@@ -1,0 +1,23 @@
+Package: alterniverse
+Type: Package
+Title: An Extension to multiverse Package for researchers and educators in statistics
+Version: 0.1.0
+Authors@R: person("Moon", "Michael Jongho", email = "michael.moon@mail.utoronto.ca",
+  role = c("aut", "cre"))
+Maintainer: Michael Jongho Moon <michael.moon@mail.utoronto.ca>
+Description: An extension to multiverse package which allows users
+    to create explorable multiverse analysis in R. This extension
+    provides user friendly abstractions for those who may have
+    limited experience with advanced R as well as a set of sample
+    examples to help understand multiverse analysis.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+Depends: 
+  R (>= 3.5.0)
+Suggests:
+  testthat (>= 2.1.0)
+Imports:
+  multiverse,
+  rlang
+RoxygenNote: 7.0.2
