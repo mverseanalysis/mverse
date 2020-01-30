@@ -1,4 +1,4 @@
-Package: alterniverse
+Package: multiverseExtra
 Type: Package
 Title: An Extension to multiverse Package for researchers and educators in statistics
 Version: 0.1.0
@@ -19,5 +19,7 @@ Suggests:
   testthat (>= 2.1.0)
 Imports:
   multiverse,
-  rlang
+  dplyr,
+  rlang,
+  stats
 RoxygenNote: 7.0.2
