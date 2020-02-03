@@ -24,7 +24,7 @@ variable_branch <- function(..., name = NULL) {
     )
 }
 
-#' @rdname variable_branch
+#' @rdname name
 name.variable_branch <- function(vB, name = NULL) {
   stopifnot(inherits(vB, "variable_branch"))
   if(is.null(name))
@@ -34,7 +34,11 @@ name.variable_branch <- function(vB, name = NULL) {
   vB
 }
 
-#' @rdname variable_branch
+#' Internal method for naming a variable branch.
+#'
+#' @description  Internal method to name the variable
+#'   for a variable branch.
+#' @name name
 name <- function(vB, name = NULL) {
   UseMethod("name")
 }

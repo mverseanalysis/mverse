@@ -22,6 +22,24 @@ multiverseExtra <- function(data) {
   .multiverse
 }
 
+#' Add a variable branch to a \code{multiverse}.
+#'
+#' This function adds one variable branch to
+#' an existing \code{multiverse} object.
+#'
+#' @param .multiverse A \code{multiverse} object.
+#' @param ... Variable branch rules.
+#' @examples
+#' \dontrun{
+#' mverse <- create_multiverse(df)
+#' new_branch <- variableBranch("x3", x1+x2, mean(c(x1,x2)))
+#' mverse %>% add_variable_branch(new_branch)
+#' }
+#' @name add_variable_branch
+add_variable_branch <- function(.multiverse, ...) {
+  UseMethod("add_variable_branch")
+}
+
 #' @rdname add_variable_branch
 add_variable_branch.multiverseExtra <- function(.multiverse, ...) {
   varnames <- sapply(

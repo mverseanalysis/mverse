@@ -1,44 +1,9 @@
-# load: Cmd + Shift + L
-# check: Cmd + Shift + E
-# test: Cmd + Shift + T
-# document: Cmd + Shift + D (devtools::document())
-# lint: lintr::lint_package()
-
-#' Create a new multiverseExtra object
-#'
-#' This is an alias for \code{multiverseExtra} constructor.
-#' Constructs a new multiverseExtra object which extends \code{multiverse::multiverse} object.
-#'
-#'
-#' @examples
-#' \dontrun{
-#' M <- create_multiverse(df)
-#' }
-#' @param data Source datafame.
-#' @return A multiverseExtra object with the source dataframe attached.
-#' @name multiverseExtra
+#' @describeIn multiverseExtra A descriptive alias
+#'   to \code{mutliverseExtra}.
 create_multiverse <- function(data) {
   multiverseExtra(data)
 }
 
-#' Add a variable branch to a \code{multiverse}.
-#'
-#' This function adds one variable branch to
-#' an existing \code{multiverse} object.
-#'
-#' @param .multiverse A \code{multiverse} object.
-#' @param ... Variable branch rules.
-#' @examples
-#' \dontrun{
-#' mverse <- create_multiverse(df)
-#' new_branch <- variableBranch("x3", x1+x2, mean(c(x1,x2)))
-#' mverse %>% add_variable_branch(new_branch)
-#' }
-#' @name add_variable_branch
-add_variable_branch <- function(.multiverse, ...) {
-  UseMethod("add_variable_branch")
-}
-#'
 #' #' Remove variable branch(es) from a \code{multiverse}.
 #' #'
 #' #' This function removes one or more variable branch to
