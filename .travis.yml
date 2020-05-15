@@ -1,0 +1,32 @@
+language: r
+cache: packages
+
+# set R dependencies from CRAM
+r_packages:
+  - testthat
+  - covr
+  - pkgdown
+
+# set Linux system dependencies
+# apt_packages:
+
+addons:
+  apt:
+    update: true
+    pacakges:
+      - libgs-dev
+      - qpdf
+      - ghostscript
+
+script:
+  - R CMD build . --compact-vignettes=gs+qpdf
+  - R CMD check *tar.gz --as-cran
+
+after_success:
+  - Rscript -e 'covr::codecov()'
+  - Rscript -e 'pkgdown::build_site()'
+
+deploy:
+  provider: script
+  script: Rscript -e 'pkgdown::deploy_site_github()'
+  skip-clenup: true

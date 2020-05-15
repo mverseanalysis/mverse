@@ -1,7 +1,7 @@
-#' @describeIn multiverseExtra A descriptive alias
-#'   to \code{mutliverseExtra}.
+#' @describeIn mverse A descriptive alias
+#'   to \code{mverse}.
 create_multiverse <- function(data) {
-  multiverseExtra(data)
+  mverse(data)
 }
 
 #' #' Remove variable branch(es) from a \code{multiverse}.

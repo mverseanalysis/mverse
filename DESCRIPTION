@@ -1,10 +1,10 @@
-Package: multiverseExtra
+Package: mverse
 Type: Package
 Title: An Extension to multiverse Package for researchers and educators in statistics
 Version: 0.1.0
-Authors@R: person("Moon", "Michael Jongho", email = "michael.moon@mail.utoronto.ca",
+Authors@R: person("Moon", "Michael Jongho", email = "moon@utstat.toronto.edu",
   role = c("aut", "cre"))
-Maintainer: Michael Jongho Moon <michael.moon@mail.utoronto.ca>
+Maintainer: Michael Jongho Moon <moon@utstat.toronto.edu>
 Description: An extension to multiverse package which allows users
     to create explorable multiverse analysis in R. This extension
     provides user friendly abstractions for those who may have
@@ -16,7 +16,9 @@ LazyData: true
 Depends: 
   R (>= 3.5.0)
 Suggests:
-  testthat (>= 2.1.0)
+  testthat (>= 2.1.0),
+  pkgdown (>= 1.5.1),
+  covr
 Imports:
   multiverse,
   dplyr,

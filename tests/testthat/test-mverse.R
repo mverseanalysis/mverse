@@ -1,8 +1,8 @@
-context("multiverseExtra")
+context("mverse")
 
 test_that("Instantiation works with a data frame.", {
   mydf <- data.frame(col1=c(1,2,3))
-  mverse <- multiverseExtra(mydf)
+  mverse <- mverse(mydf)
   expect_equal(attr(mverse, 'source'), mydf)
 })
 
