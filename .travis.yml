@@ -1,5 +1,6 @@
 language: r
 cache: packages
+sudo: required
 
 # set R dependencies from CRAM
 r_packages:
@@ -22,9 +23,12 @@ addons:
       - qpdf
       - ghostscript
 
-script:
-  - R CMD build . --compact-vignettes=gs+qpdf
-  - R CMD check *tar.gz
+
+r_build_args:
+  - '--compact-vignettes=gs+qpdf'
+  - '--resave-data'
+r_check_args:
+  - '--no-build-vignettes'
 
 after_success:
   - Rscript -e 'covr::codecov()'

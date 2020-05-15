@@ -2,8 +2,14 @@ Package: mverse
 Type: Package
 Title: An Extension to multiverse Package for researchers and educators in statistics
 Version: 0.1.0
-Authors@R: person("Moon", "Michael Jongho", email = "moon@utstat.toronto.edu",
-  role = c("aut", "cre"))
+Authors@R: c(
+  person("Moon", "Michael Jongho", email = "moon@utstat.toronto.edu", 
+  role = c("aut", "cre")),
+  person("Chevalier", "Fanny", email = "fanny@cs.tornto.edu",
+  role = "aut"),
+  person("Taback","Nathan", email = "nathan.taback@utoronto.ca",
+  role = "aut")
+  )
 Maintainer: Michael Jongho Moon <moon@utstat.toronto.edu>
 Description: An extension to multiverse package which allows users
     to create explorable multiverse analysis in R. This extension
