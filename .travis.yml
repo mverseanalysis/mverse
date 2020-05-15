@@ -6,7 +6,10 @@ r_packages:
   - testthat
   - covr
   - pkgdown
-
+  - dplyr
+  - rlang
+# set R dependencies from GitHub
+  - MUCollective/multiverse
 # set Linux system dependencies
 # apt_packages:
 
