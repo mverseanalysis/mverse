@@ -34,6 +34,10 @@ after_success:
   - Rscript -e 'pkgdown::build_site()'
 
 deploy:
-  provider: script
-  script: Rscript -e 'pkgdown::deploy_site_github(ssh_id = Sys.getenv("TRAVIS_DEPLOY_KEY", ""))'
-  skip-clenup: true
+  provider: pages
+  skip_cleanup: true
+  github_token: $TRAVIS_DEPLOY_KEY
+  keep_history: true
+  local_dir: docs
+  on:
+    branch: master
