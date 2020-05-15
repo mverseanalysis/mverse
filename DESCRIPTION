@@ -21,6 +21,7 @@ Suggests:
   covr
 Imports:
   multiverse,
+  magrittr,
   dplyr,
   rlang,
   stats

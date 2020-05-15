@@ -24,7 +24,7 @@ addons:
 
 script:
   - R CMD build . --compact-vignettes=gs+qpdf
-  - R CMD check *tar.gz --as-cran
+  - R CMD check *tar.gz
 
 after_success:
   - Rscript -e 'covr::codecov()'
