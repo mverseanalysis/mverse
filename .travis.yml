@@ -1,6 +1,7 @@
 language: r
 cache: packages
 sudo: required
+warnings_are_errors: false
 
 # set R dependencies from CRAM
 r_packages:
@@ -12,8 +13,6 @@ r_packages:
 # set R dependencies from GitHub
 r_github_packages:
   - MUCollective/multiverse
-# set Linux system dependencies
-# apt_packages:
 
 addons:
   apt:
