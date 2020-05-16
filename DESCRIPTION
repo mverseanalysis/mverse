@@ -3,11 +3,11 @@ Type: Package
 Title: An Extension to multiverse Package for researchers and educators in statistics
 Version: 0.1.0
 Authors@R: c(
-  person("Moon", "Michael Jongho", email = "moon@utstat.toronto.edu", 
+  person("Michael Jongho", "Moon", email = "moon@utstat.toronto.edu", 
   role = c("aut", "cre")),
-  person("Chevalier", "Fanny", email = "fanny@cs.tornto.edu",
+  person("Nathan", "Taback", email = "nathan.taback@utoronto.ca",
   role = "aut"),
-  person("Taback","Nathan", email = "nathan.taback@utoronto.ca",
+  person("Fanny", "Chevalier", email = "fanny@cs.tornto.edu",
   role = "aut")
   )
 Maintainer: Michael Jongho Moon <moon@utstat.toronto.edu>
