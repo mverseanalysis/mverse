@@ -3,20 +3,23 @@
 \name{remove_variable_branch}
 \alias{remove_variable_branch}
 \alias{remove_variable_branch.mverse}
-\title{Remove a variable branch to a \code{multiverse}.}
+\title{Remove a variable branch to a \code{mverse}.}
 \usage{
-remove_variable_branch(.multiverse, name)
+remove_variable_branch(.mverse, name)
 
-\method{remove_variable_branch}{mverse}(.multiverse, name)
+\method{remove_variable_branch}{mverse}(.mverse, name)
 }
 \arguments{
-\item{.multiverse}{A \code{multiverse} object.}
+\item{.mverse}{A \code{mverse} object.}
 
-\item{name}{Variable branch name to be removed.}
+\item{name}{Name of the \code{variable_branch} to be removed.}
+}
+\value{
+The resulting \code{mverse} object.
 }
 \description{
 This method removes one variable branch from
-an existing \code{multiverse} object.
+an existing \code{mverse} object.
 }
 \examples{
 \dontrun{

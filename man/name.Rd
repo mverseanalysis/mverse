@@ -9,6 +9,14 @@
 
 name(vB, name = NULL)
 }
+\arguments{
+\item{vB}{A variable_branch object to be.}
+
+\item{name}{Name for the variable.}
+}
+\value{
+Renamed variable_branch object.
+}
 \description{
 Internal method to name the variable
   for a variable branch.

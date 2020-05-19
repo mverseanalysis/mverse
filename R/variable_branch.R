@@ -1,4 +1,4 @@
-#' Create a new variableBranch object
+#' Create a new variable_branch object
 #'
 #' @examples
 #' \dontrun{
@@ -7,8 +7,7 @@
 #'
 #' @param ... Branch definitions.
 #' @param name (optional) Name for the new variable.
-#'
-#' @return A variableBranch object.
+#' @return A variable_branch object.
 #'
 #' @name variable_branch
 variable_branch <- function(..., name = NULL) {
@@ -38,6 +37,9 @@ name.variable_branch <- function(vB, name = NULL) {
 #'
 #' @description  Internal method to name the variable
 #'   for a variable branch.
+#' @param vB A variable_branch object to be.
+#' @param name Name for the variable.
+#' @return Renamed variable_branch object.
 #' @name name
 name <- function(vB, name = NULL) {
   UseMethod("name")
@@ -45,23 +47,24 @@ name <- function(vB, name = NULL) {
 
 
 #' @rdname variable_branch
-parse <- function(rules, name) {
+#' @param vBranch A \code{variable_branch} object.
+parse <- function(vBranch) {
   UseMethod('parse')
 }
 
 #' @rdname variable_branch
-parse.variable_branch <- function(vB) {
-  stopifnot(inherits(vB, "variable_branch"))
+parse.variable_branch <- function(vBranch) {
+  stopifnot(inherits(vBranch, "variable_branch"))
   # initiate a branch
   head_str <- paste0(
-    "branch(", vB$name, "_branch,")
+    "branch(", vBranch$name, "_branch,")
   # construct individual branch definitions
-  idx <- 1:length(vB$rules)
+  idx <- 1:length(vBranch$rules)
   body_str <- paste0(
     mapply(
       function(i, x) paste0(
-        "'", vB$name, '_', i, "'~", rlang::quo_name(x)),
-      idx, vB$rules),
+        "'", vBranch$name, '_', i, "'~", rlang::quo_name(x)),
+      idx, vBranch$rules),
     collapse=',')
   # parse as an expresssion
   rlang::parse_expr(

@@ -3,27 +3,29 @@
 \name{add_variable_branch}
 \alias{add_variable_branch}
 \alias{add_variable_branch.mverse}
-\title{Add variable branches to a \code{multiverse}.}
+\title{Add variable branches to a \code{mverse} object.}
 \usage{
-add_variable_branch(.multiverse, ...)
+add_variable_branch(.mverse, ...)
 
-\method{add_variable_branch}{mverse}(.multiverse, ...)
+\method{add_variable_branch}{mverse}(.mverse, ...)
 }
 \arguments{
-\item{.multiverse}{A \code{multiverse} object.}
+\item{.mverse}{A \code{mverse} object.}
 
-\item{...}{Variable branch rules.}
+\item{...}{\code{variable_branch} object(s).}
+}
+\value{
+The resulting \code{mverse} object.
 }
 \description{
 This method adds one ore more variable branches to
-an existing \code{multiverse} object.
+an existing \code{mverse} object.
 }
 \examples{
 \dontrun{
 mverse <- create_multiverse(df)
-new_branch <- variableBranch("x3", x1+x2, mean(c(x1,x2)))
+x3 <- variable_branch(x1+x2, mean(c(x1,x2)))
 mverse <- mverse \%>\%
-  add_variable_branch(new_branch)
+  add_variable_branch(x3)
 }
-
 }

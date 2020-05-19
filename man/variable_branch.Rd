@@ -4,24 +4,26 @@
 \alias{variable_branch}
 \alias{parse}
 \alias{parse.variable_branch}
-\title{Create a new variableBranch object}
+\title{Create a new variable_branch object}
 \usage{
 variable_branch(..., name = NULL)
 
-parse(rules, name)
+parse(vBranch)
 
-\method{parse}{variable_branch}(vB)
+\method{parse}{variable_branch}(vBranch)
 }
 \arguments{
 \item{...}{Branch definitions.}
 
 \item{name}{(optional) Name for the new variable.}
+
+\item{vBranch}{A \code{variable_branch} object.}
 }
 \value{
-A variableBranch object.
+A variable_branch object.
 }
 \description{
-Create a new variableBranch object
+Create a new variable_branch object
 }
 \examples{
 \dontrun{
