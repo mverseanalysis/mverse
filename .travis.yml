@@ -28,6 +28,7 @@ r_build_args:
   - '--resave-data'
 r_check_args:
   - '--no-build-vignettes'
+  - '--resave-data'
 
 after_success:
   - Rscript -e 'covr::codecov()'
