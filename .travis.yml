@@ -24,7 +24,7 @@ addons:
 
 
 r_build_args:
-  - '--compact-vignettes=gs+qpdf'
+  - '--no-build-vignettes'
   - '--resave-data'
 r_check_args:
   - '--no-build-vignettes'
