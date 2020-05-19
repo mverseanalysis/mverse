@@ -1,6 +1,6 @@
 Package: mverse
 Type: Package
-Title: An Extension to multiverse Package for researchers and educators in statistics
+Title: mverse: An Easy-to-use Multiverse Analysis Package in R for Researchers, Educators, and Students in Statistics
 Version: 0.1.0
 Authors@R: c(
   person("Michael Jongho", "Moon", email = "moon@utstat.toronto.edu", 
@@ -11,11 +11,11 @@ Authors@R: c(
   role = "aut")
   )
 Maintainer: Michael Jongho Moon <moon@utstat.toronto.edu>
-Description: An extension to multiverse package which allows users
-    to create explorable multiverse analysis in R. This extension
-    provides user friendly abstractions for those who may have
-    limited experience with advanced R as well as a set of sample
-    examples to help understand multiverse analysis.
+Description: mverse is an extension to multiverse package 
+  which allows users perform to create explorable multiverse analysis
+  in R. This extension provides user friendly abstraction
+  and a set of examples for researchers, educators,
+  and students in statistics. 
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
