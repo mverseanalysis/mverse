@@ -24,7 +24,7 @@ addons:
 
 before_install:
   - tlmgr install
-  - tlmgr update --self --all
+  - tlmgr update --self
 
 r_build_args:
   - '--compact-vignettes=gs+qpdf'
