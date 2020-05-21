@@ -14,7 +14,17 @@ r_packages:
 r_github_packages:
   - MUCollective/multiverse
 
+addons:
+  apt:
+    update: true
+    pacakges:
+      - libgs-dev
+      - qpdf
+      - ghostscript
+
 r_build_args:
+  - '--no-build-vignettes'
+  #- '--compact-vignettes=gs+qpdf'
   - '--resave-data'
 r_check_args:
   - '--no-build-vignettes'
