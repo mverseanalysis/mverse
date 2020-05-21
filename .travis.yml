@@ -3,7 +3,7 @@ cache: packages
 sudo: required
 warnings_are_errors: true
 
-# set R dependencies from CRAM
+# set R dependencies from CRAN
 r_packages:
   - testthat
   - covr
@@ -22,9 +22,12 @@ addons:
       - qpdf
       - ghostscript
 
+before_install:
+  - tlmgr install
+  - tlmgr update --self --all
 
 r_build_args:
-  - '--no-build-vignettes'
+  - '--compact-vignettes=gs+qpdf'
   - '--resave-data'
 r_check_args:
   - '--no-build-vignettes'
