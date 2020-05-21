@@ -1,7 +1,15 @@
 language: r
 cache: packages
 sudo: required
+# macOS 10.12 version
+os: osx
+osx_image: xcode9.2
 warnings_are_errors: true
+
+before_install:
+  - tlmgr update --self
+  - tlmgr update --all --no-auto-install
+  - updmap-sys
 
 # set R dependencies from CRAN
 r_packages:
@@ -18,17 +26,10 @@ addons:
   apt:
     update: true
     pacakges:
-      - libgs-dev
       - qpdf
-      - ghostscript
 
-r_build_args:
-  - '--no-build-vignettes'
-  #- '--compact-vignettes=gs+qpdf'
-  - '--resave-data'
-r_check_args:
-  - '--no-build-vignettes'
-  - '--resave-data'
+r_build_args: --compact-vignettes --resave-data
+r_check_args: --no-vignettes --resave-data
 
 after_success:
   - Rscript -e 'covr::codecov()'

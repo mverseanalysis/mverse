@@ -16,7 +16,7 @@ License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Depends: 
-  R (>= 3.5.0)
+  R (>= 3.6)
 Suggests:
   testthat (>= 2.1.0),
   pkgdown (>= 1.5.1),
