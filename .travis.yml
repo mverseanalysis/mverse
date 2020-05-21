@@ -14,20 +14,7 @@ r_packages:
 r_github_packages:
   - MUCollective/multiverse
 
-addons:
-  apt:
-    update: true
-    pacakges:
-      - libgs-dev
-      - qpdf
-      - ghostscript
-
-before_install:
-  - tlmgr install index
-  # https://docs.travis-ci.com/user/languages/r/#latextexlive-packages
-
 r_build_args:
-  - '--compact-vignettes=gs+qpdf'
   - '--resave-data'
 r_check_args:
   - '--no-build-vignettes'
