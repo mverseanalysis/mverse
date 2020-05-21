@@ -23,8 +23,8 @@ addons:
       - ghostscript
 
 before_install:
-  - tlmgr install
-  - tlmgr update --self
+  - tlmgr install index
+  # https://docs.travis-ci.com/user/languages/r/#latextexlive-packages
 
 r_build_args:
   - '--compact-vignettes=gs+qpdf'
