@@ -35,7 +35,7 @@
 }}
 \source{
 Silberzahn, R., Uhlmann, E. L., Martin, D. P., Anselmi, P., Aust, F., Awtrey, E. C., … Nosek, B. A. (2018, August 24).
-\emph{Many analysts, one dataset: Making transparent how variations in analytical choices affect results.}
+{Many analysts, one dataset: Making transparent how variations in analytical choices affect results.}
 Retrieved from \url{https://osf.io/gvm2z/}
 }
 \usage{
@@ -48,7 +48,7 @@ ratings. Each line represents a player-referee pair.
 }
 \details{
 The skin colour of each player was rated by two independent raters,
-\emph{rater1} and \emph{rater2}, and the 5-point scale values were
+{rater1} and {rater2}, and the 5-point scale values were
 scaled to 0 to 1 - i.e., 0, 0.25, 0.5, 0.75, 1.
 }
 \keyword{datasets}
