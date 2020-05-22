@@ -8,8 +8,6 @@ sudo: required
 warnings_are_errors: false
 
 before_install:
-  - tlmgr update --self
-  - tlmgr update --all --no-auto-install
   - updmap-sys
 
 # set R dependencies from CRAN
