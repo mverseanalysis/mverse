@@ -1,7 +1,5 @@
 # mverse
 
-_A User Friendly Multiverse Analysis Package in R for Researchers, Educators, and Students in Statistics._
-
 _mverse_ is an extension to multiverse package 
 which allows users perform to create explorable multiverse analysis
 in R. This extension provides user friendly abstraction

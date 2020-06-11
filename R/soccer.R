@@ -1,8 +1,12 @@
 #' Number of cards given for each referee-player pair in soccer.
 #'
 #' A dataset containing card counts between 2,053 soccer players
-#' and 3,147 referees with other covariates including skin color
-#' ratings. Each line represents a player-referee pair.
+#' playing in the first male divisions of England, Germany, France,
+#' and Spain in the 2012-2013 season and 3,147 referees
+#' that these players played under in professional matches.
+#' The dataset contains other covariates including 2 independen
+#' skin tone ratings per player.
+#' Each line represents a player-referee pair.
 #'
 #' @format A data frame with 146,028 rows and 26 variables:
 #' \describe{

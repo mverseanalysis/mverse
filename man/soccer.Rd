@@ -4,7 +4,8 @@
 \name{soccer}
 \alias{soccer}
 \title{Number of cards given for each referee-player pair in soccer.}
-\format{A data frame with 146,028 rows and 26 variables:
+\format{
+A data frame with 146,028 rows and 26 variables:
 \describe{
   \item{playerShort}{short player ID}
   \item{player}{player name}
@@ -32,7 +33,8 @@
   \item{meanExp}{mean explicit bias score (using a racial thermometer task) for referee country, higher values correspond to greater feelings of warmth toward whites versus blacks}
   \item{nExp}{sample size for explicit bias in that particular country}
   \item{seExp}{standard error for mean estimate of explicit bias measure}
-}}
+}
+}
 \source{
 Silberzahn, R., Uhlmann, E. L., Martin, D. P., Anselmi, P., Aust, F., Awtrey, E. C., … Nosek, B. A. (2018, August 24).
 {Many analysts, one dataset: Making transparent how variations in analytical choices affect results.}
@@ -43,8 +45,12 @@ soccer
 }
 \description{
 A dataset containing card counts between 2,053 soccer players
-and 3,147 referees with other covariates including skin color
-ratings. Each line represents a player-referee pair.
+playing in the first male divisions of England, Germany, France,
+and Spain in the 2012-2013 season and 3,147 referees
+that these players played under in professional matches.
+The dataset contains other covariates including 2 independen
+skin tone ratings per player.
+Each line represents a player-referee pair.
 }
 \details{
 The skin colour of each player was rated by two independent raters,

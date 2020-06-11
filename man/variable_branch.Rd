@@ -2,22 +2,14 @@
 % Please edit documentation in R/variable_branch.R
 \name{variable_branch}
 \alias{variable_branch}
-\alias{parse}
-\alias{parse.variable_branch}
 \title{Create a new variable_branch object}
 \usage{
 variable_branch(..., name = NULL)
-
-parse(vBranch)
-
-\method{parse}{variable_branch}(vBranch)
 }
 \arguments{
 \item{...}{Branch definitions.}
 
 \item{name}{(optional) Name for the new variable.}
-
-\item{vBranch}{A \code{variable_branch} object.}
 }
 \value{
 A variable_branch object.

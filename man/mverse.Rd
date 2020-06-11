@@ -19,14 +19,6 @@ A \code{mverse} object with the source dataframe attached.
 Constructs a new mverse object which extends
 \code{multiverse::multiverse} object.
 }
-\section{Functions}{
-\itemize{
-\item \code{create_multiverse}: A descriptive alias
-to \code{mverse}.
-}}
-
 \examples{
-\dontrun{
-M <- mverse(df)
-}
+mv <- mverse(soccer)
 }

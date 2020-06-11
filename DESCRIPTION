@@ -1,7 +1,7 @@
 Package: mverse
 Type: Package
 Title: mverse: A User Friendly Multiverse Analysis Package in R for Researchers, Educators, and Students in Statistics
-Version: 0.1.0
+Version: 0.0.1
 Authors@R: c(
   person("Michael Jongho", "Moon", email = "moon@utstat.toronto.edu", 
   role = c("aut", "cre")),
@@ -18,13 +18,17 @@ LazyData: true
 Depends: 
   R (>= 3.6)
 Suggests:
-  testthat (>= 2.1.0),
-  pkgdown (>= 1.5.1),
-  covr
+    testthat (>= 2.1.0),
+    pkgdown (>= 1.5.1),
+    covr,
+    knitr,
+    rmarkdown
 Imports:
   multiverse,
   magrittr,
   dplyr,
   rlang,
+  stringr,
   stats
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
+VignetteBuilder: knitr
