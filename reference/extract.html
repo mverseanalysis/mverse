@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Remove a variable branch to a <code>mverse</code>. — remove_variable_branch • mverse</title>
+<title>Extract branched values. — extract • mverse</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="Remove a variable branch to a <code>mverse</code>. — remove_variable_branch" />
-<meta property="og:description" content="This method removes one variable branch from
-an existing mverse object." />
+<meta property="og:title" content="Extract branched values. — extract" />
+<meta property="og:description" content="extract returns a tibble of selected values
+across the multiverse in a long format." />
 
 
 
@@ -116,20 +116,20 @@ an existing mverse object." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Remove a variable branch to a <code>mverse</code>.</h1>
+    <h1>Extract branched values.</h1>
     
-    <div class="hidden name"><code>remove_variable_branch.Rd</code></div>
+    <div class="hidden name"><code>extract.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This method removes one variable branch from
-an existing <code>mverse</code> object.</p>
+    <p><code>extract</code> returns a tibble of selected values
+across the multiverse in a long format.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>remove_variable_branch</span>(<span class='no'>.mverse</span>, <span class='no'>name</span>)
+    <pre class="usage"><span class='fu'>extract</span>(<span class='no'>...</span>)
 
 <span class='co'># S3 method for mverse</span>
-<span class='fu'>remove_variable_branch</span>(<span class='no'>.mverse</span>, <span class='no'>name</span>)</pre>
+<span class='fu'>extract</span>(<span class='no'>.mverse</span>, <span class='kw'>columns</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>universe</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nuni</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>frow</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,21 +139,47 @@ an existing <code>mverse</code> object.</p>
       <td><p>a <code>mverse</code> object.</p></td>
     </tr>
     <tr>
-      <th>name</th>
-      <td><p>name of the <code>variable_branch</code> to be removed.</p></td>
+      <th>columns</th>
+      <td><p>a character vector of column names to extract.</p></td>
+    </tr>
+    <tr>
+      <th>universe</th>
+      <td><p>an integer vector of universe ids to extract.</p></td>
+    </tr>
+    <tr>
+      <th>nuni</th>
+      <td><p>a positive integer for the number of universes to extract.</p></td>
+    </tr>
+    <tr>
+      <th>frow</th>
+      <td><p>proportion of rows to extract from each universe.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The resulting <code>mverse</code> object.</p>
+    <p>This method extracts data values across
+the multiverse. You can specify a subset of data
+to extract using <code>columns</code>, <code>universe</code>,
+ <code>nuni</code>, and <code>frow</code>.</p>
+<p>You can specify the columns to extract from each
+universe by passing the column names as a character
+vector to <code>columns</code>. The default values is
+<code>NULL</code> extracting all columns with branches.</p>
+<p>Use <code>universe</code> to specify a set of universes
+by their integer ids. Use <code>nuni</code> to specify
+the number of universes to extract data from. The
+method then selects the subset randomly. Specifying
+<code>universe</code> manually will override <code>nuni</code> value.
+By default, they are both set to <code>NULL</code> and
+the method returns data from all universes.</p>
+<p>Use <code>frow</code> to randomly extract a fraction of
+data from each universe. The default value is <code>NULL</code>
+and all rows are returned as they are. Note if you select
+1 the method will return shuffle rows in each universe
+before returning them. If <code>frow</code> is greater than 1,
+the method randomly samples rows with replacement.</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>mv</span> <span class='kw'>&lt;-</span> <span class='fu'>create_multiverse</span>(<span class='no'>df</span>)
-<span class='no'>mv</span> <span class='kw'>&lt;-</span> <span class='no'>mverse</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>remove_variable_branch</span>(<span class='no'>old_branch</span>)
-}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

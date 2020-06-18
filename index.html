@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">mverse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
       </span>
     </div>
 
@@ -46,6 +46,18 @@
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/example-1.html">Example 1. Combining two independent ratings.</a>
+    </li>
+  </ul>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
 </div>
@@ -59,10 +71,9 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-
-<div id="mverse-a-user-friendly-multiverse-analysis-package-in-r-for-researchers-educators-and-students-in-statistics" class="section level1">
+<div id="mverse" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#mverse-a-user-friendly-multiverse-analysis-package-in-r-for-researchers-educators-and-students-in-statistics" class="anchor"></a>mverse: A User Friendly Multiverse Analysis Package in R for Researchers, Educators, and Students in Statistics</h1></div>
+<a href="#mverse" class="anchor"></a>mverse</h1></div>
 <p><em>mverse</em> is an extension to multiverse package which allows users perform to create explorable multiverse analysis in R. This extension provides user friendly abstraction and a set of examples for researchers, educators, and students in statistics.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -70,76 +81,18 @@
 <p>You can install the package from <a href="https://github.com/mverseanalysis/mverse">GitHub</a> with:</p>
 <pre><code>devtools::install_github("mverseanalysis/mverse")</code></pre>
 </div>
-<div id="methods" class="section level2">
+<div id="usage" class="section level2">
 <h2 class="hasAnchor">
-<a href="#methods" class="anchor"></a>Methods</h2>
-<div id="initialisation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#initialisation" class="anchor"></a>Initialisation</h3>
-<ul>
-<li>
-<code>mverse(data)</code> : Initialize a multiverse objectwith a dataset.</li>
-<li>
-<code>create_multiverse(data)</code> : Alias of <code>mverse</code>.</li>
-</ul>
+<a href="#usage" class="anchor"></a>Usage</h2>
+<p>TBD</p>
 </div>
-<div id="variable-branching" class="section level3">
-<h3 class="hasAnchor">
-<a href="#variable-branching" class="anchor"></a>Variable branching</h3>
-<ul>
-<li>
-<code>variable_branch(...)</code> : Define a rule for branching a variable.</li>
-<li>
-<code>add_variable_branch(.multiverse, ...)</code> : Add variable branching rules to a multiverse object.</li>
-<li>
-<code>add_variable_exclusion(.multiverse, ...)</code> : Add variable branching exclusion rules to a multiverse object.</li>
-<li>
-<code>remove_variable_branch(.multiverse, ...)</code> : Remove variable branching rules from a multiverse object.</li>
-<li>
-<code>remove_variable_exclusion(.multiverse, ...)</code> : Remove variable branching exclusion rules from a multiverse object.</li>
-</ul>
-</div>
-<div id="model-specificiations" class="section level3">
-<h3 class="hasAnchor">
-<a href="#model-specificiations" class="anchor"></a>Model specificiations</h3>
-<ul>
-<li>
-<code>model_spec(...)</code> : Define a rule for branching a variable.</li>
-<li>
-<code>add_model_spec(.multiverse, ...)</code> : Add a model specification to a multiverse object.</li>
-<li>
-<code>remove_model_spec(.multiverse, ...)</code> : Remove a model specification from a multiverse object.</li>
-</ul>
-</div>
-<div id="view-and-execute-multiverse" class="section level3">
-<h3 class="hasAnchor">
-<a href="#view-and-execute-multiverse" class="anchor"></a>View and execute multiverse</h3>
-<ul>
-<li>
-<code>multiverse_table(.multiverse)</code> : View all combinations of parameter options and model specifications.</li>
-<li>
-<code>execute_multiverse(.multiverse)</code> : Execute all analyses specified in the current multiverse.</li>
-<li>
-<code>visualise_multiverse(.multiverse)</code> : Visualise multiverse for inspection <em>(visualisations TBD)</em>.</li>
-</ul>
-</div>
-<div id="extract-results" class="section level3">
-<h3 class="hasAnchor">
-<a href="#extract-results" class="anchor"></a>Extract results</h3>
-<ul>
-<li>
-<code>summary(.multiverse, &lt;universe_id)</code> : View analysis results for one ore more universes in the multiverse.</li>
-</ul>
-</div>
-</div>
-</div>
-<div id="references" class="section level1">
-<h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
+<div id="references" class="section level2">
+<h2 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h2>
 <p>Steegen S, Tuerlinckx F, Gelman A, Vanpaemel W. <em>Increasing Transparency Through a Multiverse Analysis.</em> Perspect Psychol Sci. 2016;11(5):702‐712. <a href="doi:10.1177/1745691616658637" class="uri">doi:10.1177/1745691616658637</a> URL: <a href="https://pubmed.ncbi.nlm.nih.gov/27694465/" class="uri">https://pubmed.ncbi.nlm.nih.gov/27694465/</a></p>
 <p>Sarma, A. and Kay, M. <em>Multidy: An R package for creating multiverse analysis.</em> 2020. <a href="https://mucollective.github.io/multiverse/" class="uri">https://mucollective.github.io/multiverse/</a></p>
 </div>
-
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
