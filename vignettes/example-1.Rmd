@@ -222,7 +222,7 @@ skin_option_5 <- soccer$rater2    # second
 We can plot their histograms to study the distributions.
 We will use the `ggplot2` library for plotting.
 
-```{r hist_base, fig.caption="Histogram of skin tones variale based on the first definition.", fig.width=4, fig.height=4, warning=FALSE}
+```{r hist_base, fig.caption="Histogram of skin tones variale based on the first definition.", fig.width=5, fig.height=4, warning=FALSE}
 library(ggplot2)
 ggplot(mapping=aes(x = skin_option_1)) +
   geom_histogram(breaks = seq(0,1,0.2),
@@ -269,17 +269,6 @@ skin_tone <- variable_branch(
   ifelse(rater1 > rater2, rater1, rater2)
 )
 ```
-
-# ```{r variable_branch}
-# skin_tone <- variable_branch(
-#   (rater1 + rater2)/2,
-#   ifelse(rater1 > rater2, rater1, rater2),
-#   ifelse(rater1 > rater2, rater2, rater1),
-#   rater1,
-#   rater2
-# )
-# ```
-
 
 You can then add the variable branch rules to the `mverse` object
 using `add_variable_branch`. You can use the `tidyverse`'s
@@ -340,25 +329,25 @@ Using the output tibble, you can construct plots to compare
 their distributions in different universes. For example,
 you can overlay density lines on a single plot.
 
-```{r compare_universe, fig.caption="Density lines overlaid on a single plot.", fig.width=4, fig.height=4, warning=FALSE}
+```{r compare_universe, fig.caption="Density lines overlaid on a single plot.", fig.width=5, fig.height=4, warning=FALSE}
 branched %>%
   ggplot(mapping = aes(x = skin_tone, color = universe)) +
   geom_density(alpha = 0.2) +
   xlab('Skin Tone') +
-  ylab('Density') 
+  ylab('Density') +
+  ggtitle('Density of player skin tones.')
 ```
 
 Another option is the use `ggplot`'s `facet_grid` function 
 to generate multiple plots in a grid.
 
-```{r compare_universe_hist, fig.caption="Histograms on a facet grid.", fig.width=4, fig.height=4, warning=FALSE}
+```{r compare_universe_hist, fig.caption="Histograms on a facet grid.", fig.width=5, fig.height=4, warning=FALSE}
 branched %>%
   ggplot(mapping = aes(x = skin_tone, fill = universe)) +
   geom_histogram(position = 'dodge', bins = 10) +
   labs(title = 'Histogram of player skin tones.',
-       y = 'Count', x='Skin Tone') +
-  # generate histograms for each universe and place along a column.
-  facet_grid(. ~ universe)
+       y = 'Count', x='Skin Tone') + # you can add axis labels and plot title with labs.
+  facet_grid(. ~ universe) # generate histograms for each universe.
 ```
 
 ### Exercise.
