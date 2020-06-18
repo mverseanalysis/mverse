@@ -17,6 +17,7 @@ r_packages:
   - pkgdown
   - dplyr
   - rlang
+  - kableExtra
 # set R dependencies from GitHub
 r_github_packages:
   - MUCollective/multiverse
