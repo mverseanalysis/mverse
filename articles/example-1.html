@@ -683,7 +683,7 @@ First, we will define the five options as separate variables.</p>
                  <span class="kw">colour</span> <span class="kw">=</span> <span class="st">'white'</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">'Histogram of player skin tones.'</span>,
        <span class="kw">x</span> <span class="kw">=</span> <span class="st">'Skin Tone'</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="st">'Count'</span>)</pre></body></html></div>
-<p><img src="example-1_files/figure-html/hist_base-1.png" width="384"></p>
+<p><img src="example-1_files/figure-html/hist_base-1.png" width="480"></p>
 <p>Now, for the remaining four variable definitions, we will have to repeat the step above.</p>
 <div id="exercise-" class="section level3">
 <h3 class="hasAnchor">
@@ -709,11 +709,6 @@ First, we will define the five options as separate variables.</p>
   (<span class="no">rater1</span> + <span class="no">rater2</span>)/<span class="fl">2</span>,
   <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">rater1</span> <span class="kw">&gt;</span> <span class="no">rater2</span>, <span class="no">rater1</span>, <span class="no">rater2</span>)
 )</pre></body></html></div>
-</div>
-<div id="r-variable_branch-skin_tone---variable_branch-rater1-rater22-ifelserater1-rater2-rater1-rater2-ifelserater1-rater2-rater2-rater1-rater1-rater2" class="section level1">
-<h1 class="hasAnchor">
-<a href="#r-variable_branch-skin_tone---variable_branch-rater1-rater22-ifelserater1-rater2-rater1-rater2-ifelserater1-rater2-rater2-rater1-rater1-rater2" class="anchor"></a><code>{r variable_branch} # skin_tone &lt;- variable_branch( #   (rater1 + rater2)/2, #   ifelse(rater1 &gt; rater2, rater1, rater2), #   ifelse(rater1 &gt; rater2, rater2, rater1), #   rater1, #   rater2 # ) #</code>
-</h1>
 <p>You can then add the variable branch rules to the <code>mverse</code> object using <code>add_variable_branch</code>. You can use the <code>tidyverse</code>’s <code>dplyr</code> grammar for defining the variable rules.</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">mv</span> <span class="kw">&lt;-</span> <span class="no">mv</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/pkg/mverse/man/add_variable_branch.html">add_variable_branch</a></span>(<span class="no">skin_tone</span>) <span class="kw">%&gt;%</span>
@@ -758,6 +753,7 @@ ifelse(rater1 &gt; rater2, rater1, rater2)
 <li>Print the multiverse table. How many <em>universes</em> does your multiverse produce?</li>
 </ol>
 </div>
+</div>
 <div id="comparing-between-universes-" class="section level2">
 <h2 class="hasAnchor">
 <a href="#comparing-between-universes-" class="anchor"></a>3. Comparing between Universes.</h2>
@@ -774,17 +770,17 @@ ifelse(rater1 &gt; rater2, rater1, rater2)
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw">mapping</span> <span class="kw">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">skin_tone</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="no">universe</span>)) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span>(<span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">0.2</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">'Skin Tone'</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">'Density'</span>)</pre></body></html></div>
-<p><img src="example-1_files/figure-html/compare_universe-1.png" width="384"></p>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">'Density'</span>) +
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">'Density of player skin tones.'</span>)</pre></body></html></div>
+<p><img src="example-1_files/figure-html/compare_universe-1.png" width="480"></p>
 <p>Another option is the use <code>ggplot</code>’s <code>facet_grid</code> function to generate multiple plots in a grid.</p>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">branched</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw">mapping</span> <span class="kw">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">skin_tone</span>, <span class="kw">fill</span> <span class="kw">=</span> <span class="no">universe</span>)) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span>(<span class="kw">position</span> <span class="kw">=</span> <span class="st">'dodge'</span>, <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">10</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">'Histogram of player skin tones.'</span>,
-       <span class="kw">y</span> <span class="kw">=</span> <span class="st">'Count'</span>, <span class="kw">x</span><span class="kw">=</span><span class="st">'Skin Tone'</span>) +
-  <span class="co"># generate histograms for each universe and place along a column.</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span>(<span class="no">.</span> ~ <span class="no">universe</span>)</pre></body></html></div>
-<p><img src="example-1_files/figure-html/compare_universe_hist-1.png" width="384"></p>
+       <span class="kw">y</span> <span class="kw">=</span> <span class="st">'Count'</span>, <span class="kw">x</span><span class="kw">=</span><span class="st">'Skin Tone'</span>) + <span class="co"># you can add axis labels and plot title with labs.</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span>(<span class="no">.</span> ~ <span class="no">universe</span>) <span class="co"># generate histograms for each universe.</span></pre></body></html></div>
+<p><img src="example-1_files/figure-html/compare_universe_hist-1.png" width="480"></p>
 <div id="exercise--2" class="section level3">
 <h3 class="hasAnchor">
 <a href="#exercise--2" class="anchor"></a>Exercise.</h3>
@@ -808,7 +804,6 @@ ifelse(rater1 &gt; rater2, rater1, rater2)
 <div id="refs" class="references">
 <div id="ref-datasrc">
 <p>Silberzahn, Raphael, Eric Luis Uhlmann, Dan Martin, Pasquale Anselmi, Frederik Aust, Eli C. Awtrey, Štěpán Bahník, et al. 2014. “Many Analysts, One Dataset: Making Transparent How Variations in Anlytical Choices Affect Results.” <a href="https://osf.io/gvm2z/" class="uri">https://osf.io/gvm2z/</a>.</p>
-</div>
 </div>
 </div>
 </div>
