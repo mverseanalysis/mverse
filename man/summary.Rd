@@ -10,10 +10,10 @@ summary(.mverse)
 \method{summary}{mverse}(.mverse)
 }
 \arguments{
-\item{.mverse}{A \code{mverse} object.}
+\item{.mverse}{a \code{mverse} object.}
 }
 \value{
-Multiverse table as a tibble
+a multiverse table as a tibble
 }
 \description{
 This method returns the multiverse table

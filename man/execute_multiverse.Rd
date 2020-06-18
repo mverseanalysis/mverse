@@ -10,7 +10,7 @@ execute_multiverse(.mverse)
 \method{execute_multiverse}{mverse}(.mverse)
 }
 \arguments{
-\item{.mverse}{A \code{mverse} object.}
+\item{.mverse}{a \code{mverse} object.}
 }
 \value{
 The resulting \code{mverse} object.

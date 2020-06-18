@@ -222,13 +222,13 @@ skin_option_5 <- soccer$rater2    # second
 We can plot their histograms to study the distributions.
 We will use the `ggplot2` library for plotting.
 
-```{r hist_base, fig.width=4, fig.height=4, warning=FALSE}
+```{r hist_base, fig.caption="Histogram of skin tones variale based on the first definition.", fig.width=4, fig.height=4, warning=FALSE}
 library(ggplot2)
-ggplot(mapping=aes(x=skin_option_1)) +
-  geom_histogram(breaks=seq(0,1,0.2),
-                 colour="white") +
-  labs(title='Histogram of player skin tones.',
-       x='Skin Tone', y='')
+ggplot(mapping=aes(x = skin_option_1)) +
+  geom_histogram(breaks = seq(0,1,0.2),
+                 colour = 'white') +
+  labs(title = 'Histogram of player skin tones.',
+       x = 'Skin Tone', y = 'Count')
 ```
 
 
@@ -270,6 +270,16 @@ skin_tone <- variable_branch(
 )
 ```
 
+# ```{r variable_branch}
+# skin_tone <- variable_branch(
+#   (rater1 + rater2)/2,
+#   ifelse(rater1 > rater2, rater1, rater2),
+#   ifelse(rater1 > rater2, rater2, rater1),
+#   rater1,
+#   rater2
+# )
+# ```
+
 
 You can then add the variable branch rules to the `mverse` object
 using `add_variable_branch`. You can use the `tidyverse`'s
@@ -301,22 +311,67 @@ summary(mv) %>%
 ### Exercise.
 
 1.  Define and add the variable branches for the remaining three options.
-2.  Print the multiverse table. How many _universes_ does your multiverse prduce?
+2.  Print the multiverse table. How many _universes_ does your multiverse produce?
 
 ## 3. Comparing between Universes.
 
 In this section, we will now examine and compare the distributions of
-the variable branches. 
+the variable branches. You can extract the resulting value of branched
+variables using `extract` method. By default, it returns the branched
+variables across all universes with the universe index. Note that
+the universe index column is returned as a factor variable.
 
-_not implemented yet_
-
-```{r}
-# not yet implemented
-# extract.mverse <- function(
-#   .mverse, columns = NULL, universe = 0,
-#   how = 'all', n = 0)
-extract(mv) %>%
-  kable() # for display in the documentation
+```{r extract_multiverse}
+branched <- extract(mv) 
+dim(branched)
 ```
+
+It provides various options to select a subset of data only.
+`universe` and `nuni` are useful if you want to select 
+a subset of universes in the multiverse. `frow` provides
+the option to extract a fraction of data in each universe.
+
+```{r extract_fraction}
+frac <- extract(mv, frow =  0.05)
+nrow(frac)/nrow(branched)
+```
+
+Using the output tibble, you can construct plots to compare
+their distributions in different universes. For example,
+you can overlay density lines on a single plot.
+
+```{r compare_universe, fig.caption="Density lines overlaid on a single plot.", fig.width=4, fig.height=4, warning=FALSE}
+branched %>%
+  ggplot(mapping = aes(x = skin_tone, color = universe)) +
+  geom_density(alpha = 0.2) +
+  xlab('Skin Tone') +
+  ylab('Density') 
+```
+
+Another option is the use `ggplot`'s `facet_grid` function 
+to generate multiple plots in a grid.
+
+```{r compare_universe_hist, fig.caption="Histograms on a facet grid.", fig.width=4, fig.height=4, warning=FALSE}
+branched %>%
+  ggplot(mapping = aes(x = skin_tone, fill = universe)) +
+  geom_histogram(position = 'dodge', bins = 10) +
+  labs(title = 'Histogram of player skin tones.',
+       y = 'Count', x='Skin Tone') +
+  # generate histograms for each universe and place along a column.
+  facet_grid(. ~ universe)
+```
+
+### Exercise.
+
+1.  Use `geom_boxplot` to compare the distributions between 
+the five options.
+2.  Construct a grid of histograms for all the five options. 
+Use `universe ~ .` instead of `. ~ universe` in `facet_grid`. 
+
+## Discussion.
+
+1.  The five options each result in different distributions. Does one option provide a more _objective_ rating than others?
+2.  Among the three types of plots - density plot, histogram, and boxplot, which plot do you find the most effective at comparing different distributions? 
+
 
 ## References

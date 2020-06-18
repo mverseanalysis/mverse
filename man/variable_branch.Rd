@@ -7,12 +7,12 @@
 variable_branch(..., name = NULL)
 }
 \arguments{
-\item{...}{Branch definitions.}
+\item{...}{branch definition expressions.}
 
-\item{name}{(optional) Name for the new variable.}
+\item{nameName}{for the new variable.}
 }
 \value{
-A variable_branch object.
+a variable_branch object.
 }
 \description{
 Create a new variable_branch object

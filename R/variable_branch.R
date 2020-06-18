@@ -5,9 +5,9 @@
 #' x4 <- variableBranch(x1 + x2, x1 + x3, sum(x1, x2, x3))
 #' }
 #'
-#' @param ... Branch definitions.
-#' @param name (optional) Name for the new variable.
-#' @return A variable_branch object.
+#' @param ... branch definition expressions.
+#' @param nameName for the new variable.
+#' @return a variable_branch object.
 #'
 #' @name variable_branch
 #' @export
@@ -65,8 +65,8 @@ parse.variable_branch <- function(vBranch) {
 #' This method adds one ore more variable branches to
 #' an existing \code{mverse} object.
 #'
-#' @param .mverse A \code{mverse} object.
-#' @param ... \code{variable_branch} object(s).
+#' @param .mverse a \code{mverse} object.
+#' @param ... \code{variable_branch} objects.
 #' @examples
 #' \dontrun{
 #' mv <- create_multiverse(df)
@@ -120,8 +120,8 @@ add_variable_branch.mverse <- function(.mverse, ...) {
 #' This method removes one variable branch from
 #' an existing \code{mverse} object.
 #'
-#' @param .mverse A \code{mverse} object.
-#' @param name Name of the \code{variable_branch} to be removed.
+#' @param .mverse a \code{mverse} object.
+#' @param name name of the \code{variable_branch} to be removed.
 #' @examples
 #' \dontrun{
 #' mv <- create_multiverse(df)

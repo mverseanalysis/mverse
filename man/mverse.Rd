@@ -10,7 +10,7 @@ mverse(data)
 create_multiverse(data)
 }
 \arguments{
-\item{data}{Source datafame.}
+\item{data}{source datafame.}
 }
 \value{
 A \code{mverse} object with the source dataframe attached.

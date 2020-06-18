@@ -7,26 +7,46 @@
 \usage{
 extract(...)
 
-\method{extract}{mverse}(.mverse, columns = NULL, universe = 0, how = "all", n = 0)
+\method{extract}{mverse}(.mverse, columns = NULL, universe = NULL, nuni = NULL, frow = NULL)
 }
 \arguments{
-\item{.mverse}{A \code{mverse} object.}
+\item{.mverse}{a \code{mverse} object.}
 
-\item{columns}{(optional) A vector of characters.
-Default: NULL.}
+\item{columns}{a character vector of column names to extract.}
 
-\item{universe}{(optional) Integer.
-Default: 0.}
+\item{universe}{an integer vector of universe ids to extract.}
 
-\item{how}{(optional) 'all', 'manual', or 'random'.
-Default: 'all'.}
+\item{nuni}{a positive integer for the number of universes to extract.}
 
-\item{n}{(optional) Integer.
-Default 0.}
+\item{frow}{proportion of rows to extract from each universe.}
 }
 \description{
-This method returns a table of selected values
-across the multiverse in a long format. You
-can select a subset based on the universe and
-columns.
+\code{extract} returns a tibble of selected values
+across the multiverse in a long format.
+}
+\details{
+This method extracts data values across
+the multiverse. You can specify a subset of data
+to extract using \code{columns}, \code{universe},
+ \code{nuni}, and \code{frow}.
+
+You can specify the columns to extract from each
+universe by passing the column names as a character
+vector to \code{columns}. The default values is
+\code{NULL} extracting all columns with branches.
+
+Use \code{universe} to specify a set of universes
+by their integer ids. Use \code{nuni} to specify
+the number of universes to extract data from. The
+method then selects the subset randomly. Specifying
+\code{universe} manually will override \code{nuni} value.
+By default, they are both set to \code{NULL} and
+the method returns data from all universes.
+
+Use \code{frow} to randomly extract a fraction of
+data from each universe. The default value is \code{NULL}
+and all rows are returned as they are. Note if you select
+1 the method will return shuffle rows in each universe
+before returning them. If \code{frow} is greater than 1,
+the method randomly samples rows with replacement.
 }

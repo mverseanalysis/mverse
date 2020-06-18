@@ -10,9 +10,9 @@ remove_variable_branch(.mverse, name)
 \method{remove_variable_branch}{mverse}(.mverse, name)
 }
 \arguments{
-\item{.mverse}{A \code{mverse} object.}
+\item{.mverse}{a \code{mverse} object.}
 
-\item{name}{Name of the \code{variable_branch} to be removed.}
+\item{name}{name of the \code{variable_branch} to be removed.}
 }
 \value{
 The resulting \code{mverse} object.

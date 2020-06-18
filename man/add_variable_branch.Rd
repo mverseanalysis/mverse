@@ -10,9 +10,9 @@ add_variable_branch(.mverse, ...)
 \method{add_variable_branch}{mverse}(.mverse, ...)
 }
 \arguments{
-\item{.mverse}{A \code{mverse} object.}
+\item{.mverse}{a \code{mverse} object.}
 
-\item{...}{\code{variable_branch} object(s).}
+\item{...}{\code{variable_branch} objects.}
 }
 \value{
 The resulting \code{mverse} object.
