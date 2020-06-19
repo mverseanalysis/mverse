@@ -26,6 +26,7 @@ Suggests:
 Remotes:
   github::MUCollective/multiverse
 Imports:
+  multiverse,
   magrittr,
   dplyr,
   rlang,
