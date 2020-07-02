@@ -148,9 +148,6 @@ references:
 ---
 
 ```{r setup, include = FALSE}
-library(mverse)
-library(knitr)
-library(kableExtra)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -164,14 +161,11 @@ on card counts per each pair between
 2,053 soccer players and 3,147 referees.
 Below are the first few lines of the dataset.
 
-```{r eval=FALSE}
+```{r load}
 library(mverse)
-head(soccer)
+knitr::kable(head(soccer)) # using kable for displaying data in html
 ```
 
-```{r display, warning=FALSE, echo=FALSE}
-kable(head(soccer))
-```
 
 The dataset was used to study whether
 racial bias played a role when referees
@@ -274,7 +268,6 @@ You can then add the variable branch rules to the `mverse` object
 using `add_variable_branch`. You can use the `tidyverse`'s
 `dplyr` grammar for defining the variable rules.
 
-
 ```{r add_vb}
 mv <- mv %>%
   add_variable_branch(skin_tone) %>%
@@ -293,8 +286,7 @@ You can see the variable branch added with `summary`
 method for the `mverse` object. 
 
 ```{r check_multiverse}
-summary(mv) %>% 
-  kable() # for display in the documentation
+summary(mv) 
 ```
 
 ### Exercise.
