@@ -17,6 +17,13 @@ Encoding: UTF-8
 LazyData: true
 Depends: 
   R (>= 3.6)
+Imports:
+  multiverse,
+  magrittr,
+  dplyr,
+  rlang,
+  stringr,
+  stats
 Suggests:
   testthat (>= 2.1.0),
   pkgdown (>= 1.5.1),
@@ -25,12 +32,6 @@ Suggests:
   rmarkdown
 Remotes:
   github::MUCollective/multiverse
-Imports:
-  multiverse,
-  magrittr,
-  dplyr,
-  rlang,
-  stringr,
-  stats
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr
+URL: https://mverseanalysis.github.io/mverse/
