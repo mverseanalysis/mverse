@@ -26,3 +26,10 @@ mv <- mv \%>\%
   execute_multiverse(old_branch)
 }
 }
+\seealso{
+Other {mverse methods}: 
+\code{\link{extract}()},
+\code{\link{mverse}()},
+\code{\link{summary}()}
+}
+\concept{{mverse methods}}

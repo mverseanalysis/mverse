@@ -29,3 +29,9 @@ mv <- mv \%>\%
   add_variable_branch(x3)
 }
 }
+\seealso{
+Other {methods for working with a variable branch}: 
+\code{\link{remove_variable_branch}()},
+\code{\link{variable_branch}()}
+}
+\concept{{methods for working with a variable branch}}

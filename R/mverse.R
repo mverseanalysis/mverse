@@ -8,6 +8,7 @@
 #' @param data source datafame.
 #' @return A \code{mverse} object with the source dataframe attached.
 #' @name mverse
+#' @family {mverse methods}
 #' @export
 mverse <- function(data) {
   .mverse <- multiverse::multiverse(class="mverse")
@@ -24,6 +25,11 @@ create_multiverse <- function(data) {
   mverse(data)
 }
 
+#' @rdname execute_multiverse
+#' @export
+execute_multiverse <- function(.mverse) {
+  UseMethod("execute_multiverse")
+}
 #' Execute the entire multiverse.
 #'
 #' This method executes the analysis steps
@@ -37,11 +43,8 @@ create_multiverse <- function(data) {
 #'   execute_multiverse(old_branch)
 #' }
 #' @return The resulting \code{mverse} object.
-#' @export
-execute_multiverse <- function(.mverse) {
-  UseMethod("execute_multiverse")
-}
-#' @rdname execute_multiverse
+#' @name execute_multiverse
+#' @family {mverse methods}
 #' @export
 execute_multiverse.mverse <- function(.mverse) {
   stopifnot(inherits(.mverse, "mverse"))
@@ -49,6 +52,11 @@ execute_multiverse.mverse <- function(.mverse) {
   invisible(.mverse)
 }
 
+#' @rdname summary
+#' @export
+summary <- function(.mverse) {
+  UseMethod("summary")
+}
 #' Display the multiverse table.
 #'
 #' This method returns the multiverse table
@@ -58,11 +66,8 @@ execute_multiverse.mverse <- function(.mverse) {
 #'
 #' @param .mverse a \code{mverse} object.
 #' @return a multiverse table as a tibble
-#' @export
-summary <- function(.mverse) {
-  UseMethod("summary")
-}
-#' @rdname summary
+#' @name summary
+#' @family {mverse methods}
 #' @importFrom  stringr str_replace
 #' @export
 summary.mverse <- function(.mverse) {
@@ -80,6 +85,11 @@ summary.mverse <- function(.mverse) {
   mtable
 }
 
+#' @rdname extract
+#' @export
+extract <- function(...) {
+  UseMethod("extract")
+}
 #' Extract branched values.
 #'
 #' \code{extract} returns a tibble of selected values
@@ -90,6 +100,7 @@ summary.mverse <- function(.mverse) {
 #' @param universe an integer vector of universe ids to extract.
 #' @param nuni a positive integer for the number of universes to extract.
 #' @param frow proportion of rows to extract from each universe.
+#' @param ... Ignored.
 #' @details This method extracts data values across
 #' the multiverse. You can specify a subset of data
 #' to extract using \code{columns}, \code{universe},
@@ -116,22 +127,18 @@ summary.mverse <- function(.mverse) {
 #' the method randomly samples rows with replacement.
 #'
 #' @name extract
-#' @export
-extract <- function(...) {
-  UseMethod("extract")
-}
-#' @rdname extract
+#' @family {mverse methods}
 #' @export
 extract.mverse <- function(
   .mverse, columns = NULL, universe = NULL,
-  nuni = NULL, frow = NULL) {
+  nuni = NULL, frow = NULL, ...) {
   stopifnot(inherits(.mverse, "mverse"))
   mtable <- summary(.mverse)
   nms <- stringr::str_replace(
     colnames(mtable), "_branch", "")
   if(is.null(columns)) {
     columns <- nms}
-  if(! "universe" %in% colnames(summary(mv))) {
+  if(! "universe" %in% colnames(mtable)) {
     columns <- c("universe", columns)}
   if(is.null(universe)) {
     universe <- mtable$universe
@@ -147,7 +154,7 @@ extract.mverse <- function(
   stopifnot(length(universe) > 0)
   extracted <- lapply(
     universe, function(x) {
-      ex <- multiverse::from_universe_i(mv, x, data)
+      ex <- multiverse::from_universe_i(.mverse, x, data)
       if(!is.null(frow)) {
         stopifnot("frow must be a positive value." = frow > 0)
         ex <- dplyr::sample_frac(ex, size = frow,

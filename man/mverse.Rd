@@ -22,3 +22,10 @@ Constructs a new mverse object which extends
 \examples{
 mv <- mverse(soccer)
 }
+\seealso{
+Other {mverse methods}: 
+\code{\link{execute_multiverse}()},
+\code{\link{extract}()},
+\code{\link{summary}()}
+}
+\concept{{mverse methods}}

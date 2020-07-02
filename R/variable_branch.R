@@ -1,4 +1,4 @@
-#' Create a new variable_branch object
+#' Create a new variable branch.
 #'
 #' @examples
 #' \dontrun{
@@ -6,10 +6,11 @@
 #' }
 #'
 #' @param ... branch definition expressions.
-#' @param nameName for the new variable.
+#' @param name Name for the new variable.
 #' @return a variable_branch object.
 #'
 #' @name variable_branch
+#' @family {methods for working with a variable branch}
 #' @export
 variable_branch <- function(..., name = NULL) {
   rules <- rlang::enquos(...)
@@ -60,6 +61,12 @@ parse.variable_branch <- function(vBranch) {
     paste0(head_str, body_str, ')'))
 }
 
+#' @rdname add_variable_branch
+#' @export
+add_variable_branch <- function(.mverse, ...) {
+  UseMethod("add_variable_branch")
+}
+
 #' Add variable branches to a \code{mverse} object.
 #'
 #' This method adds one ore more variable branches to
@@ -75,15 +82,10 @@ parse.variable_branch <- function(vBranch) {
 #'   add_variable_branch(x3)
 #' }
 #' @return The resulting \code{mverse} object.
-#' @name add_variable_branch
-#' @export
-add_variable_branch <- function(.mverse, ...) {
-  UseMethod("add_variable_branch")
-}
-
 #' @importFrom magrittr %>%
 #' @import dplyr
-#' @rdname add_variable_branch
+#' @name add_variable_branch
+#' @family {methods for working with a variable branch}
 #' @export
 add_variable_branch.mverse <- function(.mverse, ...) {
   varnames <- sapply(
@@ -115,7 +117,13 @@ add_variable_branch.mverse <- function(.mverse, ...) {
   invisible(.mverse)
 }
 
-#' Remove a variable branch to a \code{mverse}.
+#' @rdname remove_variable_branch
+#' @export
+remove_variable_branch <- function(.mverse, name) {
+  UseMethod("remove_variable_branch")
+}
+
+#' Remove a variable branch from a \code{mverse}.
 #'
 #' This method removes one variable branch from
 #' an existing \code{mverse} object.
@@ -129,15 +137,10 @@ add_variable_branch.mverse <- function(.mverse, ...) {
 #'   remove_variable_branch(old_branch)
 #' }
 #' @return The resulting \code{mverse} object.
-#' @name remove_variable_branch
-#' @export
-remove_variable_branch <- function(.mverse, name) {
-  UseMethod("remove_variable_branch")
-}
-
 #' @importFrom magrittr %>%
 #' @import dplyr
-#' @rdname remove_variable_branch
+#' @name remove_variable_branch
+#' @family {methods for working with a variable branch}
 #' @export
 remove_variable_branch.mverse <- function(.mverse, name) {
   vB_list <- attr(.mverse, 'variable_branches')
@@ -184,7 +187,7 @@ print_variable_branches_table <- function(vbprint, mtable) {
     replace_this<- paste0(nm, '_', 1:length(vbprint[[nm]]))
     brnch <- paste0(nm,'_branch')
     mtable[[brnch]] <- mtable[[brnch]] %>%
-      dplyr::recode(!!! setNames(vbprint[[nm]], replace_this))
+      dplyr::recode(!!! stats::setNames(vbprint[[nm]], replace_this))
   }
   mtable
 }

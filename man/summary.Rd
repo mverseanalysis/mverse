@@ -21,3 +21,10 @@ displaying all universes defined by the multiverse.
 Each row corresponds to a universe and each column
 represents a branch.
 }
+\seealso{
+Other {mverse methods}: 
+\code{\link{execute_multiverse}()},
+\code{\link{extract}()},
+\code{\link{mverse}()}
+}
+\concept{{mverse methods}}

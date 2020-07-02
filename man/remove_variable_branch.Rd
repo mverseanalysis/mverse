@@ -3,7 +3,7 @@
 \name{remove_variable_branch}
 \alias{remove_variable_branch}
 \alias{remove_variable_branch.mverse}
-\title{Remove a variable branch to a \code{mverse}.}
+\title{Remove a variable branch from a \code{mverse}.}
 \usage{
 remove_variable_branch(.mverse, name)
 
@@ -28,3 +28,9 @@ mv <- mverse \%>\%
   remove_variable_branch(old_branch)
 }
 }
+\seealso{
+Other {methods for working with a variable branch}: 
+\code{\link{add_variable_branch}()},
+\code{\link{variable_branch}()}
+}
+\concept{{methods for working with a variable branch}}

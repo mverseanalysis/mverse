@@ -7,9 +7,18 @@
 \usage{
 extract(...)
 
-\method{extract}{mverse}(.mverse, columns = NULL, universe = NULL, nuni = NULL, frow = NULL)
+\method{extract}{mverse}(
+  .mverse,
+  columns = NULL,
+  universe = NULL,
+  nuni = NULL,
+  frow = NULL,
+  ...
+)
 }
 \arguments{
+\item{...}{Ignored.}
+
 \item{.mverse}{a \code{mverse} object.}
 
 \item{columns}{a character vector of column names to extract.}
@@ -50,3 +59,10 @@ and all rows are returned as they are. Note if you select
 before returning them. If \code{frow} is greater than 1,
 the method randomly samples rows with replacement.
 }
+\seealso{
+Other {mverse methods}: 
+\code{\link{execute_multiverse}()},
+\code{\link{mverse}()},
+\code{\link{summary}()}
+}
+\concept{{mverse methods}}

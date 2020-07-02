@@ -2,20 +2,20 @@
 % Please edit documentation in R/variable_branch.R
 \name{variable_branch}
 \alias{variable_branch}
-\title{Create a new variable_branch object}
+\title{Create a new variable branch.}
 \usage{
 variable_branch(..., name = NULL)
 }
 \arguments{
 \item{...}{branch definition expressions.}
 
-\item{nameName}{for the new variable.}
+\item{name}{Name for the new variable.}
 }
 \value{
 a variable_branch object.
 }
 \description{
-Create a new variable_branch object
+Create a new variable branch.
 }
 \examples{
 \dontrun{
@@ -23,3 +23,9 @@ x4 <- variableBranch(x1 + x2, x1 + x3, sum(x1, x2, x3))
 }
 
 }
+\seealso{
+Other {methods for working with a variable branch}: 
+\code{\link{add_variable_branch}()},
+\code{\link{remove_variable_branch}()}
+}
+\concept{{methods for working with a variable branch}}

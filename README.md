@@ -16,7 +16,7 @@ devtools::install_github("mverseanalysis/mverse")
 
 ## Usage
 
-TBD
+See [Example 1](articles/example-1.html) and other articles for examples and exercises.
 
 ## References
 
