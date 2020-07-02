@@ -16,10 +16,10 @@ License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Depends: 
-  R (>= 3.6)
+  R (>= 3.6),
+  magrittr (>= 1.5)
 Imports:
   multiverse,
-  magrittr,
   dplyr,
   rlang,
   stringr,
