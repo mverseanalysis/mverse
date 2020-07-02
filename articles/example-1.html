@@ -84,568 +84,241 @@
     
 <p>The library comes preloaded with a dataset, <code>soccer</code>, from <span class="citation">(Silberzahn et al. 2014)</span> on card counts per each pair between 2,053 soccer players and 3,147 referees. Below are the first few lines of the dataset.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">mverse</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">soccer</span>)</pre></body></html></div>
+<span class="co">#&gt; Loading required package: magrittr</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'mverse'</span>
+<span class="co">#&gt; The following object is masked from 'package:magrittr':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     extract</span>
+<span class="co">#&gt; The following object is masked from 'package:base':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     summary</span>
+<span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">soccer</span>)) <span class="co"># using kable for displaying data in html</span></pre></body></html></div>
 <table class="table">
-<thead><tr>
-<th style="text-align:left;">
-playerShort
-</th>
-<th style="text-align:left;">
-player
-</th>
-<th style="text-align:left;">
-club
-</th>
-<th style="text-align:left;">
-leagueCountry
-</th>
-<th style="text-align:left;">
-birthday
-</th>
-<th style="text-align:right;">
-height
-</th>
-<th style="text-align:right;">
-weight
-</th>
-<th style="text-align:left;">
-position
-</th>
-<th style="text-align:right;">
-games
-</th>
-<th style="text-align:right;">
-victories
-</th>
-<th style="text-align:right;">
-ties
-</th>
-<th style="text-align:right;">
-defeats
-</th>
-<th style="text-align:right;">
-goals
-</th>
-<th style="text-align:right;">
-yellowCards
-</th>
-<th style="text-align:right;">
-yellowReds
-</th>
-<th style="text-align:right;">
-redCards
-</th>
-<th style="text-align:right;">
-rater1
-</th>
-<th style="text-align:right;">
-rater2
-</th>
-<th style="text-align:right;">
-refNum
-</th>
-<th style="text-align:right;">
-refCountry
-</th>
-<th style="text-align:right;">
-meanIAT
-</th>
-<th style="text-align:right;">
-nIAT
-</th>
-<th style="text-align:right;">
-seIAT
-</th>
-<th style="text-align:right;">
-meanExp
-</th>
-<th style="text-align:right;">
-nExp
-</th>
-<th style="text-align:right;">
-seExp
-</th>
+<colgroup>
+<col width="5%">
+<col width="5%">
+<col width="6%">
+<col width="5%">
+<col width="4%">
+<col width="2%">
+<col width="2%">
+<col width="8%">
+<col width="2%">
+<col width="3%">
+<col width="1%">
+<col width="3%">
+<col width="2%">
+<col width="4%">
+<col width="4%">
+<col width="3%">
+<col width="2%">
+<col width="2%">
+<col width="2%">
+<col width="4%">
+<col width="3%">
+<col width="1%">
+<col width="3%">
+<col width="4%">
+<col width="1%">
+<col width="3%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">playerShort</th>
+<th align="left">player</th>
+<th align="left">club</th>
+<th align="left">leagueCountry</th>
+<th align="left">birthday</th>
+<th align="right">height</th>
+<th align="right">weight</th>
+<th align="left">position</th>
+<th align="right">games</th>
+<th align="right">victories</th>
+<th align="right">ties</th>
+<th align="right">defeats</th>
+<th align="right">goals</th>
+<th align="right">yellowCards</th>
+<th align="right">yellowReds</th>
+<th align="right">redCards</th>
+<th align="right">rater1</th>
+<th align="right">rater2</th>
+<th align="right">refNum</th>
+<th align="right">refCountry</th>
+<th align="right">meanIAT</th>
+<th align="right">nIAT</th>
+<th align="right">seIAT</th>
+<th align="right">meanExp</th>
+<th align="right">nExp</th>
+<th align="right">seExp</th>
 </tr></thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-lucas-wilchez
-</td>
-<td style="text-align:left;">
-Lucas Wilchez
-</td>
-<td style="text-align:left;">
-Real Zaragoza
-</td>
-<td style="text-align:left;">
-Spain
-</td>
-<td style="text-align:left;">
-31.08.1983
-</td>
-<td style="text-align:right;">
-177
-</td>
-<td style="text-align:right;">
-72
-</td>
-<td style="text-align:left;">
-Attacking Midfielder
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.25
-</td>
-<td style="text-align:right;">
-0.50
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.3263915
-</td>
-<td style="text-align:right;">
-712
-</td>
-<td style="text-align:right;">
-0.0005641
-</td>
-<td style="text-align:right;">
-0.3960000
-</td>
-<td style="text-align:right;">
-750
-</td>
-<td style="text-align:right;">
-0.0026965
-</td>
+<tr class="odd">
+<td align="left">lucas-wilchez</td>
+<td align="left">Lucas Wilchez</td>
+<td align="left">Real Zaragoza</td>
+<td align="left">Spain</td>
+<td align="left">31.08.1983</td>
+<td align="right">177</td>
+<td align="right">72</td>
+<td align="left">Attacking Midfielder</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.25</td>
+<td align="right">0.50</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.3263915</td>
+<td align="right">712</td>
+<td align="right">0.0005641</td>
+<td align="right">0.3960000</td>
+<td align="right">750</td>
+<td align="right">0.0026965</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-john-utaka
-</td>
-<td style="text-align:left;">
-John Utaka
-</td>
-<td style="text-align:left;">
-Montpellier HSC
-</td>
-<td style="text-align:left;">
-France
-</td>
-<td style="text-align:left;">
-08.01.1982
-</td>
-<td style="text-align:right;">
-179
-</td>
-<td style="text-align:right;">
-82
-</td>
-<td style="text-align:left;">
-Right Winger
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.75
-</td>
-<td style="text-align:right;">
-0.75
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-0.2033747
-</td>
-<td style="text-align:right;">
-40
-</td>
-<td style="text-align:right;">
-0.0108749
-</td>
-<td style="text-align:right;">
--0.2040816
-</td>
-<td style="text-align:right;">
-49
-</td>
-<td style="text-align:right;">
-0.0615044
-</td>
+<tr class="even">
+<td align="left">john-utaka</td>
+<td align="left">John Utaka</td>
+<td align="left">Montpellier HSC</td>
+<td align="left">France</td>
+<td align="left">08.01.1982</td>
+<td align="right">179</td>
+<td align="right">82</td>
+<td align="left">Right Winger</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.75</td>
+<td align="right">0.75</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">0.2033747</td>
+<td align="right">40</td>
+<td align="right">0.0108749</td>
+<td align="right">-0.2040816</td>
+<td align="right">49</td>
+<td align="right">0.0615044</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-abdon-prats
-</td>
-<td style="text-align:left;">
-Abdon Prats
-</td>
-<td style="text-align:left;">
-RCD Mallorca
-</td>
-<td style="text-align:left;">
-Spain
-</td>
-<td style="text-align:left;">
-17.12.1992
-</td>
-<td style="text-align:right;">
-181
-</td>
-<td style="text-align:right;">
-79
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.3698936
-</td>
-<td style="text-align:right;">
-1785
-</td>
-<td style="text-align:right;">
-0.0002295
-</td>
-<td style="text-align:right;">
-0.5882973
-</td>
-<td style="text-align:right;">
-1897
-</td>
-<td style="text-align:right;">
-0.0010016
-</td>
+<tr class="odd">
+<td align="left">abdon-prats</td>
+<td align="left">Abdon Prats</td>
+<td align="left">RCD Mallorca</td>
+<td align="left">Spain</td>
+<td align="left">17.12.1992</td>
+<td align="right">181</td>
+<td align="right">79</td>
+<td align="left">NA</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="right">0.3698936</td>
+<td align="right">1785</td>
+<td align="right">0.0002295</td>
+<td align="right">0.5882973</td>
+<td align="right">1897</td>
+<td align="right">0.0010016</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-pablo-mari
-</td>
-<td style="text-align:left;">
-Pablo Mari
-</td>
-<td style="text-align:left;">
-RCD Mallorca
-</td>
-<td style="text-align:left;">
-Spain
-</td>
-<td style="text-align:left;">
-31.08.1993
-</td>
-<td style="text-align:right;">
-191
-</td>
-<td style="text-align:right;">
-87
-</td>
-<td style="text-align:left;">
-Center Back
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.3698936
-</td>
-<td style="text-align:right;">
-1785
-</td>
-<td style="text-align:right;">
-0.0002295
-</td>
-<td style="text-align:right;">
-0.5882973
-</td>
-<td style="text-align:right;">
-1897
-</td>
-<td style="text-align:right;">
-0.0010016
-</td>
+<tr class="even">
+<td align="left">pablo-mari</td>
+<td align="left">Pablo Mari</td>
+<td align="left">RCD Mallorca</td>
+<td align="left">Spain</td>
+<td align="left">31.08.1993</td>
+<td align="right">191</td>
+<td align="right">87</td>
+<td align="left">Center Back</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="right">0.3698936</td>
+<td align="right">1785</td>
+<td align="right">0.0002295</td>
+<td align="right">0.5882973</td>
+<td align="right">1897</td>
+<td align="right">0.0010016</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-ruben-pena
-</td>
-<td style="text-align:left;">
-Ruben Pena
-</td>
-<td style="text-align:left;">
-Real Valladolid
-</td>
-<td style="text-align:left;">
-Spain
-</td>
-<td style="text-align:left;">
-18.07.1991
-</td>
-<td style="text-align:right;">
-172
-</td>
-<td style="text-align:right;">
-70
-</td>
-<td style="text-align:left;">
-Right Midfielder
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-0.3698936
-</td>
-<td style="text-align:right;">
-1785
-</td>
-<td style="text-align:right;">
-0.0002295
-</td>
-<td style="text-align:right;">
-0.5882973
-</td>
-<td style="text-align:right;">
-1897
-</td>
-<td style="text-align:right;">
-0.0010016
-</td>
+<tr class="odd">
+<td align="left">ruben-pena</td>
+<td align="left">Ruben Pena</td>
+<td align="left">Real Valladolid</td>
+<td align="left">Spain</td>
+<td align="left">18.07.1991</td>
+<td align="right">172</td>
+<td align="right">70</td>
+<td align="left">Right Midfielder</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="right">0.3698936</td>
+<td align="right">1785</td>
+<td align="right">0.0002295</td>
+<td align="right">0.5882973</td>
+<td align="right">1897</td>
+<td align="right">0.0010016</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-aaron-hughes
-</td>
-<td style="text-align:left;">
-Aaron Hughes
-</td>
-<td style="text-align:left;">
-Fulham FC
-</td>
-<td style="text-align:left;">
-England
-</td>
-<td style="text-align:left;">
-08.11.1979
-</td>
-<td style="text-align:right;">
-182
-</td>
-<td style="text-align:right;">
-71
-</td>
-<td style="text-align:left;">
-Center Back
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-0.25
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-0.3251852
-</td>
-<td style="text-align:right;">
-127
-</td>
-<td style="text-align:right;">
-0.0032968
-</td>
-<td style="text-align:right;">
-0.5384615
-</td>
-<td style="text-align:right;">
-130
-</td>
-<td style="text-align:right;">
-0.0137522
-</td>
+<tr class="even">
+<td align="left">aaron-hughes</td>
+<td align="left">Aaron Hughes</td>
+<td align="left">Fulham FC</td>
+<td align="left">England</td>
+<td align="left">08.11.1979</td>
+<td align="right">182</td>
+<td align="right">71</td>
+<td align="left">Center Back</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0.25</td>
+<td align="right">0.00</td>
+<td align="right">4</td>
+<td align="right">4</td>
+<td align="right">0.3251852</td>
+<td align="right">127</td>
+<td align="right">0.0032968</td>
+<td align="right">0.5384615</td>
+<td align="right">130</td>
+<td align="right">0.0137522</td>
 </tr>
 </tbody>
 </table>
@@ -715,36 +388,12 @@ First, we will define the five options as separate variables.</p>
   <span class="fu"><a href="https://rdrr.io/pkg/mverse/man/execute_multiverse.html">execute_multiverse</a></span>()</pre></body></html></div>
 <p>The object name <code>skin_tone</code> is the name of the new variable defined. Each alternative definition creates an alternative <em>universe</em> in the <code>mverse</code> object. <code>execute_multiverse</code> generates the new variable based on the branching rules provided by <code>add_variable_branch</code>.</p>
 <p>You can see the variable branch added with <code>summary</code> method for the <code>mverse</code> object.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/mverse/man/summary.html">summary</a></span>(<span class="no">mv</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>() <span class="co"># for display in the documentation</span></pre></body></html></div>
-<table class="table">
-<thead><tr>
-<th style="text-align:right;">
-universe
-</th>
-<th style="text-align:left;">
-skin_tone_branch
-</th>
-</tr></thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-(rater1 + rater2)/2
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-ifelse(rater1 &gt; rater2, rater1, rater2)
-</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/mverse/man/summary.html">summary</a></span>(<span class="no">mv</span>)
+<span class="co">#&gt; # A tibble: 2 x 2</span>
+<span class="co">#&gt;   universe skin_tone_branch                       </span>
+<span class="co">#&gt;      &lt;int&gt; &lt;chr&gt;                                  </span>
+<span class="co">#&gt; 1        1 (rater1 + rater2)/2                    </span>
+<span class="co">#&gt; 2        2 ifelse(rater1 &gt; rater2, rater1, rater2)</span></pre></body></html></div>
 <div id="exercise--1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#exercise--1" class="anchor"></a>Exercise.</h3>
