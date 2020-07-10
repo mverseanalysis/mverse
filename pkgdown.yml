@@ -2,7 +2,7 @@ pandoc: '2.2'
 pkgdown: 1.5.1
 pkgdown_sha: ~
 articles: []
-last_built: 2020-07-02T17:41Z
+last_built: 2020-07-10T03:29Z
 urls:
   reference: https://mverseanalysis.github.io/mverse/reference
   article: https://mverseanalysis.github.io/mverse/articles
