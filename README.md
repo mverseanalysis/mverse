@@ -14,9 +14,15 @@ You can install the package from [GitHub](https://github.com/mverseanalysis/mver
 devtools::install_github("mverseanalysis/mverse")
 ```
 
+If you do not have `devtools` installed, install it first with:
+
+```
+install.packages("devtools")
+```
+
 ## Usage
 
-See [Example 1](articles/example-1.html) and other articles for examples and exercises.
+See [Example 1](https://mverseanalysis.github.io/mverse/articles/example-1.html) and other articles for examples and exercises.
 
 ## References
 
