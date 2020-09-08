@@ -56,6 +56,9 @@
 <li>
       <a href="../articles/example-1.html">Example 1. Combining two independent ratings.</a>
     </li>
+    <li>
+      <a href="../articles/hurricane.html">Case Study. Are female hurricanes deadlier than male hurricanes?</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -83,7 +86,8 @@
     
     
 <p>The library comes preloaded with a dataset, <code>soccer</code>, from <span class="citation">(Silberzahn et al. 2014)</span> on card counts per each pair between 2,053 soccer players and 3,147 referees. Below are the first few lines of the dataset.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">mverse</span>)
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://mverseanalysis.github.io/mverse">mverse</a></span>)
 <span class="co">#&gt; Loading required package: magrittr</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'mverse'</span>
@@ -93,7 +97,8 @@
 <span class="co">#&gt; The following object is masked from 'package:base':</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     summary</span>
-<span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">soccer</span>)) <span class="co"># using kable for displaying data in html</span></pre></body></html></div>
+<span class="kw">knitr</span>::<span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw">soccer</span>)) <span class="co"># using kable for displaying data in html</span>
+</pre></div>
 <table class="table">
 <colgroup>
 <col width="5%">
@@ -336,26 +341,30 @@
 <a href="#without-the-mverse-library-" class="anchor"></a>1. Without the <code>mverse</code> library.</h2>
 <p>Let’s first consider how you might study the five options using base R.<br>
 First, we will define the five options as separate variables.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="co"># remove rows with no rating</span>
-<span class="no">soccer</span> <span class="kw">&lt;-</span> <span class="no">soccer</span>[!<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">soccer</span>$<span class="no">rater1</span>), ]
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="co"># remove rows with no rating</span>
+<span class="kw">soccer</span> <span class="op">&lt;-</span> <span class="kw">soccer</span>[<span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="kw">soccer</span><span class="op">$</span><span class="kw">rater1</span>), ] 
 
-<span class="no">skin_option_1</span> <span class="kw">&lt;-</span> (                <span class="co"># mean</span>
-  <span class="no">soccer</span>$<span class="no">rater1</span> + <span class="no">soccer</span>$<span class="no">rater2</span>) / <span class="fl">2</span>
-<span class="no">skin_option_2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(          <span class="co"># max</span>
-  <span class="no">soccer</span>$<span class="no">rater1</span> <span class="kw">&gt;</span> <span class="no">soccer</span>$<span class="no">rater2</span>,
-  <span class="no">soccer</span>$<span class="no">rater1</span>, <span class="no">soccer</span>$<span class="no">rater2</span>)
-<span class="no">skin_option_3</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(          <span class="co"># min</span>
-  <span class="no">soccer</span>$<span class="no">rater1</span> <span class="kw">&lt;</span> <span class="no">soccer</span>$<span class="no">rater2</span>,
-  <span class="no">soccer</span>$<span class="no">rater1</span>, <span class="no">soccer</span>$<span class="no">rater2</span>)
-<span class="no">skin_option_4</span> <span class="kw">&lt;-</span> <span class="no">soccer</span>$<span class="no">rater1</span>    <span class="co"># first</span>
-<span class="no">skin_option_5</span> <span class="kw">&lt;-</span> <span class="no">soccer</span>$<span class="no">rater2</span>    <span class="co"># second</span></pre></body></html></div>
+<span class="kw">skin_option_1</span> <span class="op">&lt;-</span> (                <span class="co"># mean</span>
+  <span class="kw">soccer</span><span class="op">$</span><span class="kw">rater1</span> <span class="op">+</span> <span class="kw">soccer</span><span class="op">$</span><span class="kw">rater2</span>) <span class="op">/</span> <span class="fl">2</span> 
+<span class="kw">skin_option_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(          <span class="co"># max</span>
+  <span class="kw">soccer</span><span class="op">$</span><span class="kw">rater1</span> <span class="op">&gt;</span> <span class="kw">soccer</span><span class="op">$</span><span class="kw">rater2</span>, 
+  <span class="kw">soccer</span><span class="op">$</span><span class="kw">rater1</span>, <span class="kw">soccer</span><span class="op">$</span><span class="kw">rater2</span>)
+<span class="kw">skin_option_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(          <span class="co"># min</span>
+  <span class="kw">soccer</span><span class="op">$</span><span class="kw">rater1</span> <span class="op">&lt;</span> <span class="kw">soccer</span><span class="op">$</span><span class="kw">rater2</span>, 
+  <span class="kw">soccer</span><span class="op">$</span><span class="kw">rater1</span>, <span class="kw">soccer</span><span class="op">$</span><span class="kw">rater2</span>)
+<span class="kw">skin_option_4</span> <span class="op">&lt;-</span> <span class="kw">soccer</span><span class="op">$</span><span class="kw">rater1</span>    <span class="co"># first</span>
+<span class="kw">skin_option_5</span> <span class="op">&lt;-</span> <span class="kw">soccer</span><span class="op">$</span><span class="kw">rater2</span>    <span class="co"># second</span>
+</pre></div>
 <p>We can plot their histograms to study the distributions. We will use the <code>ggplot2</code> library for plotting.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw">mapping</span><span class="kw">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">skin_option_1</span>)) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span>(<span class="kw">breaks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0.2</span>),
-                 <span class="kw">colour</span> <span class="kw">=</span> <span class="st">'white'</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">'Histogram of player skin tones.'</span>,
-       <span class="kw">x</span> <span class="kw">=</span> <span class="st">'Skin Tone'</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="st">'Count'</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span>)
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(mapping=<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(x = <span class="kw">skin_option_1</span>)) <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span>(breaks = <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0.2</span>),
+                 colour = <span class="st">'white'</span>) <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(title = <span class="st">'Histogram of player skin tones.'</span>,
+       x = <span class="st">'Skin Tone'</span>, y = <span class="st">'Count'</span>)
+</pre></div>
 <p><img src="example-1_files/figure-html/hist_base-1.png" width="480"></p>
 <p>Now, for the remaining four variable definitions, we will have to repeat the step above.</p>
 <div id="exercise-" class="section level3">
@@ -376,31 +385,32 @@ First, we will define the five options as separate variables.</p>
 <li>the darker rating of the two</li>
 </ol>
 <p>First, we will define a <code>mverse</code> object from the data set.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">mv</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://mverseanalysis.github.io/mverse/reference/mverse.html">create_multiverse</a></span>(<span class="no">soccer</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="kw">mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mverse.html">create_multiverse</a></span>(<span class="kw">soccer</span>)
+</pre></div>
 <p>In <code>mverse</code> package, an alternative variabe definition is called a variable branch. You can create a variable branch with the function <code>variable_branch</code>.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">skin_tone</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://mverseanalysis.github.io/mverse/reference/variable_branch.html">variable_branch</a></span>(
-  (<span class="no">rater1</span> + <span class="no">rater2</span>)/<span class="fl">2</span>,
-  <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">rater1</span> <span class="kw">&gt;</span> <span class="no">rater2</span>, <span class="no">rater1</span>, <span class="no">rater2</span>)
-)</pre></body></html></div>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="kw">skin_tone</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/variable_branch.html">variable_branch</a></span>(
+  (<span class="kw">rater1</span> <span class="op">+</span> <span class="kw">rater2</span>)<span class="op">/</span><span class="fl">2</span>,
+  <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="kw">rater1</span> <span class="op">&gt;</span> <span class="kw">rater2</span>, <span class="kw">rater1</span>, <span class="kw">rater2</span>)
+)
+</pre></div>
 <p>You can then add the variable branch rules to the <code>mverse</code> object using <code>add_variable_branch</code>. You can use the <code>tidyverse</code>’s <code>dplyr</code> grammar for defining the variable rules.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">mv</span> <span class="kw">&lt;-</span> <span class="no">mv</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://mverseanalysis.github.io/mverse/reference/add_variable_branch.html">add_variable_branch</a></span>(<span class="no">skin_tone</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://mverseanalysis.github.io/mverse/reference/execute_multiverse.html">execute_multiverse</a></span>()</pre></body></html></div>
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="kw">mv</span> <span class="op">&lt;-</span> <span class="kw">mv</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_variable_branch.html">add_variable_branch</a></span>(<span class="kw">skin_tone</span>) <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/execute_multiverse.html">execute_multiverse</a></span>()
+</pre></div>
 <p>The object name <code>skin_tone</code> is the name of the new variable defined. Each alternative definition creates an alternative <em>universe</em> in the <code>mverse</code> object. <code>execute_multiverse</code> generates the new variable based on the branching rules provided by <code>add_variable_branch</code>.</p>
 <p>You can see the variable branch added with <code>summary</code> method for the <code>mverse</code> object.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://mverseanalysis.github.io/mverse/reference/summary.html">summary</a></span>(<span class="no">mv</span>)
-<span class="co">#&gt; Warning: `...` is not empty.</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; We detected these problematic arguments:</span>
-<span class="co">#&gt; * `needs_dots`</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; These dots only exist to allow future extensions and should be empty.</span>
-<span class="co">#&gt; Did you misspecify an argument?</span>
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="fu"><a href="../reference/summary.html">summary</a></span>(<span class="kw">mv</span>) 
 <span class="co">#&gt; # A tibble: 2 x 2</span>
 <span class="co">#&gt;   universe skin_tone_branch                       </span>
 <span class="co">#&gt;      &lt;int&gt; &lt;chr&gt;                                  </span>
 <span class="co">#&gt; 1        1 (rater1 + rater2)/2                    </span>
-<span class="co">#&gt; 2        2 ifelse(rater1 &gt; rater2, rater1, rater2)</span></pre></body></html></div>
+<span class="co">#&gt; 2        2 ifelse(rater1 &gt; rater2, rater1, rater2)</span>
+</pre></div>
 <div id="exercise--1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#exercise--1" class="anchor"></a>Exercise.</h3>
@@ -414,28 +424,36 @@ First, we will define the five options as separate variables.</p>
 <h2 class="hasAnchor">
 <a href="#comparing-between-universes-" class="anchor"></a>3. Comparing between Universes.</h2>
 <p>In this section, we will now examine and compare the distributions of the variable branches. You can extract the resulting value of branched variables using <code>extract</code> method. By default, it returns the branched variables across all universes with the universe index. Note that the universe index column is returned as a factor variable.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">branched</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://mverseanalysis.github.io/mverse/reference/extract.html">extract</a></span>(<span class="no">mv</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(<span class="no">branched</span>)
-<span class="co">#&gt; [1] 249242      2</span></pre></body></html></div>
+<div class="sourceCode" id="cb8"><pre class="downlit">
+<span class="kw">branched</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract.html">extract</a></span>(<span class="kw">mv</span>) 
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(<span class="kw">branched</span>)
+<span class="co">#&gt; [1] 249242      2</span>
+</pre></div>
 <p>It provides various options to select a subset of data only. <code>universe</code> and <code>nuni</code> are useful if you want to select a subset of universes in the multiverse. <code>frow</code> provides the option to extract a fraction of data in each universe.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">frac</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://mverseanalysis.github.io/mverse/reference/extract.html">extract</a></span>(<span class="no">mv</span>, <span class="kw">frow</span> <span class="kw">=</span>  <span class="fl">0.05</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">frac</span>)/<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">branched</span>)
-<span class="co">#&gt; [1] 0.0499996</span></pre></body></html></div>
+<div class="sourceCode" id="cb9"><pre class="downlit">
+<span class="kw">frac</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract.html">extract</a></span>(<span class="kw">mv</span>, frow =  <span class="fl">0.05</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">frac</span>)<span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="kw">branched</span>)
+<span class="co">#&gt; [1] 0.0499996</span>
+</pre></div>
 <p>Using the output tibble, you can construct plots to compare their distributions in different universes. For example, you can overlay density lines on a single plot.</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">branched</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw">mapping</span> <span class="kw">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">skin_tone</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="no">universe</span>)) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span>(<span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">0.2</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">'Skin Tone'</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">'Density'</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">'Density of player skin tones.'</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb10"><pre class="downlit">
+<span class="kw">branched</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(mapping = <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(x = <span class="kw">skin_tone</span>, color = <span class="kw">universe</span>)) <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span>(alpha = <span class="fl">0.2</span>) <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">'Skin Tone'</span>) <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">'Density'</span>) <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">'Density of player skin tones.'</span>)
+</pre></div>
 <p><img src="example-1_files/figure-html/compare_universe-1.png" width="480"></p>
 <p>Another option is the use <code>ggplot</code>’s <code>facet_grid</code> function to generate multiple plots in a grid.</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">branched</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw">mapping</span> <span class="kw">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">skin_tone</span>, <span class="kw">fill</span> <span class="kw">=</span> <span class="no">universe</span>)) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span>(<span class="kw">position</span> <span class="kw">=</span> <span class="st">'dodge'</span>, <span class="kw">bins</span> <span class="kw">=</span> <span class="fl">10</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">'Histogram of player skin tones.'</span>,
-       <span class="kw">y</span> <span class="kw">=</span> <span class="st">'Count'</span>, <span class="kw">x</span><span class="kw">=</span><span class="st">'Skin Tone'</span>) + <span class="co"># you can add axis labels and plot title with labs.</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span>(<span class="no">.</span> ~ <span class="no">universe</span>) <span class="co"># generate histograms for each universe.</span></pre></body></html></div>
+<div class="sourceCode" id="cb11"><pre class="downlit">
+<span class="kw">branched</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(mapping = <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(x = <span class="kw">skin_tone</span>, fill = <span class="kw">universe</span>)) <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span>(position = <span class="st">'dodge'</span>, bins = <span class="fl">10</span>) <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(title = <span class="st">'Histogram of player skin tones.'</span>,
+       y = <span class="st">'Count'</span>, x=<span class="st">'Skin Tone'</span>) <span class="op">+</span> <span class="co"># you can add axis labels and plot title with labs.</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span>(<span class="kw">.</span> <span class="op">~</span> <span class="kw">universe</span>) <span class="co"># generate histograms for each universe.</span>
+</pre></div>
 <p><img src="example-1_files/figure-html/compare_universe_hist-1.png" width="480"></p>
 <div id="exercise--2" class="section level3">
 <h3 class="hasAnchor">
@@ -480,7 +498,7 @@ First, we will define the five options as separate variables.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>
