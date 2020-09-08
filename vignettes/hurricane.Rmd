@@ -1,0 +1,336 @@
+---
+title: "Case Study. Are female hurricanes deadlier than male hurricanes?"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Case Study. Are female hurricanes deadlier than male hurricanes?}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+references:
+  - id: original
+    title: "Female hurricanes are deadlier than male hurricanes"
+    type: article-journal
+    issued:
+      year: 2014
+      month: 6
+      day: 17
+    URL: https://doi.org/10.1073/pnas.1402786111
+    DOI: 10.1073/pnas.1402786111
+    journal: Proceeedings fo the National Academiy of Sciences of the United States of America
+    volume: 111
+    issue: 24
+    page: 8782-8787
+    author:
+    - given: Kiju 
+      family: Jung
+    - given: Sharon
+      family: Shavitt
+    - given: Madhu
+      family: Viswanathan
+    - given: "Joseph M."
+      family: Hilbe
+  - id: multiverse
+    title: "multiverse: R package for creating explorable multiverse analysis"
+    type: entry
+    URL: https://mucollective.github.io/multiverse/
+    accessed:
+      year: 2020
+    author:
+    - given: Abhraneel
+      family: Sarma
+    - given: Matthew
+      family: Kay
+  - id: boba
+    title: "Boba: Authoring and Visualizing Multiverse Analyses"
+    type: entry
+    URL: https://arxiv.org/abs/2007.05551
+    issued:
+      year: 2020
+      month: 7
+      day: 30
+    accessed:
+      year: 2020
+    author:
+    - given: Yang
+      family: Liu
+    - given: Alex
+      family: Kale
+    - given: Tim
+      family: Althoff
+    - given: Jeffrey
+      family: Heer
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE
+)
+```
+
+This case study is adapted from the `multiverse` package case study of the same analysis.
+
+## Initiate a multiverse
+
+```{r load_data, warning=FALSE, message=FALSE}
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(tidybayes)
+library(ggplot2)
+library(mverse)
+data('hurricane')
+# read and process data
+hurricane <- hurricane %>%
+  rename(
+    year = Year,
+    name = Name,
+    dam = NDAM,
+    death = alldeaths,
+    female = Gender_MF,
+    masfem = MasFem,
+    category = Category,
+    pressure = Minpressure_Updated_2014,
+    wind = HighestWindSpeed
+  ) %>%
+  mutate(
+    post = if_else(year > 1979, 1, 0),
+    zcat = as.numeric(scale(category)),
+    zmin = -scale(pressure),
+    zwin = as.numeric(scale(wind)),
+    z3 = as.numeric((zmin + zcat + zwin) / 3)
+  )
+```
+
+```{r define_mverse}
+mv <- create_multiverse(hurricane)
+```
+
+## Define variable branches
+
+```{r define_outliers}
+# the exclusion criteria will be implemeted using filtering branches
+death_outliers <- variable_branch(
+  TRUE, 
+  name != 'Katrina', 
+  !(name %in% c('Katrina', 'Audrey'))
+)
+damage_outliers <- variable_branch(
+  TRUE, 
+  name != 'Sandy', 
+  !(name %in% c('Sandy', 'Andrew')),
+  !(name %in% c('Sandy', 'Andrew', 'Donna'))
+)
+mv <- mv %>%
+  add_variable_branch(death_outliers, damage_outliers) %>%
+  execute_multiverse()
+summary(mv)
+```
+
+```{r define_variables}
+femininity <- variable_branch(
+  female,
+  masfem
+)
+damage <- variable_branch(
+  dam,
+  log(dam)
+)
+mv <- mv %>%
+  add_variable_branch(femininity, damage) %>%
+  execute_multiverse()
+summary(mv)
+```
+## Define model branches
+
+> `mverse` methods aren't implemented yet
+
+```{r fit_model}
+# wrapper functions for defining filter variables 
+# and model variables to be implemented
+multiverse::inside(
+  mv, {
+    model <- glm(
+      branch(
+        model,
+        'linear' ~ log(death + 1),
+        'poisson' ~ death
+      ) ~ branch(
+        femininity_damage_interaction,
+        'yes' ~ femininity * damage,
+        'no' ~ femininity + damage
+      # ) + branch(
+      #   other_predictors,
+      #   'pressure' %when% (femininity_damage_interaction == "yes") ~ femininity * zmin,
+      #   'wind' %when% (femininity_damage_interaction == "yes") ~ femininity * zwin,
+      #   'category' %when% (femininity_damage_interaction == "yes") ~ femininity * zcat,
+      #   'all' %when% (femininity_damage_interaction == "yes") ~ femininity * z3,
+      #   'all_no_interaction' %when% (femininity_damage_interaction == "no") ~ z3,
+      #   'none' ~ NULL
+      ) + branch(
+        other_predictors,
+        'pressure' ~ femininity * zmin,
+        'wind' ~ femininity * zwin,
+        'category' ~ femininity * zcat,
+        'all' ~ femininity * z3,
+        'all_no_interaction' ~ z3,
+        'none' ~ NULL
+      ) + branch(
+        covariates,
+        '1' ~ NULL,
+        '2' ~ year:damage,
+        '3' ~ post:damage
+      ), family = branch(
+        model,
+        'linear' ~ gaussian,
+        'poisson' ~ poisson
+      ), data = data %>% filter(death_outliers, damage_outliers)
+    )
+    coef <- broom::tidy(model)
+  }
+)
+mv <- mv %>%
+  execute_multiverse()
+```
+
+## Inspect estimates
+
+> `mverse` methods aren't implemented yet (will wait until `multiverse::extract_variables` is available in the released version of `multiverse`)
+
+```{r extract_results, fig.cap="Estimated coefficient of femininity of a hurricane's name."}
+# a wrapper function to be implemented using multiverse::extract_variables
+fem_coefs <- multiverse::multiverse_table(mv) %>%
+  mutate(res = map(.results, 'coef')) %>%
+  unnest(res) %>%
+  rename(universe = .universe) %>%
+  filter(term == 'femininity')
+fem_coefs %>%
+  arrange(estimate) %>%
+  mutate(index = 1:nrow(.)) %>%
+  ggplot(aes(y = estimate, x = index, color = model)) +
+  geom_point(alpha = 0.1) +
+  geom_pointrange(aes(ymin = estimate - qnorm(0.025)*std.error,
+                      ymax = estimate + qnorm(0.025)*std.error),
+                  alpha = 0.1) +
+  theme_minimal()
+```
+
+<!-- ## Cross-validation -->
+
+<!-- > `mverse` methods aren't implemented yet (will wait until `multiverse::extract_variables` is available in the released version of `multiverse`) -->
+
+
+```{r cvfunction, eval=FALSE, include=FALSE}
+cross <- function (df, func, mdl, fml, folds = 5) {
+  l = nrow(df) %/% folds
+  mse = 0
+  for (i in c(1:folds)) {
+    # properly splitting train/test
+    i1 = l*(i-1)+1
+    i2 = l*i
+    d_test = df[i1:i2, ]
+    if (i1 > 1) {
+      if (i2+1 < nrow(df)) {
+        d_train = rbind(df[1:(i1-1), ], df[(i2+1):nrow(df), ])
+      } else {
+        d_train = df[1:(i1-1), ]
+      }
+    } else {
+      d_train = df[(i2+1):nrow(df), ]
+    }
+    model <- func(mdl, family = fml, data = d_train)
+    mu <- predict(model, d_test, type = "response")
+    sigma <- sigma(model)
+    expected_deaths <- pred2expectation(mu, sigma)
+    mse = mse + sum((d_test$death - expected_deaths)^2)
+  }
+  mse = sqrt(mse / nrow(df))
+  return(mse)
+}
+```
+
+```{r executecv, eval=FALSE, include=FALSE}
+# a function for post-processing predicted means and
+# standard deviations into expected number of deaths
+pred2expectation <- function(mu, sigma) {
+  branch(model, 
+         "linear" ~ exp(mu + sigma^2/2) - 1,
+         "poisson" ~ mu
+  )
+}
+mv <- mv %>%
+  execute_multiverse()
+multiverse::inside(
+  mv, {
+    fit <- cross(
+      data %>% filter(death_outliers) %>% filter(damage_outliers),
+      glm,
+      branch(
+        model,
+        'linear' ~ log(death + 1),
+        'poisson' ~ death
+      ) ~ branch(
+        femininity_damage_interaction,
+        'yes' ~ femininity * damage,
+        'no' ~ femininity + damage
+      ) + branch(
+        other_predictors,
+        'pressure' %when% (femininity_damage_interaction == "yes") ~ femininity * zmin,
+        'wind' %when% (femininity_damage_interaction == "yes") ~ femininity * zwin,
+        'category' %when% (femininity_damage_interaction == "yes") ~ femininity * zcat,
+        'all' %when% (femininity_damage_interaction == "yes") ~ femininity * z3,
+        'all_no_interaction' %when% (femininity_damage_interaction == "no") ~ z3,
+        'none' ~ NULL
+      ) + branch(
+        covariates,
+        '1' ~ NULL,
+        '2' ~ year:damage,
+        '3' ~ post:damage
+      ),
+      branch(
+        model,
+        'linear' ~ gaussian,
+        'poisson' ~ poisson
+      )
+    ) # cross validation
+    nrmse <- fit / (max(data$death) - min(data$death))
+    # get perdiction
+    pred  <- predict(model, se.fit = TRUE, type = 'response')
+    disagg_fit <- data %>%
+      mutate(
+        fit = pred$fit,
+        se.fit = pred$se.fit,
+        df = df.residual(model),
+        sigma = sigma(model),
+        se.residual = sqrt(sum(residuals(model)^2) / df)
+      )
+    # aggregate fitted effect of female storm name
+    expectation <- disagg_fit %>%
+      mutate(expected_deaths = pred2expectation(fit, sigma)) %>%
+      group_by(female) %>%
+      summarise(expected_deaths = weighted.mean(expected_deaths), .groups = 'drop_last') %>%
+      compare_levels(expected_deaths, by = female) %>%
+      ungroup() %>%
+      select(expected_diff = expected_deaths) %>%
+      tibble::add_column(NRMSE = nrmse)
+    uncertainty <- disagg_fit %>%
+      mutate(
+        draw = list(1:5000),
+        t = map(df, ~rt(5000, .)),
+        x = map(df, ~rchisq(5000, .))
+      ) %>%
+      unnest(cols = c('draw', 't', 'x')) %>%
+      mutate(
+        mu = t * se.fit + fit,
+        sigma = sqrt(df * se.residual^2 / x),
+        expected_deaths = pred2expectation(mu, sigma)
+      ) %>%
+      group_by(draw, female) %>%
+      summarise(expected_deaths = mean(expected_deaths),
+                .groups = 'drop_last') %>%
+      compare_levels(expected_deaths, by = female) %>%
+      ungroup() %>%
+      select(expected_diff = expected_deaths)
+  }
+)
+mv <- mv %>%
+  execute_multiverse()
+```

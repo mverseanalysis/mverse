@@ -19,7 +19,7 @@ Depends:
   R (>= 3.6),
   magrittr (>= 1.5)
 Imports:
-  multiverse,
+  multiverse (<= 0.1.4),
   dplyr,
   rlang,
   stringr,

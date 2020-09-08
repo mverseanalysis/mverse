@@ -12,6 +12,8 @@ before_install:
 
 # set R dependencies from CRAN
 r_packages:
+  - broom
+  - tidybayes
   - testthat
   - covr
   - pkgdown
