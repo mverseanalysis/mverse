@@ -122,25 +122,23 @@
 <span class="kw">mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mverse.html">create_multiverse</a></span>(<span class="kw">hurricane</span>)
 </pre></div>
 </div>
-<div id="define-variable-branches" class="section level2">
+<div id="define-filter-branches" class="section level2">
 <h2 class="hasAnchor">
-<a href="#define-variable-branches" class="anchor"></a>Define variable branches</h2>
+<a href="#define-filter-branches" class="anchor"></a>Define filter branches</h2>
 <div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="co"># the exclusion criteria will be implemeted using filtering branches</span>
-<span class="kw">death_outliers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/variable_branch.html">variable_branch</a></span>(
+<span class="kw">death_outliers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_branch.html">filter_branch</a></span>(
   <span class="fl">TRUE</span>, 
   <span class="kw">name</span> != <span class="st">'Katrina'</span>, 
   <span class="op">!</span>(<span class="kw">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Katrina'</span>, <span class="st">'Audrey'</span>))
 )
-<span class="kw">damage_outliers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/variable_branch.html">variable_branch</a></span>(
+<span class="kw">damage_outliers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_branch.html">filter_branch</a></span>(
   <span class="fl">TRUE</span>, 
   <span class="kw">name</span> != <span class="st">'Sandy'</span>, 
   <span class="op">!</span>(<span class="kw">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Sandy'</span>, <span class="st">'Andrew'</span>)),
   <span class="op">!</span>(<span class="kw">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'Sandy'</span>, <span class="st">'Andrew'</span>, <span class="st">'Donna'</span>))
 )
 <span class="kw">mv</span> <span class="op">&lt;-</span> <span class="kw">mv</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_variable_branch.html">add_variable_branch</a></span>(<span class="kw">death_outliers</span>, <span class="kw">damage_outliers</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/execute_multiverse.html">execute_multiverse</a></span>()
+  <span class="fu"><a href="../reference/add_filter_branch.html">add_filter_branch</a></span>(<span class="kw">death_outliers</span>, <span class="kw">damage_outliers</span>)
 <span class="fu"><a href="../reference/summary.html">summary</a></span>(<span class="kw">mv</span>)
 <span class="co">## # A tibble: 12 x 3</span>
 <span class="co">##    universe death_outliers_branch           damage_outliers_branch              </span>
@@ -158,18 +156,21 @@
 <span class="co">## 11       11 "name != \"Katrina\""           "!(name %in% c(\"Sandy\", \"Andrew\…</span>
 <span class="co">## 12       12 "!(name %in% c(\"Katrina\", \"… "!(name %in% c(\"Sandy\", \"Andrew\…</span>
 </pre></div>
+</div>
+<div id="define-mutate-branches" class="section level2">
+<h2 class="hasAnchor">
+<a href="#define-mutate-branches" class="anchor"></a>Define mutate branches</h2>
 <div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw">femininity</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/variable_branch.html">variable_branch</a></span>(
+<span class="kw">femininity</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutate_branch.html">mutate_branch</a></span>(
   <span class="kw">female</span>,
   <span class="kw">masfem</span>
 )
-<span class="kw">damage</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/variable_branch.html">variable_branch</a></span>(
+<span class="kw">damage</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutate_branch.html">mutate_branch</a></span>(
   <span class="kw">dam</span>,
   <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span>(<span class="kw">dam</span>)
 )
 <span class="kw">mv</span> <span class="op">&lt;-</span> <span class="kw">mv</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_variable_branch.html">add_variable_branch</a></span>(<span class="kw">femininity</span>, <span class="kw">damage</span>) <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/execute_multiverse.html">execute_multiverse</a></span>()
+  <span class="fu"><a href="../reference/add_mutate_branch.html">add_mutate_branch</a></span>(<span class="kw">femininity</span>, <span class="kw">damage</span>)
 <span class="fu"><a href="../reference/summary.html">summary</a></span>(<span class="kw">mv</span>)
 <span class="co">## # A tibble: 48 x 5</span>
 <span class="co">##    universe death_outliers_br… damage_outliers_b… femininity_bran… damage_branch</span>
@@ -207,14 +208,6 @@
         <span class="kw">femininity_damage_interaction</span>,
         <span class="st">'yes'</span> <span class="op">~</span> <span class="kw">femininity</span> <span class="op">*</span> <span class="kw">damage</span>,
         <span class="st">'no'</span> <span class="op">~</span> <span class="kw">femininity</span> <span class="op">+</span> <span class="kw">damage</span>
-      <span class="co"># ) + branch(</span>
-      <span class="co">#   other_predictors,</span>
-      <span class="co">#   'pressure' %when% (femininity_damage_interaction == "yes") ~ femininity * zmin,</span>
-      <span class="co">#   'wind' %when% (femininity_damage_interaction == "yes") ~ femininity * zwin,</span>
-      <span class="co">#   'category' %when% (femininity_damage_interaction == "yes") ~ femininity * zcat,</span>
-      <span class="co">#   'all' %when% (femininity_damage_interaction == "yes") ~ femininity * z3,</span>
-      <span class="co">#   'all_no_interaction' %when% (femininity_damage_interaction == "no") ~ z3,</span>
-      <span class="co">#   'none' ~ NULL</span>
       ) <span class="op">+</span> <span class="fu">branch</span>(
         <span class="kw">other_predictors</span>,
         <span class="st">'pressure'</span> <span class="op">~</span> <span class="kw">femininity</span> <span class="op">*</span> <span class="kw">zmin</span>,
@@ -232,7 +225,7 @@
         <span class="kw">model</span>,
         <span class="st">'linear'</span> <span class="op">~</span> <span class="kw">gaussian</span>,
         <span class="st">'poisson'</span> <span class="op">~</span> <span class="kw">poisson</span>
-      ), data = <span class="kw">data</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw">death_outliers</span>, <span class="kw">damage_outliers</span>)
+      ), data = <span class="kw">data</span>
     )
     <span class="kw">coef</span> <span class="op">&lt;-</span> <span class="kw">broom</span>::<span class="fu"><a href="https://rdrr.io/pkg/generics/man/tidy.html">tidy</a></span>(<span class="kw">model</span>)
   }
@@ -289,7 +282,7 @@ Estimated coefficient of femininity of a hurricane’s name.
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -388,21 +388,21 @@ First, we will define the five options as separate variables.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="kw">mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mverse.html">create_multiverse</a></span>(<span class="kw">soccer</span>)
 </pre></div>
-<p>In <code>mverse</code> package, an alternative variabe definition is called a variable branch. You can create a variable branch with the function <code>variable_branch</code>.</p>
+<p>In <code>mverse</code> package, an alternative variable definition is called a mutate branch - analogous to <code>mutate</code> method in <code>tidyverse</code>’s data manipulation grammar. You can create a mutate branch with the function <code>mutate_branch</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="kw">skin_tone</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/variable_branch.html">variable_branch</a></span>(
+<span class="kw">skin_tone</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutate_branch.html">mutate_branch</a></span>(
   (<span class="kw">rater1</span> <span class="op">+</span> <span class="kw">rater2</span>)<span class="op">/</span><span class="fl">2</span>,
   <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="kw">rater1</span> <span class="op">&gt;</span> <span class="kw">rater2</span>, <span class="kw">rater1</span>, <span class="kw">rater2</span>)
 )
 </pre></div>
-<p>You can then add the variable branch rules to the <code>mverse</code> object using <code>add_variable_branch</code>. You can use the <code>tidyverse</code>’s <code>dplyr</code> grammar for defining the variable rules.</p>
+<p>You can then add the mutate branch rules to the <code>mverse</code> object using <code>add_mutate_branch</code>. You can use the <code>tidyverse</code>’s <code>dplyr</code> grammar for defining the mutate rules.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="kw">mv</span> <span class="op">&lt;-</span> <span class="kw">mv</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/add_variable_branch.html">add_variable_branch</a></span>(<span class="kw">skin_tone</span>) <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_mutate_branch.html">add_mutate_branch</a></span>(<span class="kw">skin_tone</span>) <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/execute_multiverse.html">execute_multiverse</a></span>()
 </pre></div>
-<p>The object name <code>skin_tone</code> is the name of the new variable defined. Each alternative definition creates an alternative <em>universe</em> in the <code>mverse</code> object. <code>execute_multiverse</code> generates the new variable based on the branching rules provided by <code>add_variable_branch</code>.</p>
-<p>You can see the variable branch added with <code>summary</code> method for the <code>mverse</code> object.</p>
+<p>The object name <code>skin_tone</code> is the name of the new variable defined. Each alternative definition creates an alternative <em>universe</em> in the <code>mverse</code> object. <code>execute_multiverse</code> generates the new variable based on the branching rules provided by <code>add_mutate_branch</code>.</p>
+<p>You can see the mutate branch added with <code>summary</code> method for the <code>mverse</code> object.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
 <span class="fu"><a href="../reference/summary.html">summary</a></span>(<span class="kw">mv</span>) 
 <span class="co">#&gt; # A tibble: 2 x 2</span>
@@ -415,7 +415,7 @@ First, we will define the five options as separate variables.</p>
 <h3 class="hasAnchor">
 <a href="#exercise--1" class="anchor"></a>Exercise.</h3>
 <ol style="list-style-type: decimal">
-<li>Define and add the variable branches for the remaining three options.</li>
+<li>Define and add the mutate branches for the remaining three options.</li>
 <li>Print the multiverse table. How many <em>universes</em> does your multiverse produce?</li>
 </ol>
 </div>
@@ -423,7 +423,7 @@ First, we will define the five options as separate variables.</p>
 <div id="comparing-between-universes-" class="section level2">
 <h2 class="hasAnchor">
 <a href="#comparing-between-universes-" class="anchor"></a>3. Comparing between Universes.</h2>
-<p>In this section, we will now examine and compare the distributions of the variable branches. You can extract the resulting value of branched variables using <code>extract</code> method. By default, it returns the branched variables across all universes with the universe index. Note that the universe index column is returned as a factor variable.</p>
+<p>In this section, we will now examine and compare the distributions of the mutate branches. You can extract the resulting value of branched variables using <code>extract</code> method. By default, it returns the branched variables across all universes with the universe index. Note that the universe index column is returned as a factor variable.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit">
 <span class="kw">branched</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract.html">extract</a></span>(<span class="kw">mv</span>) 
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(<span class="kw">branched</span>)
@@ -498,7 +498,7 @@ First, we will define the five options as separate variables.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

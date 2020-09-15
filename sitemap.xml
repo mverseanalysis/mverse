@@ -4,7 +4,10 @@
     <loc>https://mverseanalysis.github.io/mverse/index.html</loc>
   </url>
   <url>
-    <loc>https://mverseanalysis.github.io/mverse/reference/add_variable_branch.html</loc>
+    <loc>https://mverseanalysis.github.io/mverse/reference/add_filter_branch.html</loc>
+  </url>
+  <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/add_mutate_branch.html</loc>
   </url>
   <url>
     <loc>https://mverseanalysis.github.io/mverse/reference/execute_multiverse.html</loc>
@@ -13,19 +16,25 @@
     <loc>https://mverseanalysis.github.io/mverse/reference/extract.html</loc>
   </url>
   <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/filter_branch.html</loc>
+  </url>
+  <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/mutate_branch.html</loc>
+  </url>
+  <url>
     <loc>https://mverseanalysis.github.io/mverse/reference/mverse.html</loc>
   </url>
   <url>
-    <loc>https://mverseanalysis.github.io/mverse/reference/remove_variable_branch.html</loc>
+    <loc>https://mverseanalysis.github.io/mverse/reference/remove_filter_branch.html</loc>
+  </url>
+  <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/remove_mutate_branch.html</loc>
   </url>
   <url>
     <loc>https://mverseanalysis.github.io/mverse/reference/soccer.html</loc>
   </url>
   <url>
     <loc>https://mverseanalysis.github.io/mverse/reference/summary.html</loc>
-  </url>
-  <url>
-    <loc>https://mverseanalysis.github.io/mverse/reference/variable_branch.html</loc>
   </url>
   <url>
     <loc>https://mverseanalysis.github.io/mverse/articles/example-1.html</loc>
