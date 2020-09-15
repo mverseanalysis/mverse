@@ -13,9 +13,9 @@
 mverse <- function(data) {
   .mverse <- multiverse::multiverse(class="mverse")
   attr(.mverse, 'source') <- data
-  attr(.mverse, 'variable_branches') <- list()
-  attr(.mverse, 'model_branches') <- list()
-  attr(.mverse, 'branch_asserts') <- list()
+  attr(.mverse, 'manipulate_branches') <- list()
+  # attr(.mverse, 'model_branches') <- list()
+  # attr(.mverse, 'branch_asserts') <- list()
   .mverse
 }
 
@@ -78,8 +78,8 @@ summary.mverse <- function(.mverse) {
       colnames(mtable), '\\.', '')
     mtable <- mtable %>%
       select(1:(ncol(mtable)-3))
-    branches <- print_variable_branch_all(.mverse)
-    mtable <- print_variable_branches_table(
+    branches <- print_branch_all(.mverse)
+    mtable <- print_branches_table(
       branches, mtable)
   }
   mtable

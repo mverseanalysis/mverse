@@ -253,24 +253,25 @@ from the data set.
 mv <- create_multiverse(soccer)
 ```
 
-In `mverse` package, an alternative variabe definition
-is called a variable branch. You can create
-a variable branch with the function `variable_branch`.
+In `mverse` package, an alternative variable definition
+is called a mutate branch - analogous to `mutate` method in `tidyverse`'s
+data manipulation grammar. You can create
+a mutate branch with the function `mutate_branch`.
 
-```{r variable_branch}
-skin_tone <- variable_branch(
+```{r mutate_branch}
+skin_tone <- mutate_branch(
   (rater1 + rater2)/2,
   ifelse(rater1 > rater2, rater1, rater2)
 )
 ```
 
-You can then add the variable branch rules to the `mverse` object
-using `add_variable_branch`. You can use the `tidyverse`'s
-`dplyr` grammar for defining the variable rules.
+You can then add the mutate branch rules to the `mverse` object
+using `add_mutate_branch`. You can use the `tidyverse`'s
+`dplyr` grammar for defining the mutate rules.
 
 ```{r add_vb}
 mv <- mv %>%
-  add_variable_branch(skin_tone) %>%
+  add_mutate_branch(skin_tone) %>%
   execute_multiverse()
 ```
 
@@ -280,9 +281,9 @@ definition creates an alternative _universe_
 in the `mverse` object. `execute_multiverse`
 generates the new variable based
 on the branching rules provided by
-`add_variable_branch`.
+`add_mutate_branch`.
 
-You can see the variable branch added with `summary`
+You can see the mutate branch added with `summary`
 method for the `mverse` object. 
 
 ```{r check_multiverse}
@@ -291,13 +292,13 @@ summary(mv)
 
 ### Exercise.
 
-1.  Define and add the variable branches for the remaining three options.
+1.  Define and add the mutate branches for the remaining three options.
 2.  Print the multiverse table. How many _universes_ does your multiverse produce?
 
 ## 3. Comparing between Universes.
 
 In this section, we will now examine and compare the distributions of
-the variable branches. You can extract the resulting value of branched
+the mutate branches. You can extract the resulting value of branched
 variables using `extract` method. By default, it returns the branched
 variables across all universes with the universe index. Note that
 the universe index column is returned as a factor variable.

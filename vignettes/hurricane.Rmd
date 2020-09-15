@@ -104,39 +104,38 @@ hurricane <- hurricane %>%
 mv <- create_multiverse(hurricane)
 ```
 
-## Define variable branches
+## Define filter branches
 
-```{r define_outliers}
-# the exclusion criteria will be implemeted using filtering branches
-death_outliers <- variable_branch(
+```{r filter_branch}
+death_outliers <- filter_branch(
   TRUE, 
   name != 'Katrina', 
   !(name %in% c('Katrina', 'Audrey'))
 )
-damage_outliers <- variable_branch(
+damage_outliers <- filter_branch(
   TRUE, 
   name != 'Sandy', 
   !(name %in% c('Sandy', 'Andrew')),
   !(name %in% c('Sandy', 'Andrew', 'Donna'))
 )
 mv <- mv %>%
-  add_variable_branch(death_outliers, damage_outliers) %>%
-  execute_multiverse()
+  add_filter_branch(death_outliers, damage_outliers)
 summary(mv)
 ```
 
+## Define mutate branches
+
 ```{r define_variables}
-femininity <- variable_branch(
+femininity <- mutate_branch(
   female,
   masfem
 )
-damage <- variable_branch(
+damage <- mutate_branch(
   dam,
   log(dam)
 )
 mv <- mv %>%
-  add_variable_branch(femininity, damage) %>%
-  execute_multiverse()
+  add_mutate_branch(femininity, damage)
 summary(mv)
 ```
 ## Define model branches
@@ -157,14 +156,6 @@ multiverse::inside(
         femininity_damage_interaction,
         'yes' ~ femininity * damage,
         'no' ~ femininity + damage
-      # ) + branch(
-      #   other_predictors,
-      #   'pressure' %when% (femininity_damage_interaction == "yes") ~ femininity * zmin,
-      #   'wind' %when% (femininity_damage_interaction == "yes") ~ femininity * zwin,
-      #   'category' %when% (femininity_damage_interaction == "yes") ~ femininity * zcat,
-      #   'all' %when% (femininity_damage_interaction == "yes") ~ femininity * z3,
-      #   'all_no_interaction' %when% (femininity_damage_interaction == "no") ~ z3,
-      #   'none' ~ NULL
       ) + branch(
         other_predictors,
         'pressure' ~ femininity * zmin,
@@ -182,7 +173,7 @@ multiverse::inside(
         model,
         'linear' ~ gaussian,
         'poisson' ~ poisson
-      ), data = data %>% filter(death_outliers, damage_outliers)
+      ), data = data
     )
     coef <- broom::tidy(model)
   }
