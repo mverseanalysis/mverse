@@ -72,7 +72,8 @@ summary <- function(.mverse) {
 #' @export
 summary.mverse <- function(.mverse) {
   stopifnot(inherits(.mverse, "mverse"))
-  mtable <- multiverse::multiverse_table(.mverse)
+  # mtable <- multiverse::multiverse_table(.mverse)
+  mtable <- multiverse::expand(.mverse)
   if(length(mtable) > 0) {
     colnames(mtable) <- str_replace(
       colnames(mtable), '\\.', '')
@@ -154,7 +155,7 @@ extract.mverse <- function(
   stopifnot(length(universe) > 0)
   extracted <- lapply(
     universe, function(x) {
-      ex <- multiverse::from_universe_i(.mverse, x, data)
+      ex <- multiverse::extract_variable_from_universe(.mverse, x, data)
       if(!is.null(frow)) {
         stopifnot("frow must be a positive value." = frow > 0)
         ex <- dplyr::sample_frac(ex, size = frow,

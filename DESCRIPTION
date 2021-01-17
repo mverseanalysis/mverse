@@ -1,10 +1,12 @@
 Package: mverse
 Type: Package
 Title: mverse: A User Friendly Multiverse Analysis Package in R for Researchers, Educators, and Students in Statistics
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(
   person("Michael Jongho", "Moon", email = "moon@utstat.toronto.edu", 
   role = c("aut", "cre")),
+  person("Haoda", "Li", email = "haoda.li@mail.utoronto.ca", 
+  role = c("aut")),
   person("Nathan", "Taback", email = "nathan.taback@utoronto.ca",
   role = "aut"),
   person("Fanny", "Chevalier", email = "fanny@cs.tornto.edu",
@@ -19,7 +21,7 @@ Depends:
   R (>= 3.6),
   magrittr (>= 1.5)
 Imports:
-  multiverse (<= 0.1.4),
+  multiverse (>= 0.3),
   dplyr,
   rlang,
   stringr,
@@ -32,6 +34,6 @@ Suggests:
   rmarkdown
 Remotes:
   github::MUCollective/multiverse
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 URL: https://mverseanalysis.github.io/mverse
