@@ -11,8 +11,9 @@ before_install:
   - sudo apt-get update
   - updmap-sys
 
-r_binary_packages:
-  - pkgdown
+apt_packages:
+  - libharfbuzz-dev
+  - libfribidi-dev
 
 addons:
   apt:
