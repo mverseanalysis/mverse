@@ -20,7 +20,7 @@ references:
     issue: 24
     page: 8782-8787
     author:
-    - given: Kiju 
+    - given: Kiju
       family: Jung
     - given: Sharon
       family: Shavitt
@@ -108,13 +108,13 @@ mv <- create_multiverse(hurricane)
 
 ```{r filter_branch}
 death_outliers <- filter_branch(
-  TRUE, 
-  name != 'Katrina', 
+  TRUE,
+  name != 'Katrina',
   !(name %in% c('Katrina', 'Audrey'))
 )
 damage_outliers <- filter_branch(
-  TRUE, 
-  name != 'Sandy', 
+  TRUE,
+  name != 'Sandy',
   !(name %in% c('Sandy', 'Andrew')),
   !(name %in% c('Sandy', 'Andrew', 'Donna'))
 )
@@ -138,16 +138,16 @@ mv <- mv %>%
   add_mutate_branch(femininity, damage)
 summary(mv)
 ```
+
 ## Define model branches
 
 > `mverse` methods aren't implemented yet
 
 ```{r fit_model}
-# wrapper functions for defining filter variables 
-# and model variables to be implemented
+# wrapper for model branching to be implemented
 multiverse::inside(
   mv, {
-    model <- glm(
+    fit <- glm(
       branch(
         model,
         'linear' ~ log(death + 1),
@@ -175,153 +175,49 @@ multiverse::inside(
         'poisson' ~ poisson
       ), data = data
     )
-    coef <- broom::tidy(model)
+    # attach fitted values and standard errors to the original data
+    pred <- predict(fit, se.fit = TRUE, type = "response")
+    disagg_fit <- data %>%
+      mutate(
+        fitted = pred$fit,
+        se.fit = pred$se.fit,
+        df = df.residual(fit),
+        sigma = sigma(fit),
+        se.residual = sqrt(sum(residuals(fit)^2))/ df
+      )
+    pred2expectation <- function(mu, sigma) {
+      branch(model, "linear" ~ exp(mu + sigma^2/2) - 1, "poisson" ~ mu)
+    }
+    expectation <- disagg_fit %>%
+      mutate(expected_deaths = pred2expectation(fitted, sigma)) %>%
+      group_by(female) %>%
+      summarise(mean_deaths = mean(expected_deaths), .groups = "drop_last") %>%
+      compare_levels(mean_deaths, by = female)
   }
 )
+```
+
+## Execute and Inspect Results
+
+```{r}
+# execute the multiverse
 mv <- mv %>%
   execute_multiverse()
 ```
-
-## Inspect estimates
 
 > `mverse` methods aren't implemented yet (will wait until `multiverse::extract_variables` is available in the released version of `multiverse`)
 
-```{r extract_results, fig.cap="Estimated coefficient of femininity of a hurricane's name."}
+```{r extract_results, fig.width=8, fig.height=3, fig.cap="Estimated coefficient of femininity of a hurricane's name."}
 # a wrapper function to be implemented using multiverse::extract_variables
-fem_coefs <- multiverse::multiverse_table(mv) %>%
-  mutate(res = map(.results, 'coef')) %>%
+fem_coefs <- multiverse::extract_variables(mv) %>%
+  mutate(res = map(.results, 'expectation')) %>%
   unnest(res) %>%
-  rename(universe = .universe) %>%
-  filter(term == 'femininity')
+  rename(universe = .universe)
 fem_coefs %>%
-  arrange(estimate) %>%
+  arrange(mean_deaths) %>%
   mutate(index = 1:nrow(.)) %>%
-  ggplot(aes(y = estimate, x = index, color = model)) +
+  ggplot(aes(y = mean_deaths, x = index, color = model)) +
   geom_point(alpha = 0.1) +
-  geom_pointrange(aes(ymin = estimate - qnorm(0.025)*std.error,
-                      ymax = estimate + qnorm(0.025)*std.error),
-                  alpha = 0.1) +
+  xlab('Universe') + ylab('Mean Difference in Expected Deaths') +
   theme_minimal()
-```
-
-<!-- ## Cross-validation -->
-
-<!-- > `mverse` methods aren't implemented yet (will wait until `multiverse::extract_variables` is available in the released version of `multiverse`) -->
-
-
-```{r cvfunction, eval=FALSE, include=FALSE}
-cross <- function (df, func, mdl, fml, folds = 5) {
-  l = nrow(df) %/% folds
-  mse = 0
-  for (i in c(1:folds)) {
-    # properly splitting train/test
-    i1 = l*(i-1)+1
-    i2 = l*i
-    d_test = df[i1:i2, ]
-    if (i1 > 1) {
-      if (i2+1 < nrow(df)) {
-        d_train = rbind(df[1:(i1-1), ], df[(i2+1):nrow(df), ])
-      } else {
-        d_train = df[1:(i1-1), ]
-      }
-    } else {
-      d_train = df[(i2+1):nrow(df), ]
-    }
-    model <- func(mdl, family = fml, data = d_train)
-    mu <- predict(model, d_test, type = "response")
-    sigma <- sigma(model)
-    expected_deaths <- pred2expectation(mu, sigma)
-    mse = mse + sum((d_test$death - expected_deaths)^2)
-  }
-  mse = sqrt(mse / nrow(df))
-  return(mse)
-}
-```
-
-```{r executecv, eval=FALSE, include=FALSE}
-# a function for post-processing predicted means and
-# standard deviations into expected number of deaths
-pred2expectation <- function(mu, sigma) {
-  branch(model, 
-         "linear" ~ exp(mu + sigma^2/2) - 1,
-         "poisson" ~ mu
-  )
-}
-mv <- mv %>%
-  execute_multiverse()
-multiverse::inside(
-  mv, {
-    fit <- cross(
-      data %>% filter(death_outliers) %>% filter(damage_outliers),
-      glm,
-      branch(
-        model,
-        'linear' ~ log(death + 1),
-        'poisson' ~ death
-      ) ~ branch(
-        femininity_damage_interaction,
-        'yes' ~ femininity * damage,
-        'no' ~ femininity + damage
-      ) + branch(
-        other_predictors,
-        'pressure' %when% (femininity_damage_interaction == "yes") ~ femininity * zmin,
-        'wind' %when% (femininity_damage_interaction == "yes") ~ femininity * zwin,
-        'category' %when% (femininity_damage_interaction == "yes") ~ femininity * zcat,
-        'all' %when% (femininity_damage_interaction == "yes") ~ femininity * z3,
-        'all_no_interaction' %when% (femininity_damage_interaction == "no") ~ z3,
-        'none' ~ NULL
-      ) + branch(
-        covariates,
-        '1' ~ NULL,
-        '2' ~ year:damage,
-        '3' ~ post:damage
-      ),
-      branch(
-        model,
-        'linear' ~ gaussian,
-        'poisson' ~ poisson
-      )
-    ) # cross validation
-    nrmse <- fit / (max(data$death) - min(data$death))
-    # get perdiction
-    pred  <- predict(model, se.fit = TRUE, type = 'response')
-    disagg_fit <- data %>%
-      mutate(
-        fit = pred$fit,
-        se.fit = pred$se.fit,
-        df = df.residual(model),
-        sigma = sigma(model),
-        se.residual = sqrt(sum(residuals(model)^2) / df)
-      )
-    # aggregate fitted effect of female storm name
-    expectation <- disagg_fit %>%
-      mutate(expected_deaths = pred2expectation(fit, sigma)) %>%
-      group_by(female) %>%
-      summarise(expected_deaths = weighted.mean(expected_deaths), .groups = 'drop_last') %>%
-      compare_levels(expected_deaths, by = female) %>%
-      ungroup() %>%
-      select(expected_diff = expected_deaths) %>%
-      tibble::add_column(NRMSE = nrmse)
-    uncertainty <- disagg_fit %>%
-      mutate(
-        draw = list(1:5000),
-        t = map(df, ~rt(5000, .)),
-        x = map(df, ~rchisq(5000, .))
-      ) %>%
-      unnest(cols = c('draw', 't', 'x')) %>%
-      mutate(
-        mu = t * se.fit + fit,
-        sigma = sqrt(df * se.residual^2 / x),
-        expected_deaths = pred2expectation(mu, sigma)
-      ) %>%
-      group_by(draw, female) %>%
-      summarise(expected_deaths = mean(expected_deaths),
-                .groups = 'drop_last') %>%
-      compare_levels(expected_deaths, by = female) %>%
-      ungroup() %>%
-      select(expected_diff = expected_deaths)
-  }
-)
-mv <- mv %>%
-  execute_multiverse()
 ```

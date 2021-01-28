@@ -10,20 +10,13 @@ warnings_are_errors: false
 before_install:
   - updmap-sys
 
-# set R dependencies from CRAN
-r_packages:
-  - broom
-  - tidybayes
-  - testthat
-  - covr
-  - pkgdown
-  - kableExtra
-
 addons:
   apt:
     update: true
     pacakges:
       - qpdf
+      - libharfbuzz-dev
+      - libfribidi-dev
 
 r_build_args: --compact-vignettes --resave-data
 r_check_args: --no-vignettes --resave-data

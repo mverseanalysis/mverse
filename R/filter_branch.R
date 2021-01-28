@@ -14,6 +14,8 @@
 #' @export
 filter_branch <- function(..., name = NULL) {
   rules <- rlang::enquos(...)
+  if(!length(rules) > 0)
+    stop('Error: Provide at least one rule.')
   if(!(is.character(name) | is.null(name)))
     stop('Error: "name" must be a character object.')
   structure(
@@ -81,42 +83,40 @@ add_filter_branch.mverse <- function(.mverse, ...) {
   invisible(.mverse)
 }
 
-#' @rdname remove_filter_branch
-#' @export
-remove_filter_branch <- function(.mverse, name) {
-  UseMethod("remove_filter_branch")
-}
-
-#' Remove a filter branch from a \code{mverse}.
-#'
-#' This method removes one filter branch from
-#' an existing \code{mverse} object.
-#'
-#' @param .mverse a \code{mverse} object.
-#' @param name name of the \code{filter branch} to be removed.
-#' @examples
-#' \dontrun{
-#' mv <- create_multiverse(df)
-#' mv <- mverse %>%
-#'   remove_filter_branch(old_branch)
+#' #' @rdname remove_filter_branch
+#' remove_filter_branch <- function(.mverse, name) {
+#'   UseMethod("remove_filter_branch")
 #' }
-#' @return The resulting \code{mverse} object.
-#' @importFrom magrittr %>%
-#' @import dplyr
-#' @name remove_filter_branch
-#' @family {methods for working with a variable branch}
-#' @export
-remove_filter_branch.mverse <- function(.mverse, name) {
-  fbranch_list <- attr(.mverse, 'manipulate_branches')
-  fbranch_list <- fbranch_list[
-    sapply(fbranch_list, function(x) inherits(x, "filter_branch"))]
-  # exit if the name doesn't exist
-  stopifnot(is.character(name))
-  if(!(name %in% sapply(fbranch_list, function(x) x$name)))
-    stop(paste(name, "is not in the filter branch list."))
-  # remove from list
-  attr(.mverse, 'manipulate_branches') <- fbranch_list[
-    sapply(fbranch_list, function(x) x$name != name)]
-  # remove from the multiverse object
-  reset_parameters(.mverse)
-}
+#'
+#' #' Remove a filter branch from a \code{mverse}.
+#' #'
+#' #' This method removes one filter branch from
+#' #' an existing \code{mverse} object.
+#' #'
+#' #' @param .mverse a \code{mverse} object.
+#' #' @param name name of the \code{filter branch} to be removed.
+#' #' @examples
+#' #' \dontrun{
+#' #' mv <- create_multiverse(df)
+#' #' mv <- mverse %>%
+#' #'   remove_filter_branch(old_branch)
+#' #' }
+#' #' @return The resulting \code{mverse} object.
+#' #' @importFrom magrittr %>%
+#' #' @import dplyr
+#' #' @name remove_filter_branch
+#' #' @family {methods for working with a variable branch}
+#' remove_filter_branch.mverse <- function(.mverse, name) {
+#'   fbranch_list <- attr(.mverse, 'manipulate_branches')
+#'   fbranch_list <- fbranch_list[
+#'     sapply(fbranch_list, function(x) inherits(x, "filter_branch"))]
+#'   # exit if the name doesn't exist
+#'   stopifnot(is.character(name))
+#'   if(!(name %in% sapply(fbranch_list, function(x) x$name)))
+#'     stop(paste(name, "is not in the filter branch list."))
+#'   # remove from list
+#'   attr(.mverse, 'manipulate_branches') <- fbranch_list[
+#'     sapply(fbranch_list, function(x) x$name != name)]
+#'   # remove from the multiverse object
+#'   reset_parameters(.mverse)
+#' }
