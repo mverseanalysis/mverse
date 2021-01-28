@@ -11,6 +11,14 @@ before_install:
   - sudo apt-get update
   - updmap-sys
 
+r_binary_packages:
+  - tidyverse
+  - pkgdown
+  - testthat
+  - covr
+  - kableExtra
+  - rmarkdown
+
 addons:
   apt:
     update: true
