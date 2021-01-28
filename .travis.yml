@@ -10,15 +10,13 @@ warnings_are_errors: false
 before_install:
   - updmap-sys
 
-apt_packages:
-  - libharfbuzz-dev
-  - libfribidi-dev
-
 addons:
   apt:
     update: true
     pacakges:
       - qpdf
+      - libharfbuzz-dev
+      - libfribidi-dev
 
 r_build_args: --compact-vignettes --resave-data
 r_check_args: --no-vignettes --resave-data
