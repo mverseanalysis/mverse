@@ -11,7 +11,7 @@ before_install:
   - sudo apt-get update
   - updmap-sys
 
-r_packages:
+r_binary_packages:
   - pkgdown
 
 addons:
