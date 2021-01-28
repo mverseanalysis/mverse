@@ -209,7 +209,7 @@ mv <- mv %>%
 
 ```{r extract_results, fig.width=8, fig.height=3, fig.cap="Estimated coefficient of femininity of a hurricane's name."}
 # a wrapper function to be implemented using multiverse::extract_variables
-fem_coefs <- multiverse::multiverse_table(mv) %>%
+fem_coefs <- multiverse::extract_variables(mv) %>%
   mutate(res = map(.results, 'expectation')) %>%
   unnest(res) %>%
   rename(universe = .universe)

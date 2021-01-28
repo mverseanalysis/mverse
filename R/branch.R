@@ -29,8 +29,7 @@ parse.branch <- function(brnch) {
       idx, brnch$rules),
     collapse=',')
   # parse as an expression
-  rlang::parse_expr(
-    paste0(head_str, body_str, ')'))
+  rlang::parse_expr(paste0(head_str, body_str, ')'))
 }
 
 reset_parameters <- function(.mverse) {
@@ -50,33 +49,7 @@ reset_parameters <- function(.mverse) {
         .mverse,
         data <- dplyr::filter(data, !! parse(br))
       )
-
     }
   }
   .mverse
-}
-
-print_branch_all <- function(.mverse) {
-  brnches <- attr(.mverse, 'manipulate_branches')
-  sapply(brnches, print_branch_single)
-}
-
-print_branch_single <- function(vb) {
-  rules <- character(length(vb$rules))
-  for(i in 1:length(vb$rules)) {
-    rules[i] <- rlang::quo_name(vb$rules[[i]])
-  }
-  out <- list(rules)
-  names(out) <- vb$name
-  out
-}
-
-print_branches_table <- function(vbprint, mtable) {
-  for(nm in names(vbprint)) {
-    replace_this<- paste0(nm, '_', 1:length(vbprint[[nm]]))
-    brnch <- paste0(nm,'_branch')
-    mtable[[brnch]] <- mtable[[brnch]] %>%
-      dplyr::recode(!!! stats::setNames(vbprint[[nm]], replace_this))
-  }
-  mtable
 }
