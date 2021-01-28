@@ -8,16 +8,8 @@ sudo: required
 warnings_are_errors: false
 
 before_install:
+  - sudo apt-get update
   - updmap-sys
-
-# set R dependencies from CRAN
-r_packages:
-  - broom
-  - tidybayes
-  - testthat
-  - covr
-  - pkgdown
-  - kableExtra
 
 addons:
   apt:

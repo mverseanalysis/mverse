@@ -27,11 +27,15 @@ Imports:
   stringr,
   stats
 Suggests:
+  tidyverse,
+  broom,
+  tidybayes,
   testthat (>= 2.1.0),
   pkgdown (>= 1.5.1),
   covr,
   knitr,
-  rmarkdown
+  rmarkdown,
+  kableExtra
 Remotes:
   github::MUCollective/multiverse
 RoxygenNote: 7.1.1
