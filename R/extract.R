@@ -50,8 +50,7 @@ extract.mverse <- function(
   if(is.null(columns)) columns <- unlist(
     sapply(attr(.mverse, "manipulate_branch"),
            function(x) if(inherits(x, "mutate_branch")) x$name))
-  if(! "universe" %in% colnames(mtable))
-    columns <- c("universe", columns)
+  columns <- c("universe", columns)
   if(is.null(universe)) {
     universe <- mtable$universe
     if(!is.null(nuni)) {
@@ -75,6 +74,5 @@ extract.mverse <- function(
       ex })
   extracted <- dplyr::bind_rows(extracted)
   extracted %>%
-    select(columns) %>%
-    mutate(universe = factor(universe))
+    select(columns)
 }
