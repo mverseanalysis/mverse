@@ -22,7 +22,8 @@ summary.mverse <- function(.mverse) {
   colnames(mtable) <- str_replace(
     colnames(mtable), '\\.', '')
   mtable <- mtable %>%
-    select(1:(ncol(mtable)-3))
+    select(1:(ncol(mtable)-3)) %>%
+    mutate(universe = factor(universe))
   # extract all branches
   branches <- sapply(
     attr(.mverse, 'manipulate_branches'),
