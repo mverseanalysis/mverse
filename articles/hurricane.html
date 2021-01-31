@@ -142,19 +142,19 @@
 <span class="fu"><a href="../reference/summary.html">summary</a></span><span class="op">(</span><span class="va">mv</span><span class="op">)</span>
 <span class="co">## # A tibble: 12 x 3</span>
 <span class="co">##    universe death_outliers_branch           damage_outliers_branch              </span>
-<span class="co">##       &lt;int&gt; &lt;chr&gt;                           &lt;chr&gt;                               </span>
-<span class="co">##  1        1 "TRUE"                          "TRUE"                              </span>
-<span class="co">##  2        2 "TRUE"                          "name != \"Sandy\""                 </span>
-<span class="co">##  3        3 "TRUE"                          "!(name %in% c(\"Sandy\", \"Andrew\…</span>
-<span class="co">##  4        4 "TRUE"                          "!(name %in% c(\"Sandy\", \"Andrew\…</span>
-<span class="co">##  5        5 "name != \"Katrina\""           "TRUE"                              </span>
-<span class="co">##  6        6 "name != \"Katrina\""           "name != \"Sandy\""                 </span>
-<span class="co">##  7        7 "name != \"Katrina\""           "!(name %in% c(\"Sandy\", \"Andrew\…</span>
-<span class="co">##  8        8 "name != \"Katrina\""           "!(name %in% c(\"Sandy\", \"Andrew\…</span>
-<span class="co">##  9        9 "!(name %in% c(\"Katrina\", \"… "TRUE"                              </span>
-<span class="co">## 10       10 "!(name %in% c(\"Katrina\", \"… "name != \"Sandy\""                 </span>
-<span class="co">## 11       11 "!(name %in% c(\"Katrina\", \"… "!(name %in% c(\"Sandy\", \"Andrew\…</span>
-<span class="co">## 12       12 "!(name %in% c(\"Katrina\", \"… "!(name %in% c(\"Sandy\", \"Andrew\…</span></code></pre></div>
+<span class="co">##    &lt;fct&gt;    &lt;chr&gt;                           &lt;chr&gt;                               </span>
+<span class="co">##  1 1        "TRUE"                          "TRUE"                              </span>
+<span class="co">##  2 2        "TRUE"                          "name != \"Sandy\""                 </span>
+<span class="co">##  3 3        "TRUE"                          "!(name %in% c(\"Sandy\", \"Andrew\…</span>
+<span class="co">##  4 4        "TRUE"                          "!(name %in% c(\"Sandy\", \"Andrew\…</span>
+<span class="co">##  5 5        "name != \"Katrina\""           "TRUE"                              </span>
+<span class="co">##  6 6        "name != \"Katrina\""           "name != \"Sandy\""                 </span>
+<span class="co">##  7 7        "name != \"Katrina\""           "!(name %in% c(\"Sandy\", \"Andrew\…</span>
+<span class="co">##  8 8        "name != \"Katrina\""           "!(name %in% c(\"Sandy\", \"Andrew\…</span>
+<span class="co">##  9 9        "!(name %in% c(\"Katrina\", \"… "TRUE"                              </span>
+<span class="co">## 10 10       "!(name %in% c(\"Katrina\", \"… "name != \"Sandy\""                 </span>
+<span class="co">## 11 11       "!(name %in% c(\"Katrina\", \"… "!(name %in% c(\"Sandy\", \"Andrew\…</span>
+<span class="co">## 12 12       "!(name %in% c(\"Katrina\", \"… "!(name %in% c(\"Sandy\", \"Andrew\…</span></code></pre></div>
 </div>
 <div id="define-mutate-branches" class="section level2">
 <h2 class="hasAnchor">
@@ -173,17 +173,17 @@
 <span class="fu"><a href="../reference/summary.html">summary</a></span><span class="op">(</span><span class="va">mv</span><span class="op">)</span>
 <span class="co">## # A tibble: 48 x 5</span>
 <span class="co">##    universe death_outliers_b… damage_outliers_br… femininity_bran… damage_branch</span>
-<span class="co">##       &lt;int&gt; &lt;chr&gt;             &lt;chr&gt;               &lt;chr&gt;            &lt;chr&gt;        </span>
-<span class="co">##  1        1 TRUE              "TRUE"              female           dam          </span>
-<span class="co">##  2        2 TRUE              "TRUE"              female           log(dam)     </span>
-<span class="co">##  3        3 TRUE              "TRUE"              masfem           dam          </span>
-<span class="co">##  4        4 TRUE              "TRUE"              masfem           log(dam)     </span>
-<span class="co">##  5        5 TRUE              "name != \"Sandy\"" female           dam          </span>
-<span class="co">##  6        6 TRUE              "name != \"Sandy\"" female           log(dam)     </span>
-<span class="co">##  7        7 TRUE              "name != \"Sandy\"" masfem           dam          </span>
-<span class="co">##  8        8 TRUE              "name != \"Sandy\"" masfem           log(dam)     </span>
-<span class="co">##  9        9 TRUE              "!(name %in% c(\"S… female           dam          </span>
-<span class="co">## 10       10 TRUE              "!(name %in% c(\"S… female           log(dam)     </span>
+<span class="co">##    &lt;fct&gt;    &lt;chr&gt;             &lt;chr&gt;               &lt;chr&gt;            &lt;chr&gt;        </span>
+<span class="co">##  1 1        TRUE              "TRUE"              female           dam          </span>
+<span class="co">##  2 2        TRUE              "TRUE"              female           log(dam)     </span>
+<span class="co">##  3 3        TRUE              "TRUE"              masfem           dam          </span>
+<span class="co">##  4 4        TRUE              "TRUE"              masfem           log(dam)     </span>
+<span class="co">##  5 5        TRUE              "name != \"Sandy\"" female           dam          </span>
+<span class="co">##  6 6        TRUE              "name != \"Sandy\"" female           log(dam)     </span>
+<span class="co">##  7 7        TRUE              "name != \"Sandy\"" masfem           dam          </span>
+<span class="co">##  8 8        TRUE              "name != \"Sandy\"" masfem           log(dam)     </span>
+<span class="co">##  9 9        TRUE              "!(name %in% c(\"S… female           dam          </span>
+<span class="co">## 10 10       TRUE              "!(name %in% c(\"S… female           log(dam)     </span>
 <span class="co">## # … with 38 more rows</span></code></pre></div>
 </div>
 <div id="define-model-branches" class="section level2">
