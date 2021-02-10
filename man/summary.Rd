@@ -5,12 +5,10 @@
 \alias{summary.mverse}
 \title{Display the multiverse table.}
 \usage{
-summary(.mverse)
-
-\method{summary}{mverse}(.mverse)
+\method{summary}{mverse}(object)
 }
 \arguments{
-\item{.mverse}{a \code{mverse} object.}
+\item{object}{a \code{mverse} object.}
 }
 \value{
 a multiverse table as a tibble

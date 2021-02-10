@@ -1,8 +1,3 @@
-#' @rdname summary
-#' @export
-summary <- function(.mverse) {
-  UseMethod("summary")
-}
 #' Display the multiverse table.
 #'
 #' This method returns the multiverse table
@@ -10,15 +5,15 @@ summary <- function(.mverse) {
 #' Each row corresponds to a universe and each column
 #' represents a branch.
 #'
-#' @param .mverse a \code{mverse} object.
+#' @param object a \code{mverse} object.
 #' @return a multiverse table as a tibble
 #' @name summary
 #' @family {mverse methods}
 #' @importFrom  stringr str_replace
 #' @export
-summary.mverse <- function(.mverse) {
-  stopifnot(inherits(.mverse, "mverse"))
-  mtable <- multiverse::expand(.mverse)
+summary.mverse <- function(object) {
+  stopifnot(inherits(object, "mverse"))
+  mtable <- multiverse::expand(object)
   colnames(mtable) <- str_replace(
     colnames(mtable), '\\.', '')
   mtable <- mtable %>%
@@ -26,7 +21,7 @@ summary.mverse <- function(.mverse) {
     mutate(universe = factor(universe))
   # extract all branches
   branches <- sapply(
-    attr(.mverse, 'manipulate_branches'),
+    attr(object, 'manipulate_branches'),
     function(vb) {
       rules <- character(length(vb$rules))
       for(i in 1:length(vb$rules)) rules[i] <- rlang::quo_name(vb$rules[[i]])
