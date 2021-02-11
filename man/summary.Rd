@@ -3,14 +3,19 @@
 \name{summary}
 \alias{summary}
 \alias{summary.mverse}
-\title{Display the multiverse table.}
+\alias{summary.lm_mverse}
+\title{Display the multiverse table with results.}
 \usage{
 \method{summary}{mverse}(object)
+
+\method{summary}{lm_mverse}(object, conf.int = FALSE, conf.level = 0.95)
 }
 \arguments{
 \item{object}{a \code{mverse} object.}
 }
 \value{
+a multiverse table as a tibble
+
 a multiverse table as a tibble
 }
 \description{
@@ -18,11 +23,10 @@ This method returns the multiverse table
 displaying all universes defined by the multiverse.
 Each row corresponds to a universe and each column
 represents a branch.
+
+\code{summary.lm_mverse} returns the multiverse table
+displaying all universes defined by the multiverse.
+Each row corresponds to a universe and each column
+represents a branch.
 }
-\seealso{
-Other {mverse methods}: 
-\code{\link{execute_multiverse}()},
-\code{\link{extract}()},
-\code{\link{mverse}()}
-}
-\concept{{mverse methods}}
+\concept{{summary method}}

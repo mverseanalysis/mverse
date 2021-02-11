@@ -16,17 +16,30 @@ parse <- function(brnch) {
 }
 
 parse.branch <- function(brnch) {
-  stopifnot(inherits(brnch, "branch"))
   # initiate a branch
   head_str <- paste0(
     "branch(", brnch$name, "_branch,")
   # construct individual branch definitions
-  idx <- 1:length(brnch$rules)
   body_str <- paste0(
     mapply(
       function(i, x) paste0(
         "'", brnch$name, '_', i, "'~", rlang::quo_name(x)),
-      idx, brnch$rules),
+      1:length(brnch$rules), brnch$rules),
+    collapse=',')
+  # parse as an expression
+  rlang::parse_expr(paste0(head_str, body_str, ')'))
+}
+
+parse.formula_branch <- function(brnch) {
+  # initiate a branch
+  head_str <- paste0(
+    "branch(", brnch$name, "_branch,")
+  # construct individual formula
+  body_str <- paste0(
+    mapply(
+      function(i, x) paste0(
+        "'", brnch$name, '_', i, "'~ formula(", rlang::quo_name(x), ")"),
+      1:length(brnch$rules), brnch$rules),
     collapse=',')
   # parse as an expression
   rlang::parse_expr(paste0(head_str, body_str, ')'))
@@ -48,6 +61,15 @@ reset_parameters <- function(.mverse) {
       multiverse::inside(
         .mverse,
         data <- dplyr::filter(data, !! parse(br))
+      )
+    }
+  }
+  for (br in attr(.mverse, 'model_branches')) {
+    stopifnot(inherits(br, "branch"))
+    if(inherits(br, "formula_branch")) {
+      multiverse::inside(
+        .mverse,
+        formulae <- formula(!! parse(br))
       )
     }
   }

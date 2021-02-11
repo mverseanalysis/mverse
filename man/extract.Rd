@@ -62,7 +62,6 @@ the method randomly samples rows with replacement.
 \seealso{
 Other {mverse methods}: 
 \code{\link{execute_multiverse}()},
-\code{\link{mverse}()},
-\code{\link{summary}()}
+\code{\link{mverse}()}
 }
 \concept{{mverse methods}}

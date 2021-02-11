@@ -25,7 +25,6 @@ mv <- mverse(soccer)
 \seealso{
 Other {mverse methods}: 
 \code{\link{execute_multiverse}()},
-\code{\link{extract}()},
-\code{\link{summary}()}
+\code{\link{extract}()}
 }
 \concept{{mverse methods}}

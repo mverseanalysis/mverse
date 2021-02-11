@@ -33,7 +33,7 @@ add_mutate_branch <- function(.mverse, ...) {
   UseMethod("add_mutate_branch")
 }
 
-#' Add variable branches to a \code{mverse} object.
+#' Add mutate branches to a \code{mverse} object.
 #'
 #' This method adds one or more mutate branches to
 #' an existing \code{mverse} object.

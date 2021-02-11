@@ -14,7 +14,7 @@ mverse <- function(data) {
   .mverse <- multiverse::multiverse(class="mverse")
   attr(.mverse, 'source') <- data
   attr(.mverse, 'manipulate_branches') <- list()
-  # attr(.mverse, 'model_branches') <- list()
+  attr(.mverse, 'model_branches') <- list()
   # attr(.mverse, 'branch_asserts') <- list()
   .mverse
 }
