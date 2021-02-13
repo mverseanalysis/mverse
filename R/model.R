@@ -19,12 +19,12 @@
 lm_mverse <- function(.mverse) {
   stopifnot(inherits(.mverse, "mverse"))
   # check whether there is a formula branch (should be only 1)
-  stopifnot(sum(sapply(attr(mv, "model_branches"), inherits, "formula_branch")) == 1)
+  if(!any(sapply(attr(.mverse, "model_branches"), inherits, "formula_branch")))
+    stop("Exactly one formual branch is required.")
+  if(sum(sapply(attr(.mverse, "model_branches"), inherits, "formula_branch")) > 1)
+    stop("Exactly one formual branch is required.")
   # fit lm
-  multiverse::inside(
-    mv,
-    model <- lm(formulae, data = data)
-  )
+  multiverse::inside(.mverse, model <- lm(formulae, data = data))
   attr(.mverse, "class") <- unique(c("lm_mverse", class(.mverse)))
   execute_multiverse(.mverse)
   invisible(.mverse)
