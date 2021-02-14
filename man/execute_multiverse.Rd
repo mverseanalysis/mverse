@@ -29,7 +29,6 @@ mv <- mv \%>\%
 \seealso{
 Other {mverse methods}: 
 \code{\link{extract}()},
-\code{\link{mverse}()},
-\code{\link{summary}()}
+\code{\link{mverse}()}
 }
 \concept{{mverse methods}}

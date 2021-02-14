@@ -33,7 +33,7 @@ add_filter_branch <- function(.mverse, ...) {
   UseMethod("add_filter_branch")
 }
 
-#' Add variable branches to a \code{mverse} object.
+#' Add filter branches to a \code{mverse} object.
 #'
 #' This method adds one or more filter branches to
 #' an existing \code{mverse} object.

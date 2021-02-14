@@ -3,7 +3,7 @@
 \name{add_filter_branch}
 \alias{add_filter_branch}
 \alias{add_filter_branch.mverse}
-\title{Add variable branches to a \code{mverse} object.}
+\title{Add filter branches to a \code{mverse} object.}
 \usage{
 add_filter_branch(.mverse, ...)
 

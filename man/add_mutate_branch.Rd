@@ -3,7 +3,7 @@
 \name{add_mutate_branch}
 \alias{add_mutate_branch}
 \alias{add_mutate_branch.mverse}
-\title{Add variable branches to a \code{mverse} object.}
+\title{Add mutate branches to a \code{mverse} object.}
 \usage{
 add_mutate_branch(.mverse, ...)
 

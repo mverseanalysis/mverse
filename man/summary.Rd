@@ -3,16 +3,30 @@
 \name{summary}
 \alias{summary}
 \alias{summary.mverse}
-\title{Display the multiverse table.}
+\alias{summary.lm_mverse}
+\title{Display the multiverse table with results.}
 \usage{
-summary(.mverse)
+\method{summary}{mverse}(object)
 
-\method{summary}{mverse}(.mverse)
+\method{summary}{lm_mverse}(object, conf.int = TRUE, conf.level = 0.95, output = "estimates")
 }
 \arguments{
-\item{.mverse}{a \code{mverse} object.}
+\item{object}{a \code{mverse} object.}
+
+\item{conf.int}{When \code{TRUE} (default), the estimate output
+includes the confidence intervals.}
+
+\item{conf.level}{The confidence level of the confindence interval
+returned using \code{conf.int = TRUE}. Default value is 0.95.}
+
+\item{output}{The output of interest. The possible values are
+"estimates", "df", "fstatistic", and "r.squared".
+Alternatively, the first letters may be used. Default value
+is "estimates".}
 }
 \value{
+a multiverse table as a tibble.
+
 a multiverse table as a tibble
 }
 \description{
@@ -20,11 +34,8 @@ This method returns the multiverse table
 displaying all universes defined by the multiverse.
 Each row corresponds to a universe and each column
 represents a branch.
+
+\code{summary.lm_mverse} returns the \code{lm} regression
+results across the multiverse.
 }
-\seealso{
-Other {mverse methods}: 
-\code{\link{execute_multiverse}()},
-\code{\link{extract}()},
-\code{\link{mverse}()}
-}
-\concept{{mverse methods}}
+\concept{{summary method}}
