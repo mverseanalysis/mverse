@@ -94,9 +94,6 @@
 <span class="co">#&gt; The following object is masked from 'package:magrittr':</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     extract</span>
-<span class="co">#&gt; The following object is masked from 'package:base':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     summary</span>
 <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">soccer</span><span class="op">)</span><span class="op">)</span> <span class="co"># using kable for displaying data in html</span></code></pre></div>
 <table class="table">
 <colgroup>
@@ -403,7 +400,7 @@ First, we will define the five options as separate variables.</p>
 <code class="sourceCode R"><span class="fu"><a href="../reference/summary.html">summary</a></span><span class="op">(</span><span class="va">mv</span><span class="op">)</span> 
 <span class="co">#&gt; # A tibble: 2 x 2</span>
 <span class="co">#&gt;   universe skin_tone_branch                       </span>
-<span class="co">#&gt;   &lt;fct&gt;    &lt;chr&gt;                                  </span>
+<span class="co">#&gt;   &lt;fct&gt;    &lt;fct&gt;                                  </span>
 <span class="co">#&gt; 1 1        (rater1 + rater2)/2                    </span>
 <span class="co">#&gt; 2 2        ifelse(rater1 &gt; rater2, rater1, rater2)</span></code></pre></div>
 <div id="exercise--1" class="section level3">

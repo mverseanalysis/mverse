@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Display the multiverse table. — summary • mverse</title>
+<title>Display the multiverse table with results. — summary • mverse</title>
 
 
 <!-- jquery -->
@@ -39,11 +39,13 @@
 
 
 
-<meta property="og:title" content="Display the multiverse table. — summary" />
+<meta property="og:title" content="Display the multiverse table with results. — summary" />
 <meta property="og:description" content="This method returns the multiverse table
 displaying all universes defined by the multiverse.
 Each row corresponds to a universe and each column
-represents a branch." />
+represents a branch.
+summary.lm_mverse returns the lm regression
+results across the multiverse." />
 
 
 
@@ -121,7 +123,7 @@ represents a branch." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Display the multiverse table.</h1>
+    <h1>Display the multiverse table with results.</h1>
     
     <div class="hidden name"><code>summary.Rd</code></div>
     </div>
@@ -131,31 +133,46 @@ represents a branch." />
 displaying all universes defined by the multiverse.
 Each row corresponds to a universe and each column
 represents a branch.</p>
+<p><code>summary.lm_mverse</code> returns the <code>lm</code> regression
+results across the multiverse.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>summary</span><span class='op'>(</span><span class='va'>.mverse</span><span class='op'>)</span>
+    <pre class="usage"><span class='co'># S3 method for mverse</span>
+<span class='fu'>summary</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
 
-<span class='co'># S3 method for mverse</span>
-<span class='fu'>summary</span><span class='op'>(</span><span class='va'>.mverse</span><span class='op'>)</span></pre>
+<span class='co'># S3 method for lm_mverse</span>
+<span class='fu'>summary</span><span class='op'>(</span><span class='va'>object</span>, conf.int <span class='op'>=</span> <span class='cn'>TRUE</span>, conf.level <span class='op'>=</span> <span class='fl'>0.95</span>, output <span class='op'>=</span> <span class='st'>"estimates"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>.mverse</th>
+      <th>object</th>
       <td><p>a <code>mverse</code> object.</p></td>
+    </tr>
+    <tr>
+      <th>conf.int</th>
+      <td><p>When <code>TRUE</code> (default), the estimate output
+includes the confidence intervals.</p></td>
+    </tr>
+    <tr>
+      <th>conf.level</th>
+      <td><p>The confidence level of the confindence interval
+returned using <code>conf.int = TRUE</code>. Default value is 0.95.</p></td>
+    </tr>
+    <tr>
+      <th>output</th>
+      <td><p>The output of interest. The possible values are
+"estimates", "df", "fstatistic", and "r.squared".
+Alternatively, the first letters may be used. Default value
+is "estimates".</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a multiverse table as a tibble</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other mverse methods: 
-<code><a href='execute_multiverse.html'>execute_multiverse</a>()</code>,
-<code><a href='extract.html'>extract</a>()</code>,
-<code><a href='mverse.html'>mverse</a>()</code></p></div>
+    <p>a multiverse table as a tibble.</p>
+<p>a multiverse table as a tibble</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -7,6 +7,9 @@
     <loc>https://mverseanalysis.github.io/mverse/reference/add_filter_branch.html</loc>
   </url>
   <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/add_formula_branch.html</loc>
+  </url>
+  <url>
     <loc>https://mverseanalysis.github.io/mverse/reference/add_mutate_branch.html</loc>
   </url>
   <url>
@@ -17,6 +20,12 @@
   </url>
   <url>
     <loc>https://mverseanalysis.github.io/mverse/reference/filter_branch.html</loc>
+  </url>
+  <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/fit_lm.html</loc>
+  </url>
+  <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/formula_branch.html</loc>
   </url>
   <url>
     <loc>https://mverseanalysis.github.io/mverse/reference/mutate_branch.html</loc>
