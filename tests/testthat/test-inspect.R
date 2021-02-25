@@ -83,7 +83,7 @@ test_that("summary.lm_mverse(., conf.int = FALSE) outputs coefficient estimates 
   expect_identical(smverse, smanu)
 })
 
-test_that("summary.lm_mverse(output = 'd') outputs degrees of freedom.", {
+test_that("summary.lm_mverse(output = 'de') outputs degrees of freedom.", {
   n <- 10
   mydf <- data.frame(x1 = 1:n, x2 = sample(1:n)) %>%
     mutate(y = rnorm(n, x1 + x2))
@@ -99,9 +99,7 @@ test_that("summary.lm_mverse(output = 'd') outputs degrees of freedom.", {
       rename(p = V1, n.minus.p = V2, p.star = V3),
     as.data.frame(t(summary(lm(y ~ x1 * x2, data = mydf))$df)) %>%
       rename(p = V1, n.minus.p = V2, p.star = V3)))
-  smverse <- summary(mv, output = "d") %>% select(-c(universe, model_spec_branch))
   smverse2 <- summary(mv, output = "df") %>% select(-c(universe, model_spec_branch))
-  expect_identical(smverse, smanu)
   expect_identical(smverse2, smanu)
 })
 

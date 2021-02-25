@@ -20,5 +20,5 @@ test_that("lm_mverse() expects a formual branch.", {
   mydf <- data.frame(x1 = 1:n, x2 = sample(1:n)) %>%
     mutate(y = rnorm(n, x1 + x2))
   mv <- mverse(mydf)
-  expect_error(lm_mverse(mv), "Exactly one formual branch is required.")
+  expect_error(lm_mverse(mv), "Exactly one formula branch is required.")
 })

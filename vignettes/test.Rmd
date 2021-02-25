@@ -1,0 +1,24 @@
+```{r}
+Sys.setenv(LANG = "en")
+library(dplyr)
+library(multiverse)
+library(mverse)
+```
+
+```{r}
+mv <- create_multiverse(soccer)
+f <- formula_branch(height ~ meanIAT + weight, height ~ weight)
+add_formula_branch(mv, f)
+lm_mverse(mv)
+summary(mv, output="df")
+summary(mv, output="r")
+```
+
+```{r}
+glm_mverse(mv, family=poisson())
+summary(mv, output='de')
+summary(mv, output='df')
+summary(mv, output='aic')
+summary(mv)
+```
+
