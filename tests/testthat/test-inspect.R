@@ -83,7 +83,7 @@ test_that("summary.lm_mverse(., conf.int = FALSE) outputs coefficient estimates 
   expect_identical(smverse, smanu)
 })
 
-test_that("summary.lm_mverse(output = 'de') outputs degrees of freedom.", {
+test_that("summary.lm_mverse(output = 'df') outputs degrees of freedom.", {
   n <- 10
   mydf <- data.frame(x1 = 1:n, x2 = sample(1:n)) %>%
     mutate(y = rnorm(n, x1 + x2))
