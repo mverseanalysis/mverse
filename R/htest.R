@@ -48,25 +48,44 @@ ttest_mverse <-
     mverse_params.t.test.conf.level <<- conf.level
 
 
-    multiverse::inside(.mverse,
-                       {
-                         y = if (is.null(mverse_params.t.test.y))
-                           NULL
-                         else
-                           data[mverse_params.t.test.y]
-                         htest <-
-                           t.test(
-                             x = data[mverse_params.t.test.x],
-                             y = y,
-                             alternative = mverse_params.t.test.alternative,
-                             mu = mverse_params.t.test.mu,
-                             paried = mverse_params.t.test.paired,
-                             var.equal = mverse_params.t.test.var.equal,
-                             conf.level = mverse_params.t.test.conf.level
-                           )
-                       })
+    multiverse::inside(.mverse, {
+      y = if (is.null(mverse_params.t.test.y))
+        NULL
+      else
+        data[mverse_params.t.test.y]
+      htest <-
+        t.test(
+          x = data[mverse_params.t.test.x],
+          y = y,
+          alternative = mverse_params.t.test.alternative,
+          mu = mverse_params.t.test.mu,
+          paried = mverse_params.t.test.paired,
+          var.equal = mverse_params.t.test.var.equal,
+          conf.level = mverse_params.t.test.conf.level
+        )
+      out <-
+        as.data.frame(t(
+          c(
+            htest$statistic,
+            htest$p.value,
+            htest$conf.int,
+            htest$estimate
+          )
+        )) %>%
+        rename(
+          statistic = t,
+          p.value = V2,
+          conf.lower = V3,
+          conf.upper = V4
+        )
+    })
 
     attr(.mverse, "class") <- unique(c("htest_mv", class(.mverse)))
     execute_multiverse(.mverse)
-    invisible(.mverse)
+    mtable <- multiverse::extract_variables(.mverse, out) %>%
+      tidyr::unnest(out) %>%
+      mutate(universe = factor(.universe)) %>%
+      select(-starts_with(".")) %>%
+      select(universe, everything())
+    display_branch_rules(mtable, .mverse)
   }

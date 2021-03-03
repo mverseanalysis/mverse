@@ -23,6 +23,12 @@ summary(mv)
 ```
 
 ``` {r}
-ttest_mverse(mv, x='height')
+ttest_mverse(mv, x='height', y='nExp')
+```
+
+```{r}
+tt <- t.test(soccer$height)
+tt$conf.int[2]
+tt$p.value
 ```
 
