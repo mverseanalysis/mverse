@@ -22,3 +22,7 @@ summary(mv, output='aic')
 summary(mv)
 ```
 
+``` {r}
+ttest_mverse(mv, x='height')
+```
+

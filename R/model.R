@@ -58,9 +58,10 @@ glm_mverse <- function(.mverse, family) {
   if (sum(sapply(attr(.mverse, "model_branches"), inherits, "formula_branch")) > 1)
     stop("Exactly one formula branch is required.")
   # fit glm
-  family <<- family
+
+  mverse_params.glm.family <<- family
   multiverse::inside(.mverse, model <-
-                       glm(formulae, data = data, family = family))
+                       glm(formulae, data = data, family = mverse_params.glm.family))
   attr(.mverse, "class") <- unique(c("glm_mverse", class(.mverse)))
   execute_multiverse(.mverse)
   invisible(.mverse)

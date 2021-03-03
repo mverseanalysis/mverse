@@ -69,12 +69,14 @@ summary.lm_mverse <- function(object,
   if (output %in% c("estimates", "e")) {
     # multiverse::inside evaluates global environments
     # set "inside" parameters as global variables before passing in
-    conf.int <<- conf.int
-    conf.level <<- conf.level
+    mverse_config.summary.lm.conf.int <<- conf.int
+    mverse_config.summary.lm.conf.level <<- conf.level
     multiverse::inside(object, {
       if (summary(model)$df[1] > 0)
         out <-
-          broom::tidy(model, conf.int = conf.int, conf.level = conf.level)
+          broom::tidy(model,
+                      conf.int = mverse_config.summary.lm.conf.int,
+                      conf.level = mverse_config.summary.lm.conf.level)
       else {
         out <- data.frame(
           term = "(None)",
@@ -83,7 +85,7 @@ summary.lm_mverse <- function(object,
           statistic = NA,
           p.value = NA
         )
-        if (conf.int)
+        if (mverse_config.summary.lm.conf.int)
           out <- out %>% mutate(conf.low = NA, conf.high = NA)
       }
     })
@@ -161,12 +163,14 @@ summary.glm_mverse <- function(object,
   if (output %in% c("estimates", "e")) {
     # multiverse::inside evaluates global environments
     # set "inside" parameters as global variables before passing in
-    conf.int <<- conf.int
-    conf.level <<- conf.level
+    mverse_config.summary.glm.conf.int <<- conf.int
+    mverse_config.summary.glm.conf.level <<- conf.level
     multiverse::inside(object, {
       if (summary(model)$df[1] > 0)
         out <-
-          broom::tidy(model, conf.int = conf.int, conf.level = conf.level)
+          broom::tidy(model,
+                      conf.int = mverse_config.summary.glm.conf.int,
+                      conf.level = mverse_config.summary.glm.conf.level)
       else {
         out <- data.frame(
           term = "(None)",
@@ -175,7 +179,7 @@ summary.glm_mverse <- function(object,
           statistic = NA,
           p.value = NA
         )
-        if (conf.int)
+        if (mverse_config.summary.glm.conf.int)
           out <- out %>% mutate(conf.low = NA, conf.high = NA)
       }
     })
