@@ -39,29 +39,22 @@ ttest_mverse <-
     if (!exists('mverse_params')) {
       mverse_params <<- list()
     }
-    mverse_params.t.test.x <<- x
-    mverse_params.t.test.y <<- y
-    mverse_params.t.test.alternative <<- alternative
-    mverse_params.t.test.mu <<- mu
-    mverse_params.t.test.paired <<- paired
-    mverse_params.t.test.var.equal <<- var.equal
-    mverse_params.t.test.conf.level <<- conf.level
 
 
     multiverse::inside(.mverse, {
-      y = if (is.null(mverse_params.t.test.y))
+      y = if (is.null(!!rlang::enexpr(y)))
         NULL
       else
-        data[mverse_params.t.test.y]
+        data[!!rlang::enexpr(y)]
       htest <-
         t.test(
-          x = data[mverse_params.t.test.x],
+          x = data[!!rlang::enexpr(x)],
           y = y,
-          alternative = mverse_params.t.test.alternative,
-          mu = mverse_params.t.test.mu,
-          paried = mverse_params.t.test.paired,
-          var.equal = mverse_params.t.test.var.equal,
-          conf.level = mverse_params.t.test.conf.level
+          alternative = !!rlang::enexpr(alternative),
+          mu = !!rlang::enexpr(mu),
+          paried = !!rlang::enexpr(paired),
+          var.equal = !!rlang::enexpr(var.equal),
+          conf.level = !!rlang::enexpr(conf.level)
         )
       out <-
         as.data.frame(t(
