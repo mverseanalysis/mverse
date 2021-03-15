@@ -17,6 +17,7 @@ spec_curve <- function(...) {
 #' @param order a logical to decide if we order the estimated value.
 #' @param color specify the color in the plot.
 #' @return a specification curve graph.
+#' @import dplyr stringr str_replace ggplot2
 #' @name spec_curve
 #' @family {mverse methods}
 #' @export
