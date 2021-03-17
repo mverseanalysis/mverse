@@ -57,6 +57,10 @@ test_that("name() extracts the name of a branch.", {
   expect_equal(name(mbranch), "mutate")
   fbranch <- filter_branch(x > 0, x < 0, x == 0, name = "filter")
   expect_equal(name(fbranch), "filter")
+  frmbranch <- formula_branch(y ~ x, y ~ log(x), name = "formula")
+  expect_equal(name(frmbranch), "formula")
+  fambranch <- family_branch(poisson, gaussian(link = "log"), name = "family")
+  expect_equal(name(fambranch), "family")
 })
 
 test_that("name() renames a branch.", {
@@ -123,31 +127,3 @@ test_that("add_*_branch() checks for a new variable name.", {
       filter_branch(x > 0, x < 0, x == 0)),
     "Please specify a variable name for the branch rule:.*")
 })
-#
-# test_that("remove*_branch() removes a branch.", {
-#   mydf <- data.frame(
-#     x=c(1,2,3),
-#     y=c(4,5,6))
-#   mv <- mverse(mydf)
-#   mv %>%
-#     add_mutate_branch(
-#       mutate_branch(x + y, x - y, x * y, name = "m1"),
-#       mutate_branch(x + y, x - y, x * y, name = "m2")) %>%
-#     add_filter_branch(
-#       filter_branch(x > 0, x < 0, x == 0, name = "f1"),
-#       filter_branch(x > 0, x < 0, x == 0, name = "f2"))
-#   mv %>%
-#     remove_mutate_branch("m1")
-#   expect_false("m1" %in% sapply(
-#     attr(mv, "manipulate_branches"), function(x) x$name))
-#   mv %>%
-#     remove_filter_branch("f1")
-#   print(sapply(
-#     attr(mv, "manipulate_branches"), function(x) x$name))
-#   expect_false("f1" %in% sapply(
-#     attr(mv, "manipulate_branches"), function(x) x$name))
-#   expect_true("m2" %in% sapply(
-#     attr(mv, "manipulate_branches"), function(x) x$name))
-#   expect_true("f2" %in% sapply(
-#     attr(mv, "manipulate_branches"), function(x) x$name))
-# })

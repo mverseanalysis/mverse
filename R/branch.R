@@ -71,6 +71,11 @@ reset_parameters <- function(.mverse) {
         .mverse,
         formulae <- formula(!! parse(br))
       )
+    } else if(inherits(br, "family_branch")) {
+      multiverse::inside(
+        .mverse,
+        family <- !! parse(br)
+      )
     }
   }
   .mverse

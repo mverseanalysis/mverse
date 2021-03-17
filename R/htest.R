@@ -1,15 +1,12 @@
-#' Performs one and two sample t-tests on data columns.
+#' Performs one or two sample t-tests on data columns.
 #'
-#' \code{t.test.mverse} fits \code{lm} across the multiverse
-#' according to model specifications provided by \code{formula_branch}.
-#' At least one \code{formula_branch} must have been added.
+#' \code{t.test_mverse} performs t-tests across the multiverse.
+#' You can specify
 #'
 #' @examples
 #' \dontrun{
-#' model_spec <- formula_branch(y ~ x1)
 #' mv <- mv %>%
-#'   add_formula_branch(model_spec) %>%
-#'   fit_lm()
+#'   t.test_mverse()
 #' }
 #' @param .mverse a \code{mverse} object.
 #' @param x column name of data within mverse object
@@ -20,9 +17,9 @@
 #' @param paired a logical indicating whether you want a paired t-test.
 #' @param var.equal a logical variable indicating whether to treat the two variances as being equal.
 #' @param conf.level confidence level of the interval.
-#' @return A \code{mverse} object with \code{lm} fitted.
-#' @name fit_lm
-#' @family {model fitting methods}
+#' @return A \code{ttest_mverse} object.
+#' @name t.test
+#' @family {hypothesis testing methods}
 #' @export
 ttest_mverse <-
   function(.mverse,
@@ -34,21 +31,14 @@ ttest_mverse <-
            var.equal = FALSE,
            conf.level = 0.95) {
     stopifnot(inherits(.mverse, "mverse"))
-
-    # pass function parameters
-    if (!exists('mverse_params')) {
-      mverse_params <<- list()
-    }
-
-
     multiverse::inside(.mverse, {
       y = if (is.null(!!rlang::enexpr(y)))
         NULL
       else
-        data[!!rlang::enexpr(y)]
+        data %>% pull(!!rlang::enexpr(y))
       htest <-
         t.test(
-          x = data[!!rlang::enexpr(x)],
+          x = data %>% pull(!!rlang::enexpr(x)),
           y = y,
           alternative = !!rlang::enexpr(alternative),
           mu = !!rlang::enexpr(mu),
@@ -72,8 +62,6 @@ ttest_mverse <-
           conf.upper = V4
         )
     })
-
-    attr(.mverse, "class") <- unique(c("htest_mv", class(.mverse)))
     execute_multiverse(.mverse)
     mtable <- multiverse::extract_variables(.mverse, out) %>%
       tidyr::unnest(out) %>%

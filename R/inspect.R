@@ -44,12 +44,12 @@ summary.mverse <- function(object) {
 }
 
 
-#' Display the s
+#' Display a summary of fitting \code{lm} across the multiverse.
 #'
 #' \code{summary.lm_mverse} returns the \code{lm} regression
 #' results across the multiverse.
 #'
-#' @param object a \code{mverse} object.
+#' @param object a \code{lm_mverse} object.
 #' @param conf.int When \code{TRUE} (default), the estimate output
 #'   includes the confidence intervals.
 #' @param conf.level The confidence level of the confindence interval
@@ -130,12 +130,12 @@ summary.lm_mverse <- function(object,
 }
 
 
-#' Display the s
+#' Display a summary of fitting \code{glm} across the multiverse.
 #'
-#' \code{summary.lm_mverse} returns the \code{lm} regression
+#' \code{summary.lm_mverse} returns the \code{glm} regression
 #' results across the multiverse.
 #'
-#' @param object a \code{mverse} object.
+#' @param object a \code{glm_mverse} object.
 #' @param conf.int When \code{TRUE} (default), the estimate output
 #'   includes the confidence intervals.
 #' @param conf.level The confidence level of the confindence interval

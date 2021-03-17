@@ -14,7 +14,7 @@
 \method{summary}{glm_mverse}(object, conf.int = TRUE, conf.level = 0.95, output = "estimates")
 }
 \arguments{
-\item{object}{a \code{mverse} object.}
+\item{object}{a \code{glm_mverse} object.}
 
 \item{conf.int}{When \code{TRUE} (default), the estimate output
 includes the confidence intervals.}
@@ -43,7 +43,7 @@ represents a branch.
 \code{summary.lm_mverse} returns the \code{lm} regression
 results across the multiverse.
 
-\code{summary.lm_mverse} returns the \code{lm} regression
+\code{summary.lm_mverse} returns the \code{glm} regression
 results across the multiverse.
 }
 \concept{{summary method}}
