@@ -118,9 +118,7 @@
     z3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="op">(</span><span class="va">zmin</span> <span class="op">+</span> <span class="va">zcat</span> <span class="op">+</span> <span class="va">zwin</span><span class="op">)</span> <span class="op">/</span> <span class="fl">3</span><span class="op">)</span>
   <span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mverse.html">create_multiverse</a></span><span class="op">(</span><span class="va">hurricane</span><span class="op">)</span>
-<span class="co">## Warning: changing locked binding for 'block_exec' in 'knitr' whilst loading</span>
-<span class="co">## 'multiverse'</span></code></pre></div>
+<code class="sourceCode R"><span class="va">mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mverse.html">create_multiverse</a></span><span class="op">(</span><span class="va">hurricane</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="define-filter-branches" class="section level2">
 <h2 class="hasAnchor">
@@ -194,7 +192,7 @@
 </blockquote>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># wrapper for model branching to be implemented</span>
-<span class="fu">multiverse</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/multiverse/man/inside.html">inside</a></span><span class="op">(</span>
+<span class="fu">multiverse</span><span class="fu">::</span><span class="fu"><a href="http://mucollective.github.io/multiverse/reference/inside.html">inside</a></span><span class="op">(</span>
   <span class="va">mv</span>, <span class="op">{</span>
     <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span>
       <span class="fu">branch</span><span class="op">(</span>
@@ -253,11 +251,11 @@
 <span class="va">mv</span> <span class="op">&lt;-</span> <span class="va">mv</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="../reference/execute_multiverse.html">execute_multiverse</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <blockquote>
-<p><code>mverse</code> methods aren’t implemented yet (will wait until <code><a href="https://rdrr.io/pkg/multiverse/man/extract_variables.html">multiverse::extract_variables</a></code> is available in the released version of <code>multiverse</code>)</p>
+<p><code>mverse</code> methods aren’t implemented yet (will wait until <code><a href="http://mucollective.github.io/multiverse/reference/extract_variables.html">multiverse::extract_variables</a></code> is available in the released version of <code>multiverse</code>)</p>
 </blockquote>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># a wrapper function to be implemented using multiverse::extract_variables</span>
-<span class="va">fem_coefs</span> <span class="op">&lt;-</span> <span class="fu">multiverse</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/multiverse/man/extract_variables.html">extract_variables</a></span><span class="op">(</span><span class="va">mv</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<span class="va">fem_coefs</span> <span class="op">&lt;-</span> <span class="fu">multiverse</span><span class="fu">::</span><span class="fu"><a href="http://mucollective.github.io/multiverse/reference/extract_variables.html">extract_variables</a></span><span class="op">(</span><span class="va">mv</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>res <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">.results</span>, <span class="st">'expectation'</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html">unnest</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>universe <span class="op">=</span> <span class="va">.universe</span><span class="op">)</span>

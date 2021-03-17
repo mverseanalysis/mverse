@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a new mverse object — mverse • mverse</title>
+<title>Fit lm across the multiverse. — lm_mverse • mverse</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,10 @@
 
 
 
-<meta property="og:title" content="Create a new mverse object — mverse" />
-<meta property="og:description" content="Constructs a new mverse object which extends
-multiverse::multiverse object." />
+<meta property="og:title" content="Fit lm across the multiverse. — lm_mverse" />
+<meta property="og:description" content="lm_mverse fits lm across the multiverse
+according to model specifications provided by formula_branch.
+At least one formula_branch must have been added." />
 
 
 
@@ -119,40 +120,43 @@ multiverse::multiverse object." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a new <code>mverse</code> object</h1>
+    <h1>Fit <code>lm</code> across the multiverse.</h1>
     
-    <div class="hidden name"><code>mverse.Rd</code></div>
+    <div class="hidden name"><code>lm_mverse.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Constructs a new mverse object which extends
-<code><a href='http://mucollective.github.io/multiverse/reference/multiverse.html'>multiverse::multiverse</a></code> object.</p>
+    <p><code>lm_mverse</code> fits <code>lm</code> across the multiverse
+according to model specifications provided by <code>formula_branch</code>.
+At least one <code>formula_branch</code> must have been added.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mverse</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
-
-<span class='fu'>create_multiverse</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>lm_mverse</span><span class='op'>(</span><span class='va'>.mverse</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>data</th>
-      <td><p>source datafame.</p></td>
+      <th>.mverse</th>
+      <td><p>a <code>mverse</code> object.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>mverse</code> object with the source dataframe attached.</p>
+    <p>A <code>mverse</code> object with <code>lm</code> fitted.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other mverse methods: 
-<code><a href='execute_multiverse.html'>execute_multiverse</a>()</code>,
-<code><a href='extract.html'>extract</a>()</code></p></div>
+    <div class='dont-index'><p>Other model fitting methods: 
+<code><a href='glm_mverse.html'>glm_mverse</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>mv</span> <span class='op'>&lt;-</span> <span class='fu'>mverse</span><span class='op'>(</span><span class='va'>soccer</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>model_spec</span> <span class='op'>&lt;-</span> <span class='fu'><a href='formula_branch.html'>formula_branch</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>x1</span><span class='op'>)</span>
+<span class='va'>mv</span> <span class='op'>&lt;-</span> <span class='va'>mv</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_formula_branch.html'>add_formula_branch</a></span><span class='op'>(</span><span class='va'>model_spec</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>fit_lm</span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

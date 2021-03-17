@@ -4,6 +4,9 @@
     <loc>https://mverseanalysis.github.io/mverse/index.html</loc>
   </url>
   <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/add_family_branch.html</loc>
+  </url>
+  <url>
     <loc>https://mverseanalysis.github.io/mverse/reference/add_filter_branch.html</loc>
   </url>
   <url>
@@ -19,13 +22,19 @@
     <loc>https://mverseanalysis.github.io/mverse/reference/extract.html</loc>
   </url>
   <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/family_branch.html</loc>
+  </url>
+  <url>
     <loc>https://mverseanalysis.github.io/mverse/reference/filter_branch.html</loc>
   </url>
   <url>
-    <loc>https://mverseanalysis.github.io/mverse/reference/fit_lm.html</loc>
+    <loc>https://mverseanalysis.github.io/mverse/reference/formula_branch.html</loc>
   </url>
   <url>
-    <loc>https://mverseanalysis.github.io/mverse/reference/formula_branch.html</loc>
+    <loc>https://mverseanalysis.github.io/mverse/reference/glm_mverse.html</loc>
+  </url>
+  <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/lm_mverse.html</loc>
   </url>
   <url>
     <loc>https://mverseanalysis.github.io/mverse/reference/mutate_branch.html</loc>
@@ -38,6 +47,9 @@
   </url>
   <url>
     <loc>https://mverseanalysis.github.io/mverse/reference/summary.html</loc>
+  </url>
+  <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/t.test.html</loc>
   </url>
   <url>
     <loc>https://mverseanalysis.github.io/mverse/articles/example-1.html</loc>

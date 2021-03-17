@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fit lm across the multiverse. — fit_lm • mverse</title>
+<title>Fit glm across the multiverse. — glm_mverse • mverse</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,15 @@
 
 
 
-<meta property="og:title" content="Fit lm across the multiverse. — fit_lm" />
-<meta property="og:description" content="lm_mverse fits lm across the multiverse
-according to model specificaitons provided by formula_branch.
-At least one formula_branch must have been added." />
+<meta property="og:title" content="Fit glm across the multiverse. — glm_mverse" />
+<meta property="og:description" content="glm_mverse fits glm across the multiverse
+according to model specifications provided by formula_branch.
+At least one formula_branch must have been added.
+You can also specify the underlying error distribution and
+the link function by adding a family_branch. If no
+family_branch has been provided, it uses the follows
+the default behaviour of glm, which uses the Gaussian
+distribution with an identity link." />
 
 
 
@@ -120,18 +125,23 @@ At least one formula_branch must have been added." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fit <code>lm</code> across the multiverse.</h1>
+    <h1>Fit <code>glm</code> across the multiverse.</h1>
     
-    <div class="hidden name"><code>fit_lm.Rd</code></div>
+    <div class="hidden name"><code>glm_mverse.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>lm_mverse</code> fits <code>lm</code> across the multiverse
-according to model specificaitons provided by <code>formula_branch</code>.
-At least one <code>formula_branch</code> must have been added.</p>
+    <p><code>glm_mverse</code> fits <code>glm</code> across the multiverse
+according to model specifications provided by <code>formula_branch</code>.
+At least one <code>formula_branch</code> must have been added.
+You can also specify the underlying error distribution and
+the link function by adding a <code>family_branch</code>. If no
+<code>family_branch</code> has been provided, it uses the follows
+the default behaviour of <code>glm</code>, which uses the Gaussian
+distribution with an identity link.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>lm_mverse</span><span class='op'>(</span><span class='va'>.mverse</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>glm_mverse</span><span class='op'>(</span><span class='va'>.mverse</span>, <span class='va'>family</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,14 +154,22 @@ At least one <code>formula_branch</code> must have been added.</p>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>mverse</code> object with <code>lm</code> fitted.</p>
+    <p>A <code>mverse</code> object with <code>glm</code> fitted.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other model fitting methods: 
+<code><a href='lm_mverse.html'>lm_mverse</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='va'>model_spec</span> <span class='op'>&lt;-</span> <span class='fu'><a href='formula_branch.html'>formula_branch</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>x1</span><span class='op'>)</span>
+<span class='va'>fam</span> <span class='op'>&lt;-</span> <span class='fu'><a href='family_branch.html'>family_branch</a></span><span class='op'>(</span>
+  <span class='va'>poisson</span>, <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>gaussian</a></span><span class='op'>(</span>link <span class='op'>=</span> <span class='st'>"log"</span><span class='op'>)</span>
+<span class='op'>)</span>
 <span class='va'>mv</span> <span class='op'>&lt;-</span> <span class='va'>mv</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_formula_branch.html'>add_formula_branch</a></span><span class='op'>(</span><span class='va'>model_spec</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>fit_lm</span><span class='op'>(</span><span class='op'>)</span>
+  <span class='fu'>add_family_banch</span><span class='op'>(</span><span class='va'>fam</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>fit_glm</span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>}</span>
 </div></pre>
   </div>
