@@ -32,6 +32,7 @@ mv <- mv \%>\%
 }
 \seealso{
 Other {methods for working with a formula branch}: 
+\code{\link{family_branch}()},
 \code{\link{formula_branch}()}
 }
 \concept{{methods for working with a formula branch}}

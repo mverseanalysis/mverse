@@ -12,7 +12,7 @@ formula_branch(..., name = NULL)
 \item{name}{Name for the new formula.}
 }
 \value{
-a mutate_branch object.
+a \code{formula_branch} object.
 }
 \description{
 Create a new formula branch.
@@ -29,6 +29,7 @@ form <- formula_branch(
 }
 \seealso{
 Other {methods for working with a formula branch}: 
-\code{\link{add_formula_branch}()}
+\code{\link{add_formula_branch}()},
+\code{\link{family_branch}()}
 }
 \concept{{methods for working with a formula branch}}
