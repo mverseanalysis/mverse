@@ -1,7 +1,9 @@
 #' Performs one or two sample t-tests on data columns.
 #'
 #' \code{t.test_mverse} performs t-tests across the multiverse.
-#' You can specify
+#' If x or y is specified, then performs one and two sample t-tests
+#' on specified columns of the data. If both x and y are NULL, then
+#' performs t.test based on the formula branches.
 #'
 #' @examples
 #' \dontrun{
@@ -9,7 +11,7 @@
 #'   t.test_mverse()
 #' }
 #' @param .mverse a \code{mverse} object.
-#' @param x column name of data within mverse object
+#' @param x (optional) column name of data within mverse object
 #' @param y (optional) column name of data within mverse object
 #' @param alternative a character string specifying the alternative hypothesis,
 #'        must be one of "two.sided" (default), "greater" or "less". You can specify just the initial letter.
@@ -23,7 +25,7 @@
 #' @export
 ttest_mverse <-
   function(.mverse,
-           x,
+           x = NULL,
            y = NULL,
            alternative = "two.sided",
            mu = 0,
@@ -31,37 +33,68 @@ ttest_mverse <-
            var.equal = FALSE,
            conf.level = 0.95) {
     stopifnot(inherits(.mverse, "mverse"))
-    multiverse::inside(.mverse, {
-      y = if (is.null(!!rlang::enexpr(y)))
-        NULL
-      else
-        data %>% pull(!!rlang::enexpr(y))
-      htest <-
-        t.test(
-          x = data %>% pull(!!rlang::enexpr(x)),
-          y = y,
+    if (is.null(x) & is.null(y)) {
+      multiverse::inside(.mverse, {
+        htest <- t.test(
+          formulae,
+          data = data,
           alternative = !!rlang::enexpr(alternative),
           mu = !!rlang::enexpr(mu),
           paried = !!rlang::enexpr(paired),
           var.equal = !!rlang::enexpr(var.equal),
           conf.level = !!rlang::enexpr(conf.level)
         )
-      out <-
-        as.data.frame(t(
-          c(
-            htest$statistic,
-            htest$p.value,
-            htest$conf.int,
-            htest$estimate
+
+        out <-
+          as.data.frame(t(
+            c(
+              htest$statistic,
+              htest$p.value,
+              htest$conf.int,
+              htest$estimate
+            )
+          )) %>%
+          rename(
+            statistic = t,
+            p.value = V2,
+            conf.lower = V3,
+            conf.upper = V4
           )
-        )) %>%
-        rename(
-          statistic = t,
-          p.value = V2,
-          conf.lower = V3,
-          conf.upper = V4
-        )
-    })
+      })
+    } else {
+      multiverse::inside(.mverse, {
+        y = if (is.null(!!rlang::enexpr(y)))
+          NULL
+        else
+          data %>% pull(!!rlang::enexpr(y))
+        htest <-
+          t.test(
+            x = data %>% pull(!!rlang::enexpr(x)),
+            y = y,
+            alternative = !!rlang::enexpr(alternative),
+            mu = !!rlang::enexpr(mu),
+            paried = !!rlang::enexpr(paired),
+            var.equal = !!rlang::enexpr(var.equal),
+            conf.level = !!rlang::enexpr(conf.level)
+          )
+        out <-
+          as.data.frame(t(
+            c(
+              htest$statistic,
+              htest$p.value,
+              htest$conf.int,
+              htest$estimate
+            )
+          )) %>%
+          rename(
+            statistic = t,
+            p.value = V2,
+            conf.lower = V3,
+            conf.upper = V4
+          )
+      })
+    }
+
     execute_multiverse(.mverse)
     mtable <- multiverse::extract_variables(.mverse, out) %>%
       tidyr::unnest(out) %>%
