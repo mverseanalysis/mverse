@@ -5,6 +5,8 @@
 \alias{add_family_branch.mverse}
 \title{Add family branches to a \code{mverse} object.}
 \usage{
+add_family_branch(.mverse, ...)
+
 \method{add_family_branch}{mverse}(.mverse, ...)
 }
 \arguments{

@@ -19,7 +19,7 @@
 \item{conf.int}{When \code{TRUE} (default), the estimate output
 includes the confidence intervals.}
 
-\item{conf.level}{The confidence level of the confindence interval
+\item{conf.level}{The confidence level of the confidence interval
 returned using \code{conf.int = TRUE}. Default value is 0.95.}
 
 \item{output}{The output of interest. The possible values are
@@ -29,8 +29,6 @@ is "estimates".}
 }
 \value{
 a multiverse table as a tibble.
-
-a multiverse table as a tibble
 
 a multiverse table as a tibble
 }
@@ -43,7 +41,17 @@ represents a branch.
 \code{summary.lm_mverse} returns the \code{lm} regression
 results across the multiverse.
 
-\code{summary.lm_mverse} returns the \code{glm} regression
+\code{summary.glm_mverse} returns the \code{glm} regression
 results across the multiverse.
+}
+\seealso{
+Other {summary method}: 
+\code{\link{AIC}()}
+
+Other {summary method}: 
+\code{\link{AIC}()}
+
+Other {summary method}: 
+\code{\link{AIC}()}
 }
 \concept{{summary method}}

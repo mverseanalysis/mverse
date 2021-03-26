@@ -29,7 +29,7 @@ family_branch <- function(..., name = NULL) {
     )
 }
 
-#' @rdname add_ffamily_branch
+#' @rdname add_family_branch
 #' @export
 add_family_branch <- function(.mverse, ...) {
   UseMethod("add_family_branch")

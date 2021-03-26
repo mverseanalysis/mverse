@@ -52,7 +52,7 @@ summary.mverse <- function(object) {
 #' @param object a \code{lm_mverse} object.
 #' @param conf.int When \code{TRUE} (default), the estimate output
 #'   includes the confidence intervals.
-#' @param conf.level The confidence level of the confindence interval
+#' @param conf.level The confidence level of the confidence interval
 #'   returned using \code{conf.int = TRUE}. Default value is 0.95.
 #' @param output The output of interest. The possible values are
 #'   "estimates" ("e"), "df", "fstatistic" ("f"), and "r.squared" ("r").
@@ -132,19 +132,18 @@ summary.lm_mverse <- function(object,
 
 #' Display a summary of fitting \code{glm} across the multiverse.
 #'
-#' \code{summary.lm_mverse} returns the \code{glm} regression
+#' \code{summary.glm_mverse} returns the \code{glm} regression
 #' results across the multiverse.
 #'
 #' @param object a \code{glm_mverse} object.
 #' @param conf.int When \code{TRUE} (default), the estimate output
 #'   includes the confidence intervals.
-#' @param conf.level The confidence level of the confindence interval
+#' @param conf.level The confidence level of the confidence interval
 #'   returned using \code{conf.int = TRUE}. Default value is 0.95.
 #' @param output The output of interest. The possible values are
 #'   "estimates" ("e"), "df", "deviance" ("de"), and "aic" ("bic").
 #'   Alternatively, the first letters may be used. Default value
 #'   is "estimates".
-#' @return a multiverse table as a tibble
 #' @name summary
 #' @family {summary method}
 #' @importFrom  stringr str_replace
@@ -217,4 +216,32 @@ summary.glm_mverse <- function(object,
     select(-starts_with(".")) %>%
     select(universe, everything())
   display_branch_rules(mtable, object)
+}
+
+
+
+#' Display the AIC and BIC score of the fitted models across the multiverse
+#'
+#' display the AIC and BIC score of \code{glm} regression
+#' results across the multiverse.
+#'
+#' @param object a \code{glm_mverse} object.
+#' @return a multiverse table as a tibble
+#' @name AIC
+#' @family {summary method}
+#' @importFrom  stringr str_replace
+#' @export
+AIC.glm_mverse <- function(object) {
+  df <- summary.glm_mverse(object, output = "aic")
+  df$BIC <- NULL
+  df
+}
+
+
+#' @rdname AIC
+#' @export
+BIC.glm_mverse <- function(object) {
+  df <- summary.glm_mverse(object, output = "aic")
+  df$AIC <- NULL
+  df
 }
