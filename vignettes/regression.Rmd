@@ -1,0 +1,56 @@
+---
+title: "Basic Regressions with mverse"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+references:
+  - id: multiverse
+    title: "multiverse: R package for creating explorable multiverse analysis"
+    type: entry
+    URL: https://mucollective.github.io/multiverse/
+    accessed:
+      year: 2020
+    author:
+    - given: Abhraneel
+      family: Sarma
+    - given: Matthew
+      family: Kay
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE
+)
+Sys.setenv(LANG="en")
+```
+
+```{r}
+library(MASS)
+library(mverse)
+mv <- create_multiverse(Boston)
+
+lstat2 <- mutate_branch(
+  lstat ^ 2,
+  lstat ^ .5
+)
+
+
+model_formulas <- formula_branch(
+  log(medv) ~ .,
+  medv ~ .
+)
+
+families <- family_branch(gaussian(), Gamma())
+
+mv <- mv %>% 
+  add_formula_branch(model_formulas) %>% 
+  add_family_branch(families)  %>%  
+  add_mutate_branch(lstat2) %>%
+  glm_mverse()
+summary(mv)
+AIC(mv)
+BIC(mv)
+```
+
