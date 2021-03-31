@@ -22,14 +22,14 @@ spec_curve <- function(...) {
 #' @name spec_curve
 #' @family {spec_cuve method}
 #' @export
-spec_curve.mverse <- function(
+spec_curve.mverse <- function( # need to define spec_curve for glm_mverse, lm_mverse, etc.
   .mverse, var = NULL, conf = FALSE,
   option = names(multiverse::parameters(.mverse)),
   order = FALSE, color = (p.value < 0.05)) {
   stopifnot(inherits(.mverse, "mverse"))
   color <- rlang::enquo(color)
   mtable <- multiverse::expand(.mverse) %>%
-    mutate(res = map(.results, 'coef')) %>%
+    mutate(res = map(.results, 'coef')) %>% # see glm_mverse and summary.glm_mverse for the variable name
     unnest(res) %>%
     select(.universe, !! names(multiverse::parameters(.mverse)),
            term, estimate, p.value, std.error)

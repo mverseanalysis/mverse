@@ -1,22 +1,20 @@
-#' Create a new formula branch.
+#' Create a new family branch.
 #'
 #' @examples
 #' \dontrun{
-#' form <- formula_branch(
-#'   y ~ x1,
-#'   y ~ x2,
-#'   y ~ x1*x2
+#' fam <- family_branch(
+#'   poisson, gaussian(link = "log")
 #' )
 #' }
 #'
 #' @param ... branch definition expressions.
-#' @param name Name for the new formula.
-#' @return a \code{formula_branch} object.
+#' @param name Name for the new family.
+#' @return a \code{family_branch} object.
 #'
-#' @name formula_branch
+#' @name family_branch
 #' @family {methods for working with a formula branch}
 #' @export
-formula_branch <- function(..., name = NULL) {
+family_branch <- function(..., name = NULL) {
   rules <- rlang::enquos(...)
   if(!length(rules) > 0)
     stop('Error: Provide at least one rule.')
@@ -27,38 +25,41 @@ formula_branch <- function(..., name = NULL) {
       rules = rules,
       name = name
       ),
-    class = c("formula_branch", "branch")
+    class = c("family_branch", "branch")
     )
 }
 
-#' @rdname add_formula_branch
+#' @rdname add_ffamily_branch
 #' @export
-add_formula_branch <- function(.mverse, ...) {
-  UseMethod("add_formula_branch")
+add_family_branch <- function(.mverse, ...) {
+  UseMethod("add_family_branch")
 }
 
-#' Add formula branches to a \code{mverse} object.
+#' Add family branches to a \code{mverse} object.
 #'
-#' This method adds one or more formula branches to
-#' an existing \code{mverse} object. The formula branches
-#' are used to specify a model for the main analysis.
+#' This method adds one or more family branches to
+#' an existing \code{mverse} object. The family branches
+#' are used to specify a model family for the main analysis
+#' that takes a family argument.
 #'
 #' @param .mverse a \code{mverse} object.
-#' @param ... \code{formula_branch} objects.
+#' @param ... \code{family_branch} objects.
 #' @examples
 #' \dontrun{
 #' mv <- create_multiverse(df)
-#' model_spec <- formula_branch(y ~ x1 + x2, y ~ x1 * x2)
+#' fam <- family_branch(
+#'   poisson, gaussian(link = "log")
+#' )
 #' mv <- mv %>%
-#'   add_formula_branch(model_spec)
+#'   add_family_branch(fam)
 #' }
 #' @return The resulting \code{mverse} object.
 #' @importFrom magrittr %>%
 #' @import dplyr
-#' @name add_formula_branch
-#' @family {methods for working with a formula branch}
+#' @name add_family_branch
+#' @family {methods for working with a family branch}
 #' @export
-add_formula_branch.mverse <- function(.mverse, ...) {
+add_family_branch.mverse <- function(.mverse, ...) {
   varnames <- sapply(
     rlang::enquos(...),
     rlang::quo_name)
@@ -75,7 +76,7 @@ add_formula_branch.mverse <- function(.mverse, ...) {
   e <- sapply(
     branch_rules,
     function(x) {
-      if(grepl('^formula_branch(.+)$', x$name)) {
+      if(grepl('^family_branch(.+)$', x$name)) {
         stop(paste(
           "Please specify a variable name for the branch rule:",
           x$name))}})

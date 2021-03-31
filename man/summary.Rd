@@ -4,14 +4,17 @@
 \alias{summary}
 \alias{summary.mverse}
 \alias{summary.lm_mverse}
+\alias{summary.glm_mverse}
 \title{Display the multiverse table with results.}
 \usage{
 \method{summary}{mverse}(object)
 
 \method{summary}{lm_mverse}(object, conf.int = TRUE, conf.level = 0.95, output = "estimates")
+
+\method{summary}{glm_mverse}(object, conf.int = TRUE, conf.level = 0.95, output = "estimates")
 }
 \arguments{
-\item{object}{a \code{mverse} object.}
+\item{object}{a \code{glm_mverse} object.}
 
 \item{conf.int}{When \code{TRUE} (default), the estimate output
 includes the confidence intervals.}
@@ -20,12 +23,14 @@ includes the confidence intervals.}
 returned using \code{conf.int = TRUE}. Default value is 0.95.}
 
 \item{output}{The output of interest. The possible values are
-"estimates", "df", "fstatistic", and "r.squared".
+"estimates" ("e"), "df", "deviance" ("de"), and "aic" ("bic").
 Alternatively, the first letters may be used. Default value
 is "estimates".}
 }
 \value{
 a multiverse table as a tibble.
+
+a multiverse table as a tibble
 
 a multiverse table as a tibble
 }
@@ -36,6 +41,9 @@ Each row corresponds to a universe and each column
 represents a branch.
 
 \code{summary.lm_mverse} returns the \code{lm} regression
+results across the multiverse.
+
+\code{summary.lm_mverse} returns the \code{glm} regression
 results across the multiverse.
 }
 \concept{{summary method}}

@@ -11,11 +11,12 @@
 #' @family {mverse methods}
 #' @export
 mverse <- function(data) {
-  .mverse <- multiverse::multiverse(class="mverse")
+  .mverse <- multiverse::multiverse()
   attr(.mverse, 'source') <- data
   attr(.mverse, 'manipulate_branches') <- list()
   attr(.mverse, 'model_branches') <- list()
   # attr(.mverse, 'branch_asserts') <- list()
+  attr(.mverse, "class") <- c("mverse", class(.mverse))
   .mverse
 }
 
