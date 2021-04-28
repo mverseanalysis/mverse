@@ -1,0 +1,154 @@
+/* fonts */
+@import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300;1,400;1,500&family=Work+Sans:wght@400;500;600&display=swap');
+
+body {
+  font-family: Bitter;
+  font-weight: 400;
+  font-style: normal;
+  color: #000000;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Work Sans';
+  font-style: normal;
+  color: #696969;
+}
+
+h1 {
+  font-weight: 600;
+}
+h2 {
+  font-weight: 500;
+}
+h3, h4, h5, h6 {
+  font-weight: 400;
+}
+b {
+  font-family: 'Work Sans';
+  font-style: normal;
+}
+code { font-family: 'Ubuntu Mono'; }
+.footnote{
+  font-family: Bitter;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 0.8em;
+  padding-top: 30px;
+  display: block;
+  width: 100%;
+}
+.btn {
+  font-family: 'Work Sans';
+  font-weight: 500;
+}
+.control-label {
+  font-family: 'Work Sans';
+}
+.irs--shiny .irs-bar {
+  border-top-color: #fc8d62;
+  border-bottom-color: #fc8d62;
+  background-color: #fc8d62;
+}
+.irs--shiny .irs-from,
+.irs--shiny .irs-to,
+.irs--shiny .irs-single {
+  background-color: #fc8d62;
+}
+/* layouts */
+.flex-center {
+  display: flex;
+  justify-content: center;
+}
+.well {
+  background: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  border-right: 3px solid #696969;
+}
+.shiny-plot-output {
+  margin: 20px 0;
+  border-radius: 15px;
+}
+/* custom style for main menu */
+#mainmenu {
+  font-family: 'Work Sans';
+  font-style: normal;
+  color: #696969;
+  font-weight: 500;
+  display: block;
+  border: none;
+}
+#mainmenu>li.active>a,
+#mainmenu>li.active>a:focus,
+#mainmenu>li.active>a:hover {
+  border: 1px solid #f6f6f6;
+  background-color: #f6f6f6;
+}
+#mainmenu>li>a {
+  border: 1px solid #f6f6f6;
+  margin-right: 0;
+  padding: 0;
+  height: auto;
+}
+#mainmenu>li:first-child>a {
+  border-radius: 5px 0 0 5px;
+}
+#mainmenu>li:last-child>a {
+  border-radius: 0 5px 5px 0;
+}
+#mainmenu>li>a>span {
+  padding: 10px 15px;
+  display: inline-block;
+}
+#mainmenu>li.active>a>span {
+  pointer-events: none;
+}
+#header {
+  position: relative;
+}
+/* info box */
+#infobtn {
+  padding: 0;
+  font-size: 12px;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  float: right;
+}
+#infobtnclose {
+  padding: 0;
+  font-size: 16px;
+  border-radius: 0;
+  float: right;
+  color: black;
+  border: none;
+  background: none;
+}
+#infobox {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 10px;
+  width: 100%;
+  max-height: 900px;
+  background-color: #ffffff;
+  border: solid 1px black;
+  overflow-y: auto;
+  border-radius: 10px;
+  z-index: 999999;
+}
+#infobox a {
+  color: #fc8d62;
+}
+#infobox img {
+  border-radius: 10px;
+}
+/* main panels */
+.tab-pane {
+  padding: 25px 0;
+}

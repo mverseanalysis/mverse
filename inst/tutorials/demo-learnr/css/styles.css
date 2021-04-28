@@ -1,0 +1,49 @@
+/* fonts */
+@import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300;1,400;1,500&family=Work+Sans:wght@400;500;600&display=swap');
+
+body {
+  font-family: Bitter;
+  font-weight: 400;
+  font-style: normal;
+  color: #555555;
+}
+
+h1, h2, h3, h4, h5, label {
+  font-family: 'Work Sans';
+  font-style: normal;
+  color: #696969;
+}
+
+h1 {
+  font-weight: 600;
+}
+h2 {
+  font-weight: 500;
+}
+h3, h4, h5 {
+  font-weight: 400;
+}
+label {
+  font-weight: 500;
+}
+code { font-family: 'Ubuntu Mono'; }
+.footnote{
+  font-family: Bitter;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 0.8em;
+  padding-top: 30px;
+  display: block;
+  width: 100%;
+}
+
+/* layouts */
+.well {
+  background: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  border-right: 3px solid #696969;
+}

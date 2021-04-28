@@ -22,6 +22,9 @@ Depends:
   magrittr (>= 1.5)
 Imports:
   multiverse (>= 0.3),
+  shiny (>= 1.6),
+  shinyjs,
+  shinyBS,
   dplyr,
   rlang,
   stringr,
@@ -29,6 +32,8 @@ Imports:
 Suggests:
   tidyverse,
   broom,
+  showtext,
+  lubridate,
   tidybayes,
   testthat (>= 2.1.0),
   pkgdown (>= 1.5.1),

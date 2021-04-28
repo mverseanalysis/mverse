@@ -1,0 +1,56 @@
+---
+title: "Interactive Module Demo"
+output: 
+  learnr::tutorial:
+    css: "css/styles.css"
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(shiny)
+library(learnr)
+library(dplyr)
+library(ggplot2)
+library(mverse)
+opts_chunk$set(echo = FALSE)
+# prep data
+dat <- soccer %>% 
+  group_by(playerShort, position) %>%
+  summarise(height = median(height), 
+            weight = median(weight), 
+            goals_per_game = sum(goals)/sum(games),
+            cards_per_game = sum(yellowReds)/sum(games),
+            .groups = "drop") %>%
+  select(-playerShort) %>%
+  filter(complete.cases(.))
+```
+
+## Objective
+
+```{r}
+ggplot(dat, aes(x = goals_per_game, y = cards_per_game)) +
+  theme_minimal() +
+  labs(x = "Goals per Game", y = "Cards per Game") +
+  geom_point(alpha = 0.2) +
+  facet_wrap(~ position, scales = "free") +
+  theme(axis.text = element_blank())
+```
+
+## Identify Outliers
+
+_Add controllers for outlier thresholds._
+
+```{r}
+a <- textInput('txt01', 'Text')
+a
+```
+
+## Identify Cutoffs
+
+_Add controllers for defining high vs low goals per game._
+
+## Define Metrics
+
+## Show Results
+
