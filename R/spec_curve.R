@@ -59,8 +59,9 @@ spec_curve.mverse <- function( # need to define spec_curve for glm_mverse, lm_mv
                                alpha = 0.2,size=0.25)}
 
   data.info <- data.spec_curve %>%
-    gather( "parameter_name", "parameter_option",
-            !! names(multiverse::parameters(.mverse)) ) %>%
+    pivot_longer( !! names(multiverse::parameters(.mverse)),
+                  names_to = "parameter_name",
+                  values_to = "parameter_option" ) %>%
     filter(parameter_name %in% option)
 
   p2 <- data.info %>%
@@ -138,8 +139,9 @@ spec_curve.lm_mverse <- function(
                                alpha = 0.2,size=0.25)}
 
   data.info <- data.spec_curve %>%
-    gather( "parameter_name", "parameter_option",
-            !! names(multiverse::parameters(.lm_mverse)) ) %>%
+    pivot_longer( !! names(multiverse::parameters(.lm_mverse)),
+      names_to = "parameter_name",
+      values_to = "parameter_option" ) %>%
     filter(parameter_name %in% option)
 
   p2 <- data.info %>%
@@ -216,8 +218,9 @@ spec_curve.glm_mverse <- function(
                                alpha = 0.2,size=0.25)}
 
   data.info <- data.spec_curve %>%
-    gather( "parameter_name", "parameter_option",
-            !! names(multiverse::parameters(.glm_mverse)) ) %>%
+    pivot_longer( !! names(multiverse::parameters(.glm_mverse)),
+                  names_to = "parameter_name",
+                  values_to = "parameter_option" ) %>%
     filter(parameter_name %in% option)
 
   p2 <- data.info %>%
