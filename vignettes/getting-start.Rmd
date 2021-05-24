@@ -1,0 +1,233 @@
+---
+title: "Getting started with mverse"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Case Study. Are female hurricanes deadlier than male hurricanes?}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+references:
+  - id: original
+    title: "Female hurricanes are deadlier than male hurricanes"
+    type: article-journal
+    issued:
+      year: 2014
+      month: 6
+      day: 17
+    URL: https://doi.org/10.1073/pnas.1402786111
+    DOI: 10.1073/pnas.1402786111
+    journal: Proceeedings fo the National Academiy of Sciences of the United States of America
+    volume: 111
+    issue: 24
+    page: 8782-8787
+    author:
+    - given: Kiju
+      family: Jung
+    - given: Sharon
+      family: Shavitt
+    - given: Madhu
+      family: Viswanathan
+    - given: "Joseph M."
+      family: Hilbe
+  - id: multiverse
+    title: "multiverse: R package for creating explorable multiverse analysis"
+    type: entry
+    URL: https://mucollective.github.io/multiverse/
+    accessed:
+      year: 2020
+    author:
+    - given: Abhraneel
+      family: Sarma
+    - given: Matthew
+      family: Kay
+  - id: boba
+    title: "Boba: Authoring and Visualizing Multiverse Analyses"
+    type: entry
+    URL: https://arxiv.org/abs/2007.05551
+    issued:
+      year: 2020
+      month: 7
+      day: 30
+    accessed:
+      year: 2020
+    author:
+    - given: Yang
+      family: Liu
+    - given: Alex
+      family: Kale
+    - given: Tim
+      family: Althoff
+    - given: Jeffrey
+      family: Heer
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE
+)
+```
+
+
+This simple case-study will introduce the basic work-flow of `mverse`. We will define and execute different branches to analyze the data with multiple "paths".
+
+
+## Loading packages
+```{r load_package, warning=FALSE, message=FALSE}
+library(mverse)
+```
+
+## Data
+We will use the `hurricane` data [@original]. This dataset has 94 observations on 12 variables. 
+
+```{r load_data, warning=FALSE, message=FALSE}
+hurricane
+```
+
+## Initiate a multiverse
+We first create a multiverse object from the dataset. 
+```{r define_mverse}
+mv <- create_multiverse(hurricane)
+```
+
+## Branch
+Each branch defines a "decision point". The multiverse then branches out to different "universe", or analysis paths. In `mverse` package, we define branches using `X_branch(...)`, where `...` are expressions that defines reasonable decision choices at that "decision point". 
+
+## Define filter branches
+`filter_branch` takes some logical predicates, and finds the observations where the condition is true. 
+
+In the original analysis [@original], the authors excludes outliers based on extreme observations of deaths and damages. In our implementations, we use `filter_branch` to exclude the most extreme hurricanes. 
+
+```{r filter_branch}
+
+# Exclude up to 2 most extreme observations in term of death
+death_outliers <- filter_branch(
+  TRUE, # keep all observations
+  Name != 'Katrina', # excludes the most deadly observation
+  !(Name %in% c('Katrina', 'Audrey')) # excludes the two most deadly observations
+)
+# Exclude up to 3 most extreme observations in term of damage
+damage_outliers <- filter_branch(
+  TRUE,
+  Name != 'Sandy',
+  !(Name %in% c('Sandy', 'Andrew')),
+  !(Name %in% c('Sandy', 'Andrew', 'Donna'))
+)
+
+# Add these branches to the multiverse 
+mv <- mv %>%
+  add_filter_branch(death_outliers, damage_outliers)
+```
+
+
+## T-test on multiverses
+``` {r t_test}
+ttest_mverse(mv, 'Gender_MF')
+```
+
+
+## Define mutate branches
+`mutate_branch` takes expressions that modify data columns. 
+
+For defining the femininity of the name, [@original] identify two ways, by a 0-11 point scale or by a binary scale. Also, the other decision is whether to transform the damage. We will use `mutate_branch` to implement such decisions.
+
+```{r define_variables}
+# Define femininity 
+femininity <- mutate_branch(
+  Gender_MF, # based on binary gender
+  MasFem # based on the scale
+)
+
+# Define damage
+damage <- mutate_branch(
+  NDAM, # No transform
+  log(NDAM) # log transform
+)
+mv <- mv %>%
+  add_mutate_branch(femininity, damage)
+```
+
+
+
+## Define model branches
+
+`model_branch` takes formulas that 
+
+> `mverse` methods aren't implemented yet
+
+```{r fit_model}
+# wrapper for model branching to be implemented
+multiverse::inside(
+  mv, {
+    fit <- glm(
+      branch(
+        model,
+        'linear' ~ log(death + 1),
+        'poisson' ~ death
+      ) ~ branch(
+        femininity_damage_interaction,
+        'yes' ~ femininity * damage,
+        'no' ~ femininity + damage
+      ) + branch(
+        other_predictors,
+        'pressure' ~ femininity * zmin,
+        'wind' ~ femininity * zwin,
+        'category' ~ femininity * zcat,
+        'all' ~ femininity * z3,
+        'all_no_interaction' ~ z3,
+        'none' ~ NULL
+      ) + branch(
+        covariates,
+        '1' ~ NULL,
+        '2' ~ year:damage,
+        '3' ~ post:damage
+      ), family = branch(
+        model,
+        'linear' ~ gaussian,
+        'poisson' ~ poisson
+      ), data = data
+    )
+    # attach fitted values and standard errors to the original data
+    pred <- predict(fit, se.fit = TRUE, type = "response")
+    disagg_fit <- data %>%
+      mutate(
+        fitted = pred$fit,
+        se.fit = pred$se.fit,
+        df = df.residual(fit),
+        sigma = sigma(fit),
+        se.residual = sqrt(sum(residuals(fit)^2))/ df
+      )
+    pred2expectation <- function(mu, sigma) {
+      branch(model, "linear" ~ exp(mu + sigma^2/2) - 1, "poisson" ~ mu)
+    }
+    expectation <- disagg_fit %>%
+      mutate(expected_deaths = pred2expectation(fitted, sigma)) %>%
+      group_by(female) %>%
+      summarise(mean_deaths = mean(expected_deaths), .groups = "drop_last") %>%
+      compare_levels(mean_deaths, by = female)
+  }
+)
+```
+
+## Execute and Inspect Results
+
+```{r}
+# execute the multiverse
+mv <- mv %>%
+  execute_multiverse()
+```
+
+> `mverse` methods aren't implemented yet (will wait until `multiverse::extract_variables` is available in the released version of `multiverse`)
+
+```{r extract_results, fig.width=8, fig.height=3, fig.cap="Estimated coefficient of femininity of a hurricane's name."}
+# a wrapper function to be implemented using multiverse::extract_variables
+fem_coefs <- multiverse::extract_variables(mv) %>%
+  mutate(res = map(.results, 'expectation')) %>%
+  unnest(res) %>%
+  rename(universe = .universe)
+fem_coefs %>%
+  arrange(mean_deaths) %>%
+  mutate(index = 1:nrow(.)) %>%
+  ggplot(aes(y = mean_deaths, x = index, color = model)) +
+  geom_point(alpha = 0.1) +
+  xlab('Universe') + ylab('Mean Difference in Expected Deaths') +
+  theme_minimal()
+```
