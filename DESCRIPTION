@@ -22,13 +22,15 @@ Encoding: UTF-8
 LazyData: true
 Depends: 
   R (>= 3.6),
+  multiverse (>= 0.3),
   magrittr (>= 1.5)
 Imports:
-  multiverse (>= 0.3),
-  dplyr,
   rlang,
+  dplyr,
+  tidyr,
+  tibble,
   stringr,
-  stats
+  stats 
 Suggests:
   tidyverse,
   broom,

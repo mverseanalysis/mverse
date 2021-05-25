@@ -33,13 +33,12 @@ display_branch_rules <- function(mtable, object) {
 #' @return a multiverse table as a tibble.
 #' @name summary
 #' @family {summary method}
-#' @importFrom  stringr str_replace
 #' @export
 summary.mverse <- function(object) {
   mtable <- multiverse::extract_variables(object) %>%
-    mutate(universe = factor(.universe)) %>%
-    select(-starts_with(".")) %>%
-    select(universe, everything())
+    dplyr::mutate(universe = factor(.universe)) %>%
+    dplyr::select(-tidyselect::starts_with(".")) %>%
+    dplyr::select(universe, tidyselect::everything())
   display_branch_rules(mtable, object)
 }
 
@@ -60,7 +59,6 @@ summary.mverse <- function(object) {
 #' @return a multiverse table as a tibble
 #' @name summary
 #' @family {summary method}
-#' @importFrom  stringr str_replace
 #' @export
 summary.lm_mverse <- function(object,
                               conf.int = TRUE,
@@ -79,14 +77,14 @@ summary.lm_mverse <- function(object,
           p.value = NA
         )
         if (!!rlang::enexpr(conf.int))
-          out <- out %>% mutate(conf.low = NA, conf.high = NA)
+          out <- out %>% dplyr::mutate(conf.low = NA, conf.high = NA)
       }
     })
   } else if (output == "df") {
     multiverse::inside(object, {
       if (summary(model)$df[1] > 0)
         out <- as.data.frame(t(summary(model)$df)) %>%
-          rename(p = V1,
+          dplyr::rename(p = V1,
                  n.minus.p = V2,
                  p.star = V3)
       else
@@ -102,7 +100,7 @@ summary.lm_mverse <- function(object,
             summary(model)$r.squared,
             summary(model)$adj.r.squared
           ))) %>%
-          rename(r.squared = V1, adj.r.squared = V2)
+          dplyr::rename(r.squared = V1, adj.r.squared = V2)
       else
         out <- data.frame(r.squared = NA, adj.r.squared = NA)
     })
@@ -110,7 +108,7 @@ summary.lm_mverse <- function(object,
     multiverse::inside(object, {
       if (summary(model)$df[1] > 1)
         out <- as.data.frame(t(summary(model)$fstatistic)) %>%
-          rename(fstatistic = value,
+          dplyr::rename(fstatistic = value,
                  numdf.f = numdf,
                  dendf.f = dendf)
       else
@@ -123,9 +121,9 @@ summary.lm_mverse <- function(object,
   execute_multiverse(object)
   mtable <- multiverse::extract_variables(object, out) %>%
     tidyr::unnest(out) %>%
-    mutate(universe = factor(.universe)) %>%
-    select(-starts_with(".")) %>%
-    select(universe, everything())
+    dplyr::mutate(universe = factor(.universe)) %>%
+    dplyr::select(-tidyselect::starts_with(".")) %>%
+    dplyr::select(universe, tidyselect::everything())
   display_branch_rules(mtable, object)
 }
 
@@ -147,7 +145,6 @@ summary.lm_mverse <- function(object,
 #' @return a multiverse table as a tibble
 #' @name summary
 #' @family {summary method}
-#' @importFrom  stringr str_replace
 #' @export
 summary.glm_mverse <- function(object,
                                conf.int = TRUE,
@@ -167,7 +164,7 @@ summary.glm_mverse <- function(object,
           p.value = NA
         )
         if (!!rlang::enexpr(conf.int))
-          out <- out %>% mutate(conf.low = NA, conf.high = NA)
+          out <- out %>% dplyr::mutate(conf.low = NA, conf.high = NA)
       }
     })
   } else if (output == "df") {
@@ -177,7 +174,7 @@ summary.glm_mverse <- function(object,
           as.data.frame(t(c(
             summary(model)$df.residual, summary(model)$df.null
           ))) %>%
-          rename(df.residual = V1,
+          dplyr::rename(df.residual = V1,
                  df.null = V2)
       else
         out <- data.frame(df.residual = NA,
@@ -190,7 +187,7 @@ summary.glm_mverse <- function(object,
           as.data.frame(t(c(
             summary(model)$deviance, summary(model)$null.deviance
           ))) %>%
-          rename(deviance = V1,
+          dplyr::rename(deviance = V1,
                  null.deviance = V2)
       else
         out <- data.frame(deviance = NA,
@@ -201,7 +198,7 @@ summary.glm_mverse <- function(object,
       if (summary(model)$df[1] > 0)
         out <-
           as.data.frame(t(c(AIC(model), BIC(model)))) %>%
-          rename(AIC = V1,
+          dplyr::rename(AIC = V1,
                  BIC = V2)
       else
         out <- data.frame(AIC = NA,
@@ -213,8 +210,8 @@ summary.glm_mverse <- function(object,
   execute_multiverse(object)
   mtable <- multiverse::extract_variables(object, out) %>%
     tidyr::unnest(out) %>%
-    mutate(universe = factor(.universe)) %>%
-    select(-starts_with(".")) %>%
-    select(universe, everything())
+    dplyr::mutate(universe = factor(.universe)) %>%
+    dplyr::select(-tidyselect::starts_with(".")) %>%
+    dplyr::select(universe, tidyselect::everything())
   display_branch_rules(mtable, object)
 }

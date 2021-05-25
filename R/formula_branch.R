@@ -53,8 +53,6 @@ add_formula_branch <- function(.mverse, ...) {
 #'   add_formula_branch(model_spec)
 #' }
 #' @return The resulting \code{mverse} object.
-#' @importFrom magrittr %>%
-#' @import dplyr
 #' @name add_formula_branch
 #' @family {methods for working with a formula branch}
 #' @export

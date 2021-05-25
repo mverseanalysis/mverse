@@ -8,11 +8,11 @@ test_that("ttest_mverse() computes t.test.", {
   mv %>%
     add_mutate_branch(mbranch) %>%
     ttest_mverse(x)
-  fitmverse <- (multiverse::extract_variables(mv, htest) %>% pull(htest))[[1]]
+  fitmverse <- (multiverse::extract_variables(mv, htest) %>% dplyr::pull(htest))[[1]]
   fitmanual <- t.test(mydf$x)
   expect_identical(fitmverse$statistic, fitmanual$statistic)
   ttest_mverse(mv, 'x', 'm')
-  fitmverse <- (multiverse::extract_variables(mv, htest) %>% pull(htest))[[1]]
+  fitmverse <- (multiverse::extract_variables(mv, htest) %>% dplyr::pull(htest))[[1]]
   fitmanual <- t.test(mydf$x, mydf$x + mydf$y)
   expect_identical(fitmverse$statistic, fitmanual$statistic)
 })
