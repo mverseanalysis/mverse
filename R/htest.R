@@ -35,10 +35,10 @@ ttest_mverse <-
       y = if (is.null(!!rlang::enexpr(y)))
         NULL
       else
-        data %>% pull(!!rlang::enexpr(y))
+        data %>% dplyr::pull(!!rlang::enexpr(y))
       htest <-
         t.test(
-          x = data %>% pull(!!rlang::enexpr(x)),
+          x = data %>% dplyr::pull(!!rlang::enexpr(x)),
           y = y,
           alternative = !!rlang::enexpr(alternative),
           mu = !!rlang::enexpr(mu),
@@ -55,7 +55,7 @@ ttest_mverse <-
             htest$estimate
           )
         )) %>%
-        rename(
+        dplyr::rename(
           statistic = t,
           p.value = V2,
           conf.lower = V3,
@@ -65,8 +65,8 @@ ttest_mverse <-
     execute_multiverse(.mverse)
     mtable <- multiverse::extract_variables(.mverse, out) %>%
       tidyr::unnest(out) %>%
-      mutate(universe = factor(.universe)) %>%
-      select(-starts_with(".")) %>%
-      select(universe, everything())
+      dplyr::mutate(universe = factor(.universe)) %>%
+      dplyr::select(-dplyr::starts_with(".")) %>%
+      dplyr::select(universe, dplyr::everything())
     display_branch_rules(mtable, .mverse)
   }
