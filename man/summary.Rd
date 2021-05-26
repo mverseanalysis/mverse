@@ -46,4 +46,16 @@ results across the multiverse.
 \code{summary.lm_mverse} returns the \code{glm} regression
 results across the multiverse.
 }
+\examples{
+# Create a mverse object
+mv <- mverse(hurricane)
+# Define and add a mutate branch
+femininity <- mutate_branch(
+ MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1)
+add_mutate_branch(mv, femininity)
+# Execute the multiverse
+execute_multiverse(mv)
+# Display summary
+summary(mv)
+}
 \concept{{summary method}}

@@ -21,10 +21,15 @@ defined in the \code{mverse} objected
 across the entire multiverse.
 }
 \examples{
-\dontrun{
+# Create a mverse object
+mv <- mverse(hurricane)
+# Define and add a mutate branch
+femininity <- mutate_branch(
+ MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1)
 mv <- mv \%>\%
-  execute_multiverse(old_branch)
-}
+ add_mutate_branch(femininity)
+# Execute the multiverse
+execute_multiverse(mv)
 }
 \seealso{
 Other {mverse methods}: 

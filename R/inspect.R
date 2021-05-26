@@ -29,6 +29,17 @@ display_branch_rules <- function(mtable, object) {
 #' Each row corresponds to a universe and each column
 #' represents a branch.
 #'
+#' @examples
+#' # Create a mverse object
+#' mv <- mverse(hurricane)
+#' # Define and add a mutate branch
+#' femininity <- mutate_branch(
+#'  MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1)
+#' add_mutate_branch(mv, femininity)
+#' # Execute the multiverse
+#' execute_multiverse(mv)
+#' # Display the multiverse table
+#' summary(mv)
 #' @param object a \code{mverse} object.
 #' @return a multiverse table as a tibble.
 #' @name summary
@@ -48,6 +59,21 @@ summary.mverse <- function(object) {
 #' \code{summary.lm_mverse} returns the \code{lm} regression
 #' results across the multiverse.
 #'
+#' @examples
+#' # Create a mverse object
+#' mv <- mverse(hurricane)
+#' # Define and add a mutate branch
+#' femininity <- mutate_branch(
+#'  MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1)
+#' add_mutate_branch(mv, femininity)
+#' # Define and add a formula branch
+#' model <- formula_branch(
+#'  alldeaths ~ femininity, log(alldeaths + 1) ~ femininity)
+#' add_formula_branch(mv, model)
+#' # Fit a lm model
+#' lm_mverse(mv)
+#' # Display the multiverse table with estimated coefficients
+#' summary(mv)
 #' @param object a \code{lm_mverse} object.
 #' @param conf.int When \code{TRUE} (default), the estimate output
 #'   includes the confidence intervals.
@@ -132,6 +158,25 @@ summary.lm_mverse <- function(object,
 #'
 #' \code{summary.lm_mverse} returns the \code{glm} regression
 #' results across the multiverse.
+#'
+#' @examples
+#' # Create a mverse object
+#' mv <- mverse(hurricane)
+#' # Define and add a mutate branch
+#' femininity <- mutate_branch(
+#'  MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1)
+#' add_mutate_branch(mv, femininity)
+#' # Define and add a formula branch
+#' model <- formula_branch(
+#'  alldeaths ~ femininity, alldeaths ~ femininity * HighestWindSpeed)
+#' add_formula_branch(mv, model)
+#' # Define and add a family branch
+#' model_family <- family_branch(gaussian, poisson)
+#' add_family_branch(mv, model_family)
+#' # Fit a glm model
+#' glm_mverse(mv)
+#' # Display the multiverse table with estimated coefficients
+#' summary(mv)
 #'
 #' @param object a \code{glm_mverse} object.
 #' @param conf.int When \code{TRUE} (default), the estimate output

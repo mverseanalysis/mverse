@@ -8,6 +8,31 @@ extract <- function(...) {
 #' \code{extract} returns a tibble of selected values
 #' across the multiverse in a long format.
 #'
+#' @examples
+#' # Create a mverse object
+#' mv <- mverse(hurricane)
+#' # Define and add a mutate branch
+#' femininity <- mutate_branch(
+#' MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1)
+#'  add_mutate_branch(mv, femininity)
+#' strength <- mutate_branch(
+#'  NDAM, Minpressure_Updated_2014, HighestWindSpeed)
+#' add_mutate_branch(mv, femininity, strength)
+#' # Execute the multiverse
+#' execute_multiverse(mv)
+#' # Extract all branched columns from all universes
+#' extract(mv)
+#' # Specify the columns to extract from each universe using \code{columns}
+#' # You can select both branched and non-branched columns
+#' extract(mv, columns = c("strength", "NDAM"))
+#' # Specify the universe to extract from using \code{universe}
+#' extract(mv, universe = 1)
+#' # Specify the number of universes to extract from using \code{nuni}
+#' # The universes are randomly selected
+#' extract(mv, nuni = 3)
+#' # Specify the proportion of data to extract from each universe using \code{frow}
+#' # The rows are randomly selected
+#' extract(mv, frow = 0.7)
 #' @param .mverse a \code{mverse} object.
 #' @param columns a character vector of column names to extract.
 #' @param universe an integer vector of universe ids to extract.

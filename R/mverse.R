@@ -4,7 +4,7 @@
 #' \code{multiverse::multiverse} object.
 #'
 #' @examples
-#' # Create a mverse object using the hurricane data
+#' # Create a mverse object
 #' mv <- mverse(hurricane)
 #' # create_multiverse() is an alias of mverse()
 #' mv <- create_multiverse(hurricane)
@@ -42,13 +42,14 @@ execute_multiverse <- function(.mverse) {
 #'
 #' @param .mverse a \code{mverse} object.
 #' @examples
+#' # Create a mverse object
 #' mv <- mverse(hurricane)
 #' # Define and add a mutate branch
 #' femininity <- mutate_branch(
-#'   MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1)
+#'  MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1)
 #' mv <- mv %>%
-#'   add_mutate_branch(femininity)
-#' # Execute the mutate step
+#'  add_mutate_branch(femininity)
+#' # Execute the multiverse
 #' execute_multiverse(mv)
 #' @return The resulting \code{mverse} object.
 #' @name execute_multiverse
