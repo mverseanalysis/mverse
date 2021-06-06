@@ -13,6 +13,8 @@ run_module(module)
 Run an interactive module.
 }
 \examples{
-run_module(demo)
+\dontrun{
+run_module("demo")
+}
 }
 \concept{{interactive modules}}
