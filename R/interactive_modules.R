@@ -24,6 +24,8 @@ run_module <- function(module) {
 }
 
 #' @import shiny
+#' @import shinyjs
+#' @import shinyBS
 module_ui <- function(
   infoPanel, defPanel, resPanel, maintitle, subtitle = NULL, css = NULL) {
   ui <- fluidPage(
