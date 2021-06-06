@@ -9,12 +9,16 @@ spec_curve <- function(...) {
 #' displaying all universes defined by the multiverse.
 #' x-aixs corresponds to a universe and y-axis
 #' represents one choice in one branch.
+#' Notice that the order of universes is not corresponding
+#' to the order in the summary table.
 #'
 #' @param .mverse a \code{mverse} object.
 #' @param var name for the variable to show.
-#' @param conf a logical to decide if we show the confidence interval.
+#' @param conf When \code{TRUE}, the plot shows the confidence interval.
 #' @param option a vector of branches to show the options included.
-#' @param order When \code{TRUE}, the estimated value will be ordered
+#' @param universe_order When \code{TRUE}, order the universes according to
+#'   the order in the summary table.
+#' @param color_order When \code{TRUE}, the estimated value will be ordered
 #'   according to the color.
 #' @param color specify the color in the plot.
 #' @return a specification curve graph.
@@ -22,26 +26,33 @@ spec_curve <- function(...) {
 #' @name spec_curve
 #' @family {spec_cuve method}
 #' @export
-spec_curve.mverse <- function( # need to define spec_curve for glm_mverse, lm_mverse, etc.
+spec_curve.mverse <- function(
   .mverse, var = NULL, conf = FALSE,
   option = names(multiverse::parameters(.mverse)),
-  order = FALSE, color = (p.value < 0.05)) {
+  universe_order = FALSE,
+  color_order = FALSE, color = (p.value < 0.05)) {
   stopifnot(inherits(.mverse, "mverse"))
   color <- rlang::enquo(color)
   mtable <- multiverse::expand(.mverse) %>%
-    mutate(res = map(.results, 'coef')) %>% # see glm_mverse and summary.glm_mverse for the variable name
+    mutate(res = map(.results, 'coef')) %>%
     unnest(res) %>%
     select(.universe, !! names(multiverse::parameters(.mverse)),
            term, estimate, p.value, std.error)
   mtable <- display_branch_rules(mtable, .mverse)
 
   data.spec_curve <- mtable %>%
-    filter(term == var) %>%
-    arrange(estimate) %>%
+    filter(term == var)
+
+  if (universe_order == FALSE) {
+    data.spec_curve <- data.spec_curve %>%
+      arrange(estimate)
+  }
+
+  data.spec_curve <- data.spec_curve %>%
     mutate(.universe = 1:nrow(.)) %>%
     select(-term)
 
-  if (order == TRUE) {
+  if (color_order == TRUE) {
     data.spec_curve <- data.spec_curve %>%
       mutate(color = ifelse(!!color,TRUE,FALSE)) %>%
       arrange(color,estimate) %>%
@@ -67,9 +78,15 @@ spec_curve.mverse <- function( # need to define spec_curve for glm_mverse, lm_mv
   p2 <- data.info %>%
     ggplot() +
     geom_point(aes(x = .universe, y = parameter_option,
-                   color = !!color), size = 2,shape = 124) +
-    labs( x = "universe #",
-          y = "option included in the analysis specification")+
+                   color = !!color), size = 2,shape = 124)
+
+  if (universe_order == FALSE) {
+    p2 <- p2 + xlab("universe counts")
+  } else {
+    p2 <- p2 + xlab("universe #")
+  }
+
+  p2 <- p2 + ylab("option included in the analysis specification") +
     facet_grid(parameter_name ~ ., space="free_y", scales="free_y")+
     theme(strip.placement = "outside",
           strip.background = element_rect(fill=NA,colour=NA),
@@ -87,6 +104,8 @@ spec_curve.mverse <- function( # need to define spec_curve for glm_mverse, lm_mv
 #'
 #' \code{spec_curve.lm_mverse} returns the specification curve of \code{lm}
 #' regression results across the multiverse.
+#' Notice that the order of universes is not corresponding
+#' to the order in the summary table.
 #'
 #' @param .lm_mverse a \code{lm_mverse} object.
 #' @param var name for the variable to show.
@@ -95,9 +114,28 @@ spec_curve.mverse <- function( # need to define spec_curve for glm_mverse, lm_mv
 #' @param conf.level The confidence level of the confidence interval
 #'   returned using \code{conf.int = TRUE}. Default value is 0.95.
 #' @param option a vector of branches to show the options included.
-#' @param order When \code{TRUE}, the estimated value will be ordered
+#' @param universe_order When \code{TRUE}, order the universes according to
+#'   the order in the summary table.
+#' @param color_order When \code{TRUE}, the estimated value will be ordered
 #'   according to the color.
 #' @param color specify the color in the plot.
+#'
+#' @examples
+#' # Create a mverse object
+#' mv <- mverse(hurricane)
+#' # Define and add a mutate branch
+#' femininity <- mutate_branch(
+#'  MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1)
+#' add_mutate_branch(mv, femininity)
+#' # Define and add a formula branch
+#' model <- formula_branch(
+#'  alldeaths ~ femininity, log(alldeaths + 1) ~ femininity)
+#' add_formula_branch(mv, model)
+#' # Fit a lm model
+#' lm_mverse(mv)
+#' # Display the specification curve
+#' spec_curve(mv, var = "femininityTRUE")
+#'
 #' @return a multiverse table as a tibble
 #' @import dplyr stringr str_replace ggplot2
 #' @name spec_curve
@@ -107,7 +145,8 @@ spec_curve.lm_mverse <- function(
   .lm_mverse, var = NULL, conf.int = TRUE,
   conf.level = 0.95,
   option = names(multiverse::parameters(.lm_mverse)),
-  order = FALSE, color = (p.value < 0.05)) {
+  universe_order = FALSE,
+  color_order = FALSE, color = (p.value < 0.05)) {
   stopifnot(inherits(.lm_mverse, "lm_mverse"))
   conf.int <<- conf.int
   conf.level <<- conf.level
@@ -116,12 +155,18 @@ spec_curve.lm_mverse <- function(
                     conf.int = conf.int, conf.level = conf.level)
 
   data.spec_curve <- mtable %>%
-    filter(term == var) %>%
-    arrange(estimate) %>%
+    filter(term == var)
+
+  if (universe_order == FALSE) {
+    data.spec_curve <- data.spec_curve %>%
+      arrange(estimate)
+  }
+
+  data.spec_curve <- data.spec_curve %>%
     mutate(.universe = 1:nrow(.)) %>%
     select(-term)
 
-  if (order == TRUE) {
+  if (color_order == TRUE) {
     data.spec_curve <- data.spec_curve %>%
       mutate(color = ifelse(!!color,TRUE,FALSE)) %>%
       arrange(color,estimate) %>%
@@ -147,9 +192,15 @@ spec_curve.lm_mverse <- function(
   p2 <- data.info %>%
     ggplot() +
     geom_point(aes(x = .universe, y = parameter_option,
-                   color = !!color), size = 2,shape = 124) +
-    labs( x = "universe #",
-          y = "option included in the analysis specification")+
+                   color = !!color), size = 2,shape = 124)
+
+  if (universe_order == FALSE) {
+    p2 <- p2 + xlab("universe counts")
+  } else {
+    p2 <- p2 + xlab("universe #")
+  }
+
+  p2 <- p2 + ylab("option included in the analysis specification") +
     facet_grid(parameter_name ~ ., space="free_y", scales="free_y")+
     theme(strip.placement = "outside",
           strip.background = element_rect(fill=NA,colour=NA),
@@ -166,6 +217,8 @@ spec_curve.lm_mverse <- function(
 #'
 #' \code{spec_curve.glm_mverse} returns the specification curve of \code{glm}
 #' regression results across the multiverse.
+#' Notice that the order of universes is not corresponding
+#' to the order in the summary table.
 #'
 #' @param .glm_mverse a \code{lm_mverse} object.
 #' @param var name for the variable to show.
@@ -174,9 +227,31 @@ spec_curve.lm_mverse <- function(
 #' @param conf.level The confidence level of the confidence interval
 #'   returned using \code{conf.int = TRUE}. Default value is 0.95.
 #' @param option a vector of branches to show the options included.
-#' @param order When \code{TRUE}, the estimated value will be ordered
+#' @param universe_order When \code{TRUE}, order the universes according to
+#'   the order in the summary table.
+#' @param color_order When \code{TRUE}, the estimated value will be ordered
 #'   according to the color.
 #' @param color specify the color in the plot.
+#'
+#' @examples
+#' # Create a mverse object
+#' mv <- mverse(hurricane)
+#' # Define and add a mutate branch
+#' femininity <- mutate_branch(
+#'  MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1)
+#' add_mutate_branch(mv, femininity)
+#' # Define and add a formula branch
+#' model <- formula_branch(
+#'  alldeaths ~ femininity, alldeaths ~ femininity * HighestWindSpeed)
+#' add_formula_branch(mv, model)
+#' # Define and add a family branch
+#' model_family <- family_branch(gaussian, poisson)
+#' add_family_branch(mv, model_family)
+#' # Fit a glm model
+#' glm_mverse(mv)
+#' # Display the specification curve
+#' spec_curve(mv, var = "femininityTRUE")
+#'
 #' @return a multiverse table as a tibble
 #' @import dplyr stringr str_replace ggplot2
 #' @name spec_curve
@@ -186,7 +261,8 @@ spec_curve.glm_mverse <- function(
   .glm_mverse, var = NULL, conf.int = TRUE,
   conf.level = 0.95,
   option = names(multiverse::parameters(.glm_mverse)),
-  order = FALSE, color = (p.value < 0.05)) {
+  universe_order = FALSE,
+  color_order = FALSE, color = (p.value < 0.05)) {
   stopifnot(inherits(.glm_mverse, "glm_mverse"))
   color <- rlang::enquo(color)
   conf.int <<- conf.int
@@ -195,12 +271,18 @@ spec_curve.glm_mverse <- function(
                     conf.int = conf.int, conf.level = conf.level)
 
   data.spec_curve <- mtable %>%
-    filter(term == var) %>%
-    arrange(estimate) %>%
+    filter(term == var)
+
+  if (universe_order == FALSE) {
+    data.spec_curve <- data.spec_curve %>%
+      arrange(estimate)
+  }
+
+  data.spec_curve <- data.spec_curve %>%
     mutate(.universe = 1:nrow(.)) %>%
     select(-term)
 
-  if (order == TRUE) {
+  if (color_order == TRUE) {
     data.spec_curve <- data.spec_curve %>%
       mutate(color = ifelse(!!color,TRUE,FALSE)) %>%
       arrange(color,estimate) %>%
@@ -226,9 +308,15 @@ spec_curve.glm_mverse <- function(
   p2 <- data.info %>%
     ggplot() +
     geom_point(aes(x = .universe, y = parameter_option,
-                   color = !!color), size = 2,shape = 124) +
-    labs( x = "universe #",
-          y = "option included in the analysis specification")+
+                   color = !!color), size = 2,shape = 124)
+
+  if (universe_order == FALSE) {
+    p2 <- p2 + xlab("universe counts")
+  } else {
+    p2 <- p2 + xlab("universe #")
+  }
+
+  p2 <- p2 + ylab("option included in the analysis specification") +
     facet_grid(parameter_name ~ ., space="free_y", scales="free_y")+
     theme(strip.placement = "outside",
           strip.background = element_rect(fill=NA,colour=NA),
