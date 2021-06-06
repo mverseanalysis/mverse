@@ -2,7 +2,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' run_module(demo)
+#' run_module("demo")
 #' }
 #' @param module module name.
 #' @name run_module
