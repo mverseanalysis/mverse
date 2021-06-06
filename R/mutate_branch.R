@@ -48,8 +48,6 @@ add_mutate_branch <- function(.mverse, ...) {
 #'   add_mutate_branch(x3)
 #' }
 #' @return The resulting \code{mverse} object.
-#' @importFrom magrittr %>%
-#' @import dplyr
 #' @name add_mutate_branch
 #' @family {methods for working with a mutate branch}
 #' @export
@@ -82,42 +80,3 @@ add_mutate_branch.mverse <- function(.mverse, ...) {
   .mverse <- reset_parameters(.mverse)
   invisible(.mverse)
 }
-
-# TODO: allow removing branches
-#' #' @rdname remove_mutate_branch
-#' remove_mutate_branch <- function(.mverse, name) {
-#'   UseMethod("remove_mutate_branch")
-#' }
-#'
-#' #' Remove a mutate branch from a \code{mverse}.
-#' #'
-#' #' This method removes one mutate branch from
-#' #' an existing \code{mverse} object.
-#' #'
-#' #' @param .mverse a \code{mverse} object.
-#' #' @param name name of the \code{mutate branch} to be removed.
-#' #' @examples
-#' #' \dontrun{
-#' #' mv <- create_multiverse(df)
-#' #' mv <- mverse %>%
-#' #'   remove_mutate_branch(old_branch)
-#' #' }
-#' #' @return The resulting \code{mverse} object.
-#' #' @importFrom magrittr %>%
-#' #' @import dplyr
-#' #' @name remove_mutate_branch
-#' #' @family {methods for working with a variable branch}
-#' remove_mutate_branch.mverse <- function(.mverse, name) {
-#'   mbranch_list <- attr(.mverse, 'manipulate_branches')
-#'   mbranch_list <- mbranch_list[
-#'     sapply(mbranch_list, function(x) inherits(x, "mutate_branch"))]
-#'   # exit if the name doesn't exist
-#'   stopifnot(is.character(name))
-#'   if(!(name %in% sapply(mbranch_list, function(x) x$name)))
-#'     stop(paste(name, "is not in the mutate branch list."))
-#'   # remove from list
-#'   attr(.mverse, 'manipulate_branches') <- mbranch_list[
-#'     sapply(mbranch_list, function(x) x$name != name)]
-#'   # remove from the multiverse object
-#'   reset_parameters(.mverse)
-#' }

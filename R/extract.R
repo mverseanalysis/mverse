@@ -74,5 +74,5 @@ extract.mverse <- function(
       ex })
   extracted <- dplyr::bind_rows(extracted)
   extracted %>%
-    select(columns)
+    dplyr::select(columns)
 }
