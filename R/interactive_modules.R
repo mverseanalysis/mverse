@@ -1,7 +1,9 @@
 #' Run an interactive module.
 #'
 #' @examples
+#' \dontrun{
 #' run_module(demo)
+#' }
 #' @param module module name.
 #' @name run_module
 #' @family {interactive modules}
