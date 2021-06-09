@@ -1,10 +1,20 @@
 #' Create a new mutate branch.
 #'
 #' @examples
-#' \dontrun{
-#' x4 <- mutate_branch(x1 + x2, x1 + x3, sum(x1, x2, x3))
-#' }
-#'
+#' # Define mutate branches.
+#' hurricane_strength <- mutate_branch(
+#'   # damage vs. wind speed vs.pressure
+#'   NDAM,
+#'   HighestWindSpeed,
+#'   Minpressure_Updated_2014,
+#'   # Standardized versions
+#'   scale(NDAM),
+#'   scale(HighestWindSpeed),
+#'   -scale(Minpressure_Updated_2014),
+#' )
+#' # Create a mverse and add the branch.
+#' mv <- create_multiverse(hurricane) %>%
+#'   add_mutate_branch(hurricane_strength)
 #' @param ... branch definition expressions.
 #' @param name Name for the new variable.
 #' @return a mutate_branch object.
@@ -41,12 +51,27 @@ add_mutate_branch <- function(.mverse, ...) {
 #' @param .mverse a \code{mverse} object.
 #' @param ... \code{mutate_branch} objects.
 #' @examples
-#' \dontrun{
-#' mv <- create_multiverse(df)
-#' x3 <- mutate_branch(x1+x2, mean(c(x1,x2)))
-#' mv <- mv %>%
-#'   add_mutate_branch(x3)
-#' }
+#' # Define mutate branches.
+#' hurricane_strength <- mutate_branch(
+#'   # damage vs. wind speed vs.pressure
+#'   NDAM,
+#'   HighestWindSpeed,
+#'   Minpressure_Updated_2014,
+#'   # Standardized versions
+#'   scale(NDAM),
+#'   scale(HighestWindSpeed),
+#'   -scale(Minpressure_Updated_2014),
+#' )
+#' y <- mutate_branch(
+#'   alldeaths, log(alldeaths + 1)
+#' )
+#' # Create a mverse and add the branches.
+#' mv <- create_multiverse(hurricane) %>%
+#'   add_mutate_branch(hurricane_strength) %>%
+#'   add_mutate_branch(y)
+#' # You can also add multiple branches with a single call.
+#' mv <- create_multiverse(hurricane) %>%
+#'   add_mutate_branch(hurricane_strength, y)
 #' @return The resulting \code{mverse} object.
 #' @name add_mutate_branch
 #' @family {methods for working with a mutate branch}
