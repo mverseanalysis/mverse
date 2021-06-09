@@ -7,14 +7,16 @@
 \alias{summary.glm_mverse}
 \title{Display the multiverse table with results.}
 \usage{
-\method{summary}{mverse}(object)
+\method{summary}{mverse}(object, ...)
 
-\method{summary}{lm_mverse}(object, conf.int = TRUE, conf.level = 0.95, output = "estimates")
+\method{summary}{lm_mverse}(object, conf.int = TRUE, conf.level = 0.95, output = "estimates", ...)
 
-\method{summary}{glm_mverse}(object, conf.int = TRUE, conf.level = 0.95, output = "estimates")
+\method{summary}{glm_mverse}(object, conf.int = TRUE, conf.level = 0.95, output = "estimates", ...)
 }
 \arguments{
 \item{object}{a \code{glm_mverse} object.}
+
+\item{...}{Ignored.}
 
 \item{conf.int}{When \code{TRUE} (default), the estimate output
 includes the confidence intervals.}
@@ -47,15 +49,106 @@ results across the multiverse.
 results across the multiverse.
 }
 \examples{
-# Create a mverse object
-mv <- mverse(hurricane)
-# Define and add a mutate branch
-femininity <- mutate_branch(
- MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1)
-add_mutate_branch(mv, femininity)
-# Execute the multiverse
-execute_multiverse(mv)
-# Display summary
+# Define a mutate branch.
+hurricane_strength <- mutate_branch(
+  # damage vs. wind speed vs.pressure
+  NDAM,
+  HighestWindSpeed,
+  Minpressure_Updated_2014,
+  # Standardized versions
+  scale(NDAM),
+  scale(HighestWindSpeed),
+  -scale(Minpressure_Updated_2014),
+)
+# Create a mverse and add the branch.
+mv <- create_multiverse(hurricane) \%>\%
+  add_mutate_branch(hurricane_strength)
+# Display the multiverse table while
+# defining a multiverse provides a way
+# to inspect the universes created.
+summary(mv)
+# Define a filter branch.
+hurricane_outliers <- filter_branch(
+  ! Name \%in\% c("Katrina", "Audrey", "Andrew"),
+  ! Name \%in\% c("Katrina"),
+  ! Name \%in\% c("Katrina"),
+  TRUE # include all
+)
+# Add the additional branch and inspect.
+mv <- add_filter_branch(mv, hurricane_outliers)
+summary(mv)
+# Define mutate branches.
+hurricane_strength <- mutate_branch(
+# damage vs. wind speed vs.pressure
+NDAM,
+HighestWindSpeed,
+Minpressure_Updated_2014,
+# Standardized versions
+scale(NDAM),
+scale(HighestWindSpeed),
+-scale(Minpressure_Updated_2014),
+)
+y <- mutate_branch(
+alldeaths, log(alldeaths + 1)
+)
+# Define a filter branch.
+hurricane_outliers <- filter_branch(
+! Name \%in\% c("Katrina", "Audrey", "Andrew"),
+! Name \%in\% c("Katrina"),
+! Name \%in\% c("Katrina"),
+TRUE # include all
+)
+# Define a formula branch.
+model_specifications <- formula_branch(
+y ~ femininity,
+y ~ femininity + hurricane_strength,
+y ~ femininity * hurricane_strength
+)
+# Create a mverse, add the branches, and fit lm models.
+mv <- create_multiverse(hurricane) \%>\%
+add_filter_branch(hurricane_outliers) \%>\%
+add_mutate_branch(hurricane_strength, y) \%>\%
+add_formula_branch(model_specifications) \%>\%
+lm_mverse()
+# Display the multiverse table with estimated coefficients.
+summary(mv)
+# Define mutate branches.
+hurricane_strength <- mutate_branch(
+# damage vs. wind speed vs.pressure
+NDAM,
+HighestWindSpeed,
+Minpressure_Updated_2014,
+# Standardized versions
+scale(NDAM),
+scale(HighestWindSpeed),
+-scale(Minpressure_Updated_2014),
+)
+y <- mutate_branch(
+alldeaths, log(alldeaths + 1)
+)
+# Define a filter branch.
+hurricane_outliers <- filter_branch(
+  ! Name \%in\% c("Katrina", "Audrey", "Andrew"),
+! Name \%in\% c("Katrina"),
+! Name \%in\% c("Katrina"),
+TRUE # include all
+)
+# Define a formula branch.
+model_specifications <- formula_branch(
+y ~ femininity,
+y ~ femininity + hurricane_strength,
+y ~ femininity * hurricane_strength
+)
+# Define a family branch.
+model_distributions <- family_branch(gaussian, poisson)
+# Create a mverse, add the branches, and fit glm models.
+mv <- create_multiverse(hurricane) \%>\%
+add_filter_branch(hurricane_outliers) \%>\%
+add_mutate_branch(hurricane_strength, y) \%>\%
+add_formula_branch(model_specifications) \%>\%
+add_family_branch(model_distributions) \%>\%
+glm_mverse()
+# Display the multiverse table with estimated coefficients.
 summary(mv)
 }
 \concept{{summary method}}

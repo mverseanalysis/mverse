@@ -18,12 +18,13 @@ a \code{family_branch} object.
 Create a new family branch.
 }
 \examples{
-\dontrun{
-fam <- family_branch(
-  poisson, gaussian(link = "log")
+# Define a family branch.
+model_distributions <- family_branch(
+ gaussian, poisson(link = "log")
 )
-}
-
+# Create a mverse and add the branch.
+mv <- create_multiverse(hurricane) \%>\%
+  add_family_branch(model_distributions)
 }
 \seealso{
 Other {methods for working with a formula branch}: 

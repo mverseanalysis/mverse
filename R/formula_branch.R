@@ -1,14 +1,15 @@
 #' Create a new formula branch.
 #'
 #' @examples
-#' \dontrun{
-#' form <- formula_branch(
-#'   y ~ x1,
-#'   y ~ x2,
-#'   y ~ x1*x2
+#' # Define a formula branch.
+#' model_specifications <- formula_branch(
+#'   y ~ femininity,
+#'   y ~ femininity + hurricane_strength,
+#'   y ~ femininity * hurricane_strength
 #' )
-#' }
-#'
+#' # Create a mverse, add the branch.
+#' mv <- create_multiverse(hurricane) %>%
+#'   add_formula_branch(model_specifications)
 #' @param ... branch definition expressions.
 #' @param name Name for the new formula.
 #' @return a \code{formula_branch} object.
@@ -46,12 +47,15 @@ add_formula_branch <- function(.mverse, ...) {
 #' @param .mverse a \code{mverse} object.
 #' @param ... \code{formula_branch} objects.
 #' @examples
-#' \dontrun{
-#' mv <- create_multiverse(df)
-#' model_spec <- formula_branch(y ~ x1 + x2, y ~ x1 * x2)
-#' mv <- mv %>%
-#'   add_formula_branch(model_spec)
-#' }
+#' # Define a formula branch.
+#' model_specifications <- formula_branch(
+#'   y ~ femininity,
+#'   y ~ femininity + hurricane_strength,
+#'   y ~ femininity * hurricane_strength
+#' )
+#' # Create a mverse, add the branch.
+#' mv <- create_multiverse(hurricane) %>%
+#'   add_formula_branch(model_specifications)
 #' @return The resulting \code{mverse} object.
 #' @name add_formula_branch
 #' @family {methods for working with a formula branch}

@@ -9,22 +9,29 @@ extract <- function(...) {
 #' across the multiverse in a long format.
 #'
 #' @examples
-#' # Create a mverse object
-#' mv <- mverse(hurricane)
-#' # Define and add a mutate branch
-#' femininity <- mutate_branch(
-#' MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1)
-#'  add_mutate_branch(mv, femininity)
-#' strength <- mutate_branch(
-#'  NDAM, Minpressure_Updated_2014, HighestWindSpeed)
-#' add_mutate_branch(mv, femininity, strength)
-#' # Execute the multiverse
+#' # Define mutate branches.
+#' hurricane_strength <- mutate_branch(
+#' # damage vs. wind speed vs.pressure
+#' NDAM,
+#' HighestWindSpeed,
+#' Minpressure_Updated_2014,
+#' # Standardized versions
+#' scale(NDAM),
+#' scale(HighestWindSpeed),
+#' -scale(Minpressure_Updated_2014),
+#' )
+#' y <- mutate_branch(
+#' alldeaths, log(alldeaths + 1)
+#' )
+#' # Create a mverse and add the branches.
+#' mv <- create_multiverse(hurricane) %>%
+#'  add_mutate_branch(hurricane_strength, y)
 #' execute_multiverse(mv)
 #' # Extract all branched columns from all universes
 #' extract(mv)
 #' # Specify the columns to extract from each universe using \code{columns}
 #' # You can select both branched and non-branched columns
-#' extract(mv, columns = c("strength", "NDAM"))
+#' extract(mv, columns = c("hurricane_strength", "NDAM"))
 #' # Specify the universe to extract from using \code{universe}
 #' extract(mv, universe = 1)
 #' # Specify the number of universes to extract from using \code{nuni}
@@ -63,7 +70,6 @@ extract <- function(...) {
 #' 1 the method will return shuffle rows in each universe
 #' before returning them. If \code{frow} is greater than 1,
 #' the method randomly samples rows with replacement.
-#'
 #' @name extract
 #' @family {mverse methods}
 #' @export
