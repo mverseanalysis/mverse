@@ -119,6 +119,7 @@ spec_curve.mverse <- function(
 #' @param color_order When \code{TRUE}, the estimated value will be ordered
 #'   according to the color.
 #' @param color specify the color in the plot.
+#' @param branch_order name for the branch to order.
 #'
 #' @examples
 #' # Create a mverse object
@@ -146,11 +147,13 @@ spec_curve.lm_mverse <- function(
   conf.level = 0.95,
   option = names(multiverse::parameters(.lm_mverse)),
   universe_order = FALSE,
-  color_order = FALSE, color = (p.value < 0.05)) {
+  color_order = FALSE, color = (p.value < 0.05),
+  branch_order = NULL) {
   stopifnot(inherits(.lm_mverse, "lm_mverse"))
   conf.int <<- conf.int
   conf.level <<- conf.level
   color <- rlang::enquo(color)
+  branch_order <- rlang::enquo(branch_order)
   mtable <- summary(.lm_mverse,
                     conf.int = conf.int, conf.level = conf.level)
 
@@ -170,6 +173,12 @@ spec_curve.lm_mverse <- function(
     data.spec_curve <- data.spec_curve %>%
       mutate(color = ifelse(!!color,TRUE,FALSE)) %>%
       arrange(color,estimate) %>%
+      mutate(.universe = seq(1,nrow(data.spec_curve)))
+  }
+
+  if (!is.null(branch_order)) {
+    data.spec_curve <- data.spec_curve %>%
+      arrange(!!branch_order, estimate) %>%
       mutate(.universe = seq(1,nrow(data.spec_curve)))
   }
 
@@ -220,7 +229,7 @@ spec_curve.lm_mverse <- function(
 #' Notice that the order of universes is not corresponding
 #' to the order in the summary table.
 #'
-#' @param .glm_mverse a \code{lm_mverse} object.
+#' @param .glm_mverse a \code{glm_mverse} object.
 #' @param var name for the variable to show.
 #' @param conf.int When \code{TRUE} (default), the estimate output
 #'   includes the confidence intervals.
@@ -232,6 +241,7 @@ spec_curve.lm_mverse <- function(
 #' @param color_order When \code{TRUE}, the estimated value will be ordered
 #'   according to the color.
 #' @param color specify the color in the plot.
+#' @param branch_order name for the branch to order.
 #'
 #' @examples
 #' # Create a mverse object
@@ -262,11 +272,13 @@ spec_curve.glm_mverse <- function(
   conf.level = 0.95,
   option = names(multiverse::parameters(.glm_mverse)),
   universe_order = FALSE,
-  color_order = FALSE, color = (p.value < 0.05)) {
+  color_order = FALSE, color = (p.value < 0.05),
+  branch_order = NULL) {
   stopifnot(inherits(.glm_mverse, "glm_mverse"))
   color <- rlang::enquo(color)
   conf.int <<- conf.int
   conf.level <<- conf.level
+  branch_order <- rlang::enquo(branch_order)
   mtable <- summary(.glm_mverse,
                     conf.int = conf.int, conf.level = conf.level)
 
@@ -286,6 +298,12 @@ spec_curve.glm_mverse <- function(
     data.spec_curve <- data.spec_curve %>%
       mutate(color = ifelse(!!color,TRUE,FALSE)) %>%
       arrange(color,estimate) %>%
+      mutate(.universe = seq(1,nrow(data.spec_curve)))
+  }
+
+  if (!is.null(branch_order)) {
+    data.spec_curve <- data.spec_curve %>%
+      arrange(!!branch_order, estimate) %>%
       mutate(.universe = seq(1,nrow(data.spec_curve)))
   }
 
