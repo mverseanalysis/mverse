@@ -152,6 +152,8 @@ spec_curve.lm_mverse <- function(
   stopifnot(inherits(.lm_mverse, "lm_mverse"))
   conf.int <<- conf.int
   conf.level <<- conf.level
+  color_order <<- color_order
+  universe_order <<- universe_order
   color <- rlang::enquo(color)
   branch_order <- rlang::enquo(branch_order)
   mtable <- summary(.lm_mverse,
@@ -176,7 +178,7 @@ spec_curve.lm_mverse <- function(
       mutate(.universe = seq(1,nrow(data.spec_curve)))
   }
 
-  if (!is.null(branch_order)) {
+  if (!rlang::quo_is_null(branch_order)) {
     data.spec_curve <- data.spec_curve %>%
       arrange(!!branch_order, estimate) %>%
       mutate(.universe = seq(1,nrow(data.spec_curve)))
@@ -301,7 +303,7 @@ spec_curve.glm_mverse <- function(
       mutate(.universe = seq(1,nrow(data.spec_curve)))
   }
 
-  if (!is.null(branch_order)) {
+  if (!rlang::quo_is_null(branch_order)) {
     data.spec_curve <- data.spec_curve %>%
       arrange(!!branch_order, estimate) %>%
       mutate(.universe = seq(1,nrow(data.spec_curve)))
