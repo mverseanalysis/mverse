@@ -1,105 +1,3 @@
-#' @rdname spec_curve
-#' @export
-spec_curve <- function(...) {
-  UseMethod("spec_curve")
-}
-#' Display the specification curve.
-#'
-#' This method returns the specification curve plot
-#' displaying all universes defined by the multiverse.
-#' x-aixs corresponds to a universe and y-axis
-#' represents one choice in one branch.
-#' Notice that the order of universes is not corresponding
-#' to the order in the summary table.
-#'
-#' @param .mverse a \code{mverse} object.
-#' @param var name for the variable to show.
-#' @param conf When \code{TRUE}, the plot shows the confidence interval.
-#' @param option a vector of branches to show the options included.
-#' @param universe_order When \code{TRUE}, order the universes according to
-#'   the order in the summary table.
-#' @param color_order When \code{TRUE}, the estimated value will be ordered
-#'   according to the color.
-#' @param color specify the color in the plot.
-#' @return a specification curve graph.
-#' @import dplyr stringr str_replace ggplot2
-#' @name spec_curve
-#' @family {spec_cuve method}
-#' @export
-spec_curve.mverse <- function(
-  .mverse, var = NULL, conf = FALSE,
-  option = names(multiverse::parameters(.mverse)),
-  universe_order = FALSE,
-  color_order = FALSE, color = (p.value < 0.05)) {
-  stopifnot(inherits(.mverse, "mverse"))
-  color <- rlang::enquo(color)
-  mtable <- multiverse::expand(.mverse) %>%
-    mutate(res = map(.results, 'coef')) %>%
-    unnest(res) %>%
-    select(.universe, !! names(multiverse::parameters(.mverse)),
-           term, estimate, p.value, std.error)
-  mtable <- display_branch_rules(mtable, .mverse)
-
-  data.spec_curve <- mtable %>%
-    filter(term == var)
-
-  if (universe_order == FALSE) {
-    data.spec_curve <- data.spec_curve %>%
-      arrange(estimate)
-  }
-
-  data.spec_curve <- data.spec_curve %>%
-    mutate(.universe = 1:nrow(.)) %>%
-    select(-term)
-
-  if (color_order == TRUE) {
-    data.spec_curve <- data.spec_curve %>%
-      mutate(color = ifelse(!!color,TRUE,FALSE)) %>%
-      arrange(color,estimate) %>%
-      mutate(.universe = seq(1,nrow(data.spec_curve)))
-  }
-
-  p1 <- data.spec_curve %>%
-    ggplot(aes(.universe, estimate, color = !!color)) +
-    geom_point(size = 0.25) +
-    labs(x = "", y = paste("coefficient of\n:",var))
-
-  if (conf == TRUE) {
-    p1 <- p1 + geom_pointrange(aes(ymin = estimate - qnorm(0.025)*std.error,
-                                   ymax = estimate + qnorm(0.025)*std.error),
-                               alpha = 0.2,size=0.25)}
-
-  data.info <- data.spec_curve %>%
-    pivot_longer( !! names(multiverse::parameters(.mverse)),
-                  names_to = "parameter_name",
-                  values_to = "parameter_option" ) %>%
-    filter(parameter_name %in% option)
-
-  p2 <- data.info %>%
-    ggplot() +
-    geom_point(aes(x = .universe, y = parameter_option,
-                   color = !!color), size = 2,shape = 124)
-
-  if (universe_order == FALSE) {
-    p2 <- p2 + xlab("universe counts")
-  } else {
-    p2 <- p2 + xlab("universe #")
-  }
-
-  p2 <- p2 + ylab("option included in the analysis specification") +
-    facet_grid(parameter_name ~ ., space="free_y", scales="free_y")+
-    theme(strip.placement = "outside",
-          strip.background = element_rect(fill=NA,colour=NA),
-          panel.spacing.x=unit(0.15,"cm"),
-          strip.text.y = element_text(angle = 0, face="bold", size=8),
-          legend.position = "none",
-          panel.spacing = unit(0.25, "lines"))
-
-  cowplot::plot_grid(p1, p2, axis = "bltr",
-                     align = "v", ncol = 1, rel_heights = c(1, 2))
-}
-
-
 #' Display a specification curve of fitting \code{lm} across the multiverse.
 #'
 #' \code{spec_curve.lm_mverse} returns the specification curve of \code{lm}
@@ -150,6 +48,9 @@ spec_curve.lm_mverse <- function(
   color_order = FALSE, color = (p.value < 0.05),
   branch_order = NULL) {
   stopifnot(inherits(.lm_mverse, "lm_mverse"))
+  if (is.null(var)) {
+    stop("Please specify the variable to display.")
+  }
   conf.int <<- conf.int
   conf.level <<- conf.level
   color_order <<- color_order
@@ -165,24 +66,22 @@ spec_curve.lm_mverse <- function(
   if (universe_order == FALSE) {
     data.spec_curve <- data.spec_curve %>%
       arrange(estimate)
+
+    if (color_order == TRUE & !rlang::quo_is_null(branch_order)) {
+      data.spec_curve <- data.spec_curve %>%
+        arrange(!!branch_order, !!color, estimate)
+    } else if (!rlang::quo_is_null(branch_order)) {
+      data.spec_curve <- data.spec_curve %>%
+        arrange(!!branch_order, estimate)
+    } else if (color_order == TRUE) {
+      data.spec_curve <- data.spec_curve %>%
+        arrange(!!color, estimate)
+    }
   }
 
   data.spec_curve <- data.spec_curve %>%
     mutate(.universe = 1:nrow(.)) %>%
     select(-term)
-
-  if (color_order == TRUE) {
-    data.spec_curve <- data.spec_curve %>%
-      mutate(color = ifelse(!!color,TRUE,FALSE)) %>%
-      arrange(color,estimate) %>%
-      mutate(.universe = seq(1,nrow(data.spec_curve)))
-  }
-
-  if (!rlang::quo_is_null(branch_order)) {
-    data.spec_curve <- data.spec_curve %>%
-      arrange(!!branch_order, estimate) %>%
-      mutate(.universe = seq(1,nrow(data.spec_curve)))
-  }
 
   p1 <- data.spec_curve %>%
     ggplot(aes(.universe, estimate, color = !!color)) +
@@ -193,6 +92,7 @@ spec_curve.lm_mverse <- function(
     p1 <- p1 + geom_pointrange(aes(ymin = conf.low,
                                    ymax = conf.high),
                                alpha = 0.2,size=0.25)}
+  p1 <- p1 + theme_minimal()
 
   data.info <- data.spec_curve %>%
     pivot_longer( !! names(multiverse::parameters(.lm_mverse)),
@@ -215,6 +115,9 @@ spec_curve.lm_mverse <- function(
     facet_grid(parameter_name ~ ., space="free_y", scales="free_y")+
     theme(strip.placement = "outside",
           strip.background = element_rect(fill=NA,colour=NA),
+          panel.background = element_rect(fill = "white", colour = NA),
+          panel.grid = element_line(colour = "grey92"),
+          panel.grid.minor = element_line(size = rel(0.5)),
           panel.spacing.x=unit(0.15,"cm"),
           strip.text.y = element_text(angle = 0, face="bold", size=8),
           legend.position = "none",
@@ -277,6 +180,9 @@ spec_curve.glm_mverse <- function(
   color_order = FALSE, color = (p.value < 0.05),
   branch_order = NULL) {
   stopifnot(inherits(.glm_mverse, "glm_mverse"))
+  if (is.null(var)) {
+    stop("Please specify the variable to display.")
+  }
   color <- rlang::enquo(color)
   conf.int <<- conf.int
   conf.level <<- conf.level
@@ -290,24 +196,22 @@ spec_curve.glm_mverse <- function(
   if (universe_order == FALSE) {
     data.spec_curve <- data.spec_curve %>%
       arrange(estimate)
+
+    if (color_order == TRUE & !rlang::quo_is_null(branch_order)) {
+      data.spec_curve <- data.spec_curve %>%
+        arrange(!!branch_order, !!color, estimate)
+    } else if (!rlang::quo_is_null(branch_order)) {
+      data.spec_curve <- data.spec_curve %>%
+        arrange(!!branch_order, estimate)
+    } else if (color_order == TRUE) {
+      data.spec_curve <- data.spec_curve %>%
+        arrange(!!color, estimate)
+    }
   }
 
   data.spec_curve <- data.spec_curve %>%
     mutate(.universe = 1:nrow(.)) %>%
     select(-term)
-
-  if (color_order == TRUE) {
-    data.spec_curve <- data.spec_curve %>%
-      mutate(color = ifelse(!!color,TRUE,FALSE)) %>%
-      arrange(color,estimate) %>%
-      mutate(.universe = seq(1,nrow(data.spec_curve)))
-  }
-
-  if (!rlang::quo_is_null(branch_order)) {
-    data.spec_curve <- data.spec_curve %>%
-      arrange(!!branch_order, estimate) %>%
-      mutate(.universe = seq(1,nrow(data.spec_curve)))
-  }
 
   p1 <- data.spec_curve %>%
     ggplot(aes(.universe, estimate, color = !!color)) +
@@ -318,6 +222,7 @@ spec_curve.glm_mverse <- function(
     p1 <- p1 + geom_pointrange(aes(ymin = conf.low,
                                    ymax = conf.high),
                                alpha = 0.2,size=0.25)}
+  p1 <- p1 + theme_minimal()
 
   data.info <- data.spec_curve %>%
     pivot_longer( !! names(multiverse::parameters(.glm_mverse)),
@@ -340,6 +245,9 @@ spec_curve.glm_mverse <- function(
     facet_grid(parameter_name ~ ., space="free_y", scales="free_y")+
     theme(strip.placement = "outside",
           strip.background = element_rect(fill=NA,colour=NA),
+          panel.background = element_rect(fill = "white", colour = NA),
+          panel.grid = element_line(colour = "grey92"),
+          panel.grid.minor = element_line(size = rel(0.5)),
           panel.spacing.x=unit(0.15,"cm"),
           strip.text.y = element_text(angle = 0, face="bold", size=8),
           legend.position = "none",
@@ -348,4 +256,3 @@ spec_curve.glm_mverse <- function(
   cowplot::plot_grid(p1, p2, axis = "bltr",
                      align = "v", ncol = 1, rel_heights = c(1, 2))
 }
-
