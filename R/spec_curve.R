@@ -92,7 +92,9 @@ spec_curve.lm_mverse <- function(
     p1 <- p1 + geom_pointrange(aes(ymin = conf.low,
                                    ymax = conf.high),
                                alpha = 0.2,size=0.25)}
-  p1 <- p1 + theme_minimal()
+  p1 <- p1 +
+    theme_minimal() +
+    scale_colour_brewer(palette = "Set1")
 
   data.info <- data.spec_curve %>%
     pivot_longer( !! names(multiverse::parameters(.lm_mverse)),
@@ -121,7 +123,8 @@ spec_curve.lm_mverse <- function(
           panel.spacing.x=unit(0.15,"cm"),
           strip.text.y = element_text(angle = 0, face="bold", size=8),
           legend.position = "none",
-          panel.spacing = unit(0.25, "lines"))
+          panel.spacing = unit(0.25, "lines")) +
+    scale_colour_brewer(palette = "Set1")
 
   cowplot::plot_grid(p1, p2, axis = "bltr",
                      align = "v", ncol = 1, rel_heights = c(1, 2))
@@ -222,7 +225,9 @@ spec_curve.glm_mverse <- function(
     p1 <- p1 + geom_pointrange(aes(ymin = conf.low,
                                    ymax = conf.high),
                                alpha = 0.2,size=0.25)}
-  p1 <- p1 + theme_minimal()
+  p1 <- p1 +
+    theme_minimal() +
+    scale_colour_brewer(palette = "Set1")
 
   data.info <- data.spec_curve %>%
     pivot_longer( !! names(multiverse::parameters(.glm_mverse)),
@@ -251,7 +256,8 @@ spec_curve.glm_mverse <- function(
           panel.spacing.x=unit(0.15,"cm"),
           strip.text.y = element_text(angle = 0, face="bold", size=8),
           legend.position = "none",
-          panel.spacing = unit(0.25, "lines"))
+          panel.spacing = unit(0.25, "lines")) +
+    scale_colour_brewer(palette = "Set1")
 
   cowplot::plot_grid(p1, p2, axis = "bltr",
                      align = "v", ncol = 1, rel_heights = c(1, 2))
