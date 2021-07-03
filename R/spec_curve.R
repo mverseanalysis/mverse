@@ -36,7 +36,6 @@
 #' spec_curve(mv, var = "femininityTRUE")
 #'
 #' @return a multiverse table as a tibble
-#' @import dplyr stringr str_replace ggplot2
 #' @name spec_curve
 #' @family {spec_curve method}
 #' @export
@@ -61,61 +60,61 @@ spec_curve.lm_mverse <- function(
                     conf.int = conf.int, conf.level = conf.level)
 
   data.spec_curve <- mtable %>%
-    filter(term == var)
+    dplyr::filter(term == var)
 
   if (universe_order == FALSE) {
     data.spec_curve <- data.spec_curve %>%
-      arrange(estimate)
+      dplyr::arrange(estimate)
 
     if (color_order == TRUE & !rlang::quo_is_null(branch_order)) {
       data.spec_curve <- data.spec_curve %>%
-        arrange(!!branch_order, !!color, estimate)
+        dplyr::arrange(!!branch_order, !!color, estimate)
     } else if (!rlang::quo_is_null(branch_order)) {
       data.spec_curve <- data.spec_curve %>%
-        arrange(!!branch_order, estimate)
+        dplyr::arrange(!!branch_order, estimate)
     } else if (color_order == TRUE) {
       data.spec_curve <- data.spec_curve %>%
-        arrange(!!color, estimate)
+        dplyr::arrange(!!color, estimate)
     }
   }
 
   data.spec_curve <- data.spec_curve %>%
-    mutate(.universe = 1:nrow(.)) %>%
-    select(-term)
+    dplyr::mutate(.universe = 1:nrow(.)) %>%
+    dplyr::select(-term)
 
   p1 <- data.spec_curve %>%
-    ggplot(aes(.universe, estimate, color = !!color)) +
-    geom_point(size = 0.25) +
-    labs(x = "", y = paste("coefficient of\n:",var))
+    ggplot2::ggplot(aes(.universe, estimate, color = !!color)) +
+    ggplot2::geom_point(size = 0.25) +
+    ggplot2::labs(x = "", y = paste("coefficient of\n:",var))
 
   if (conf.int == TRUE) {
-    p1 <- p1 + geom_pointrange(aes(ymin = conf.low,
+    p1 <- p1 + ggplot2::geom_pointrange(aes(ymin = conf.low,
                                    ymax = conf.high),
                                alpha = 0.2,size=0.25)}
   p1 <- p1 +
-    theme_minimal() +
-    scale_colour_brewer(palette = "Set1")
+    ggplot2::theme_minimal() +
+    ggplot2::scale_colour_brewer(palette = "Set1")
 
   data.info <- data.spec_curve %>%
-    pivot_longer( !! names(multiverse::parameters(.lm_mverse)),
+    tidyr::pivot_longer( !! names(multiverse::parameters(.lm_mverse)),
       names_to = "parameter_name",
       values_to = "parameter_option" ) %>%
-    filter(parameter_name %in% option)
+    dplyr::filter(parameter_name %in% option)
 
   p2 <- data.info %>%
-    ggplot() +
-    geom_point(aes(x = .universe, y = parameter_option,
+    ggplot2::ggplot() +
+    ggplot2::geom_point(aes(x = .universe, y = parameter_option,
                    color = !!color), size = 2,shape = 124)
 
   if (universe_order == FALSE) {
-    p2 <- p2 + xlab("universe counts")
+    p2 <- p2 + ggplot2::xlab("universe counts")
   } else {
-    p2 <- p2 + xlab("universe #")
+    p2 <- p2 + ggplot2::xlab("universe #")
   }
 
-  p2 <- p2 + ylab("option included in the analysis specification") +
-    facet_grid(parameter_name ~ ., space="free_y", scales="free_y")+
-    theme(strip.placement = "outside",
+  p2 <- p2 + ggplot2::ylab("option included in the analysis specification") +
+    ggplot2::facet_grid(parameter_name ~ ., space="free_y", scales="free_y")+
+    ggplot2::theme(strip.placement = "outside",
           strip.background = element_rect(fill=NA,colour=NA),
           panel.background = element_rect(fill = "white", colour = NA),
           panel.grid = element_line(colour = "grey92"),
@@ -124,7 +123,7 @@ spec_curve.lm_mverse <- function(
           strip.text.y = element_text(angle = 0, face="bold", size=8),
           legend.position = "none",
           panel.spacing = unit(0.25, "lines")) +
-    scale_colour_brewer(palette = "Set1")
+    ggplot2::scale_colour_brewer(palette = "Set1")
 
   cowplot::plot_grid(p1, p2, axis = "bltr",
                      align = "v", ncol = 1, rel_heights = c(1, 2))
@@ -171,7 +170,6 @@ spec_curve.lm_mverse <- function(
 #' spec_curve(mv, var = "femininityTRUE")
 #'
 #' @return a multiverse table as a tibble
-#' @import dplyr stringr str_replace ggplot2
 #' @name spec_curve
 #' @family {spec_curve method}
 #' @export
@@ -194,70 +192,70 @@ spec_curve.glm_mverse <- function(
                     conf.int = conf.int, conf.level = conf.level)
 
   data.spec_curve <- mtable %>%
-    filter(term == var)
+    dplyr::filter(term == var)
 
   if (universe_order == FALSE) {
     data.spec_curve <- data.spec_curve %>%
-      arrange(estimate)
+      dplyr::arrange(estimate)
 
     if (color_order == TRUE & !rlang::quo_is_null(branch_order)) {
       data.spec_curve <- data.spec_curve %>%
-        arrange(!!branch_order, !!color, estimate)
+        dplyr::arrange(!!branch_order, !!color, estimate)
     } else if (!rlang::quo_is_null(branch_order)) {
       data.spec_curve <- data.spec_curve %>%
-        arrange(!!branch_order, estimate)
+        dplyr::arrange(!!branch_order, estimate)
     } else if (color_order == TRUE) {
       data.spec_curve <- data.spec_curve %>%
-        arrange(!!color, estimate)
+        dplyr::arrange(!!color, estimate)
     }
   }
 
   data.spec_curve <- data.spec_curve %>%
-    mutate(.universe = 1:nrow(.)) %>%
-    select(-term)
+    dplyr::mutate(.universe = 1:nrow(.)) %>%
+    dplyr::select(-term)
 
   p1 <- data.spec_curve %>%
-    ggplot(aes(.universe, estimate, color = !!color)) +
-    geom_point(size = 0.25) +
-    labs(x = "", y = paste("coefficient of\n:",var))
+    ggplot2::ggplot(aes(.universe, estimate, color = !!color)) +
+    ggplot2::geom_point(size = 0.25) +
+    ggplot2::labs(x = "", y = paste("coefficient of\n:",var))
 
   if (conf.int == TRUE) {
-    p1 <- p1 + geom_pointrange(aes(ymin = conf.low,
-                                   ymax = conf.high),
-                               alpha = 0.2,size=0.25)}
+    p1 <- p1 + ggplot2::geom_pointrange(aes(ymin = conf.low,
+                                            ymax = conf.high),
+                                        alpha = 0.2,size=0.25)}
   p1 <- p1 +
-    theme_minimal() +
-    scale_colour_brewer(palette = "Set1")
+    ggplot2::theme_minimal() +
+    ggplot2::scale_colour_brewer(palette = "Set1")
 
   data.info <- data.spec_curve %>%
-    pivot_longer( !! names(multiverse::parameters(.glm_mverse)),
-                  names_to = "parameter_name",
-                  values_to = "parameter_option" ) %>%
-    filter(parameter_name %in% option)
+    tidyr::pivot_longer( !! names(multiverse::parameters(.glm_mverse)),
+                         names_to = "parameter_name",
+                         values_to = "parameter_option" ) %>%
+    dplyr::filter(parameter_name %in% option)
 
   p2 <- data.info %>%
-    ggplot() +
-    geom_point(aes(x = .universe, y = parameter_option,
-                   color = !!color), size = 2,shape = 124)
+    ggplot2::ggplot() +
+    ggplot2::geom_point(aes(x = .universe, y = parameter_option,
+                            color = !!color), size = 2,shape = 124)
 
   if (universe_order == FALSE) {
-    p2 <- p2 + xlab("universe counts")
+    p2 <- p2 + ggplot2::xlab("universe counts")
   } else {
-    p2 <- p2 + xlab("universe #")
+    p2 <- p2 + ggplot2::xlab("universe #")
   }
 
-  p2 <- p2 + ylab("option included in the analysis specification") +
-    facet_grid(parameter_name ~ ., space="free_y", scales="free_y")+
-    theme(strip.placement = "outside",
-          strip.background = element_rect(fill=NA,colour=NA),
-          panel.background = element_rect(fill = "white", colour = NA),
-          panel.grid = element_line(colour = "grey92"),
-          panel.grid.minor = element_line(size = rel(0.5)),
-          panel.spacing.x=unit(0.15,"cm"),
-          strip.text.y = element_text(angle = 0, face="bold", size=8),
-          legend.position = "none",
-          panel.spacing = unit(0.25, "lines")) +
-    scale_colour_brewer(palette = "Set1")
+  p2 <- p2 + ggplot2::ylab("option included in the analysis specification") +
+    ggplot2::facet_grid(parameter_name ~ ., space="free_y", scales="free_y")+
+    ggplot2::theme(strip.placement = "outside",
+                   strip.background = element_rect(fill=NA,colour=NA),
+                   panel.background = element_rect(fill = "white", colour = NA),
+                   panel.grid = element_line(colour = "grey92"),
+                   panel.grid.minor = element_line(size = rel(0.5)),
+                   panel.spacing.x=unit(0.15,"cm"),
+                   strip.text.y = element_text(angle = 0, face="bold", size=8),
+                   legend.position = "none",
+                   panel.spacing = unit(0.25, "lines")) +
+    ggplot2::scale_colour_brewer(palette = "Set1")
 
   cowplot::plot_grid(p1, p2, axis = "bltr",
                      align = "v", ncol = 1, rel_heights = c(1, 2))
