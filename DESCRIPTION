@@ -7,6 +7,10 @@ Authors@R: c(
   role = c("aut", "cre")),
   person("Haoda", "Li", email = "haoda.li@mail.utoronto.ca", 
   role = c("aut")),
+  person("Mingwei", "Xu", email = "yuka.xu@mail.utoronto.ca", 
+  role = c("aut")),
+  person("Gibbs", "Alison", email = "alison.gibbs@utoronto.ca",
+  role = c("aut")),
   person("Nathan", "Taback", email = "nathan.taback@utoronto.ca",
   role = "aut"),
   person("Fanny", "Chevalier", email = "fanny@cs.tornto.edu",
@@ -19,13 +23,15 @@ Encoding: UTF-8
 LazyData: true
 Depends: 
   R (>= 3.6),
+  multiverse (>= 0.3),
   magrittr (>= 1.5)
 Imports:
-  multiverse (>= 0.3),
-  dplyr,
   rlang,
+  dplyr,
+  tidyr,
+  tibble,
   stringr,
-  stats
+  stats 
 Suggests:
   tidyverse,
   broom,

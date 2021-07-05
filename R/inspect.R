@@ -17,7 +17,7 @@ display_branch_rules <- function(mtable, object) {
     brnch <- paste(nm, 'branch', sep = "_")
     mtable[[brnch]] <- mtable[[brnch]] %>%
       dplyr::recode(!!!stats::setNames(branches[[nm]], replace_this)) %>%
-      factor(levels = branches[[nm]])
+      factor()
   }
   mtable
 }
@@ -29,17 +29,46 @@ display_branch_rules <- function(mtable, object) {
 #' Each row corresponds to a universe and each column
 #' represents a branch.
 #'
+#' @examples
+#' # Define a mutate branch.
+#' hurricane_strength <- mutate_branch(
+#'   # damage vs. wind speed vs.pressure
+#'   NDAM,
+#'   HighestWindSpeed,
+#'   Minpressure_Updated_2014,
+#'   # Standardized versions
+#'   scale(NDAM),
+#'   scale(HighestWindSpeed),
+#'   -scale(Minpressure_Updated_2014),
+#' )
+#' # Create a mverse and add the branch.
+#' mv <- create_multiverse(hurricane) %>%
+#'   add_mutate_branch(hurricane_strength)
+#' # Display the multiverse table while
+#' # defining a multiverse provides a way
+#' # to inspect the universes created.
+#' summary(mv)
+#' # Define a filter branch.
+#' hurricane_outliers <- filter_branch(
+#'   ! Name %in% c("Katrina", "Audrey", "Andrew"),
+#'   ! Name %in% c("Katrina"),
+#'   ! Name %in% c("Katrina"),
+#'   TRUE # include all
+#' )
+#' # Add the additional branch and inspect.
+#' mv <- add_filter_branch(mv, hurricane_outliers)
+#' summary(mv)
 #' @param object a \code{mverse} object.
+#' @param ... Ignored.
 #' @return a multiverse table as a tibble.
 #' @name summary
 #' @family {summary method}
-#' @importFrom  stringr str_replace
 #' @export
-summary.mverse <- function(object) {
+summary.mverse <- function(object, ...) {
   mtable <- multiverse::extract_variables(object) %>%
-    mutate(universe = factor(.universe)) %>%
-    select(-starts_with(".")) %>%
-    select(universe, everything())
+    dplyr::mutate(universe = factor(.universe)) %>%
+    dplyr::select(-tidyselect::starts_with(".")) %>%
+    dplyr::select(universe, tidyselect::everything())
   display_branch_rules(mtable, object)
 }
 
@@ -49,6 +78,42 @@ summary.mverse <- function(object) {
 #' \code{summary.lm_mverse} returns the \code{lm} regression
 #' results across the multiverse.
 #'
+#' @examples
+#' # Define mutate branches.
+#' hurricane_strength <- mutate_branch(
+#' # damage vs. wind speed vs.pressure
+#' NDAM,
+#' HighestWindSpeed,
+#' Minpressure_Updated_2014,
+#' # Standardized versions
+#' scale(NDAM),
+#' scale(HighestWindSpeed),
+#' -scale(Minpressure_Updated_2014),
+#' )
+#' y <- mutate_branch(
+#' alldeaths, log(alldeaths + 1)
+#' )
+#' # Define a filter branch.
+#' hurricane_outliers <- filter_branch(
+#' ! Name %in% c("Katrina", "Audrey", "Andrew"),
+#' ! Name %in% c("Katrina"),
+#' ! Name %in% c("Katrina"),
+#' TRUE # include all
+#' )
+#' # Define a formula branch.
+#' model_specifications <- formula_branch(
+#' y ~ femininity,
+#' y ~ femininity + hurricane_strength,
+#' y ~ femininity * hurricane_strength
+#' )
+#' # Create a mverse, add the branches, and fit lm models.
+#' mv <- create_multiverse(hurricane) %>%
+#' add_filter_branch(hurricane_outliers) %>%
+#' add_mutate_branch(hurricane_strength, y) %>%
+#' add_formula_branch(model_specifications) %>%
+#' lm_mverse()
+#' # Display the multiverse table with estimated coefficients.
+#' summary(mv)
 #' @param object a \code{lm_mverse} object.
 #' @param conf.int When \code{TRUE} (default), the estimate output
 #'   includes the confidence intervals.
@@ -57,15 +122,16 @@ summary.mverse <- function(object) {
 #' @param output The output of interest. The possible values are
 #'   "estimates" ("e"), "df", "fstatistic" ("f"), and "r.squared" ("r").
 #'   Default value is "estimates".
+#' @param ... Ignored.
 #' @return a multiverse table as a tibble
 #' @name summary
 #' @family {summary method}
-#' @importFrom  stringr str_replace
 #' @export
 summary.lm_mverse <- function(object,
                               conf.int = TRUE,
                               conf.level = 0.95,
-                              output = "estimates") {
+                              output = "estimates",
+                              ...) {
   if (output %in% c("estimates", "e")) {
     multiverse::inside(object, {
       if (summary(model)$df[1] > 0)
@@ -79,14 +145,14 @@ summary.lm_mverse <- function(object,
           p.value = NA
         )
         if (!!rlang::enexpr(conf.int))
-          out <- out %>% mutate(conf.low = NA, conf.high = NA)
+          out <- out %>% dplyr::mutate(conf.low = NA, conf.high = NA)
       }
     })
   } else if (output == "df") {
     multiverse::inside(object, {
       if (summary(model)$df[1] > 0)
         out <- as.data.frame(t(summary(model)$df)) %>%
-          rename(p = V1,
+          dplyr::rename(p = V1,
                  n.minus.p = V2,
                  p.star = V3)
       else
@@ -102,7 +168,7 @@ summary.lm_mverse <- function(object,
             summary(model)$r.squared,
             summary(model)$adj.r.squared
           ))) %>%
-          rename(r.squared = V1, adj.r.squared = V2)
+          dplyr::rename(r.squared = V1, adj.r.squared = V2)
       else
         out <- data.frame(r.squared = NA, adj.r.squared = NA)
     })
@@ -110,7 +176,7 @@ summary.lm_mverse <- function(object,
     multiverse::inside(object, {
       if (summary(model)$df[1] > 1)
         out <- as.data.frame(t(summary(model)$fstatistic)) %>%
-          rename(fstatistic = value,
+          dplyr::rename(fstatistic = value,
                  numdf.f = numdf,
                  dendf.f = dendf)
       else
@@ -123,9 +189,9 @@ summary.lm_mverse <- function(object,
   execute_multiverse(object)
   mtable <- multiverse::extract_variables(object, out) %>%
     tidyr::unnest(out) %>%
-    mutate(universe = factor(.universe)) %>%
-    select(-starts_with(".")) %>%
-    select(universe, everything())
+    dplyr::mutate(universe = factor(.universe)) %>%
+    dplyr::select(-tidyselect::starts_with(".")) %>%
+    dplyr::select(universe, tidyselect::everything())
   display_branch_rules(mtable, object)
 }
 
@@ -135,6 +201,45 @@ summary.lm_mverse <- function(object,
 #' \code{summary.glm_mverse} returns the \code{glm} regression
 #' results across the multiverse.
 #'
+#' @examples
+#' # Define mutate branches.
+#' hurricane_strength <- mutate_branch(
+#' # damage vs. wind speed vs.pressure
+#' NDAM,
+#' HighestWindSpeed,
+#' Minpressure_Updated_2014,
+#' # Standardized versions
+#' scale(NDAM),
+#' scale(HighestWindSpeed),
+#' -scale(Minpressure_Updated_2014),
+#' )
+#' y <- mutate_branch(
+#' alldeaths, log(alldeaths + 1)
+#' )
+#' # Define a filter branch.
+#' hurricane_outliers <- filter_branch(
+#'   ! Name %in% c("Katrina", "Audrey", "Andrew"),
+#' ! Name %in% c("Katrina"),
+#' ! Name %in% c("Katrina"),
+#' TRUE # include all
+#' )
+#' # Define a formula branch.
+#' model_specifications <- formula_branch(
+#' y ~ femininity,
+#' y ~ femininity + hurricane_strength,
+#' y ~ femininity * hurricane_strength
+#' )
+#' # Define a family branch.
+#' model_distributions <- family_branch(gaussian, poisson)
+#' # Create a mverse, add the branches, and fit glm models.
+#' mv <- create_multiverse(hurricane) %>%
+#' add_filter_branch(hurricane_outliers) %>%
+#' add_mutate_branch(hurricane_strength, y) %>%
+#' add_formula_branch(model_specifications) %>%
+#' add_family_branch(model_distributions) %>%
+#' glm_mverse()
+#' # Display the multiverse table with estimated coefficients.
+#' summary(mv)
 #' @param object a \code{glm_mverse} object.
 #' @param conf.int When \code{TRUE} (default), the estimate output
 #'   includes the confidence intervals.
@@ -144,14 +249,16 @@ summary.lm_mverse <- function(object,
 #'   "estimates" ("e"), "df", "deviance" ("de"), and "aic" ("bic").
 #'   Alternatively, the first letters may be used. Default value
 #'   is "estimates".
+#' @param ... Ignored.
+#' @return a multiverse table as a tibble
 #' @name summary
 #' @family {summary method}
-#' @importFrom  stringr str_replace
 #' @export
 summary.glm_mverse <- function(object,
                                conf.int = TRUE,
                                conf.level = 0.95,
-                               output = "estimates") {
+                               output = "estimates",
+                               ...) {
   if (output %in% c("estimates", "e")) {
     multiverse::inside(object, {
       if (summary(model)$df[1] > 0)
@@ -166,7 +273,7 @@ summary.glm_mverse <- function(object,
           p.value = NA
         )
         if (!!rlang::enexpr(conf.int))
-          out <- out %>% mutate(conf.low = NA, conf.high = NA)
+          out <- out %>% dplyr::mutate(conf.low = NA, conf.high = NA)
       }
     })
   } else if (output == "df") {
@@ -176,7 +283,7 @@ summary.glm_mverse <- function(object,
           as.data.frame(t(c(
             summary(model)$df.residual, summary(model)$df.null
           ))) %>%
-          rename(df.residual = V1,
+          dplyr::rename(df.residual = V1,
                  df.null = V2)
       else
         out <- data.frame(df.residual = NA,
@@ -189,7 +296,7 @@ summary.glm_mverse <- function(object,
           as.data.frame(t(c(
             summary(model)$deviance, summary(model)$null.deviance
           ))) %>%
-          rename(deviance = V1,
+          dplyr::rename(deviance = V1,
                  null.deviance = V2)
       else
         out <- data.frame(deviance = NA,
@@ -200,7 +307,7 @@ summary.glm_mverse <- function(object,
       if (summary(model)$df[1] > 0)
         out <-
           as.data.frame(t(c(AIC(model), BIC(model)))) %>%
-          rename(AIC = V1,
+          dplyr::rename(AIC = V1,
                  BIC = V2)
       else
         out <- data.frame(AIC = NA,
@@ -212,9 +319,9 @@ summary.glm_mverse <- function(object,
   execute_multiverse(object)
   mtable <- multiverse::extract_variables(object, out) %>%
     tidyr::unnest(out) %>%
-    mutate(universe = factor(.universe)) %>%
-    select(-starts_with(".")) %>%
-    select(universe, everything())
+    dplyr::mutate(universe = factor(.universe)) %>%
+    dplyr::select(-tidyselect::starts_with(".")) %>%
+    dplyr::select(universe, tidyselect::everything())
   display_branch_rules(mtable, object)
 }
 

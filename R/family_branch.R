@@ -1,16 +1,16 @@
 #' Create a new family branch.
 #'
 #' @examples
-#' \dontrun{
-#' fam <- family_branch(
-#'   poisson, gaussian(link = "log")
+#' # Define a family branch.
+#' model_distributions <- family_branch(
+#'  gaussian, poisson(link = "log")
 #' )
-#' }
-#'
+#' # Create a mverse and add the branch.
+#' mv <- create_multiverse(hurricane) %>%
+#'   add_family_branch(model_distributions)
 #' @param ... branch definition expressions.
 #' @param name Name for the new family.
 #' @return a \code{family_branch} object.
-#'
 #' @name family_branch
 #' @family {methods for working with a formula branch}
 #' @export
@@ -45,17 +45,14 @@ add_family_branch <- function(.mverse, ...) {
 #' @param .mverse a \code{mverse} object.
 #' @param ... \code{family_branch} objects.
 #' @examples
-#' \dontrun{
-#' mv <- create_multiverse(df)
-#' fam <- family_branch(
-#'   poisson, gaussian(link = "log")
+#' # Define a family branch.
+#' model_distributions <- family_branch(
+#'  gaussian, poisson(link = "log")
 #' )
-#' mv <- mv %>%
-#'   add_family_branch(fam)
-#' }
+#' # Create a mverse and add the branch.
+#' mv <- create_multiverse(hurricane) %>%
+#'   add_family_branch(model_distributions)
 #' @return The resulting \code{mverse} object.
-#' @importFrom magrittr %>%
-#' @import dplyr
 #' @name add_family_branch
 #' @family {methods for working with a family branch}
 #' @export

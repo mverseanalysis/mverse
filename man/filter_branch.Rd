@@ -18,10 +18,16 @@ a filter_branch object.
 Create a new filter branch.
 }
 \examples{
-\dontrun{
-x4 <- filter_branch(x1 + x2, x1 + x3, sum(x1, x2, x3))
-}
-
+# Define a filter branch.
+hurricane_outliers <- filter_branch(
+  ! Name \%in\% c("Katrina", "Audrey", "Andrew"),
+  ! Name \%in\% c("Katrina"),
+  ! Name \%in\% c("Katrina"),
+  TRUE # include all
+)
+# Create a mverse and add the branch.
+mv <- create_multiverse(hurricane) \%>\%
+  add_filter_branch(hurricane_outliers)
 }
 \seealso{
 Other {methods for working with a filter branch}: 

@@ -9,6 +9,7 @@ warnings_are_errors: false
 
 before_install:
   - updmap-sys
+  - Rscript -e 'devtools::build_readme()'
 
 addons:
   apt:

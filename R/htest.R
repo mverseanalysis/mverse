@@ -98,8 +98,8 @@ ttest_mverse <-
     execute_multiverse(.mverse)
     mtable <- multiverse::extract_variables(.mverse, out) %>%
       tidyr::unnest(out) %>%
-      mutate(universe = factor(.universe)) %>%
-      select(-starts_with(".")) %>%
-      select(universe, everything())
+      dplyr::mutate(universe = factor(.universe)) %>%
+      dplyr::select(-dplyr::starts_with(".")) %>%
+      dplyr::select(universe, dplyr::everything())
     display_branch_rules(mtable, .mverse)
   }

@@ -18,14 +18,15 @@ a \code{formula_branch} object.
 Create a new formula branch.
 }
 \examples{
-\dontrun{
-form <- formula_branch(
-  y ~ x1,
-  y ~ x2,
-  y ~ x1*x2
+# Define a formula branch.
+model_specifications <- formula_branch(
+  y ~ femininity,
+  y ~ femininity + hurricane_strength,
+  y ~ femininity * hurricane_strength
 )
-}
-
+# Create a mverse, add the branch.
+mv <- create_multiverse(hurricane) \%>\%
+  add_formula_branch(model_specifications)
 }
 \seealso{
 Other {methods for working with a formula branch}: 
