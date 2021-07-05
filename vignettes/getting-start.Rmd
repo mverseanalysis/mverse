@@ -84,7 +84,7 @@ library(mverse)
 We will use the `hurricane` data [@original]. This dataset has 94 observations on 12 variables. 
 
 ```{r load_data, warning=FALSE, message=FALSE}
-hurricane
+knitr::kable(head(hurricane))
 ```
 
 # Define Branches
@@ -176,7 +176,7 @@ mv_ttest <- create_multiverse(hurricane) %>%
   add_mutate_branch(femininity, damage)
 
 # Execute t test
-ttest_mverse(mv_ttest, 'MinPressure_before', 'Minpressure_Updated_2014')
+knitr::kable(ttest_mverse(mv_ttest, 'MinPressure_before', 'Minpressure_Updated_2014'))
 ```
 
 Another usage for `ttest_mverse` is to work with `formula_branch`. The formula need to follow the <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/t.test">formula interface</a> of `t.test`.
@@ -194,7 +194,7 @@ mv_ttest_formula <- create_multiverse(hurricane) %>%
   add_mutate_branch(femininity, damage) %>%
   add_formula_branch(ttest_formula)
 # Execute t test
-ttest_mverse(mv_ttest_formula)
+knitr::kable(ttest_mverse(mv_ttest_formula))
 ```
 
 ## Simple Linear Regression
@@ -211,13 +211,22 @@ mv_lm <- create_multiverse(hurricane) %>%
 `summary` is used to inspect the estimates, statistics, and p-values. Passing different keywords to `output` arguments will give different statistical values. 
 ```{r lm_summary}
 # output estimates by default, or by "estimates" or "e"
-summary(mv_lm)
+knitr::kable(summary(mv_lm))
+```
+
+```{r lm_summary_df}
 # output degree of freedom by "df" 
-summary(mv_lm, output="df")
+knitr::kable(summary(mv_lm, output="df"))
+```
+
+```{r lm_summary_f}
 # output f-statistic by "fstatistic" or "f"
-summary(mv_lm, output="f")
+knitr::kable(summary(mv_lm, output="f"))
+```
+             
+```{r lm_summary_r}
 # output R-squared by `r.squared` or "r"
-summary(mv_lm, output="r")
+knitr::kable(summary(mv_lm, output="r"))
 ```
 
 ## Generalized Linear Regression
@@ -235,12 +244,20 @@ We can use `summary` to inspect the results as well.
 
 ```{r glm_summary}
 # output estimates by default, or by "estimates" or "e"
-summary(mv_glm)
+knitr::kable(summary(mv_glm))
+```
+
+```{r glm_summary_df}
 # output degree of freedom by "df" 
-summary(mv_glm, output="df")
+knitr::kable(summary(mv_glm, output="df"))
+
+```
+```{r glm_summary_de}
 # output deviance by "deviance" or "de"
-summary(mv_glm, output="de")
+knitr::kable(summary(mv_glm, output="de"))
+```
+```{r glm_summary_aic}
 # output AIC/BIC by `aic` or "bic"
-summary(mv_glm, output="AIC")
+knitr::kable(summary(mv_glm, output="AIC"))
 ```
 ## Specification Curve
