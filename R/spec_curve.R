@@ -35,7 +35,7 @@
 #' # Display the specification curve
 #' spec_curve(mv, var = "femininityTRUE")
 #'
-#' @return a multiverse table as a tibble
+#' @return a specification curve plot for the estimates
 #' @name spec_curve
 #' @family {spec_curve method}
 #' @export
@@ -83,12 +83,12 @@ spec_curve.lm_mverse <- function(
     dplyr::select(-term)
 
   p1 <- data.spec_curve %>%
-    ggplot2::ggplot(aes(.universe, estimate, color = !!color)) +
+    ggplot2::ggplot(ggplot2::aes(.universe, estimate, color = !!color)) +
     ggplot2::geom_point(size = 0.25) +
     ggplot2::labs(x = "", y = paste("coefficient of\n:",var))
 
   if (conf.int == TRUE) {
-    p1 <- p1 + ggplot2::geom_pointrange(aes(ymin = conf.low,
+    p1 <- p1 + ggplot2::geom_pointrange(ggplot2::aes(ymin = conf.low,
                                    ymax = conf.high),
                                alpha = 0.2,size=0.25)}
   p1 <- p1 +
@@ -103,7 +103,7 @@ spec_curve.lm_mverse <- function(
 
   p2 <- data.info %>%
     ggplot2::ggplot() +
-    ggplot2::geom_point(aes(x = .universe, y = parameter_option,
+    ggplot2::geom_point(ggplot2::aes(x = .universe, y = parameter_option,
                    color = !!color), size = 2,shape = 124)
 
   if (universe_order == FALSE) {
@@ -115,14 +115,14 @@ spec_curve.lm_mverse <- function(
   p2 <- p2 + ggplot2::ylab("option included in the analysis specification") +
     ggplot2::facet_grid(parameter_name ~ ., space="free_y", scales="free_y")+
     ggplot2::theme(strip.placement = "outside",
-          strip.background = element_rect(fill=NA,colour=NA),
-          panel.background = element_rect(fill = "white", colour = NA),
-          panel.grid = element_line(colour = "grey92"),
-          panel.grid.minor = element_line(size = rel(0.5)),
-          panel.spacing.x=unit(0.15,"cm"),
-          strip.text.y = element_text(angle = 0, face="bold", size=8),
+          strip.background = ggplot2::element_rect(fill=NA,colour=NA),
+          panel.background = ggplot2::element_rect(fill = "white", colour = NA),
+          panel.grid = ggplot2::element_line(colour = "grey92"),
+          panel.grid.minor = ggplot2::element_line(size = ggplot2::rel(0.5)),
+          panel.spacing.x=ggplot2::unit(0.15,"cm"),
+          strip.text.y = ggplot2::element_text(angle = 0, face="bold", size=8),
           legend.position = "none",
-          panel.spacing = unit(0.25, "lines")) +
+          panel.spacing = ggplot2::unit(0.25, "lines")) +
     ggplot2::scale_colour_brewer(palette = "Set1")
 
   cowplot::plot_grid(p1, p2, axis = "bltr",
@@ -169,7 +169,7 @@ spec_curve.lm_mverse <- function(
 #' # Display the specification curve
 #' spec_curve(mv, var = "femininityTRUE")
 #'
-#' @return a multiverse table as a tibble
+#' @return a specification curve plot for the estimates
 #' @name spec_curve
 #' @family {spec_curve method}
 #' @export
@@ -215,12 +215,12 @@ spec_curve.glm_mverse <- function(
     dplyr::select(-term)
 
   p1 <- data.spec_curve %>%
-    ggplot2::ggplot(aes(.universe, estimate, color = !!color)) +
+    ggplot2::ggplot(ggplot2::aes(.universe, estimate, color = !!color)) +
     ggplot2::geom_point(size = 0.25) +
     ggplot2::labs(x = "", y = paste("coefficient of\n:",var))
 
   if (conf.int == TRUE) {
-    p1 <- p1 + ggplot2::geom_pointrange(aes(ymin = conf.low,
+    p1 <- p1 + ggplot2::geom_pointrange(ggplot2::aes(ymin = conf.low,
                                             ymax = conf.high),
                                         alpha = 0.2,size=0.25)}
   p1 <- p1 +
@@ -235,7 +235,7 @@ spec_curve.glm_mverse <- function(
 
   p2 <- data.info %>%
     ggplot2::ggplot() +
-    ggplot2::geom_point(aes(x = .universe, y = parameter_option,
+    ggplot2::geom_point(ggplot2::aes(x = .universe, y = parameter_option,
                             color = !!color), size = 2,shape = 124)
 
   if (universe_order == FALSE) {
@@ -247,14 +247,14 @@ spec_curve.glm_mverse <- function(
   p2 <- p2 + ggplot2::ylab("option included in the analysis specification") +
     ggplot2::facet_grid(parameter_name ~ ., space="free_y", scales="free_y")+
     ggplot2::theme(strip.placement = "outside",
-                   strip.background = element_rect(fill=NA,colour=NA),
-                   panel.background = element_rect(fill = "white", colour = NA),
-                   panel.grid = element_line(colour = "grey92"),
-                   panel.grid.minor = element_line(size = rel(0.5)),
-                   panel.spacing.x=unit(0.15,"cm"),
-                   strip.text.y = element_text(angle = 0, face="bold", size=8),
+                   strip.background = ggplot2::element_rect(fill=NA,colour=NA),
+                   panel.background = ggplot2::element_rect(fill = "white", colour = NA),
+                   panel.grid = ggplot2::element_line(colour = "grey92"),
+                   panel.grid.minor = ggplot2::element_line(size = ggplot2::rel(0.5)),
+                   panel.spacing.x=ggplot2::unit(0.15,"cm"),
+                   strip.text.y = ggplot2::element_text(angle = 0, face="bold", size=8),
                    legend.position = "none",
-                   panel.spacing = unit(0.25, "lines")) +
+                   panel.spacing = ggplot2::unit(0.25, "lines")) +
     ggplot2::scale_colour_brewer(palette = "Set1")
 
   cowplot::plot_grid(p1, p2, axis = "bltr",
