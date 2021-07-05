@@ -299,10 +299,17 @@ summary(mv) %>%
 ```
 
 
-We can also inspect the result graphically using `spec_curve` method. The method builds a specification curve analysis [^4] for the specified term.
+We can also inspect the result graphically using `spec_curve` method. The method builds a specification curve analysis [^4] for the specified term. By default, the universes are sorted by the estimate of interest specified by `var="femininity"`.
 
-```{r}
-# TODO: spec_curve
+```{r out.width="100%", dpi=144}
+spec_curve(mv, var = "femininity")
+```
+
+The method also allows sorting the universes by whether p-value < 0.05 or by branch options.
+
+```{r out.width="100%", dpi=144}
+spec_curve(mv, var = "femininity", branch_order = hurricane_outliers_branch)
+spec_curve(mv, var = "femininity", color_order = TRUE)
 ```
 
 ## References

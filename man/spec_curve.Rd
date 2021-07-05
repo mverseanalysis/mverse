@@ -4,8 +4,10 @@
 \alias{spec_curve}
 \alias{spec_curve.lm_mverse}
 \alias{spec_curve.glm_mverse}
-\title{Display a specification curve of fitting \code{lm} across the multiverse.}
+\title{Display a specification curve across the multiverse.}
 \usage{
+spec_curve(...)
+
 \method{spec_curve}{lm_mverse}(
   .lm_mverse,
   var = NULL,

@@ -219,11 +219,29 @@ summary(mv) %>%
 
 We can also inspect the result graphically using `spec_curve` method.
 The method builds a specification curve analysis \[5\] for the specified
-term.
+term. By default, the universes are sorted by the estimate of interest
+specified by `var="femininity"`.
 
 ``` r
-# TODO: spec_curve
+spec_curve(mv, var = "femininity")
 ```
+
+<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
+
+The method also allows sorting the universes by whether p-value \< 0.05
+or by branch options.
+
+``` r
+spec_curve(mv, var = "femininity", branch_order = hurricane_outliers_branch)
+```
+
+<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
+
+``` r
+spec_curve(mv, var = "femininity", color_order = TRUE)
+```
+
+<img src="man/figures/README-unnamed-chunk-11-2.png" width="100%" />
 
 ## References
 
