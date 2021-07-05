@@ -6,6 +6,8 @@
 \alias{spec_curve.glm_mverse}
 \title{Display a specification curve of fitting \code{lm} across the multiverse.}
 \usage{
+spec_curve(.mverse, var = NULL, ...)
+
 \method{spec_curve}{lm_mverse}(
   .lm_mverse,
   var = NULL,
@@ -31,9 +33,9 @@
 )
 }
 \arguments{
-\item{.lm_mverse}{a \code{lm_mverse} object.}
-
 \item{var}{name for the variable to show.}
+
+\item{.lm_mverse}{a \code{lm_mverse} object.}
 
 \item{conf.int}{When \code{TRUE} (default), the estimate output
 includes the confidence intervals.}

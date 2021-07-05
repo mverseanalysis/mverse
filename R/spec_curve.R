@@ -1,6 +1,6 @@
 #' @rdname spec_curve
 #' @export
-spec_curve <- function(...) {
+spec_curve <- function(.mverse, var = NULL, ...) {
   UseMethod("spec_curve")
 }
 #' Display a specification curve of fitting \code{lm} across the multiverse.
