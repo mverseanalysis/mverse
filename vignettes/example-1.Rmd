@@ -198,8 +198,8 @@ First, we will define the five options
 as separate variables.
 
 ```{r base_r}
-# remove rows with no rating
-soccer <- soccer[!is.na(soccer$rater1), ] 
+# remove rows with a missing rating
+soccer <- soccer[!(is.na(soccer$rater1) | is.na(soccer$rater2)), ] 
 
 skin_option_1 <- (                # mean
   soccer$rater1 + soccer$rater2) / 2 
