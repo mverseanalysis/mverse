@@ -1,14 +1,14 @@
-display_branch_rules <- function(mtable, object) {
+display_branch_opts <- function(mtable, object) {
   # extract all branches
   branches <- sapply(c(
     attr(object, 'manipulate_branches'),
     attr(object, "model_branches")
   ),
   function(vb) {
-    rules <- character(length(vb$rules))
-    for (i in 1:length(vb$rules))
-      rules[i] <- rlang::quo_name(vb$rules[[i]])
-    out <- list(rules)
+    opts <- character(length(vb$opts))
+    for (i in 1:length(vb$opts))
+      opts[i] <- rlang::quo_name(vb$opts[[i]])
+    out <- list(opts)
     names(out) <- vb$name
     out
   })
@@ -69,7 +69,7 @@ summary.mverse <- function(object, ...) {
     dplyr::mutate(universe = factor(.universe)) %>%
     dplyr::select(-tidyselect::starts_with(".")) %>%
     dplyr::select(universe, tidyselect::everything())
-  display_branch_rules(mtable, object)
+  display_branch_opts(mtable, object)
 }
 
 
@@ -192,7 +192,7 @@ summary.lm_mverse <- function(object,
     dplyr::mutate(universe = factor(.universe)) %>%
     dplyr::select(-tidyselect::starts_with(".")) %>%
     dplyr::select(universe, tidyselect::everything())
-  display_branch_rules(mtable, object)
+  display_branch_opts(mtable, object)
 }
 
 
@@ -322,5 +322,5 @@ summary.glm_mverse <- function(object,
     dplyr::mutate(universe = factor(.universe)) %>%
     dplyr::select(-tidyselect::starts_with(".")) %>%
     dplyr::select(universe, tidyselect::everything())
-  display_branch_rules(mtable, object)
+  display_branch_opts(mtable, object)
 }

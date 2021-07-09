@@ -31,7 +31,9 @@ Imports:
   tidyr,
   tibble,
   stringr,
-  stats 
+  stats,
+  igraph,
+  ggraph
 Suggests:
   tidyverse,
   broom,

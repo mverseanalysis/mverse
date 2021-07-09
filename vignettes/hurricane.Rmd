@@ -1,6 +1,7 @@
 ---
 title: "Case Study. Are female hurricanes deadlier than male hurricanes?"
 output: rmarkdown::html_vignette
+csl: american-statistical-association.csl
 vignette: >
   %\VignetteIndexEntry{Case Study. Are female hurricanes deadlier than male hurricanes?}
   %\VignetteEncoding{UTF-8}
