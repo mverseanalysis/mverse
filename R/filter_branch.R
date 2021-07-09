@@ -18,14 +18,14 @@
 #' @family {methods for working with a filter branch}
 #' @export
 filter_branch <- function(..., name = NULL) {
-  rules <- rlang::enquos(...)
-  if(!length(rules) > 0)
+  opts <- rlang::enquos(...)
+  if(!length(opts) > 0)
     stop('Error: Provide at least one rule.')
   if(!(is.character(name) | is.null(name)))
     stop('Error: "name" must be a character object.')
   structure(
     list(
-      rules = rules,
+      opts = opts,
       name = name
       ),
     class = c("filter_branch", "branch")
@@ -64,18 +64,18 @@ add_filter_branch.mverse <- function(.mverse, ...) {
   varnames <- sapply(
     rlang::enquos(...),
     rlang::quo_name)
-  branch_rules <- list(...)
+  branch_opts <- list(...)
   # name filter
-  branch_rules <- mapply(
+  branch_opts <- mapply(
     function(rl, nm) {
       if(is.null(rl$name))
         return(name(rl, nm))
       return(rl)
     },
-    branch_rules, varnames, SIMPLIFY = FALSE)
+    branch_opts, varnames, SIMPLIFY = FALSE)
   # enforce filter name
   e <- sapply(
-    branch_rules,
+    branch_opts,
     function(x) {
       if(grepl('^filter_branch(.+)$', x$name)) {
         stop(paste(
@@ -84,7 +84,7 @@ add_filter_branch.mverse <- function(.mverse, ...) {
   # add to list
   attr(.mverse, 'manipulate_branches') <- append(
     attr(.mverse, 'manipulate_branches'),
-    branch_rules)
+    branch_opts)
   # add to mverse object
   .mverse <- reset_parameters(.mverse)
   invisible(.mverse)

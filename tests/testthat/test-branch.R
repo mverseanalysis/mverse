@@ -11,9 +11,9 @@ test_that("Branches require at least one rule.", {
 
 test_that("*_branch() defines branches without 'name'.", {
   expect_equal(
-    rlang::quo_name(mutate_branch(x + y)$rules[[1]]), "x + y")
+    rlang::quo_name(mutate_branch(x + y)$opts[[1]]), "x + y")
   expect_equal(
-    rlang::quo_name(filter_branch(x > 0)$rules[[1]]), "x > 0")
+    rlang::quo_name(filter_branch(x > 0)$opts[[1]]), "x > 0")
 })
 
 test_that("*_branch() defines branches with names specified.", {
@@ -30,23 +30,23 @@ test_that("*_branch() checks a provided name is a character.", {
     'Error: "name" must be a character object.')
 })
 
-test_that("*_brach() defines branches with multiple rules.", {
+test_that("*_brach() defines branches with multiple options.", {
   mbranch <- mutate_branch(x + y, x - y, x * y)
   expect_equal(
-    rlang::quo_name(mbranch$rules[[1]]), "x + y")
+    rlang::quo_name(mbranch$opts[[1]]), "x + y")
   expect_equal(
-    rlang::quo_name(mbranch$rules[[2]]), "x - y")
+    rlang::quo_name(mbranch$opts[[2]]), "x - y")
   expect_equal(
-    rlang::quo_name(mbranch$rules[[3]]), "x * y")
-  expect_equal(length(mbranch$rules), 3)
+    rlang::quo_name(mbranch$opts[[3]]), "x * y")
+  expect_equal(length(mbranch$opts), 3)
   fbranch <- filter_branch(x > 0, x < 0, x == 0)
   expect_equal(
-    rlang::quo_name(fbranch$rules[[1]]), "x > 0")
+    rlang::quo_name(fbranch$opts[[1]]), "x > 0")
   expect_equal(
-    rlang::quo_name(fbranch$rules[[2]]), "x < 0")
+    rlang::quo_name(fbranch$opts[[2]]), "x < 0")
   expect_equal(
-    rlang::quo_name(fbranch$rules[[3]]), "x == 0")
-  expect_equal(length(fbranch$rules), 3)
+    rlang::quo_name(fbranch$opts[[3]]), "x == 0")
+  expect_equal(length(fbranch$opts), 3)
 
 })
 

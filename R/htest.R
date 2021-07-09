@@ -68,5 +68,5 @@ ttest_mverse <-
       dplyr::mutate(universe = factor(.universe)) %>%
       dplyr::select(-dplyr::starts_with(".")) %>%
       dplyr::select(universe, dplyr::everything())
-    display_branch_rules(mtable, .mverse)
+    display_branch_opts(mtable, .mverse)
   }
