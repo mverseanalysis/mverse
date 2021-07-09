@@ -1,6 +1,7 @@
 ---
 title: "Example 1. Combining two independent ratings."
 output: rmarkdown::html_vignette
+csl: american-statistical-association.csl
 vignette: >
   %\VignetteIndexEntry{Example 1. Combining two independent ratings.}
   %\VignetteEncoding{UTF-8}

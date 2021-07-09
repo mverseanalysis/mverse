@@ -32,4 +32,8 @@ model_distributions <- family_branch(
 mv <- create_multiverse(hurricane) \%>\%
   add_family_branch(model_distributions)
 }
+\seealso{
+Other {methods for working with a family branch}: 
+\code{\link{family_branch}()}
+}
 \concept{{methods for working with a family branch}}
