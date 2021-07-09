@@ -1,5 +1,91 @@
 ---
 output: github_document
+references:
+  - id: hurricane
+    title: "Female hurricanes are deadlier than male hurricanes"
+    type: article-journal
+    issued:
+      year: 2014
+      month: 6
+      day: 17
+    URL: https://doi.org/10.1073/pnas.1402786111
+    DOI: 10.1073/pnas.1402786111
+    journal: Proceeedings fo the National Academiy of Sciences of the United States of America
+    volume: 111
+    issue: 24
+    page: 8782-8787
+    author:
+    - given: Kiju
+      family: Jung
+    - given: Sharon
+      family: Shavitt
+    - given: Madhu
+      family: Viswanathan
+    - given: "Joseph M."
+      family: Hilbe
+  - id: multiverseR
+    title: "multiverse: Multiplexing Alternative Data Analyses in R Notebooks (Version 0.5.0)"
+    type: article-journal
+    URL: https://github.com/MUCollective/multiverse
+    issued:
+      year: 2021
+    journal: OSF Preprints
+    author:
+    - given: Abhraneel
+      family: Sarma
+    - given: Alex
+      family: Kale
+    - given: Michael
+      family: Moon
+    - given: Nathan
+      family: Taback
+    - given: Fanny
+      family: Chevalier
+    - given: Jessica
+      family: Hullman
+    - given: Matthew
+      family: Kay
+  - id: multiverse
+    title: "Increasing transparency through a multiverse analysis"
+    type: article-journal
+    issued:
+      year: 2016
+      month: 9
+      day: 29
+    URL: https://doi.org/10.1177/1745691616658637
+    DOI: 10.1177/1745691616658637
+    journal: Perspectives on Psychological Science
+    volume: 11
+    issue: 5
+    page: 702-712
+    author:
+    - given: Sara
+      family: Steegen
+    - given: Francis
+      family: Tuerlinckx
+    - given: Andrew
+      family: Gelman
+    - given: Wolf
+      family: Vanpaemel
+  - id: speccurve
+    title: "Specification curve analsysis"
+    type: article-journal
+    issued:
+      year: 2020
+      month: 7
+      day: 27
+    URL: https://doi.org/10.1038/s41562-020-0912-z 
+    DOI: 10.1038/s41562-020-0912-z 
+    journal: Nature Human Behaviour
+    volume: 4
+    page: 1208-1214
+    author:
+      - given: Uri
+        family: Simonsohn
+      - given: "Joseph P."
+        family: Simmons
+      - given: "Leif D."
+        family: Nelson
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -9,7 +95,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  echo = FALSE
 )
 ```
 
@@ -18,8 +105,8 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-_mverse_ is an extension to multiverse package [^1]
-which allows users create explorable multiverse analysis [^2]
+_mverse_ is an extension to multiverse package [@multiverseR]
+which allows users create explorable multiverse analysis [@multiverse]
 in R. This extension provides user friendly abstraction
 and a set of examples for researchers, educators,
 and students in statistics.
@@ -41,7 +128,7 @@ devtools::install_github("mverseanalysis/mverse")
 
 ## Example: Hurricane Names and Gender-based Expectations
 
-This is an example which demonstrating a full analysis using `mverse` using the `hurricane` data set included in the package. The data set comes from a study by Jung et al. [^3] and contains the following information about hurricanes that landed on the U.S. between 1950 and 2021:
+This is an example which demonstrating a full analysis using `mverse` using the `hurricane` dataset included in the package. The data set comes from a study by @hurricane and contains the following information about hurricanes that landed on the U.S. between 1950 and 2021:
 
 +   Femininity rating on hurricane names (1:very masculine; 11: very feminine)
 +   Total fatality counts
@@ -49,6 +136,8 @@ This is an example which demonstrating a full analysis using `mverse` using the 
 +   Maximum wind speed
 +   Minimum pressure
 +   Year
+
+Below are the first few lines of the dataset. See `?hurricane` for details on the dataset.
 
 ```{r example, message=FALSE}
 library(mverse)
@@ -59,33 +148,22 @@ hurricane <- hurricane %>%
   mutate(
     nameyear = paste(Name, Year, sep = ", ") # serves as a unique identifier
   ) %>%
-  rename(
-    name = Name, # name of the hurricane
-    deaths = alldeaths, # total fatality counts
-    femininity = MasFem, # femininity rating on hurricane names (1: very masculine; 11: very feminine)
-    year = Year, # year the hurricane landed on the U.S.
-    min_pressure = Minpressure_Updated_2014, # minimum pressure
-    max_wind_speed = HighestWindSpeed, # maximum wind speed
-    damage = NDAM, # total damage dollar amount normalized to 2013 USD
-  ) %>%
-  select(
-    name, nameyear, deaths, femininity, year,
-    min_pressure, max_wind_speed, damage
-  )
-head(hurricane)
+  select(Name, Year, alldeaths, MasFem, Minpressure_Updated_2014, HighestWindSpeed, NDAM,
+         Category, MinPressure_before, Elapsed.Yrs, Source, nameyear)
+head(hurricane %>% select(-nameyear))
 ```
 
-```{r echo=FALSE, out.width="100%", fig.asp=9/16, dpi=144}
+```{r fig.asp=9/16, dpi=144}
 topdeaths <- hurricane %>%
-  mutate(nameyear = factor(nameyear, levels = nameyear[order(deaths)])) %>%
-  arrange(-deaths) %>%
+  mutate(nameyear = factor(nameyear, levels = nameyear[order(alldeaths)])) %>%
+  arrange(-alldeaths) %>%
   slice(1:10) 
 topdamages <- hurricane %>%
-  mutate(nameyear = factor(nameyear, levels = nameyear[order(damage)])) %>%
-  arrange(-damage) %>%
+  mutate(nameyear = factor(nameyear, levels = nameyear[order(NDAM)])) %>%
+  arrange(-NDAM) %>%
   slice(1:10)
 p1 <- topdeaths %>%
-  ggplot(aes(x = nameyear, y = deaths, fill = femininity > 6)) +
+  ggplot(aes(x = nameyear, y = alldeaths, fill = MasFem > 6)) +
   theme_void() +
   geom_bar(stat = "identity", show.legend = FALSE) +
   labs(title = "10 deadliest Atlantic hurricanes",  
@@ -93,12 +171,12 @@ p1 <- topdeaths %>%
   scale_y_continuous(labels = scales::comma, name = "Fatalities", position = "right") +
   scale_fill_manual(values = c(8, 1)) +
   coord_flip() +
-  geom_text(aes(label = name), color = "white", size = 4, hjust = 1, nudge_y = -25,
-            data = topdeaths %>% filter(femininity > 6, deaths > 350)) +
-  geom_text(aes(label = name), color = "black", size = 4, hjust = 0, nudge_y = 25,
-            data = topdeaths %>% filter(femininity > 6, deaths <= 350)) +
-  geom_text(aes(label = name), color = 8, size = 4, hjust = 0, nudge_y = 25,
-            data = topdeaths %>% filter(femininity <= 6)) +
+  geom_text(aes(label = Name), color = "white", size = 4, hjust = 1, nudge_y = -25,
+            data = topdeaths %>% filter(MasFem > 6, alldeaths > 350)) +
+  geom_text(aes(label = Name), color = "black", size = 4, hjust = 0, nudge_y = 25,
+            data = topdeaths %>% filter(MasFem > 6, alldeaths <= 350)) +
+  geom_text(aes(label = Name), color = 8, size = 4, hjust = 0, nudge_y = 25,
+            data = topdeaths %>% filter(MasFem <= 6)) +
   theme(
     plot.title = element_text(size = 12),
     plot.subtitle = element_text(size = 12),
@@ -107,7 +185,7 @@ p1 <- topdeaths %>%
     plot.margin = margin(l= 10, r = 10)
   )
 p2 <- topdamages %>%
-  ggplot(aes(x = nameyear, y = damage, fill = femininity > 6)) +
+  ggplot(aes(x = nameyear, y = NDAM, fill = MasFem > 6)) +
   theme_void() +
   geom_bar(stat = "identity", show.legend = FALSE) +
   labs(title = "10 mosting damaging Atlantic hurricanes",
@@ -117,10 +195,10 @@ p2 <- topdamages %>%
                      name = expression(Damage^1)) +
   scale_fill_manual(values = c(8, 1)) +
   coord_flip() +
-  geom_text(aes(label = name), color = "white", size = 4, hjust = 1, nudge_y = -1000,
-            data = topdamages %>% filter(femininity > 6)) +
-  geom_text(aes(label = name), color = "black", size = 4, hjust = 1, nudge_y = -1000,
-            data = topdamages %>% filter(femininity <= 6)) +
+  geom_text(aes(label = Name), color = "white", size = 4, hjust = 1, nudge_y = -1000,
+            data = topdamages %>% filter(MasFem > 6)) +
+  geom_text(aes(label = Name), color = "black", size = 4, hjust = 1, nudge_y = -1000,
+            data = topdamages %>% filter(MasFem <= 6)) +
   theme(
     plot.title = element_text(size = 12),
     plot.subtitle = element_text(size = 12),
@@ -132,27 +210,19 @@ p2 <- topdamages %>%
 p1 + p2
 ```
 
-Inspecting the data reveals that 8 of the top 10 hurricanes that caused most fatalities had female names while only 6 of the top 10 hurricanes with the most financial damage had female names. Jung [^3] hypothesized that this gap was due to people underestimating the severity of a hurricane when it's named with a female name. Jung used the data to investigate whether hurricanes with _feminine_ names led to _more fatalities given equal strength_ because their names didn't motivate as much preparedness as hurricanes with _masculine_ names.
+Inspecting the data reveals that 8 of the top 10 hurricanes that caused most fatalities had female names while only 6 of the top 10 hurricanes with the most financial damage had female names. @hurricane hypothesized that this gap was due to people underestimating the severity of a hurricane when it's named with a female name. Jung used the data to investigate whether hurricanes with _feminine_ names led to _more fatalities given equal strength_ because their names didn't motivate as much preparedness as hurricanes with _masculine_ names.
 
-To demonstrate a multiverse analysis using `mverse`, we will consider a Poisson regression model that models the relationship between the femininity of a hurricane's name and the total fatalities it caused, while controlling for the strength of the hurricane. We will expand the multiverse based on the following two decision points:
+To illustrate a multiverse analysis using `mverse`, we will consider a Poisson regression model that models the relationship between the femininity of a hurricane's name and the total fatalities it caused, while controlling for the strength of the hurricane. We will expand the multiverse based on the following two decision points:
 
 1.  Are there any outliers that we should remove from analysis? If so, which ones should we exclude?
 2.  Which variable best captures the strength of a hurricane?
 
-
-### Initiate
-
-We first initiate the multivere analysis by creating a `mverse` object with the data set. Note that the library assumes a single data set.
-
-```{r}
-mv <- create_multiverse(hurricane)
-# mv <- mverse(hurricane) # alternative method; `mverse` is an alias of `create_multiverse`.
-```
+In `mverse`, such decision points are called _branches_ and the individual paths we can take at each branch are called _options_.
 
 
-### Filter Branch: Branches for Outliers
+### Branches for Outliers
 
-```{r echo=FALSE, out.width="100%", fig.asp=1, dpi=144}
+```{r eval=FALSE, fig.asp=1, dpi=144}
 p1 <- hurricane %>%
   ggplot(aes(x = deaths, fill = name %in% (hurricane %>% arrange(-deaths) %>% slice(1:2) %>% pull(name))))+
   theme_void() +
@@ -235,7 +305,6 @@ Upon inspecting the distributions of the fatalities, financial damage amounts, m
 
 +   Katrina, 2005 only;
 +   Katrina, 2005 and Audrey, 1957;
-+   Katrina, 2005, Audrey, 1957, and Andrew, 1992; or
 +   none.
 
 We can use `filter_branch` to declare the four options, or branches, of defining the outliers.
@@ -276,7 +345,7 @@ distribution <- family_branch(poisson)
 
 Once we have all branches defined, we can add them to the `mverse` object using `add_***_branch` methods and fit the model with `glm_mverse`.
 
-```{r}
+```{r eval=FALSE}
 mv <- mv %>%
   add_filter_branch(hurricane_outliers) %>%
   add_mutate_branch(hurricane_strength) %>%
@@ -290,7 +359,7 @@ mv <- mv %>%
 
 After completing the analysis, we can extract the results using `summary` method. The method returns a `tibble` with branching options, estimates, 95\% confidence intervals for all regression terms across the multiverse. Below, we focus on the main effect on _femininity_.
 
-```{r message=FALSE}
+```{r message=FALSE, eval=FALSE}
 summary(mv) %>%
   filter(term == "femininity") %>% # inspect the main effect on femininity
   select(hurricane_outliers_branch, hurricane_strength_branch, 
@@ -299,26 +368,17 @@ summary(mv) %>%
 ```
 
 
-We can also inspect the result graphically using `spec_curve` method. The method builds a specification curve analysis [^4] for the specified term. By default, the universes are sorted by the estimate of interest specified by `var="femininity"`.
+We can also inspect the result graphically using `spec_curve` method. The method builds a specification curve analysis [@speccurve] for the specified term. By default, the universes are sorted by the estimate of interest specified by `var="femininity"`.
 
-```{r out.width="100%", dpi=144}
+```{r eval=FALSE, dpi=144}
 spec_curve(mv, var = "femininity")
 ```
 
 The method also allows sorting the universes by whether p-value < 0.05 or by branch options.
 
-```{r out.width="100%", dpi=144}
+```{r eval=FALSE, dpi=144}
 spec_curve(mv, var = "femininity", branch_order = hurricane_outliers_branch)
 spec_curve(mv, var = "femininity", color_order = TRUE)
 ```
 
 ## References
-
-[^1]: Sarma, A. and Kay, M. _Multiverse: An R package for creating multiverse analysis._ 2020. https://mucollective.github.io/multiverse/
-
-[^2]: Steegen S, Tuerlinckx F, Gelman A, Vanpaemel W. _Increasing Transparency Through a Multiverse Analysis._ Perspect Psychol Sci. 2016;11(5):702‐712. doi:10.1177/1745691616658637 URL: https://pubmed.ncbi.nlm.nih.gov/27694465/
-
-[^3]: Jung, K., Shavitt, S., Viswanathan, M., and Hilbe, J.M. (2014) _Female hurricanes are deadlier than male hurricanes._  
-Proceedings of the National Academy of Sciences, 111(24), 8782-8787, https://doi.org/10.1073/pnas.1402786111
-
-[^4]: Simonsohn, U., Simmons, J.P, and Nelson, L.D. (2020) _Specification curve analysis._ Nature Human Behaviour, 4, 1208-1214, https://doi.org/10.1038/s41562-020-0912-z 
