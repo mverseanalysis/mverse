@@ -7,7 +7,7 @@
 \usage{
 ttest_mverse(
   .mverse,
-  x,
+  x = NULL,
   y = NULL,
   alternative = "two.sided",
   mu = 0,
@@ -19,7 +19,7 @@ ttest_mverse(
 \arguments{
 \item{.mverse}{a \code{mverse} object.}
 
-\item{x}{column name of data within mverse object}
+\item{x}{(optional) column name of data within mverse object}
 
 \item{y}{(optional) column name of data within mverse object}
 
@@ -39,7 +39,9 @@ A \code{ttest_mverse} object.
 }
 \description{
 \code{t.test_mverse} performs t-tests across the multiverse.
-You can specify
+If x or y is specified, then performs one and two sample t-tests
+on specified columns of the data. If both x and y are NULL, then
+performs t.test based on the formula branches.
 }
 \examples{
 \dontrun{

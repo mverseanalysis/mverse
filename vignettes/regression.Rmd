@@ -1,0 +1,163 @@
+---
+title: "Basic Regression with mverse"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Basic Regressions with mverse}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+references:
+  - id: multiverse
+    title: "multiverse: R package for creating explorable multiverse analysis"
+    type: entry
+    URL: https://mucollective.github.io/multiverse/
+    accessed:
+      year: 2020
+    author:
+    - given: Abhraneel
+      family: Sarma
+    - given: Matthew
+      family: Kay
+  - id: boston
+    title: Hedonic prices and the demand for clean air
+    author: 
+    - family: Harrison Jr
+      given: David
+    - family: Rubinfeld
+      given: Daniel L
+    container-title: Journal of environmental economics and management
+    type: article-journal
+    volume: 5
+    number: 1
+    pages: 81-102
+    issued:
+      year: 1978
+    publisher: Elsevier
+---
+
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE
+)
+Sys.setenv(LANG="en")
+```
+This vignette describes the workflow of linear regression modeling in the multiverse with the following functions:
+
+ * `formula_branch`, `add_formula_branch`: create branches for regression formulas and add them to a `mverse` object.
+ * `family_branch`, `add_family_branch`: create branches for different family functions and add them to a `mverse` object. 
+ * `lm_mverse`, `glm_mverse`: fit a simple linear model or a generalized linear model with the given formula branches and family branches.
+ * `summary.lm_mverse`, `summary.glm_mverse`: Provide a summary of the fitted models in different branches. 
+
+We will use the Boston housing dataset {@boston} as an example. This dataset has 506 observations on 14 variables. This dataset is extensively used in regression analyses and algorithm benchmarks. The objective is to predict the median value of a home (`medv`) with the feature variables.
+
+
+```{r load}
+library(MASS)
+library(mverse)
+knitr::kable(head(Boston)) # using kable for displaying data in html
+```
+
+## Simple Linear Regression with `mverse`
+
+In order to perform a linear regression in the multiverse, we create a formula branch with all defensive formulas, add it the `mverse` object, and execute `lm` on each universe by calling `lm_mverse`.
+```{r lm}
+# create a mverse object with the Boston dataset
+mv <- create_multiverse(Boston)
+
+# Assume we've done some exploratory analysis and find the defensive models
+# create a formula branch
+formulas <- formula_branch(
+  medv ~ log(lstat) + rm,
+  medv ~ log(lstat) * tax,
+  medv ~ crim + rm + tax + lstat
+)
+mv <- mv %>% 
+  add_formula_branch(formulas) %>% 
+  lm_mverse()
+```
+By default, `summary` will give the estimates of parameters for each model. You can also output other information by changing the `output` parameter.
+```{r summary_lm}
+# using kable for displaying data in html
+# output estimates by default, or by "estimates" or "e"
+knitr::kable(summary(mv))
+# output degree of freedom by "df" 
+knitr::kable(summary(mv, output="df"))
+# output f-statistic by "fstatistic" or "f"
+knitr::kable(summary(mv, output="f"))
+# output R-squared by `r.squared` or "r"
+knitr::kable(summary(mv, output="r"))
+```
+
+## Generalized Linear Regression with `mverse`
+For GLM, we use `family_branch` to create options for different error distributions and link functions. 
+
+```{r glm}
+# create a mverse object with the Boston dataset
+mv <- create_multiverse(Boston)
+
+# Assume we've done some exploratory analysis and find the defensive models
+# create a formula branch
+formulas <- formula_branch(
+  medv ~ log(lstat) + rm,
+  medv ~ crim + rm + tax + lstat
+)
+# create the family branch
+families <- family_branch(
+  gaussian(),
+  gaussian(link="log"),
+  Gamma()
+)
+mv <- mv %>% 
+  add_formula_branch(formulas) %>% 
+  add_family_branch(families) %>% 
+  glm_mverse()
+```
+Similarly, use `summary` to inspect the model results
+```{r summary_glm}
+# using kable for displaying data in html
+# output estimates by default, or by "estimates" or "e"
+knitr::kable(summary(mv))
+# output degree of freedom by "df" 
+knitr::kable(summary(mv, output="df"))
+# output deviance by "deviance" or "de"
+knitr::kable(summary(mv, output="de"))
+# output AIC/BIC by `aic` or "bic"
+knitr::kable(summary(mv, output="AIC"))
+```
+
+## Combine with `filter_branch` and `mutate_branch`
+We can also combine our models with `filter_branch` and `mutate_branch`
+
+```{r combine_glm}
+mv <- create_multiverse(Boston)
+lstat_transform <- mutate_branch(
+  lstat,
+  log(lstat)
+)
+
+exclude_chas <- filter_branch(
+  TRUE,
+  chas == 0
+)
+
+formulas <- formula_branch(
+  medv ~ lstat_transform + rm,
+  medv ~ crim + rm + tax + lstat_transform
+)
+
+families <- family_branch(
+  gaussian(),
+  gaussian(link="log")
+)
+
+mv <- mv %>% 
+  add_mutate_branch(lstat_transform) %>%
+  add_filter_branch(exclude_chas) %>%
+  add_formula_branch(formulas) %>%
+  add_family_branch(families) %>%
+  glm_mverse()
+
+knitr::kable(summary(mv, output="de"))
+```
+

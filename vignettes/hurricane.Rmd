@@ -67,7 +67,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-This case study is adapted from the `multiverse` package case study of the same analysis.
+ This case study is adapted from the `multiverse` package case study of the same analysis.
 
 ## Initiate a multiverse
 
