@@ -130,9 +130,9 @@ spec_curve.lm_mverse <- function(
           panel.grid = ggplot2::element_line(colour = "grey92"),
           panel.grid.minor = ggplot2::element_line(size = ggplot2::rel(0.5)),
           panel.spacing.x=ggplot2::unit(0.15,"cm"),
+          panel.spacing.y=ggplot2::unit(1.25, "lines"),
           strip.text.y = ggplot2::element_text(angle = 0, face="bold", size=8),
-          legend.position = "none",
-          panel.spacing = ggplot2::unit(0.25, "lines")) +
+          legend.position = "none") +
     ggplot2::scale_colour_brewer(palette = "Set1")
 
   cowplot::plot_grid(p1, p2, axis = "bltr",
@@ -266,9 +266,9 @@ spec_curve.glm_mverse <- function(
                    panel.grid = ggplot2::element_line(colour = "grey92"),
                    panel.grid.minor = ggplot2::element_line(size = ggplot2::rel(0.5)),
                    panel.spacing.x=ggplot2::unit(0.15,"cm"),
+                   panel.spacing.y=ggplot2::unit(1.25, "lines"),
                    strip.text.y = ggplot2::element_text(angle = 0, face="bold", size=8),
-                   legend.position = "none",
-                   panel.spacing = ggplot2::unit(0.25, "lines")) +
+                   legend.position = "none") +
     ggplot2::scale_colour_brewer(palette = "Set1")
 
   cowplot::plot_grid(p1, p2, axis = "bltr",
