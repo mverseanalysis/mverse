@@ -113,7 +113,11 @@ spec_curve.lm_mverse <- function(
                    color = !!color), size = 2,shape = 124)
 
   if (universe_order == FALSE) {
-    p2 <- p2 + ggplot2::xlab("universe counts")
+    p2 <- p2 + ggplot2::xlab("") +
+      ggplot2::theme(axis.ticks.x = ggplot2::element_blank(),
+                     axis.text.x = ggplot2::element_blank())
+    p1 <- p1 + ggplot2::theme(axis.ticks.x = ggplot2::element_blank(),
+                              axis.text.x = ggplot2::element_blank())
   } else {
     p2 <- p2 + ggplot2::xlab("universe #")
   }
@@ -245,7 +249,11 @@ spec_curve.glm_mverse <- function(
                             color = !!color), size = 2,shape = 124)
 
   if (universe_order == FALSE) {
-    p2 <- p2 + ggplot2::xlab("universe counts")
+    p2 <- p2 + ggplot2::xlab("") +
+      ggplot2::theme(axis.ticks.x = ggplot2::element_blank(),
+                     axis.text.x = ggplot2::element_blank())
+    p1 <- p1 + ggplot2::theme(axis.ticks.x = ggplot2::element_blank(),
+                              axis.text.x = ggplot2::element_blank())
   } else {
     p2 <- p2 + ggplot2::xlab("universe #")
   }
