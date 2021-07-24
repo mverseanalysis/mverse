@@ -33,9 +33,9 @@ spec_curve(...)
 )
 }
 \arguments{
-\item{.lm_mverse}{a \code{lm_mverse} object.}
-
 \item{var}{name for the variable to show.}
+
+\item{.lm_mverse}{a \code{lm_mverse} object.}
 
 \item{conf.int}{When \code{TRUE} (default), the estimate output
 includes the confidence intervals.}

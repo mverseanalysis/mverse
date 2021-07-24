@@ -1,3 +1,4 @@
+
 #' Display a specification curve across the multiverse.
 #' @rdname spec_curve
 #' @export
@@ -5,8 +6,6 @@ spec_curve <- function(...) {
   UseMethod("spec_curve")
 }
 
-#' Display a specification curve across the multiverse.
-#'
 #' \code{spec_curve.lm_mverse} returns the specification curve of \code{lm}
 #' regression results across the multiverse.
 #' Notice that the order of universes is not corresponding
