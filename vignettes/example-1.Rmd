@@ -1,6 +1,7 @@
 ---
 title: "Example 1. Combining two independent ratings."
 output: rmarkdown::html_vignette
+csl: american-statistical-association.csl
 vignette: >
   %\VignetteIndexEntry{Example 1. Combining two independent ratings.}
   %\VignetteEncoding{UTF-8}
@@ -159,13 +160,13 @@ The library comes preloaded with
 a dataset, `soccer`, from [@datasrc] 
 on card counts per each pair between 
 2,053 soccer players and 3,147 referees.
-Below are the first few lines of the dataset.
+Below are the first few lines of the dataset. 
+`knitr::kable` is used for a better display of the dataset.
 
-```{r load}
+```{r load, message=FALSE}
 library(mverse)
-knitr::kable(head(soccer)) # using kable for displaying data in html
+knitr::kable(head(soccer))
 ```
-
 
 The dataset was used to study whether
 racial bias played a role when referees
@@ -190,44 +191,46 @@ the following options:
 4.  the first rating only
 5.  the second rating only
 
+For the purpose of the example, we will only consider those with both ratings.
+
+```{r}
+soccer <- soccer[!is.na(soccer$rater1) & !is.na(soccer$rater2), ] 
+```
+
 ## 1. Without the `mverse` library.
 
 Let's first consider how you might 
 study the five options using base R.  
-First, we will define the five options
-as separate variables.
+First, we define the five options
+as separate variables in R.
 
 ```{r base_r}
-# remove rows with no rating
-soccer <- soccer[!is.na(soccer$rater1), ] 
-
-skin_option_1 <- (                # mean
+skin_option_1 <- (                
   soccer$rater1 + soccer$rater2) / 2 
-skin_option_2 <- ifelse(          # max
+skin_option_2 <- ifelse(          
   soccer$rater1 > soccer$rater2, 
   soccer$rater1, soccer$rater2)
-skin_option_3 <- ifelse(          # min
+skin_option_3 <- ifelse(          
   soccer$rater1 < soccer$rater2, 
   soccer$rater1, soccer$rater2)
-skin_option_4 <- soccer$rater1    # first
-skin_option_5 <- soccer$rater2    # second
+skin_option_4 <- soccer$rater1    
+skin_option_5 <- soccer$rater2    
 ```
 
-We can plot their histograms to study the distributions.
-We will use the `ggplot2` library for plotting.
+We can plot a histogram to study the distribution of the resulting skin tone value from the first option. We will use the `ggplot2` library for plotting.
 
-```{r hist_base, fig.caption="Histogram of skin tones variale based on the first definition.", fig.width=5, fig.height=4, warning=FALSE}
+```{r hist_base, fig.caption="Histogram of skin tones values based on the first option", fig.width=5, fig.height=4, warning=FALSE}
 library(ggplot2)
 ggplot(mapping=aes(x = skin_option_1)) +
   geom_histogram(breaks = seq(0,1,0.2),
                  colour = 'white') +
-  labs(title = 'Histogram of player skin tones.',
+  labs(title = 'Histogram of player skin tones (Option 1: Mean).',
        x = 'Skin Tone', y = 'Count')
 ```
 
 
-Now, for the remaining four variable definitions,
-we will have to repeat the step above. 
+Now, for the remaining four options,
+we will have to repeat the step above to examine the distributions.
 
 ### Exercise.
 
@@ -246,17 +249,16 @@ We first consider the first two options.
 1.  the mean numeric value
 2.  the darker rating of the two
 
-First, we will define a `mverse` object
-from the data set.
+First, we define a `mverse` object with the dataset. Note that `mverse` assumes a single dataset for analysis.
+
 
 ```{r create_mv}
 mv <- create_multiverse(soccer)
 ```
 
-In `mverse` package, an alternative variable definition
-is called a mutate branch - analogous to `mutate` method in `tidyverse`'s
-data manipulation grammar. You can create
-a mutate branch with the function `mutate_branch`.
+In `mverse` package, a _branch_ refers to a decision point in data analysis where you may consider more than one option. For example, a mutate branch - analogous to `mutate` method in `tidyverse`'s data manipulation grammar, lets you define a set of options for defining a new column in you dataset. 
+
+You can create a mutate branch with the function `mutate_branch`. The syntax for defining the options inside `mutate_branch` follows the `tidyverse`'s grammar as well. 
 
 ```{r mutate_branch}
 skin_tone <- mutate_branch(
@@ -265,61 +267,91 @@ skin_tone <- mutate_branch(
 )
 ```
 
-You can then add the mutate branch rules to the `mverse` object
-using `add_mutate_branch`. You can use the `tidyverse`'s
-`dplyr` grammar for defining the mutate rules.
+You can then add the newly defined mutate branch to the `mv` object using `add_mutate_branch`. 
 
 ```{r add_vb}
 mv <- mv %>%
-  add_mutate_branch(skin_tone) %>%
-  execute_multiverse()
+  add_mutate_branch(skin_tone)
 ```
 
-The object name `skin_tone` is the name of
-the new variable defined. Each alternative
-definition creates an alternative _universe_
-in the `mverse` object. `execute_multiverse`
-generates the new variable based
-on the branching rules provided by
-`add_mutate_branch`.
+Adding a branch to a `mverse` object multiplies the number of environments defined inside the object so that the environments capture all unique analysis paths. Without any branches, a `mverse` object has a single environment. We call these environments _universes_. For example, adding the `skin_tone` mutate branch to `mv` results in $1 \times 2 =2$  universes inside `mv`. In each universe, the analysis dataset now has a new column named `skin_tone` -  the name of the mutate branch object. 
 
-You can see the mutate branch added with `summary`
-method for the `mverse` object. 
+You can check that the mutate branch was added with `summary` method for the `mverse` object. The method prints a _multiverse table_ that lists all universes with branches as columns and corresponding options as values defined in the `mverse` object.
 
 ```{r check_multiverse}
 summary(mv)
 ```
 
+At this point, the values of the new column `skin_tone` are only populated in the first universe. To populate the values for all universes, we call `execute_multiverse`.
+
+```{r exec}
+execute_multiverse(mv)
+```
+
 ### Exercise.
 
-1.  Define and add the mutate branches for the remaining three options.
+1.  Revise the code above to add a mutate branch with all five options.
 2.  Print the multiverse table. How many _universes_ does your multiverse produce?
 
 ## 3. Comparing between Universes.
 
-In this section, we will now examine and compare the distributions of
-the mutate branches. You can extract the resulting value of branched
-variables using `extract` method. By default, it returns the branched
-variables across all universes with the universe index. Note that
-the universe index column is returned as a factor variable.
+In this section, we now examine and compare the distributions of
+`skin_tone` values between different options. 
+
+You can extract the values from the analysis dataset in each universe using `extract` method. By default, the method returns the columns created by a mutate branch across all universes.
 
 ```{r extract_multiverse}
-branched <- extract(mv) 
-dim(branched)
+branched <- extract(mv)
 ```
 
-It provides various options to select a subset of data only.
-`universe` and `nuni` are useful if you want to select 
-a subset of universes in the multiverse. `frow` provides
-the option to extract a fraction of data in each universe.
+`branched` is dataset with `skin_tone` values from the first universe...
+
+```{r head_skin_tone}
+head(branched)
+```
+
+...as well as the second universe.
+
+```{r tail_skin_tone}
+tail(branched)
+```
+
+The method provides various options to select a subset of data as well. These are useful when the multiverse is too large and examining the whole multiverse is inefficient.
+
+Setting `universe=2` extracts values from the second universe only. Checking the unique `universe` values in the returned dataset shows that the dataset indeed only consists of values from the second universe. 
+
+```{r ununi}
+branched_2 <- extract(mv, universe = 2)
+unique(branched_2$universe)
+```
+
+Setting `universe=c(1,2)` extracts values from both first and second universes.
+
+```{r ununi_1_2}
+branched_1_2 <- extract(mv, universe = c(1,2))
+unique(branched_1_2$universe)
+```
+
+`frow` provides the option to extract a random subset of the values in each universe. It takes a value between 0 and 1 that represent the fraction of values to extract from each universe. For example, setting `frow=0.05` returns approximately 5\% of values from each universe.
 
 ```{r extract_fraction}
 frac <- extract(mv, frow =  0.05)
-nrow(frac)/nrow(branched)
 ```
 
-Using the output tibble, you can construct plots to compare
-their distributions in different universes. For example,
+`frac` consists of values that are approximately 5\% of the first universe...
+
+```{r check_frac_1}
+sum(frac$universe == 1)/sum(branched$universe == 1)
+```
+
+...plus approximately 5\% of the second universe.
+
+```{r check_frac_2}
+sum(frac$universe == 2)/sum(branched$universe == 2)
+```
+
+Using the extracted data, you can construct plots to compare
+the distributions of `skin_tone` in different universes. For example,
 you can overlay density lines on a single plot.
 
 ```{r compare_universe, fig.caption="Density lines overlaid on a single plot.", fig.width=5, fig.height=4, warning=FALSE}
@@ -332,22 +364,24 @@ branched %>%
 ```
 
 Another option is the use `ggplot`'s `facet_grid` function 
-to generate multiple plots in a grid.
+to generate multiple plots in a grid. `facet_grid(. ~ universe)` generates
+individual plots for each universe.
 
 ```{r compare_universe_hist, fig.caption="Histograms on a facet grid.", fig.width=5, fig.height=4, warning=FALSE}
 branched %>%
   ggplot(mapping = aes(x = skin_tone, fill = universe)) +
-  geom_histogram(position = 'dodge', bins = 10) +
+  geom_histogram(position = 'dodge', bins = 21) +
   labs(title = 'Histogram of player skin tones.',
-       y = 'Count', x='Skin Tone') + # you can add axis labels and plot title with labs.
-  facet_grid(. ~ universe) # generate histograms for each universe.
+       y = 'Count', x='Skin Tone') + 
+  facet_grid(. ~ universe) 
 ```
 
 ### Exercise.
 
-1.  Use `geom_boxplot` to compare the distributions between 
+1.  In `extract` method, `nuni` sets the number of universes to extract from. The subset of the universes to extract from are randomly selected. Call `extract` method for the full multiverse with all 5 options using `nuni=3` multiple time. Check that there are 3 universes included in the extracted dataset each time. 
+2.  Use `geom_boxplot` to compare the distributions between 
 the five options.
-2.  Construct a grid of histograms for all the five options. 
+3.  Construct a grid of histograms for all the five options. 
 Use `universe ~ .` instead of `. ~ universe` in `facet_grid`. 
 
 ## Discussion.

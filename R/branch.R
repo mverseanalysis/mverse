@@ -24,7 +24,7 @@ parse.branch <- function(brnch) {
     mapply(
       function(i, x) paste0(
         "'", brnch$name, '_', i, "'~", rlang::quo_name(x)),
-      1:length(brnch$rules), brnch$rules),
+      1:length(brnch$opts), brnch$opts),
     collapse=',')
   # parse as an expression
   rlang::parse_expr(paste0(head_str, body_str, ')'))
@@ -39,7 +39,7 @@ parse.formula_branch <- function(brnch) {
     mapply(
       function(i, x) paste0(
         "'", brnch$name, '_', i, "'~ formula(", rlang::quo_name(x), ")"),
-      1:length(brnch$rules), brnch$rules),
+      1:length(brnch$opts), brnch$opts),
     collapse=',')
   # parse as an expression
   rlang::parse_expr(paste0(head_str, body_str, ')'))
@@ -47,6 +47,8 @@ parse.formula_branch <- function(brnch) {
 
 reset_parameters <- function(.mverse) {
   attr(.mverse, "multiverse")[['code']] <- NULL
+  attr(.mverse, "multiverse")[['parameter_set']] <- NULL
+  attr(.mverse, "multiverse")[['parameters']] <- list()
   multiverse::inside(.mverse, orig <- attr(.mverse, 'source'))
   multiverse::inside(.mverse, data <- orig)
   for (br in attr(.mverse, 'manipulate_branches')) {

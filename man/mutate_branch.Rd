@@ -18,10 +18,20 @@ a mutate_branch object.
 Create a new mutate branch.
 }
 \examples{
-\dontrun{
-x4 <- mutate_branch(x1 + x2, x1 + x3, sum(x1, x2, x3))
-}
-
+# Define mutate branches.
+hurricane_strength <- mutate_branch(
+  # damage vs. wind speed vs.pressure
+  NDAM,
+  HighestWindSpeed,
+  Minpressure_Updated_2014,
+  # Standardized versions
+  scale(NDAM),
+  scale(HighestWindSpeed),
+  -scale(Minpressure_Updated_2014),
+)
+# Create a mverse and add the branch.
+mv <- create_multiverse(hurricane) \%>\%
+  add_mutate_branch(hurricane_strength)
 }
 \seealso{
 Other {methods for working with a mutate branch}: 

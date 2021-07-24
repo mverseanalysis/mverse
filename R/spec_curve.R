@@ -1,10 +1,11 @@
+
+#' Display a specification curve across the multiverse.
 #' @rdname spec_curve
 #' @export
-spec_curve <- function(.mverse, var = NULL, ...) {
+spec_curve <- function(...) {
   UseMethod("spec_curve")
 }
-#' Display a specification curve of fitting \code{lm} across the multiverse.
-#'
+
 #' \code{spec_curve.lm_mverse} returns the specification curve of \code{lm}
 #' regression results across the multiverse.
 #' Notice that the order of universes is not corresponding
@@ -134,7 +135,7 @@ spec_curve.lm_mverse <- function(
                      align = "v", ncol = 1, rel_heights = c(1, 2))
 }
 
-#' Display a specification curve of fitting \code{glm} across the multiverse.
+#' Display a specification curve across the multiverse.
 #'
 #' \code{spec_curve.glm_mverse} returns the specification curve of \code{glm}
 #' regression results across the multiverse.

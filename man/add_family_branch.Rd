@@ -5,6 +5,8 @@
 \alias{add_family_branch.mverse}
 \title{Add family branches to a \code{mverse} object.}
 \usage{
+add_family_branch(.mverse, ...)
+
 \method{add_family_branch}{mverse}(.mverse, ...)
 }
 \arguments{
@@ -22,13 +24,16 @@ are used to specify a model family for the main analysis
 that takes a family argument.
 }
 \examples{
-\dontrun{
-mv <- create_multiverse(df)
-fam <- family_branch(
-  poisson, gaussian(link = "log")
+# Define a family branch.
+model_distributions <- family_branch(
+ gaussian, poisson(link = "log")
 )
-mv <- mv \%>\%
-  add_family_branch(fam)
+# Create a mverse and add the branch.
+mv <- create_multiverse(hurricane) \%>\%
+  add_family_branch(model_distributions)
 }
+\seealso{
+Other {methods for working with a family branch}: 
+\code{\link{family_branch}()}
 }
 \concept{{methods for working with a family branch}}

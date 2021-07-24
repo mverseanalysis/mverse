@@ -1,14 +1,14 @@
-display_branch_rules <- function(mtable, object) {
+display_branch_opts <- function(mtable, object) {
   # extract all branches
   branches <- sapply(c(
     attr(object, 'manipulate_branches'),
     attr(object, "model_branches")
   ),
   function(vb) {
-    rules <- character(length(vb$rules))
-    for (i in 1:length(vb$rules))
-      rules[i] <- rlang::quo_name(vb$rules[[i]])
-    out <- list(rules)
+    opts <- character(length(vb$opts))
+    for (i in 1:length(vb$opts))
+      opts[i] <- rlang::quo_name(vb$opts[[i]])
+    out <- list(opts)
     names(out) <- vb$name
     out
   })
@@ -17,7 +17,7 @@ display_branch_rules <- function(mtable, object) {
     brnch <- paste(nm, 'branch', sep = "_")
     mtable[[brnch]] <- mtable[[brnch]] %>%
       dplyr::recode(!!!stats::setNames(branches[[nm]], replace_this)) %>%
-      factor(levels = branches[[nm]])
+      factor()
   }
   mtable
 }
@@ -29,17 +29,47 @@ display_branch_rules <- function(mtable, object) {
 #' Each row corresponds to a universe and each column
 #' represents a branch.
 #'
+#' @examples
+#' # Define a mutate branch.
+#' hurricane_strength <- mutate_branch(
+#'   # damage vs. wind speed vs.pressure
+#'   NDAM,
+#'   HighestWindSpeed,
+#'   Minpressure_Updated_2014,
+#'   # Standardized versions
+#'   scale(NDAM),
+#'   scale(HighestWindSpeed),
+#'   -scale(Minpressure_Updated_2014),
+#' )
+#' # Create a mverse and add the branch.
+#' mv <- create_multiverse(hurricane) %>%
+#'   add_mutate_branch(hurricane_strength)
+#' # Display the multiverse table while
+#' # defining a multiverse provides a way
+#' # to inspect the universes created.
+#' summary(mv)
+#' # Define a filter branch.
+#' hurricane_outliers <- filter_branch(
+#'   ! Name %in% c("Katrina", "Audrey", "Andrew"),
+#'   ! Name %in% c("Katrina"),
+#'   ! Name %in% c("Katrina"),
+#'   TRUE # include all
+#' )
+#' # Add the additional branch and inspect.
+#' mv <- add_filter_branch(mv, hurricane_outliers)
+#' summary(mv)
 #' @param object a \code{mverse} object.
+#' @param ... Ignored.
 #' @return a multiverse table as a tibble.
 #' @name summary
 #' @family {summary method}
 #' @export
-summary.mverse <- function(object) {
+summary.mverse <- function(object, ...) {
   mtable <- multiverse::extract_variables(object) %>%
     dplyr::mutate(universe = factor(.universe)) %>%
     dplyr::select(-tidyselect::starts_with(".")) %>%
     dplyr::select(universe, tidyselect::everything())
-  display_branch_rules(mtable, object)
+  display_branch_opts(mtable, object)
 }
 
 
@@ -48,6 +78,42 @@ summary.mverse <- function(object) {
 #' \code{summary.lm_mverse} returns the \code{lm} regression
 #' results across the multiverse.
 #'
+#' @examples
+#' # Define mutate branches.
+#' hurricane_strength <- mutate_branch(
+#' # damage vs. wind speed vs.pressure
+#' NDAM,
+#' HighestWindSpeed,
+#' Minpressure_Updated_2014,
+#' # Standardized versions
+#' scale(NDAM),
+#' scale(HighestWindSpeed),
+#' -scale(Minpressure_Updated_2014),
+#' )
+#' y <- mutate_branch(
+#' alldeaths, log(alldeaths + 1)
+#' )
+#' # Define a filter branch.
+#' hurricane_outliers <- filter_branch(
+#' ! Name %in% c("Katrina", "Audrey", "Andrew"),
+#' ! Name %in% c("Katrina"),
+#' ! Name %in% c("Katrina"),
+#' TRUE # include all
+#' )
+#' # Define a formula branch.
+#' model_specifications <- formula_branch(
+#' y ~ femininity,
+#' y ~ femininity + hurricane_strength,
+#' y ~ femininity * hurricane_strength
+#' )
+#' # Create a mverse, add the branches, and fit lm models.
+#' mv <- create_multiverse(hurricane) %>%
+#' add_filter_branch(hurricane_outliers) %>%
+#' add_mutate_branch(hurricane_strength, y) %>%
+#' add_formula_branch(model_specifications) %>%
+#' lm_mverse()
+#' # Display the multiverse table with estimated coefficients.
+#' summary(mv)
 #' @param object a \code{lm_mverse} object.
 #' @param conf.int When \code{TRUE} (default), the estimate output
 #'   includes the confidence intervals.
@@ -56,6 +122,7 @@ summary.mverse <- function(object) {
 #' @param output The output of interest. The possible values are
 #'   "estimates" ("e"), "df", "fstatistic" ("f"), and "r.squared" ("r").
 #'   Default value is "estimates".
+#' @param ... Ignored.
 #' @return a multiverse table as a tibble
 #' @name summary
 #' @family {summary method}
@@ -63,7 +130,8 @@ summary.mverse <- function(object) {
 summary.lm_mverse <- function(object,
                               conf.int = TRUE,
                               conf.level = 0.95,
-                              output = "estimates") {
+                              output = "estimates",
+                              ...) {
   if (output %in% c("estimates", "e")) {
     multiverse::inside(object, {
       if (summary(model)$df[1] > 0)
@@ -124,7 +192,7 @@ summary.lm_mverse <- function(object,
     dplyr::mutate(universe = factor(.universe)) %>%
     dplyr::select(-tidyselect::starts_with(".")) %>%
     dplyr::select(universe, tidyselect::everything())
-  display_branch_rules(mtable, object)
+  display_branch_opts(mtable, object)
 }
 
 
@@ -133,6 +201,45 @@ summary.lm_mverse <- function(object,
 #' \code{summary.lm_mverse} returns the \code{glm} regression
 #' results across the multiverse.
 #'
+#' @examples
+#' # Define mutate branches.
+#' hurricane_strength <- mutate_branch(
+#' # damage vs. wind speed vs.pressure
+#' NDAM,
+#' HighestWindSpeed,
+#' Minpressure_Updated_2014,
+#' # Standardized versions
+#' scale(NDAM),
+#' scale(HighestWindSpeed),
+#' -scale(Minpressure_Updated_2014),
+#' )
+#' y <- mutate_branch(
+#' alldeaths, log(alldeaths + 1)
+#' )
+#' # Define a filter branch.
+#' hurricane_outliers <- filter_branch(
+#'   ! Name %in% c("Katrina", "Audrey", "Andrew"),
+#' ! Name %in% c("Katrina"),
+#' ! Name %in% c("Katrina"),
+#' TRUE # include all
+#' )
+#' # Define a formula branch.
+#' model_specifications <- formula_branch(
+#' y ~ femininity,
+#' y ~ femininity + hurricane_strength,
+#' y ~ femininity * hurricane_strength
+#' )
+#' # Define a family branch.
+#' model_distributions <- family_branch(gaussian, poisson)
+#' # Create a mverse, add the branches, and fit glm models.
+#' mv <- create_multiverse(hurricane) %>%
+#' add_filter_branch(hurricane_outliers) %>%
+#' add_mutate_branch(hurricane_strength, y) %>%
+#' add_formula_branch(model_specifications) %>%
+#' add_family_branch(model_distributions) %>%
+#' glm_mverse()
+#' # Display the multiverse table with estimated coefficients.
+#' summary(mv)
 #' @param object a \code{glm_mverse} object.
 #' @param conf.int When \code{TRUE} (default), the estimate output
 #'   includes the confidence intervals.
@@ -142,6 +249,7 @@ summary.lm_mverse <- function(object,
 #'   "estimates" ("e"), "df", "deviance" ("de"), and "aic" ("bic").
 #'   Alternatively, the first letters may be used. Default value
 #'   is "estimates".
+#' @param ... Ignored.
 #' @return a multiverse table as a tibble
 #' @name summary
 #' @family {summary method}
@@ -149,7 +257,8 @@ summary.lm_mverse <- function(object,
 summary.glm_mverse <- function(object,
                                conf.int = TRUE,
                                conf.level = 0.95,
-                               output = "estimates") {
+                               output = "estimates",
+                               ...) {
   if (output %in% c("estimates", "e")) {
     multiverse::inside(object, {
       if (summary(model)$df[1] > 0)
@@ -213,5 +322,5 @@ summary.glm_mverse <- function(object,
     dplyr::mutate(universe = factor(.universe)) %>%
     dplyr::select(-tidyselect::starts_with(".")) %>%
     dplyr::select(universe, tidyselect::everything())
-  display_branch_rules(mtable, object)
+  display_branch_opts(mtable, object)
 }

@@ -7,6 +7,10 @@ Authors@R: c(
   role = c("aut", "cre")),
   person("Haoda", "Li", email = "haoda.li@mail.utoronto.ca", 
   role = c("aut")),
+  person("Mingwei", "Xu", email = "yuka.xu@mail.utoronto.ca", 
+  role = c("aut")),
+  person("Gibbs", "Alison", email = "alison.gibbs@utoronto.ca",
+  role = c("aut")),
   person("Nathan", "Taback", email = "nathan.taback@utoronto.ca",
   role = "aut"),
   person("Fanny", "Chevalier", email = "fanny@cs.tornto.edu",
@@ -27,7 +31,9 @@ Imports:
   tidyr,
   tibble,
   stringr,
-  stats 
+  stats,
+  igraph,
+  ggraph
 Suggests:
   tidyverse,
   broom,
