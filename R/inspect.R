@@ -135,7 +135,10 @@ summary.lm_mverse <- function(object,
   if (output %in% c("estimates", "e")) {
     multiverse::inside(object, {
       if (summary(model)$df[1] > 0)
-        out <- broom::tidy(model, !!rlang::enexpr(conf.int), !!rlang::enexpr(conf.level))
+        out <-
+          broom::tidy(model,
+                      !!rlang::enexpr(conf.int),
+                      !!rlang::enexpr(conf.level))
       else {
         out <- data.frame(
           term = "(None)",
@@ -145,7 +148,8 @@ summary.lm_mverse <- function(object,
           p.value = NA
         )
         if (!!rlang::enexpr(conf.int))
-          out <- out %>% dplyr::mutate(conf.low = NA, conf.high = NA)
+          out <-
+            out %>% dplyr::mutate(conf.low = NA, conf.high = NA)
       }
     })
   } else if (output == "df") {
@@ -153,8 +157,8 @@ summary.lm_mverse <- function(object,
       if (summary(model)$df[1] > 0)
         out <- as.data.frame(t(summary(model)$df)) %>%
           dplyr::rename(p = V1,
-                 n.minus.p = V2,
-                 p.star = V3)
+                        n.minus.p = V2,
+                        p.star = V3)
       else
         out <- data.frame(p = NA,
                           n.minus.p = NA,
@@ -177,8 +181,8 @@ summary.lm_mverse <- function(object,
       if (summary(model)$df[1] > 1)
         out <- as.data.frame(t(summary(model)$fstatistic)) %>%
           dplyr::rename(fstatistic = value,
-                 numdf.f = numdf,
-                 dendf.f = dendf)
+                        numdf.f = numdf,
+                        dendf.f = dendf)
       else
         out <- data.frame(fstatistic = NA,
                           numdf.f = NA,
@@ -263,7 +267,9 @@ summary.glm_mverse <- function(object,
     multiverse::inside(object, {
       if (summary(model)$df[1] > 0)
         out <-
-          broom::tidy(model, !!rlang::enexpr(conf.int), !!rlang::enexpr(conf.level))
+          broom::tidy(model,
+                      !!rlang::enexpr(conf.int),
+                      !!rlang::enexpr(conf.level))
       else {
         out <- data.frame(
           term = "(None)",
@@ -273,7 +279,8 @@ summary.glm_mverse <- function(object,
           p.value = NA
         )
         if (!!rlang::enexpr(conf.int))
-          out <- out %>% dplyr::mutate(conf.low = NA, conf.high = NA)
+          out <-
+            out %>% dplyr::mutate(conf.low = NA, conf.high = NA)
       }
     })
   } else if (output == "df") {
@@ -284,7 +291,7 @@ summary.glm_mverse <- function(object,
             summary(model)$df.residual, summary(model)$df.null
           ))) %>%
           dplyr::rename(df.residual = V1,
-                 df.null = V2)
+                        df.null = V2)
       else
         out <- data.frame(df.residual = NA,
                           df.null = NA)
@@ -297,7 +304,7 @@ summary.glm_mverse <- function(object,
             summary(model)$deviance, summary(model)$null.deviance
           ))) %>%
           dplyr::rename(deviance = V1,
-                 null.deviance = V2)
+                        null.deviance = V2)
       else
         out <- data.frame(deviance = NA,
                           null.deviance = NA)
@@ -308,7 +315,7 @@ summary.glm_mverse <- function(object,
         out <-
           as.data.frame(t(c(AIC(model), BIC(model)))) %>%
           dplyr::rename(AIC = V1,
-                 BIC = V2)
+                        BIC = V2)
       else
         out <- data.frame(AIC = NA,
                           BIC = NA)
@@ -351,4 +358,127 @@ BIC.glm_mverse <- function(object) {
   df <- summary.glm_mverse(object, output = "aic")
   df$AIC <- NULL
   df
+}
+
+
+
+
+
+
+
+
+
+
+
+summary.coxph_mverse <- function(object,
+                                 conf.int = 0.95,
+                                 scale = 1,
+                                 output = "estimates",
+                                 ...) {
+  if (output %in% c("estimates", "e")) {
+    multiverse::inside(object, {
+      if (summary(model)$n > 0) {
+        if (!!rlang::enexpr(conf.int) == FALSE) {
+          out <-
+            as.data.frame(t(c(
+              summary(model, scale = !!rlang::enexpr(scale))$coefficients
+            ))) %>%
+            dplyr::rename(
+              estimate = V1,
+              std.err = V3,
+              statistic = V4,
+              p.value = V5,
+              "exp(coef)" = V2
+            )
+        } else {
+          out <-
+            as.data.frame(t(
+              c(
+                summary(model, scale = !!rlang::enexpr(scale))$coefficients[-2]
+                ,
+                summary(model, conf.int = !!rlang::enexpr(conf.int))$conf.int
+              ))) %>%
+            dplyr::rename(
+              estimate = V1,
+              std.err = V2,
+              statistic = V3,
+              p.value = V4,
+              "exp(coef)" = V5,
+              "exp(-conf)" = V6,
+              conf.low = V7,
+              conf.hight = V8
+            )
+        }
+      }
+
+      else {
+        out <- data.frame(
+          estimate = NA,
+          std.err = NA,
+          statistic = NA,
+          p.value = NA,
+          "exp(coef)" = NA
+        )
+        if (!!rlang::enexpr(conf.int))
+          out <-
+            out %>% dplyr::mutate(
+              "exp(-conf)" = NA,
+              conf.low = NA,
+              conf.hight = NA
+            )
+      }
+    })
+  } else if (output %in% c("c", "concordance")) {
+    multiverse::inside(object, {
+      if (summary(model)$n > 0)
+        out <-
+          as.data.frame(t(summary(model)$concordance)) %>%
+          dplyr::rename(statistic = C,
+                        std.err = "se(C)")
+      else
+        out <- data.frame(statistic = NA,
+                          std.err = NA)
+    })
+  } else if (tolower(output) %in% c("log", "logtest")) {
+    multiverse::inside(object, {
+      if (summary(model)$n > 0)
+        out <-
+          as.data.frame(t(summary(model)$logtest))
+      else
+        out <- data.frame(test = NA,
+                          df = NA,
+                          pvalue = NA)
+    })
+  } else if (tolower(output) %in% c("wald", "waldtest")) {
+    multiverse::inside(object, {
+      if (summary(model)$n > 0)
+        out <-
+          as.data.frame(t(summary(model)$waldtest))
+      else
+        out <- data.frame(test = NA,
+                          df = NA,
+                          pvalue = NA)
+    })
+  }
+  else if (tolower(output) %in% c("sc", "sctest")) {
+    multiverse::inside(object, {
+      if (summary(model)$n > 0)
+        out <-
+          as.data.frame(t(summary(model)$sctest))
+      else
+        out <- data.frame(test = NA,
+                          df = NA,
+                          pvalue = NA)
+    })
+  }
+  else {
+    stop("Invalid output argument.")
+  }
+  execute_multiverse(object)
+  mtable <- multiverse::extract_variables(object, out) %>%
+    tidyr::unnest(out) %>%
+    dplyr::mutate(universe = factor(.universe)) %>%
+    dplyr::select(-tidyselect::starts_with(".")) %>%
+    dplyr::select(universe, tidyselect::everything())
+  display_branch_rules(mtable, object)
 }

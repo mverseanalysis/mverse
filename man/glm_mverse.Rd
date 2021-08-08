@@ -4,7 +4,7 @@
 \alias{glm_mverse}
 \title{Fit \code{glm} across the multiverse.}
 \usage{
-glm_mverse(.mverse, family)
+glm_mverse(.mverse)
 }
 \arguments{
 \item{.mverse}{a \code{mverse} object.}
@@ -36,6 +36,7 @@ mv <- mv \%>\%
 }
 \seealso{
 Other {model fitting methods}: 
+\code{\link{coxph_mverse}()},
 \code{\link{lm_mverse}()}
 }
 \concept{{model fitting methods}}

@@ -58,7 +58,7 @@ lm_mverse <- function(.mverse, ...) {
 #' @name glm_mverse
 #' @family {model fitting methods}
 #' @export
-glm_mverse <- function(.mverse, family) {
+glm_mverse <- function(.mverse) {
   stopifnot(inherits(.mverse, "mverse"))
   # check whether there is a formula branch (should be only 1)
   if (!any(sapply(attr(.mverse, "model_branches"), inherits, "formula_branch")))
@@ -69,6 +69,39 @@ glm_mverse <- function(.mverse, family) {
   multiverse::inside(
     .mverse, model <- glm(formulae, data = data, family = family))
   attr(.mverse, "class") <- unique(c("glm_mverse", class(.mverse)))
+  execute_multiverse(.mverse)
+  invisible(.mverse)
+}
+
+
+#' Fit \code{coxph} across the multiverse.
+#'
+#' \code{coxph_mverse} fits \code{coxph} across the multiverse
+#' according to model specifications provided by \code{formula_branch}.
+#'
+#' @param .mverse a \code{mverse} object.
+#' @return A \code{mverse} object with \code{coxph} fitted.
+#' @name coxph_mverse
+#' @family {model fitting methods}
+#' @export
+coxph_mverse <- function(.mverse, ties=NULL) {
+  stopifnot(inherits(.mverse, "mverse"))
+  # check whether there is a formula branch (should be only 1)
+  if (!any(sapply(attr(.mverse, "model_branches"), inherits, "formula_branch")))
+    stop("Exactly one formula branch is required.")
+  if (sum(sapply(attr(.mverse, "model_branches"), inherits, "formula_branch")) > 1)
+    stop("Exactly one formula branch is required.")
+  # fix coxph
+  if (is.null(ties)) {
+    multiverse::inside(
+      .mverse, model <- coxph(formulae, data=data)
+    )
+  } else {
+    multiverse::inside(
+      .mverse, model <- coxph(formulae, data=data, ties=!!rlang::enexpr(ties))
+    )
+  }
+  attr(.mverse, "class") <- unique(c("coxph_mverse", class(.mverse)))
   execute_multiverse(.mverse)
   invisible(.mverse)
 }

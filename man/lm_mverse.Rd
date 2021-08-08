@@ -27,6 +27,7 @@ mv <- mv \%>\%
 }
 \seealso{
 Other {model fitting methods}: 
+\code{\link{coxph_mverse}()},
 \code{\link{glm_mverse}()}
 }
 \concept{{model fitting methods}}
