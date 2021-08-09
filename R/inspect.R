@@ -198,7 +198,7 @@ summary.lm_mverse <- function(object,
 
 #' Display a summary of fitting \code{glm} across the multiverse.
 #'
-#' \code{summary.lm_mverse} returns the \code{glm} regression
+#' \code{summary.glm_mverse} returns the \code{glm} regression
 #' results across the multiverse.
 #'
 #' @examples

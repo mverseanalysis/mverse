@@ -30,12 +30,14 @@ You can install the development version from
 devtools::install_github("mverseanalysis/mverse")
 ```
 
-## Example: Hurricane Names and Gender-based Expectations
+## Example: Did Gender-based Expectations Lead to More Deaths by *Female* Hurricanes?
 
-This is an example demonstrating a full analysis using `mverse` using
-the `hurricane` dataset included in the package. The data set comes from
-a study by Jung et al. (2014) and contains the following information
-about hurricanes that landed on the U.S. between 1950 and 2021:
+In this example, we examine whether naming hurricanes with female names
+lead to more deaths. A full multiverse analysis is illustrated with
+`mverse` using the `hurricane` dataset included in the package. The
+dataset comes from a study by Jung et al. (2014) and contains the
+following information about hurricanes that landed on the U.S. between
+1950 and 2021:
 
   - *MasFem*: Femininity rating on hurricane names (1:very masculine;
     11: very feminine)
@@ -68,11 +70,26 @@ head(hurricane)
 #> 6                      960        3                960          59    MWR
 ```
 
-Inspecting the data reveals that 8 of the top 10 hurricanes that caused
-most fatalities had female names while only 6 of the top 10 hurricanes
-with the most financial damage had female names.
+Figure <a href="#fig:top10">1</a> shows top 10 lists for the deadliest
+and the most damaging hurricanes in the data. The lists reveal that
+there are more female names in the deadliest list than in the most
+damaging list. It is also noticeable that some of the deadliest *female*
+hurricanes weren’t among the most damaging - e.g., Audrey, Camille, and
+Agnes.
 
-<img src="man/figures/README-top10-1.png" width="100%" />
+<div class="figure">
+
+<img src="man/figures/README-top10-1.png" alt="_While Katrina is both the deadliest and the most damaging hurricane, the top 10 lists are not consistent with more_female hurricanes among the deadliest than the most damaging._" width="100%" />
+
+<p class="caption">
+
+Figure 1: *While Katrina is both the deadliest and the most damaging
+hurricane, the top 10 lists are not consistent with more\_female
+hurricanes among the deadliest than the most damaging.*
+
+</p>
+
+</div>
 
 Jung et al. (2014) hypothesized that this gap was due to people
 underestimating the severity of a hurricane when it’s named with a
@@ -99,9 +116,21 @@ list the possible options for the above two branches below.
 
 In order to determine whether we examine the distributions of hurricane
 characteristics - fatality counts, financial damage amounts, maximum
-wind speed, and minimum pressure.
+wind speeds, and minimum pressures. The distributions are illustrated in
+Figure <a href="#fig:dotplots">2</a>.
 
-<img src="man/figures/README-dotplots-1.png" width="100%" />
+<div class="figure">
+
+<img src="man/figures/README-dotplots-1.png" alt="_The distributions of different measures of hurricane strengths suggest that some hurricanes had extraordinary strengths._" width="100%" />
+
+<p class="caption">
+
+Figure 2: *The distributions of different measures of hurricane
+strengths suggest that some hurricanes had extraordinary strengths.*
+
+</p>
+
+</div>
 
 Upon inspecting the distributions, we may choose to exclude
 
@@ -116,15 +145,27 @@ To control for the strength of a hurricane, we may use one of
   - Maximum wind speed; and
   - Minimum pressure
 
-from the data set.
+from the dataset.
 
 ### Multiverse Analysis in `mverse`
 
 We have 2 options for defining the outliers and 3 options for defining
 the hurricane strength. They lead to \(2\times 3=6\) unique analysis
-paths, or *universes*, in total as illustrated below.
+paths, or *universes*, in total as illustrated Figure
+<a href="#fig:tree">3</a>.
 
-<img src="man/figures/README-tree-1.png" width="100%" />
+<div class="figure">
+
+<img src="man/figures/README-tree-1.png" alt="_Having one branch with 2 options and another with 3 results in 2 x 3 = 6 universes in total._" width="100%" />
+
+<p class="caption">
+
+Figure 3: *Having one branch with 2 options and another with 3 results
+in 2 x 3 = 6 universes in total.*
+
+</p>
+
+</div>
 
 Below is a short demonstration on how we can perform the multiverse
 analysis using `mverse`. See `vignette("hurricane")` for a detailed case
@@ -163,19 +204,24 @@ mv <- mv %>%
   add_mutate_branch(hurricane_strength)
 ```
 
-To specify the Poisson regression model, we need the formula and the
-probability distribution. We can specify the formula using
-`formula_branch()` and the probability distribution using
-`family_branch()`. For simplicity, we only consider a single option for
-each in this example, but defining multiple options are also possible.
+`mverse` package provides a `glm_mverse()` method for multiplexing
+`stats::glm()` across `mverse` objects. To specify a Poisson model, we
+need to pass `formula` for specifying the model structure and `family`
+for specifying the model distribution to `stats::glm()`. To pass the
+specifications across the multiverse, we first define them as
+appropriate branches and add to the `mverse` object.
+
+Note that we only have a single option for the branches. While they do
+not result in any “branching”, they are defined with `formula_branch()`
+and `family_branch()` as the steps are required for `glm_mverse()`.
 
 ``` r
 model <- formula_branch(alldeaths ~ hurricane_strength * MasFem)
 distribution <- family_branch(poisson)
 ```
 
-Similar to the previous branches, we add them to the `mverse` object
-using `add_formula_branch()` and `add_family_branch()`.
+We then add them to the `mverse` object using `add_formula_branch()` and
+`add_family_branch()`.
 
 ``` r
 mv <- mv %>%
@@ -184,11 +230,9 @@ mv <- mv %>%
 ```
 
 Finally, we fit the generalized linear model by calling `glm_mverse()`.
-The method runs R’s `glm` method across the multiverse.
 
 ``` r
-mv <- mv %>%
-  glm_mverse() 
+mv <- mv %>% glm_mverse() 
 ```
 
 ### Examining Analysis Results
@@ -238,12 +282,22 @@ res %>%
 
 We can also inspect the result graphically using `spec_curve()`. The
 method builds a specification curve (Simonsohn et al. 2020) for a term
-in the regression model specified by `var`.
+in the regression model specified by `var`. The method also allows
+multiple ways of sorting the estimates. See `?spec_curve` for details.
+
+``` r
+spec_curve(mv, var = "MasFem")
+```
 
 <img src="man/figures/README-unnamed-chunk-14-1.png" width="100%" />
 
-The method also allows multiple ways of sorting the estimates. See
-`?spec_curve` for details.
+The specification curve shows that a Poisson model found a significant
+relationship between the femininity of a hurricane’s name and its
+fatality counts in 4 out of 6 universes. However, given that the 2
+universes with insignificant results both used a hurricane’s minimum
+pressure as the strength variable suggests that the result is not robust
+to the branch. See `vignette("hurricane")` for a full case study with
+more branches considered.
 
 ## References
 

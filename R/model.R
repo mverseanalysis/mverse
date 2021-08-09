@@ -56,15 +56,19 @@ lm_mverse <- function(.mverse, ...) {
 #' @param .mverse a \code{mverse} object.
 #' @return A \code{mverse} object with \code{glm} fitted.
 #' @name glm_mverse
-#' @family {model fitting methods}
 #' @export
-glm_mverse <- function(.mverse, family) {
+glm_mverse <- function(.mverse, ...) {
   stopifnot(inherits(.mverse, "mverse"))
   # check whether there is a formula branch (should be only 1)
   if (!any(sapply(attr(.mverse, "model_branches"), inherits, "formula_branch")))
     stop("Exactly one formula branch is required.")
   if (sum(sapply(attr(.mverse, "model_branches"), inherits, "formula_branch")) > 1)
     stop("Exactly one formula branch is required.")
+  # check whether there is a family branch (should be only 1)
+  if (!any(sapply(attr(.mverse, "model_branches"), inherits, "family_branch")))
+    stop("Exactly one family branch is required.")
+  if (sum(sapply(attr(.mverse, "model_branches"), inherits, "family_branch")) > 1)
+    stop("Exactly one family branch is required.")
   # fit glm
   multiverse::inside(
     .mverse, model <- glm(formulae, data = data, family = family))
