@@ -14,6 +14,7 @@
 #' @family {mverse methods}
 #' @export
 mverse <- function(data) {
+  stopifnot(is.data.frame(data))
   .mverse <- multiverse::multiverse()
   attr(.mverse, 'source') <- data
   attr(.mverse, 'manipulate_branches') <- list()
