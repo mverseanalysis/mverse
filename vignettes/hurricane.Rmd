@@ -1,6 +1,6 @@
 ---
 title: "Does naming a hurricane as a female cause more deaths?"
-output: 
+output:
   bookdown::html_document2:
     base_format: rmarkdown::html_vignette
     number_sections: false
@@ -86,8 +86,8 @@ references:
       year: 2020
       month: 7
       day: 27
-    URL: https://doi.org/10.1038/s41562-020-0912-z 
-    DOI: 10.1038/s41562-020-0912-z 
+    URL: https://doi.org/10.1038/s41562-020-0912-z
+    DOI: 10.1038/s41562-020-0912-z
     journal: Nature Human Behaviour
     volume: 4
     page: 1208-1214
@@ -124,7 +124,7 @@ library(kableExtra)
 knitr::opts_chunk$set(collapse = TRUE, echo = FALSE, message = FALSE)
 ```
 
-In this case study, we demonstrate a multiverse analysis using `mverse` to examine whether naming a hurricane with a female name lead to more deaths. The case study closely follows the set of alternative analyses proposed by @speccurve challenging a previous study by @hurricane. 
+In this case study, we demonstrate a multiverse analysis using `mverse` to examine whether naming a hurricane with a female name lead to more deaths. The case study closely follows the set of alternative analyses proposed by @speccurve challenging a previous study by @hurricane.
 
 ## Background
 
@@ -147,7 +147,7 @@ p1 <- topdeaths %>%
   ggplot(aes(x = nameyear, y = alldeaths, fill = MasFem > 6)) +
   theme_void() +
   geom_bar(stat = "identity", show.legend = FALSE) +
-  labs(title = "10 deadliest Atlantic hurricanes",  
+  labs(title = "10 deadliest Atlantic hurricanes",
        subtitle = "in the U.S between 1950 and 2012.") +
   scale_y_continuous(labels = scales::comma, name = "Fatalities", position = "right") +
   scale_fill_manual(values = c(8, 1)) +
@@ -211,7 +211,7 @@ head(hurricane)
 
 ## Multiverse Analysis
 
-Figure \@ref(fig:top10) also reveals that Hurricane Katrina caused both the most fatalities and the greatest amount of property damage. In particular, hurricane Katrina caused more fatalities (`r topdeaths %>% filter(Name == "Katrina") %>% pull(alldeaths) %>% format(big.mark = ",")`) than the following nine deadliest hurricanes combined (`r topdeaths %>% filter(Name != "Katrina") %>% summarise(s = sum(alldeaths)) %>% pull(s) %>% format(big.mark = ",")`). To assess whether Hurricane Katrina should be considered an outlier, we can investigate the distribution of the fatalities as shown in top left panel of Figure \@ref(fig:dotplots). Based on the plot, we may decide to remove Katrina or Audrey along with Katrina. 
+Figure \@ref(fig:top10) also reveals that Hurricane Katrina caused both the most fatalities and the greatest amount of property damage. In particular, hurricane Katrina caused more fatalities (`r topdeaths %>% filter(Name == "Katrina") %>% pull(alldeaths) %>% format(big.mark = ",")`) than the following nine deadliest hurricanes combined (`r topdeaths %>% filter(Name != "Katrina") %>% summarise(s = sum(alldeaths)) %>% pull(s) %>% format(big.mark = ",")`). To assess whether Hurricane Katrina should be considered an outlier, we can investigate the distribution of the fatalities as shown in top left panel of Figure \@ref(fig:dotplots). Based on the plot, we may decide to remove Katrina or Audrey along with Katrina.
 
 ```{r dotplots, fig.show='hold', fig.cap="The distributions of different measures of hurricane strengths suggest that some hurricanes had extraordinary strengths."}
 p1 <- hurricane2 %>%
@@ -231,12 +231,12 @@ p1 <- hurricane2 %>%
       axis.text.y = element_text(size = 8, hjust = 1),
       axis.title.y = element_text(size = 8, hjust = 1, angle = 90),
       plot.margin = unit(rep(16, 4), "points")
-  ) + 
+  ) +
   coord_flip()
 p2 <- hurricane2 %>%
   ggplot(aes(x = NDAM, fill = Name %in% (hurricane2 %>% arrange(-NDAM) %>% slice(1:2) %>% pull(Name)))) +
   theme_void() +
-  geom_dotplot(binwidth = 5000, color = "white", 
+  geom_dotplot(binwidth = 5000, color = "white",
                dotsize = 1, stackratio = 1,
                show.legend = FALSE) +
   geom_text(aes(label = nameyear, y = 0.06), hjust = 0,
@@ -297,7 +297,7 @@ In `mverse`, we call an analytical decision point such as the decision on outlie
 
 1. Exclude Katrina and Audrey;
 2. Exclude Katrina and Andrew;
-3. Exclude Katrina and Camille; 
+3. Exclude Katrina and Camille;
 4. Exclude Katrina only; and
 5. Exclude none.
 
@@ -311,7 +311,7 @@ distribution_tbl <- c("Poisson regression on deaths", "Linear regression on log(
 assess_tbl <- c("Interaction effect between femininity and strength", "Main effect of femininity with no interaction")
 
 branches_tbl <- data.frame(
-  Branches = factor(c(rep("Which hurricanes to analyse", 5), rep("Measuring hurricane name's femininity", 2), rep("Measuring hurricane strength", 4), rep("Regression model type", 2), rep("Assessing evidence of gender-bias", 2))), 
+  Branches = factor(c(rep("Which hurricanes to analyse", 5), rep("Measuring hurricane name's femininity", 2), rep("Measuring hurricane strength", 4), rep("Regression model type", 2), rep("Assessing evidence of gender-bias", 2))),
   Options = c(outliers_tbl, femininity_tbl, strength_tbl, distribution_tbl, assess_tbl)
 )
 kable(branches_tbl %>% select(Options), col.names = c(""),
@@ -329,7 +329,7 @@ mv <- mverse(hurricane)
 
 ## Define Branches
 
-We now use the `*_branch()` methods to define branches in `mverse`. To define the branch on which hurricanes to analyse, we can use `filter_branch()` method which multiplexes `dplyr::filter()` method. 
+We now use the `*_branch()` methods to define branches in `mverse`. To define the branch on which hurricanes to analyse, we can use `filter_branch()` method which multiplexes `dplyr::filter()` method.
 
 ```{r outlier_branch, echo=TRUE}
 outliers <- filter_branch(
@@ -355,7 +355,7 @@ The following code defines a branch for the hurricane strength column.
 strength <- mutate_branch(NDAM, HighestWindSpeed, Minpressure_Updated_2014, log(NDAM))
 ```
 
-To specify the regression model type and the model, we need to provide both `formula` and `family` for the generalized models used in the analysis. We can use `mutate_branch()` again to specify the two options for the response variable, and `formula_branch()` and `family_branch()` to specify options for the model structure and distribution. 
+To specify the regression model type and the model, we need to provide both `formula` and `family` for the generalized models used in the analysis. We can use `mutate_branch()` again to specify the two options for the response variable, and `formula_branch()` and `family_branch()` to specify options for the model structure and distribution.
 
 ```{r model_branch, echo=TRUE}
 y <- mutate_branch(alldeaths, log(alldeaths + 1))
@@ -368,7 +368,7 @@ distribution <- family_branch(poisson, gaussian)
 
 ## Add Branches
 
-After defining the branches, we need to add them to the `mverse` object (`mv`). We use appropriate `add_*_branch()` method for each type of branch as shown in the following code. 
+After defining the branches, we need to add them to the `mverse` object (`mv`). We use appropriate `add_*_branch()` method for each type of branch as shown in the following code.
 
 ```{r echo=TRUE}
 mv <- mv %>%
@@ -409,16 +409,16 @@ multiverse_tree(mv) + ggplot2::theme(legend.position = "left")
 
 ## Fit Models
 
-`mverse` package provides a `glm_mverse()` method for multiplexing `stats::glm()` across `mverse` objects. 
+`mverse` package provides a `glm_mverse()` method for multiplexing `stats::glm()` across `mverse` objects.
 
 ```{r echo=TRUE}
-mv <- glm_mverse(mv) 
+mv <- glm_mverse(mv)
 ```
 
 
 ### Examining Analysis Results
 
-After completing the analysis, we can extract the results using `summary()`. The method returns a table with branching options, estimates, 95\% confidence intervals for all regression terms across the multiverse. 
+After completing the analysis, we can extract the results using `summary()`. The method returns a table with branching options, estimates, 95\% confidence intervals for all regression terms across the multiverse.
 
 ```{r echo=TRUE}
 res <- summary(mv)
@@ -444,7 +444,6 @@ spec_curve(mv, var = "femininity", color_order = TRUE)
 spec_curve(mv, var = "femininity:strength", color_order = TRUE)
 ```
 
-In both specification curves, we can see that all universes using the log-linear model result in non-significant estimates. When the Poisson model is used, the coefficient estimates aren't always significant. 
+In both specification curves, we can see that all universes using the log-linear model result in non-significant estimates. When the Poisson model is used, the coefficient estimates aren't always significant.
 
 ## References
-

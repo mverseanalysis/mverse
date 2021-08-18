@@ -21,7 +21,7 @@
 \item{conf.int}{When \code{TRUE} (default), the estimate output
 includes the confidence intervals.}
 
-\item{conf.level}{The confidence level of the confindence interval
+\item{conf.level}{The confidence level of the confidence interval
 returned using \code{conf.int = TRUE}. Default value is 0.95.}
 
 \item{output}{The output of interest. The possible values are
@@ -31,8 +31,6 @@ is "estimates".}
 }
 \value{
 a multiverse table as a tibble.
-
-a multiverse table as a tibble
 
 a multiverse table as a tibble
 }
