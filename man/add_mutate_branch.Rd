@@ -19,7 +19,9 @@ The resulting \code{mverse} object.
 }
 \description{
 This method adds one or more mutate branches to
-an existing \code{mverse} object.
+an existing \code{mverse} object. Mutate branches
+are used to define options for adding a new
+column to the analysis dataset.
 }
 \examples{
 # Define mutate branches.

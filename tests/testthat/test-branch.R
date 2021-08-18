@@ -93,8 +93,8 @@ test_that("add_*_branch() adds a branch.", {
   mv %>%
     add_mutate_branch(mbranch) %>%
     add_filter_branch(fbranch)
-  expect_equal(attr(mv, "manipulate_branches")[[1]]$name, "m")
-  expect_equal(attr(mv, "manipulate_branches")[[2]]$name, "f")
+  expect_equal(attr(mv, "branches_list")[[1]]$name, "m")
+  expect_equal(attr(mv, "branches_list")[[2]]$name, "f")
 })
 
 test_that("add_*_branch() adds multiple branches in order.", {
@@ -109,7 +109,7 @@ test_that("add_*_branch() adds multiple branches in order.", {
     add_filter_branch(
       filter_branch(x > 0, x < 0, x == 0, name = "f1"),
       filter_branch(x > 0, x < 0, x == 0, name = "f2"))
-  nms <- sapply(attr(mv, "manipulate_branches"), function(x) x$name)
+  nms <- sapply(attr(mv, "branches_list"), function(x) x$name)
   expect_equal(nms, c("m1", "m2", "f1", "f2"))
 })
 

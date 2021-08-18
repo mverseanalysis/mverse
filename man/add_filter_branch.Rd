@@ -19,7 +19,9 @@ The resulting \code{mverse} object.
 }
 \description{
 This method adds one or more filter branches to
-an existing \code{mverse} object.
+an existing \code{mverse} object. Filter branches
+are used to define options for conditions
+for selecting subsets of data rows.
 }
 \examples{
 # Define a filter branch.

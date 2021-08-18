@@ -33,9 +33,9 @@ spec_curve(...)
 )
 }
 \arguments{
-\item{var}{name for the variable to show.}
-
 \item{.lm_mverse}{a \code{lm_mverse} object.}
+
+\item{var}{name for the variable to show.}
 
 \item{conf.int}{When \code{TRUE} (default), the estimate output
 includes the confidence intervals.}
@@ -63,11 +63,6 @@ a specification curve plot for the estimates
 a specification curve plot for the estimates
 }
 \description{
-\code{spec_curve.lm_mverse} returns the specification curve of \code{lm}
-regression results across the multiverse.
-Notice that the order of universes is not corresponding
-to the order in the summary table.
-
 \code{spec_curve.glm_mverse} returns the specification curve of \code{glm}
 regression results across the multiverse.
 Notice that the order of universes is not corresponding

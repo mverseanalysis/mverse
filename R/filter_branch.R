@@ -41,7 +41,9 @@ add_filter_branch <- function(.mverse, ...) {
 #' Add filter branches to a \code{mverse} object.
 #'
 #' This method adds one or more filter branches to
-#' an existing \code{mverse} object.
+#' an existing \code{mverse} object. Filter branches
+#' are used to define options for conditions
+#' for selecting subsets of data rows.
 #'
 #' @param .mverse a \code{mverse} object.
 #' @param ... \code{filter_branch} objects.
@@ -61,31 +63,9 @@ add_filter_branch <- function(.mverse, ...) {
 #' @family {methods for working with a filter branch}
 #' @export
 add_filter_branch.mverse <- function(.mverse, ...) {
-  varnames <- sapply(
-    rlang::enquos(...),
-    rlang::quo_name)
-  branch_opts <- list(...)
-  # name filter
-  branch_opts <- mapply(
-    function(rl, nm) {
-      if(is.null(rl$name))
-        return(name(rl, nm))
-      return(rl)
-    },
-    branch_opts, varnames, SIMPLIFY = FALSE)
-  # enforce filter name
-  e <- sapply(
-    branch_opts,
-    function(x) {
-      if(grepl('^filter_branch(.+)$', x$name)) {
-        stop(paste(
-          "Please specify a variable name for the branch rule:",
-          x$name))}})
-  # add to list
-  attr(.mverse, 'manipulate_branches') <- append(
-    attr(.mverse, 'manipulate_branches'),
-    branch_opts)
-  # add to mverse object
-  .mverse <- reset_parameters(.mverse)
+  nms <- sapply(rlang::enquos(...), rlang::quo_name)
+  brs <- list(...)
+  stopifnot(all(sapply(brs, inherits, "filter_branch")))
+  .mverse <- add_branch(.mverse, brs, nms)
   invisible(.mverse)
 }

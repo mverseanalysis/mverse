@@ -30,168 +30,97 @@ You can install the development version from
 devtools::install_github("mverseanalysis/mverse")
 ```
 
-## Example: Hurricane Names and Gender-based Expectations
+## Usage
 
-This is an example demonstrating a full analysis using `mverse` using
-the `hurricane` dataset included in the package. The data set comes from
-a study by Jung et al. (2014) and contains the following information
-about hurricanes that landed on the U.S. between 1950 and 2021:
+The following demonstration performs a multiverse analysis using
+`hurricane` dataset (Jung et al. 2014) included in the library. We first
+create 6 universes as described in Figure <a href="#fig:tree">1</a>. A
+filter *branch* with 2 *options* and a mutate *branch* with 3 *options*
+results in 6 *universes* in total. We then fit a Poisson regression
+model across the multiverse and inspect a coefficient estimate. See
+`vignette("hurricane")` for a detailed analysis as well as the
+terminologies used.
 
-  - *MasFem*: Femininity rating on hurricane names (1:very masculine;
-    11: very feminine)
-  - *alldeaths*: Total fatality counts
-  - *NDAM*: Total damage dollar amount normalized to 2013 USD
-  - *HighestWindSpeed*: Maximum wind speed
-  - *Minpressure\_Updated\_2014*: Minimum pressure
-  - *Year*: Year
-  - *Name*: Name
+<div class="figure">
 
-Below are the first few lines of the dataset. See `?hurricane` for
-details of the dataset.
+<img src="man/figures/README-tree-1.png" alt="Having one branch with 2 options and another with 3 results in 2 x 3 = 6 universes in total." width="100%" />
+
+<p class="caption">
+
+Figure 1: Having one branch with 2 options and another with 3 results in
+2 x 3 = 6 universes in total.
+
+</p>
+
+</div>
+
+### Initiate
+
+First, we start by loading the library and defining a `mverse` object
+with the dataset of interest.
 
 ``` r
 library(mverse)
-head(hurricane)
-#>       Name Year alldeaths  MasFem  NDAM HighestWindSpeed
-#> 1     Easy 1950         2 5.40625  2380              125
-#> 2     King 1950         4 1.59375  7220              134
-#> 3     Able 1952         3 2.96875   210              125
-#> 4  Barbara 1953         1 8.62500    78               75
-#> 5 Florence 1953         0 7.87500    21              115
-#> 6    Carol 1954        60 8.53125 24962              115
-#>   Minpressure_Updated_2014 Category MinPressure_before Elapsed.Yrs Source
-#> 1                      960        3                958          63    MWR
-#> 2                      955        4                955          63    MWR
-#> 3                      985        1                985          61    MWR
-#> 4                      987        1                987          60    MWR
-#> 5                      985        1                985          60    MWR
-#> 6                      960        3                960          59    MWR
-```
-
-Inspecting the data reveals that 8 of the top 10 hurricanes that caused
-most fatalities had female names while only 6 of the top 10 hurricanes
-with the most financial damage had female names.
-
-<img src="man/figures/README-top10-1.png" width="100%" />
-
-Jung et al. (2014) hypothesized that this gap was due to people
-underestimating the severity of a hurricane when it’s named with a
-female name. Jung used the data to investigate whether hurricanes with
-*feminine* names led to *more fatalities given equal strength* because
-their names didn’t motivate as much preparedness as hurricanes with
-*masculine* names.
-
-To illustrate a multiverse analysis using `mverse`, we consider a
-Poisson regression model that models the relationship between the
-femininity of a hurricane’s name and the total fatalities it caused,
-while controlling for the strength of the hurricane. We expand the
-multiverse based on the following two decision points:
-
-1.  Are there any outliers that we should remove from analysis? If so,
-    which ones should we exclude?
-2.  Which variable best captures the strength of a hurricane?
-
-In `mverse`, such decision points are called *branches* and the
-individual paths we can take at each branch are called *options*. We
-list the possible options for the above two branches below.
-
-### Options for Outliers
-
-In order to determine whether we examine the distributions of hurricane
-characteristics - fatality counts, financial damage amounts, maximum
-wind speed, and minimum pressure.
-
-<img src="man/figures/README-dotplots-1.png" width="100%" />
-
-Upon inspecting the distributions, we may choose to exclude
-
-  - Katrina, 2005 only; or
-  - Katrina, 2005 and Audrey, 1957.
-
-### Options for Choosing the Hurricane Strength Variable
-
-To control for the strength of a hurricane, we may use one of
-
-  - Total damage dollar amount normalized to 2013 USD;
-  - Maximum wind speed; and
-  - Minimum pressure
-
-from the data set.
-
-### Multiverse Analysis in `mverse`
-
-We have 2 options for defining the outliers and 3 options for defining
-the hurricane strength. They lead to \(2\times 3=6\) unique analysis
-paths, or *universes*, in total as illustrated below.
-
-<img src="man/figures/README-tree-1.png" width="100%" />
-
-Below is a short demonstration on how we can perform the multiverse
-analysis using `mverse`. See `vignette("hurricane")` for a detailed case
-study using the same data.
-
-First, we start by defining a `mverse` object with the dataset used for
-the analysis.
-
-``` r
 mv <- mverse(hurricane)
 ```
 
-We then use the `*_branch()` methods to define branches. For defining
-the outlier branch, we can use `filter_branch()`.
+### Define Branches
+
+We use the `*_branch()` methods to define branches. `filter_branch()`
+defines filtering operations using `dplyr::filter()` with different
+options for the filter.
 
 ``` r
-hurricane_outliers <- filter_branch(
-  ! nameyear %in% c("Katrina, 2005"),
-  ! nameyear %in% c("Katrina, 2005", "Audrey, 1957")
+outliers <- filter_branch(
+  ! Name %in% c("Katrina"),
+  ! Name %in% c("Katrina", "Audrey")
 )
 ```
 
-For specifying the hurricane strength variable, we can use
-`mutate_branch()`.
+`mutate_branch()` multiplexes `dplyr::mutate()` to add a new column in
+the dataset.
 
 ``` r
-hurricane_strength <- mutate_branch(NDAM, HighestWindSpeed, Minpressure_Updated_2014)
+strength <- mutate_branch(
+  NDAM, HighestWindSpeed, Minpressure_Updated_2014)
 ```
 
-We then add the branches to the `mverse` object using
-`add_filter_branch()` and `add_mutate_branch()`.
+In order to fit a Poisson regression, we need to specify the model using
+R’s formula syntax and the underlying distribution using `family`. In
+`mverse`, we provide the specifications using `formula_branch()` and
+`family_branch()`. In this demonstration, we only define a single option
+for both formula and family but it is possible to provide multiple
+options for them as well.
 
 ``` r
-mv <- mv %>%
-  add_filter_branch(hurricane_outliers) %>%
-  add_mutate_branch(hurricane_strength)
-```
-
-To specify the Poisson regression model, we need the formula and the
-probability distribution. We can specify the formula using
-`formula_branch()` and the probability distribution using
-`family_branch()`. For simplicity, we only consider a single option for
-each in this example, but defining multiple options are also possible.
-
-``` r
-model <- formula_branch(alldeaths ~ hurricane_strength * MasFem)
+model <- formula_branch(alldeaths ~ strength * MasFem)
 distribution <- family_branch(poisson)
 ```
 
-Similar to the previous branches, we add them to the `mverse` object
-using `add_formula_branch()` and `add_family_branch()`.
+### Add Branches
+
+After defining the branches, we can add the branch objects to the
+`mverse` object using `add_*_branch()` methods.
 
 ``` r
 mv <- mv %>%
+  add_filter_branch(outliers) %>%
+  add_mutate_branch(strength) %>%
   add_formula_branch(model) %>%
   add_family_branch(distribution)
 ```
 
-Finally, we fit the generalized linear model by calling `glm_mverse()`.
-The method runs R’s `glm` method across the multiverse.
+### Fit Model
+
+`glm_mverse()` multiplexes `stats::glm()` function and fits a GLM in
+each universe according to the specifications provided by
+`add_fomula_branch()` and `add_family_branch()`.
 
 ``` r
-mv <- mv %>%
-  glm_mverse() 
+mv <- mv %>% glm_mverse()
 ```
 
-### Examining Analysis Results
+### Extract Results
 
 After completing the analysis, we can extract the results using
 `summary()`. The method returns a table with branching options,
@@ -200,50 +129,57 @@ multiverse.
 
 ``` r
 res <- summary(mv)
-head(res)
-#> # A tibble: 6 x 12
-#>   universe hurricane_outli… hurricane_stren… model_branch distribution_br… term 
-#>   <fct>    <fct>            <fct>            <fct>        <fct>            <chr>
-#> 1 1        "!nameyear %in%… NDAM             alldeaths ~… poisson          (Int…
-#> 2 1        "!nameyear %in%… NDAM             alldeaths ~… poisson          hurr…
-#> 3 1        "!nameyear %in%… NDAM             alldeaths ~… poisson          MasF…
-#> 4 1        "!nameyear %in%… NDAM             alldeaths ~… poisson          hurr…
-#> 5 2        "!nameyear %in%… HighestWindSpeed alldeaths ~… poisson          (Int…
-#> 6 2        "!nameyear %in%… HighestWindSpeed alldeaths ~… poisson          hurr…
-#> # … with 6 more variables: estimate <dbl>, std.error <dbl>, statistic <dbl>,
-#> #   p.value <dbl>, conf.low <dbl>, conf.high <dbl>
+res
+#> # A tibble: 24 x 12
+#>    universe outliers_branch  strength_branch model_branch distribution_br… term 
+#>    <fct>    <fct>            <fct>           <fct>        <fct>            <chr>
+#>  1 1        "!Name %in% c(\… NDAM            alldeaths ~… poisson          (Int…
+#>  2 1        "!Name %in% c(\… NDAM            alldeaths ~… poisson          stre…
+#>  3 1        "!Name %in% c(\… NDAM            alldeaths ~… poisson          MasF…
+#>  4 1        "!Name %in% c(\… NDAM            alldeaths ~… poisson          stre…
+#>  5 2        "!Name %in% c(\… HighestWindSpe… alldeaths ~… poisson          (Int…
+#>  6 2        "!Name %in% c(\… HighestWindSpe… alldeaths ~… poisson          stre…
+#>  7 2        "!Name %in% c(\… HighestWindSpe… alldeaths ~… poisson          MasF…
+#>  8 2        "!Name %in% c(\… HighestWindSpe… alldeaths ~… poisson          stre…
+#>  9 3        "!Name %in% c(\… Minpressure_Up… alldeaths ~… poisson          (Int…
+#> 10 3        "!Name %in% c(\… Minpressure_Up… alldeaths ~… poisson          stre…
+#> # … with 14 more rows, and 6 more variables: estimate <dbl>, std.error <dbl>,
+#> #   statistic <dbl>, p.value <dbl>, conf.low <dbl>, conf.high <dbl>
 ```
 
-As the resulting data is in `tibble` format, we can use regular
-`tidyverse` grammar to manipulate the data. For example, we can focus on
-the estimates on the main effects of femininity across the multiverse.
-In the code below, we specifically focus on the estimate and the
+The resulting data is a `tibble` object and we can use regular
+`tidyverse` grammar to manipulate the data. In the code below, we
+specifically focus on the estimated coefficient for `MasFem` and its
 confidence intervals.
 
 ``` r
 library(tidyverse)
 res %>%
   filter(term == "MasFem") %>%
-  select(hurricane_outliers_branch, hurricane_strength_branch, estimate, conf.low, conf.high)
-#> # A tibble: 6 x 5
-#>   hurricane_outliers_branch      hurricane_strength… estimate conf.low conf.high
-#>   <fct>                          <fct>                  <dbl>    <dbl>     <dbl>
-#> 1 "!nameyear %in% c(\"Katrina, … NDAM                 0.134     0.112     0.157 
-#> 2 "!nameyear %in% c(\"Katrina, … HighestWindSpeed     0.254     0.177     0.332 
-#> 3 "!nameyear %in% c(\"Katrina, … Minpressure_Update…  0.0575   -0.743     0.854 
-#> 4 "!nameyear %in% c(\"Katrina, … NDAM                 0.0600    0.0366    0.0839
-#> 5 "!nameyear %in% c(\"Katrina, … HighestWindSpeed     0.151     0.0717    0.231 
-#> 6 "!nameyear %in% c(\"Katrina, … Minpressure_Update… -0.00504  -0.825     0.811
+  select(outliers_branch, strength_branch, term, estimate, conf.low, conf.high)
+#> # A tibble: 6 x 6
+#>   outliers_branch           strength_branch    term  estimate conf.low conf.high
+#>   <fct>                     <fct>              <chr>    <dbl>    <dbl>     <dbl>
+#> 1 "!Name %in% c(\"Katrina\… NDAM               MasF…  0.134     0.112     0.157 
+#> 2 "!Name %in% c(\"Katrina\… HighestWindSpeed   MasF…  0.254     0.177     0.332 
+#> 3 "!Name %in% c(\"Katrina\… Minpressure_Updat… MasF…  0.0575   -0.743     0.854 
+#> 4 "!Name %in% c(\"Katrina\… NDAM               MasF…  0.0600    0.0366    0.0839
+#> 5 "!Name %in% c(\"Katrina\… HighestWindSpeed   MasF…  0.151     0.0717    0.231 
+#> 6 "!Name %in% c(\"Katrina\… Minpressure_Updat… MasF… -0.00504  -0.825     0.811
 ```
+
+### Plot a Specification Curve
 
 We can also inspect the result graphically using `spec_curve()`. The
 method builds a specification curve (Simonsohn et al. 2020) for a term
-in the regression model specified by `var`.
+in the regression model specified by `var`. The method also allows
+multiple ways of sorting the estimates. See `?spec_curve` for details.
 
-<img src="man/figures/README-unnamed-chunk-14-1.png" width="100%" />
+``` r
+spec_curve(mv, var = "MasFem")
+```
 
-The method also allows multiple ways of sorting the estimates. See
-`?spec_curve` for details.
+<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
 
 ## References
 

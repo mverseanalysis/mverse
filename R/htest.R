@@ -54,7 +54,7 @@ ttest_mverse <-
               htest$estimate
             )
           )) %>%
-          rename(
+          dplyr::rename(
             statistic = t,
             p.value = V2,
             conf.lower = V3,
