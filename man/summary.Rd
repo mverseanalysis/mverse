@@ -33,6 +33,8 @@ is "estimates".}
 a multiverse table as a tibble.
 
 a multiverse table as a tibble
+
+a multiverse table as a tibble
 }
 \description{
 This method returns the multiverse table
@@ -148,5 +150,15 @@ add_family_branch(model_distributions) \%>\%
 glm_mverse()
 # Display the multiverse table with estimated coefficients.
 summary(mv)
+}
+\seealso{
+Other {summary method}: 
+\code{\link{AIC}()}
+
+Other {summary method}: 
+\code{\link{AIC}()}
+
+Other {summary method}: 
+\code{\link{AIC}()}
 }
 \concept{{summary method}}
