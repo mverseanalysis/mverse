@@ -1,17 +1,17 @@
-display_branch_opts <- function(mtable, object) {
+display_branch_opts <- function(mtable, .mverse) {
   # extract all branches
   branches <- sapply(c(
-    attr(object, 'manipulate_branches'),
-    attr(object, "model_branches")
-  ),
-  function(vb) {
-    opts <- character(length(vb$opts))
-    for (i in 1:length(vb$opts))
-      opts[i] <- rlang::quo_name(vb$opts[[i]])
-    out <- list(opts)
-    names(out) <- vb$name
-    out
-  })
+    attr(.mverse, 'branches_list'),
+    attr(.mverse, 'branches_conditioned_list')
+    ),
+    function(vb) {
+      opts <- character(length(vb$opts))
+      for (i in 1:length(vb$opts))
+        opts[i] <- rlang::quo_name(vb$opts[[i]])
+      out <- list(opts)
+      names(out) <- vb$name
+      out
+    })
   for (nm in names(branches)) {
     replace_this <- paste(nm, 1:length(branches[[nm]]), sep = '_')
     brnch <- paste(nm, 'branch', sep = "_")
@@ -323,4 +323,59 @@ summary.glm_mverse <- function(object,
     dplyr::select(-tidyselect::starts_with(".")) %>%
     dplyr::select(universe, tidyselect::everything())
   display_branch_opts(mtable, object)
+}
+
+#' Plot a multiverse tree diagram.
+#'
+#' @param .mverse A \code{mverse} object.
+#' @param label A logical. Display options as labels when TRUE.
+#' @param branches A character vector. Display a subset of branches
+#'   when specified. Display all when NULL.
+#' @import igraph ggraph ggplot2
+#' @name multiverse_tree
+#' @export
+multiverse_tree <- function(.mverse, label = FALSE, branches = NULL) {
+  # sort: conditioned -> conditioned on -> others
+  brs <- unique(sapply(c(
+    attr(.mverse, "branches_conditioned_list"),
+    sapply(attr(.mverse, "branches_conditioned_list"), function(t) t$conds_on),
+    attr(.mverse, "branches_list")),
+    function(s) name(s)))
+  if (!is.null(branches))
+    brs <- brs[sapply(brs, function(x) x %in% branches)]
+  brs_name <- paste0(brs, "_branch")
+  combs <- summary(.mverse)[brs_name] %>%
+    dplyr::distinct_all() %>%
+    dplyr::mutate(across(.fns = as.character))
+  edges_list <- list(data.frame(from = "Data", to = unique(combs[[1]]), branch = brs[1]))
+  v_labels <- c("Data")
+  for (i in 1:length(brs_name)) {
+    pairs <- combs[, 1:i] %>%
+      dplyr::distinct_all() %>%
+      tidyr::unite("to", 1:i, remove = FALSE) %>%
+      tidyr::unite("from", 2:i, remove = FALSE) %>%
+      dplyr::mutate(branch = brs[i])
+    if (i > 1)
+      edges_list[[length(edges_list) + 1]] <- pairs %>%
+        dplyr::select(from, to, branch) %>%
+        dplyr::distinct_all()
+    v_labels <- c(v_labels, pairs %>%dplyr::pull(i + 2))
+  }
+  edges <- do.call(rbind, edges_list)
+  g <- graph_from_data_frame(edges)
+  plt <- ggraph(g, layout = 'dendrogram', circular = FALSE) +
+    geom_edge_link(aes(color = branch)) +
+    theme_void() +
+    coord_flip() +
+    scale_y_reverse(expand = c(0.1, 0.1)) +
+    scale_x_continuous(expand = c(0.1, 0.1)) +
+    scale_edge_color_manual(
+      name = NULL, values = hcl(h = seq(0, 360, length.out = length(brs) + 1), l = 50),
+      limits = brs
+    ) +
+    theme(legend.position = "top")
+  if (label) plt <- plt +
+    geom_node_label(aes(label = v_labels), hjust = 1, vjust = 1.2, label.size = 0,
+                    size = max(2, min(4, 300/length(v_labels))))
+  plt + geom_node_point(size = min(1, 100/length(v_labels)))
 }

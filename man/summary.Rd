@@ -45,7 +45,7 @@ represents a branch.
 \code{summary.lm_mverse} returns the \code{lm} regression
 results across the multiverse.
 
-\code{summary.lm_mverse} returns the \code{glm} regression
+\code{summary.glm_mverse} returns the \code{glm} regression
 results across the multiverse.
 }
 \examples{

@@ -79,8 +79,12 @@ extract.mverse <- function(
   stopifnot(inherits(.mverse, "mverse"))
   mtable <- summary(.mverse)
   if(is.null(columns)) columns <- unlist(
-    sapply(attr(.mverse, "manipulate_branch"),
-           function(x) if(inherits(x, "mutate_branch")) x$name))
+    sapply(
+      c(
+        attr(.mverse, 'branches_list'),
+        attr(.mverse, 'branches_conditioned_list')
+      ),
+      function(x) if(inherits(x, "mutate_branch")) x$name))
   columns <- c("universe", columns)
   if(is.null(universe)) {
     universe <- mtable$universe

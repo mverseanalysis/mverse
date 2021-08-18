@@ -19,9 +19,10 @@
 lm_mverse <- function(.mverse, ...) {
   stopifnot(inherits(.mverse, "mverse"))
   # check whether there is a formula branch (should be only 1)
-  if (!any(sapply(attr(.mverse, "model_branches"), inherits, "formula_branch")))
+  brs <- c(attr(.mverse, 'branches_conditioned_list'), attr(.mverse, 'branches_list'))
+  if (length(brs) == 0)
     stop("Exactly one formula branch is required.")
-  if (sum(sapply(attr(.mverse, "model_branches"), inherits, "formula_branch")) > 1)
+  if (sum(sapply(brs,inherits, "formula_branch")) != 1)
     stop("Exactly one formula branch is required.")
   # fit lm
   multiverse::inside(.mverse, model <- lm(formulae, data = data))
@@ -38,8 +39,8 @@ lm_mverse <- function(.mverse, ...) {
 #' At least one \code{formula_branch} must have been added.
 #' You can also specify the underlying error distribution and
 #' the link function by adding a \code{family_branch}. If no
-#' \code{family_branch} has been provided, it uses the follows
-#' the default behaviour of \code{glm}, which uses the Gaussian
+#' \code{family_branch} has been provided, it follows
+#' the default behaviour of \code{glm} using the Gaussian
 #' distribution with an identity link.
 #'
 #' @examples
@@ -60,15 +61,11 @@ lm_mverse <- function(.mverse, ...) {
 glm_mverse <- function(.mverse, ...) {
   stopifnot(inherits(.mverse, "mverse"))
   # check whether there is a formula branch (should be only 1)
-  if (!any(sapply(attr(.mverse, "model_branches"), inherits, "formula_branch")))
+  brs <- c(attr(.mverse, 'branches_conditioned_list'), attr(.mverse, 'branches_list'))
+  if (length(brs) == 0)
     stop("Exactly one formula branch is required.")
-  if (sum(sapply(attr(.mverse, "model_branches"), inherits, "formula_branch")) > 1)
+  if (sum(sapply(brs,inherits, "formula_branch")) != 1)
     stop("Exactly one formula branch is required.")
-  # check whether there is a family branch (should be only 1)
-  if (!any(sapply(attr(.mverse, "model_branches"), inherits, "family_branch")))
-    stop("Exactly one family branch is required.")
-  if (sum(sapply(attr(.mverse, "model_branches"), inherits, "family_branch")) > 1)
-    stop("Exactly one family branch is required.")
   # fit glm
   multiverse::inside(
     .mverse, model <- glm(formulae, data = data, family = family))

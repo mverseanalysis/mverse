@@ -46,7 +46,9 @@ add_mutate_branch <- function(.mverse, ...) {
 #' Add mutate branches to a \code{mverse} object.
 #'
 #' This method adds one or more mutate branches to
-#' an existing \code{mverse} object.
+#' an existing \code{mverse} object. Mutate branches
+#' are used to define options for adding a new
+#' column to the analysis dataset.
 #'
 #' @param .mverse a \code{mverse} object.
 #' @param ... \code{mutate_branch} objects.
@@ -77,31 +79,9 @@ add_mutate_branch <- function(.mverse, ...) {
 #' @family {methods for working with a mutate branch}
 #' @export
 add_mutate_branch.mverse <- function(.mverse, ...) {
-  varnames <- sapply(
-    rlang::enquos(...),
-    rlang::quo_name)
-  branch_opts <- list(...)
-  # name variable
-  branch_opts <- mapply(
-    function(rl, nm) {
-      if(is.null(rl$name))
-        return(name(rl, nm))
-      return(rl)
-    },
-    branch_opts, varnames, SIMPLIFY = FALSE)
-  # enforce variable name
-  e <- sapply(
-    branch_opts,
-    function(x) {
-      if(grepl('^mutate_branch(.+)$', x$name)) {
-        stop(paste(
-          "Please specify a variable name for the branch rule:",
-          x$name))}})
-  # add to list
-  attr(.mverse, 'manipulate_branches') <- append(
-    attr(.mverse, 'manipulate_branches'),
-    branch_opts)
-  # add to mverse object
-  .mverse <- reset_parameters(.mverse)
+  nms <- sapply(rlang::enquos(...), rlang::quo_name)
+  brs <- list(...)
+  stopifnot(all(sapply(brs, inherits, "mutate_branch")))
+  .mverse <- add_branch(.mverse, brs, nms)
   invisible(.mverse)
 }

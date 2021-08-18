@@ -19,8 +19,8 @@ The resulting \code{mverse} object.
 }
 \description{
 This method adds one or more formula branches to
-an existing \code{mverse} object. The formula branches
-are used to specify a model for the main analysis.
+an existing \code{mverse} object. Formula branches
+are used to specify model structure options for the analysis.
 }
 \examples{
 # Define a formula branch.
