@@ -1,0 +1,287 @@
+---
+title: "Getting started with mverse"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Case Study. Are female hurricanes deadlier than male hurricanes?}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+references:
+  - id: original
+    title: "Female hurricanes are deadlier than male hurricanes"
+    type: article-journal
+    issued:
+      year: 2014
+      month: 6
+      day: 17
+    URL: https://doi.org/10.1073/pnas.1402786111
+    DOI: 10.1073/pnas.1402786111
+    journal: Proceeedings fo the National Academiy of Sciences of the United States of America
+    volume: 111
+    issue: 24
+    page: 8782-8787
+    author:
+    - given: Kiju
+      family: Jung
+    - given: Sharon
+      family: Shavitt
+    - given: Madhu
+      family: Viswanathan
+    - given: "Joseph M."
+      family: Hilbe
+  - id: multiverse
+    title: "multiverse: R package for creating explorable multiverse analysis"
+    type: entry
+    URL: https://mucollective.github.io/multiverse/
+    accessed:
+      year: 2020
+    author:
+    - given: Abhraneel
+      family: Sarma
+    - given: Matthew
+      family: Kay
+  - id: boba
+    title: "Boba: Authoring and Visualizing Multiverse Analyses"
+    type: entry
+    URL: https://arxiv.org/abs/2007.05551
+    issued:
+      year: 2020
+      month: 7
+      day: 30
+    accessed:
+      year: 2020
+    author:
+    - given: Yang
+      family: Liu
+    - given: Alex
+      family: Kale
+    - given: Tim
+      family: Althoff
+    - given: Jeffrey
+      family: Heer
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE
+)
+```
+
+
+This simple case-study will introduce the basic work-flow of `mverse`. We will define and execute different branches to analyze the data with multiple "paths".
+
+The typical workflow of multiverse analysis with `mverse` is
+1. Initialize a `multiverse` object.
+2. Define all the decisions as *branches*.
+3. Add defined *branches* into the `multiverse` object.
+4. Run models, hypothesis tests, and plots. 
+
+# Loading packages
+```{r load_package, warning=FALSE, message=FALSE}
+library(mverse)
+```
+
+# Data
+We will use the `hurricane` data [@original]. This dataset has 94 observations on 12 variables. 
+
+```{r load_data, warning=FALSE, message=FALSE}
+hurricane
+```
+
+# Define Branches
+Each branch defines a "decision point". The multiverse then branches out to different "universe", or analysis paths. In `mverse` package, we define branches using `X_branch(...)`, where `...` are expressions that defines reasonable decision choices at that "decision point". 
+
+## Filter branches
+`filter_branch` takes some logical predicates, and finds the observations where the condition is true. 
+
+In the original analysis [@original], the authors excludes outliers based on extreme observations of deaths and damages. In our implementations, we use `filter_branch` to exclude the most extreme hurricanes. 
+
+```{r filter_branch}
+
+# Exclude up to 2 most extreme observations in term of death
+death_outliers <- filter_branch(
+  TRUE, # keep all observations
+  Name != 'Katrina', # excludes the most deadly observation
+  !(Name %in% c('Katrina', 'Audrey')) # excludes the two most deadly observations
+)
+# Exclude up to 3 most extreme observations in term of damage
+damage_outliers <- filter_branch(
+  TRUE,
+  Name != 'Sandy',
+  !(Name %in% c('Sandy', 'Andrew')),
+  !(Name %in% c('Sandy', 'Andrew', 'Donna'))
+)
+
+```
+
+
+## Mutate branches
+`mutate_branch` takes expressions that modify data columns. 
+
+For defining the femininity of the name, [@original] identify two ways, by a 0-11 point scale or by a binary scale. Also, the other decision is whether to transform the damage. We will use `mutate_branch` to implement such decisions.
+
+```{r mutate_branch}
+# Define femininity 
+femininity <- mutate_branch(
+  Gender_MF, # based on binary gender
+  MasFem # based on the scale
+)
+
+# Define damage
+damage <- mutate_branch(
+  NDAM, # No transform
+  log(NDAM) # log transform
+)
+```
+
+
+
+## Formula branches
+
+`formula_branch` takes formulas and will be used in modeling data or hypotheses tests. 
+
+After inspections on the data, We may propose some linear regression models. For simplicity, we will predict the death numbers using femininity, damage, and wind speed. 
+
+``` {r formula_branch}
+# Define the formulas 
+formulas <- formula_branch(
+  alldeaths ~ MasFem + damage + HighestWindSpeed, # simplest additive model
+  alldeaths ~ MasFem * damage + HighestWindSpeed, # interactions between femininity and damage
+  alldeaths ~ MasFem * HighestWindSpeed + damage, # interactions between femininity and wind speed
+)
+```
+
+## Family branches
+`family_branch` takes `family` functions and will bed used in firing generalized linear regressions.
+
+Of course, models is not limited with simple linear regression. For our analysis, we will use linear model and Poisson model. 
+
+``` {r family_branch}
+families <- family_branch(
+  gaussian(),
+  poisson()
+)
+```
+
+# Execute multiverse analysis with branches
+After defining all branches, we can execute different modelings or tests. 
+
+## T-test on multiverses
+You can run t-tests on the multiverse with `ttest_mverse`, `ttest_mverse` can run one sample t test with one column name as parameter, or two sample t test with two column names. 
+``` {r t_test}
+# Two sample t test
+
+# create mverse object and add relevant branches 
+mv_ttest <- create_multiverse(hurricane) %>% 
+  add_filter_branch(death_outliers, damage_outliers) %>% 
+  add_mutate_branch(femininity, damage)
+
+# Execute t test
+ttest_mverse(mv_ttest, 'MinPressure_before', 'Minpressure_Updated_2014')
+```
+
+Another usage for `ttest_mverse` is to work with `formula_branch`. The formula need to follow the <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/t.test">formula interface</a> of `t.test`.
+
+```{r t_test_formula}
+# Two sample t test of min pressure with male hurricane group and female hurricane group
+
+# Define the formula
+ttest_formula <- formula_branch(
+  Minpressure_Updated_2014 ~ Gender_MF
+)
+# Create mverse object and add relevant branches 
+mv_ttest_formula <- create_multiverse(hurricane) %>% 
+  add_filter_branch(death_outliers, damage_outliers) %>% 
+  add_mutate_branch(femininity, damage) %>%
+  add_formula_branch(ttest_formula)
+# Execute t test
+ttest_mverse(mv_ttest_formula)
+```
+
+## Simple Linear Regression
+`lm_mverse` will execute `lm` on each of the branches. It returns an `lm_mverse` object, and we can inspect the modeling results with `summary`. 
+
+```{r lm}
+# Create mverse object and add relevant branches 
+mv_lm <- create_multiverse(hurricane) %>% 
+  add_filter_branch(death_outliers, damage_outliers) %>% 
+  add_mutate_branch(femininity, damage) %>% 
+  add_formula_branch(formulas) %>%
+  lm_mverse()
+```
+`summary` is used to inspect the estimates, statistics, and p-values. Passing different keywords to `output` arguments will give different statistical values. 
+```{r lm_summary}
+# output estimates by default, or by "estimates" or "e"
+summary(mv_lm)
+# output degree of freedom by "df" 
+summary(mv_lm, output="df")
+# output f-statistic by "fstatistic" or "f"
+summary(mv_lm, output="f")
+# output R-squared by `r.squared` or "r"
+summary(mv_lm, output="r")
+```
+
+## Generalized Linear Regression
+`glm_mverse` will execute `glm` on each of the branches. It returns an `glm_mverse` object, and we can inspect the modeling results with `summary`. 
+```{r glm}
+# Create mverse object and add relevant branches 
+mv_glm <- create_multiverse(hurricane) %>% 
+  add_filter_branch(death_outliers, damage_outliers) %>% 
+  add_mutate_branch(femininity, damage) %>% 
+  add_formula_branch(formulas) %>%
+  add_family_branch(families) %>%
+  glm_mverse()
+```
+We can use `summary` to inspect the results as well. 
+
+```{r glm_summary}
+# output estimates by default, or by "estimates" or "e"
+summary(mv_glm)
+# output degree of freedom by "df" 
+summary(mv_glm, output="df")
+# output deviance by "deviance" or "de"
+summary(mv_glm, output="de")
+# output AIC/BIC by `aic` or "bic"
+summary(mv_glm, output="AIC")
+```
+
+## Specification Curve
+`spec_curve` displays the specification curve of fitting `lm` or `glm` across the multiverse. It visualizes the estimated values of variables from the `summary`. 
+
+```{r spec_curve.lm_mverse}
+# display the specification curve by default setting
+spec_curve(mv_lm, var = "damage")
+# display without confidence interval
+spec_curve(mv_lm, var = "damage", conf.int = FALSE)
+# display without ordering by estimates
+spec_curve(mv_lm, var = "damage", universe_order = TRUE)
+# display with ordering by color
+spec_curve(mv_lm, var = "damage", color_order = TRUE)
+# display with specifying other colors
+spec_curve(mv_lm, var = "damage", color_order = TRUE,
+           color = (estimate > 0))
+# display with ordering by specific branch
+spec_curve(mv_lm, var = "damage", branch_order = damage_branch)
+# display with ordering by specific branch and color
+spec_curve(mv_lm, var = "damage", branch_order = damage_branch,
+           color_order = TRUE)
+```
+
+```{r spec_curve.glm_mverse}
+# display the specification curve by default setting
+spec_curve(mv_glm, var = "damage")
+# display without confidence interval
+spec_curve(mv_glm, var = "damage", conf.int = FALSE)
+# display without ordering by estimates
+spec_curve(mv_glm, var = "damage", universe_order = TRUE)
+# display with ordering by color
+spec_curve(mv_glm, var = "damage", color_order = TRUE)
+# display with specifying other colors
+spec_curve(mv_glm, var = "damage", color_order = TRUE,
+           color = (estimate > 0))
+# display with ordering by specific branch
+spec_curve(mv_glm, var = "damage", branch_order = damage_branch)
+# display with ordering by specific branch and color
+spec_curve(mv_lm, var = "damage", branch_order = damage_branch,
+           color_order = TRUE)
+```
+
