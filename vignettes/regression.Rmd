@@ -1,5 +1,5 @@
 ---
-title: "Basic Regression with mverse"
+title: "Basic Regressions with mverse"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Basic Regressions with mverse}
