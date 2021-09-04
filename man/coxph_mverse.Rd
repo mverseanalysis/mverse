@@ -14,7 +14,8 @@ A \code{mverse} object with \code{coxph} fitted.
 }
 \description{
 \code{coxph_mverse} fits \code{coxph} across the multiverse
-according to model specifications provided by \code{formula_branch}.
+according to model specifications provided by \code{formula_branch}. Note that
+this will require \code{survival} package
 }
 \seealso{
 Other {model fitting methods}: 

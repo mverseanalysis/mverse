@@ -358,16 +358,26 @@ BIC.glm_mverse <- function(object) {
 }
 
 
-
-
-
-
-
-
-
-
+#' Display a summary of fitting \code{coxph} across the multiverse.
+#'
+#' \code{summary.coxph_mverse} returns the \code{coxph} regression
+#' results across the multiverse.
+#' @param object a \code{coxph_mverse} object.
+#' @param conf.int When \code{TRUE} (default), the estimate output
+#'   includes the confidence intervals.
+#' @param conf.level The confidence level of the confidence interval
+#'   returned using \code{conf.int = TRUE}. Default value is 0.95.
+#' @param output The output of interest. The possible values are
+#'   "estimates" ("e"), "concordance" ("c"), "logtest" ("log"), "waldtest" ("wald"), and "sctest" ("sc").
+#'   Default value is "estimates".
+#' @param ... Ignored.
+#' @return a multiverse table as a tibble
+#' @name summary
+#' @family {summary method}
+#' @export
 summary.coxph_mverse <- function(object,
-                                 conf.int = 0.95,
+                                 conf.int = TRUE,
+                                 conf.level = 0.95,
                                  scale = 1,
                                  output = "estimates",
                                  ...)
@@ -392,7 +402,7 @@ summary.coxph_mverse <- function(object,
             as.data.frame(t(c(
               summary(model, scale = !!rlang::enexpr(scale))$coefficients[-2]
               ,
-              summary(model, conf.int = !!rlang::enexpr(conf.int))$conf.int
+              summary(model, conf.int = !!rlang::enexpr(conf.level))$conf.int
             ))) %>%
             dplyr::rename(
               estimate = V1,
