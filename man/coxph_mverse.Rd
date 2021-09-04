@@ -18,7 +18,6 @@ according to model specifications provided by \code{formula_branch}.
 }
 \seealso{
 Other {model fitting methods}: 
-\code{\link{glm_mverse}()},
 \code{\link{lm_mverse}()}
 }
 \concept{{model fitting methods}}
