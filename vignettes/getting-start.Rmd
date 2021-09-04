@@ -2,7 +2,7 @@
 title: "Getting started with mverse"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Case Study. Are female hurricanes deadlier than male hurricanes?}
+  %\VignetteIndexEntry{Getting started with mverse}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 references:
@@ -262,5 +262,45 @@ knitr::kable(summary(mv_glm, output="de"))
 # output AIC/BIC by `aic` or "bic"
 knitr::kable(summary(mv_glm, output="AIC"))
 ```
+
 ## Specification Curve
 
+`spec_curve` displays the specification curve of fitting `lm` or `glm` across the multiverse. It visualizes the estimated values of variables from the `summary`. 
+
+```{r spec_curve.lm_mverse}
+# display the specification curve by default setting
+spec_curve(mv_lm, var = "damage")
+# display without confidence interval
+spec_curve(mv_lm, var = "damage", conf.int = FALSE)
+# display without ordering by estimates
+spec_curve(mv_lm, var = "damage", universe_order = TRUE)
+# display with ordering by color
+spec_curve(mv_lm, var = "damage", color_order = TRUE)
+# display with specifying other colors
+spec_curve(mv_lm, var = "damage", color_order = TRUE,
+           color = (estimate > 0))
+# display with ordering by specific branch
+spec_curve(mv_lm, var = "damage", branch_order = damage_branch)
+# display with ordering by specific branch and color
+spec_curve(mv_lm, var = "damage", branch_order = damage_branch,
+           color_order = TRUE)
+```
+
+```{r spec_curve.glm_mverse}
+# display the specification curve by default setting
+spec_curve(mv_glm, var = "damage")
+# display without confidence interval
+spec_curve(mv_glm, var = "damage", conf.int = FALSE)
+# display without ordering by estimates
+spec_curve(mv_glm, var = "damage", universe_order = TRUE)
+# display with ordering by color
+spec_curve(mv_glm, var = "damage", color_order = TRUE)
+# display with specifying other colors
+spec_curve(mv_glm, var = "damage", color_order = TRUE,
+           color = (estimate > 0))
+# display with ordering by specific branch
+spec_curve(mv_glm, var = "damage", branch_order = damage_branch)
+# display with ordering by specific branch and color
+spec_curve(mv_lm, var = "damage", branch_order = damage_branch,
+           color_order = TRUE)
+```

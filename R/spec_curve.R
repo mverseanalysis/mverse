@@ -1,3 +1,4 @@
+
 #' Display a specification curve across the multiverse.
 #' @rdname spec_curve
 #' @export
@@ -5,8 +6,6 @@ spec_curve <- function(...) {
   UseMethod("spec_curve")
 }
 
-#' Display a specification curve across the multiverse.
-#'
 #' \code{spec_curve.lm_mverse} returns the specification curve of \code{lm}
 #' regression results across the multiverse.
 #' Notice that the order of universes is not corresponding
@@ -114,7 +113,11 @@ spec_curve.lm_mverse <- function(
                    color = !!color), size = 2,shape = 124)
 
   if (universe_order == FALSE) {
-    p2 <- p2 + ggplot2::xlab("universe counts")
+    p2 <- p2 + ggplot2::xlab("") +
+      ggplot2::theme(axis.ticks.x = ggplot2::element_blank(),
+                     axis.text.x = ggplot2::element_blank())
+    p1 <- p1 + ggplot2::theme(axis.ticks.x = ggplot2::element_blank(),
+                              axis.text.x = ggplot2::element_blank())
   } else {
     p2 <- p2 + ggplot2::xlab("universe #")
   }
@@ -127,9 +130,9 @@ spec_curve.lm_mverse <- function(
           panel.grid = ggplot2::element_line(colour = "grey92"),
           panel.grid.minor = ggplot2::element_line(size = ggplot2::rel(0.5)),
           panel.spacing.x=ggplot2::unit(0.15,"cm"),
+          panel.spacing.y=ggplot2::unit(1.25, "lines"),
           strip.text.y = ggplot2::element_text(angle = 0, face="bold", size=8),
-          legend.position = "none",
-          panel.spacing = ggplot2::unit(0.25, "lines")) +
+          legend.position = "none") +
     ggplot2::scale_colour_brewer(palette = "Set1")
 
   cowplot::plot_grid(p1, p2, axis = "bltr",
@@ -246,7 +249,11 @@ spec_curve.glm_mverse <- function(
                             color = !!color), size = 2,shape = 124)
 
   if (universe_order == FALSE) {
-    p2 <- p2 + ggplot2::xlab("universe counts")
+    p2 <- p2 + ggplot2::xlab("") +
+      ggplot2::theme(axis.ticks.x = ggplot2::element_blank(),
+                     axis.text.x = ggplot2::element_blank())
+    p1 <- p1 + ggplot2::theme(axis.ticks.x = ggplot2::element_blank(),
+                              axis.text.x = ggplot2::element_blank())
   } else {
     p2 <- p2 + ggplot2::xlab("universe #")
   }
@@ -259,9 +266,9 @@ spec_curve.glm_mverse <- function(
                    panel.grid = ggplot2::element_line(colour = "grey92"),
                    panel.grid.minor = ggplot2::element_line(size = ggplot2::rel(0.5)),
                    panel.spacing.x=ggplot2::unit(0.15,"cm"),
+                   panel.spacing.y=ggplot2::unit(1.25, "lines"),
                    strip.text.y = ggplot2::element_text(angle = 0, face="bold", size=8),
-                   legend.position = "none",
-                   panel.spacing = ggplot2::unit(0.25, "lines")) +
+                   legend.position = "none") +
     ggplot2::scale_colour_brewer(palette = "Set1")
 
   cowplot::plot_grid(p1, p2, axis = "bltr",

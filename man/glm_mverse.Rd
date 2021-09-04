@@ -4,7 +4,7 @@
 \alias{glm_mverse}
 \title{Fit \code{glm} across the multiverse.}
 \usage{
-glm_mverse(.mverse)
+glm_mverse(.mverse, ...)
 }
 \arguments{
 \item{.mverse}{a \code{mverse} object.}
@@ -18,8 +18,8 @@ according to model specifications provided by \code{formula_branch}.
 At least one \code{formula_branch} must have been added.
 You can also specify the underlying error distribution and
 the link function by adding a \code{family_branch}. If no
-\code{family_branch} has been provided, it uses the follows
-the default behaviour of \code{glm}, which uses the Gaussian
+\code{family_branch} has been provided, it follows
+the default behaviour of \code{glm} using the Gaussian
 distribution with an identity link.
 }
 \examples{
@@ -34,9 +34,3 @@ mv <- mv \%>\%
   fit_glm()
 }
 }
-\seealso{
-Other {model fitting methods}: 
-\code{\link{coxph_mverse}()},
-\code{\link{lm_mverse}()}
-}
-\concept{{model fitting methods}}

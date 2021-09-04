@@ -9,7 +9,7 @@ Authors@R: c(
   role = c("aut")),
   person("Mingwei", "Xu", email = "yuka.xu@mail.utoronto.ca", 
   role = c("aut")),
-  person("Gibbs", "Alison", email = "alison.gibbs@utoronto.ca",
+  person("Alison", "Gibbs", email = "alison.gibbs@utoronto.ca",
   role = c("aut")),
   person("Nathan", "Taback", email = "nathan.taback@utoronto.ca",
   role = "aut"),
@@ -31,7 +31,10 @@ Imports:
   tidyr,
   tibble,
   stringr,
-  stats 
+  stats,
+  igraph,
+  ggraph,
+  ggplot2
 Suggests:
   tidyverse,
   broom,
@@ -46,4 +49,4 @@ Remotes:
   github::MUCollective/multiverse
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
-URL: https://mverseanalysis.github.io/mverse
+URL: https://github.com/mverseanalysis/mverse, https://mverseanalysis.github.io/mverse

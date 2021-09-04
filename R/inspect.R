@@ -1,14 +1,14 @@
-display_branch_rules <- function(mtable, object) {
+display_branch_opts <- function(mtable, .mverse) {
   # extract all branches
   branches <- sapply(c(
-    attr(object, 'manipulate_branches'),
-    attr(object, "model_branches")
+    attr(.mverse, 'branches_list'),
+    attr(.mverse, 'branches_conditioned_list')
   ),
   function(vb) {
-    rules <- character(length(vb$rules))
-    for (i in 1:length(vb$rules))
-      rules[i] <- rlang::quo_name(vb$rules[[i]])
-    out <- list(rules)
+    opts <- character(length(vb$opts))
+    for (i in 1:length(vb$opts))
+      opts[i] <- rlang::quo_name(vb$opts[[i]])
+    out <- list(opts)
     names(out) <- vb$name
     out
   })
@@ -69,7 +69,7 @@ summary.mverse <- function(object, ...) {
     dplyr::mutate(universe = factor(.universe)) %>%
     dplyr::select(-tidyselect::starts_with(".")) %>%
     dplyr::select(universe, tidyselect::everything())
-  display_branch_rules(mtable, object)
+  display_branch_opts(mtable, object)
 }
 
 
@@ -196,7 +196,7 @@ summary.lm_mverse <- function(object,
     dplyr::mutate(universe = factor(.universe)) %>%
     dplyr::select(-tidyselect::starts_with(".")) %>%
     dplyr::select(universe, tidyselect::everything())
-  display_branch_rules(mtable, object)
+  display_branch_opts(mtable, object)
 }
 
 
@@ -329,10 +329,8 @@ summary.glm_mverse <- function(object,
     dplyr::mutate(universe = factor(.universe)) %>%
     dplyr::select(-tidyselect::starts_with(".")) %>%
     dplyr::select(universe, tidyselect::everything())
-  display_branch_rules(mtable, object)
+  display_branch_opts(mtable, object)
 }
-
-
 
 #' Display the AIC and BIC score of the fitted models across the multiverse
 #'
@@ -351,7 +349,6 @@ AIC.glm_mverse <- function(object) {
   df
 }
 
-
 #' @rdname AIC
 #' @export
 BIC.glm_mverse <- function(object) {
@@ -369,12 +366,12 @@ BIC.glm_mverse <- function(object) {
 
 
 
-
 summary.coxph_mverse <- function(object,
                                  conf.int = 0.95,
                                  scale = 1,
                                  output = "estimates",
-                                 ...) {
+                                 ...)
+{
   if (output %in% c("estimates", "e")) {
     multiverse::inside(object, {
       if (summary(model)$n > 0) {
@@ -392,12 +389,11 @@ summary.coxph_mverse <- function(object,
             )
         } else {
           out <-
-            as.data.frame(t(
-              c(
-                summary(model, scale = !!rlang::enexpr(scale))$coefficients[-2]
-                ,
-                summary(model, conf.int = !!rlang::enexpr(conf.int))$conf.int
-              ))) %>%
+            as.data.frame(t(c(
+              summary(model, scale = !!rlang::enexpr(scale))$coefficients[-2]
+              ,
+              summary(model, conf.int = !!rlang::enexpr(conf.int))$conf.int
+            ))) %>%
             dplyr::rename(
               estimate = V1,
               std.err = V2,
@@ -482,3 +478,78 @@ summary.coxph_mverse <- function(object,
     dplyr::select(universe, tidyselect::everything())
   display_branch_rules(mtable, object)
 }
+
+
+
+
+#' Plot a multiverse tree diagram.
+#'
+#' @param .mverse A \code{mverse} object.
+#' @param label A logical. Display options as labels when TRUE.
+#' @param branches A character vector. Display a subset of branches
+#'   when specified. Display all when NULL.
+#' @import igraph ggraph ggplot2
+#' @name multiverse_tree
+#' @export
+multiverse_tree <-
+  function(.mverse,
+           label = FALSE,
+           branches = NULL) {
+    # sort: conditioned -> conditioned on -> others
+    brs <- unique(sapply(c(
+      attr(.mverse, "branches_conditioned_list"),
+      sapply(attr(.mverse, "branches_conditioned_list"), function(t)
+        t$conds_on),
+      attr(.mverse, "branches_list")
+    ),
+    function(s)
+      name(s)))
+    if (!is.null(branches))
+      brs <- brs[sapply(brs, function(x)
+        x %in% branches)]
+    brs_name <- paste0(brs, "_branch")
+    combs <- summary(.mverse)[brs_name] %>%
+      dplyr::distinct_all() %>%
+      dplyr::mutate(across(.fns = as.character))
+    edges_list <-
+      list(data.frame(
+        from = "Data",
+        to = unique(combs[[1]]),
+        branch = brs[1]
+      ))
+    v_labels <- c("Data")
+    for (i in 1:length(brs_name)) {
+      pairs <- combs[, 1:i] %>%
+        dplyr::distinct_all() %>%
+        tidyr::unite("to", 1:i, remove = FALSE) %>%
+        tidyr::unite("from", 2:i, remove = FALSE) %>%
+        dplyr::mutate(branch = brs[i])
+      if (i > 1)
+        edges_list[[length(edges_list) + 1]] <- pairs %>%
+          dplyr::select(from, to, branch) %>%
+          dplyr::distinct_all()
+      v_labels <- c(v_labels, pairs %>% dplyr::pull(i + 2))
+    }
+    edges <- do.call(rbind, edges_list)
+    g <- graph_from_data_frame(edges)
+    plt <- ggraph(g, layout = 'dendrogram', circular = FALSE) +
+      geom_edge_link(aes(color = branch)) +
+      theme_void() +
+      coord_flip() +
+      scale_y_reverse(expand = c(0.1, 0.1)) +
+      scale_x_continuous(expand = c(0.1, 0.1)) +
+      scale_edge_color_manual(name = NULL,
+                              values = hcl(h = seq(0, 360, length.out = length(brs) + 1), l = 50),
+                              limits = brs) +
+      theme(legend.position = "top")
+    if (label)
+      plt <- plt +
+      geom_node_label(
+        aes(label = v_labels),
+        hjust = 1,
+        vjust = 1.2,
+        label.size = 0,
+        size = max(2, min(4, 300 / length(v_labels)))
+      )
+    plt + geom_node_point(size = min(1, 100 / length(v_labels)))
+  }

@@ -19,9 +19,9 @@ The resulting \code{mverse} object.
 }
 \description{
 This method adds one or more family branches to
-an existing \code{mverse} object. The family branches
-are used to specify a model family for the main analysis
-that takes a family argument.
+an existing \code{mverse} object. Family branches
+are used to define options for the analysis distributions
+when using \code{glm_mverse()}.
 }
 \examples{
 # Define a family branch.
@@ -31,5 +31,9 @@ model_distributions <- family_branch(
 # Create a mverse and add the branch.
 mv <- create_multiverse(hurricane) \%>\%
   add_family_branch(model_distributions)
+}
+\seealso{
+Other {methods for working with a family branch}: 
+\code{\link{family_branch}()}
 }
 \concept{{methods for working with a family branch}}

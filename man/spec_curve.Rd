@@ -63,11 +63,6 @@ a specification curve plot for the estimates
 a specification curve plot for the estimates
 }
 \description{
-\code{spec_curve.lm_mverse} returns the specification curve of \code{lm}
-regression results across the multiverse.
-Notice that the order of universes is not corresponding
-to the order in the summary table.
-
 \code{spec_curve.glm_mverse} returns the specification curve of \code{glm}
 regression results across the multiverse.
 Notice that the order of universes is not corresponding

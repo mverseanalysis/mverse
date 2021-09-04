@@ -27,8 +27,7 @@ mv <- create_multiverse(hurricane) \%>\%
   add_family_branch(model_distributions)
 }
 \seealso{
-Other {methods for working with a formula branch}: 
-\code{\link{add_formula_branch}()},
-\code{\link{formula_branch}()}
+Other {methods for working with a family branch}: 
+\code{\link{add_family_branch}()}
 }
-\concept{{methods for working with a formula branch}}
+\concept{{methods for working with a family branch}}
