@@ -74,7 +74,6 @@ glm_mverse <- function(.mverse, ...) {
   invisible(.mverse)
 }
 
-
 #' Fit \code{coxph} across the multiverse.
 #'
 #' \code{coxph_mverse} fits \code{coxph} across the multiverse
@@ -85,13 +84,15 @@ glm_mverse <- function(.mverse, ...) {
 #' @return A \code{mverse} object with \code{coxph} fitted.
 #' @name coxph_mverse
 #' @family {model fitting methods}
+#' @importFrom survival coxph Surv
 #' @export
 coxph_mverse <- function(.mverse, ties=NULL) {
   stopifnot(inherits(.mverse, "mverse"))
   # check whether there is a formula branch (should be only 1)
-  if (!any(sapply(attr(.mverse, "model_branches"), inherits, "formula_branch")))
+  brs <- c(attr(.mverse, 'branches_conditioned_list'), attr(.mverse, 'branches_list'))
+  if (length(brs) == 0)
     stop("Exactly one formula branch is required.")
-  if (sum(sapply(attr(.mverse, "model_branches"), inherits, "formula_branch")) > 1)
+  if (sum(sapply(brs,inherits, "formula_branch")) != 1)
     stop("Exactly one formula branch is required.")
   # fix coxph
   if (is.null(ties)) {
@@ -107,3 +108,4 @@ coxph_mverse <- function(.mverse, ties=NULL) {
   execute_multiverse(.mverse)
   invisible(.mverse)
 }
+
