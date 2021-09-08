@@ -486,7 +486,7 @@ summary.coxph_mverse <- function(object,
     dplyr::mutate(universe = factor(.universe)) %>%
     dplyr::select(-tidyselect::starts_with(".")) %>%
     dplyr::select(universe, tidyselect::everything())
-  display_branch_rules(mtable, object)
+  display_branch_opts(mtable, object)
 }
 
 
@@ -519,7 +519,6 @@ multiverse_tree <-
         x %in% branches)]
     brs_name <- paste0(brs, "_branch")
     combs <- summary(.mverse)[brs_name] %>%
-      dplyr::distinct_all() %>%
       dplyr::mutate(across(.fns = as.character))
     edges_list <-
       list(data.frame(
