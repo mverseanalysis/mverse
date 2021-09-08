@@ -14,11 +14,12 @@
 #' @family {mverse methods}
 #' @export
 mverse <- function(data) {
+  stopifnot(is.data.frame(data))
   .mverse <- multiverse::multiverse()
   attr(.mverse, 'source') <- data
-  attr(.mverse, 'manipulate_branches') <- list()
-  attr(.mverse, 'model_branches') <- list()
-  # attr(.mverse, 'branch_asserts') <- list()
+  attr(.mverse, 'branches_list') <- list()
+  attr(.mverse, 'branches_conditioned_list') <- list()
+  attr(.mverse, 'conditions_list') <- list()
   attr(.mverse, "class") <- c("mverse", class(.mverse))
   .mverse
 }

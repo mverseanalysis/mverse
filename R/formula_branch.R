@@ -41,8 +41,8 @@ add_formula_branch <- function(.mverse, ...) {
 #' Add formula branches to a \code{mverse} object.
 #'
 #' This method adds one or more formula branches to
-#' an existing \code{mverse} object. The formula branches
-#' are used to specify a model for the main analysis.
+#' an existing \code{mverse} object. Formula branches
+#' are used to specify model structure options for the analysis.
 #'
 #' @param .mverse a \code{mverse} object.
 #' @param ... \code{formula_branch} objects.
@@ -61,31 +61,9 @@ add_formula_branch <- function(.mverse, ...) {
 #' @family {methods for working with a formula branch}
 #' @export
 add_formula_branch.mverse <- function(.mverse, ...) {
-  varnames <- sapply(
-    rlang::enquos(...),
-    rlang::quo_name)
-  branch_opts <- list(...)
-  # name variable
-  branch_opts <- mapply(
-    function(rl, nm) {
-      if(is.null(rl$name))
-        return(name(rl, nm))
-      return(rl)
-    },
-    branch_opts, varnames, SIMPLIFY = FALSE)
-  # enforce variable name
-  e <- sapply(
-    branch_opts,
-    function(x) {
-      if(grepl('^formula_branch(.+)$', x$name)) {
-        stop(paste(
-          "Please specify a variable name for the branch rule:",
-          x$name))}})
-  # add to list
-  attr(.mverse, 'model_branches') <- append(
-    attr(.mverse, 'model_branches'),
-    branch_opts)
-  # add to mverse object
-  .mverse <- reset_parameters(.mverse)
+  nms <- sapply(rlang::enquos(...), rlang::quo_name)
+  brs <- list(...)
+  stopifnot(all(sapply(brs, inherits, "formula_branch")))
+  .mverse <- add_branch(.mverse, brs, nms)
   invisible(.mverse)
 }

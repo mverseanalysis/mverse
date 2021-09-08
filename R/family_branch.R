@@ -38,9 +38,9 @@ add_family_branch <- function(.mverse, ...) {
 #' Add family branches to a \code{mverse} object.
 #'
 #' This method adds one or more family branches to
-#' an existing \code{mverse} object. The family branches
-#' are used to specify a model family for the main analysis
-#' that takes a family argument.
+#' an existing \code{mverse} object. Family branches
+#' are used to define options for the analysis distributions
+#' when using \code{glm_mverse()}.
 #'
 #' @param .mverse a \code{mverse} object.
 #' @param ... \code{family_branch} objects.
@@ -57,31 +57,9 @@ add_family_branch <- function(.mverse, ...) {
 #' @family {methods for working with a family branch}
 #' @export
 add_family_branch.mverse <- function(.mverse, ...) {
-  varnames <- sapply(
-    rlang::enquos(...),
-    rlang::quo_name)
-  branch_opts <- list(...)
-  # name variable
-  branch_opts <- mapply(
-    function(rl, nm) {
-      if(is.null(rl$name))
-        return(name(rl, nm))
-      return(rl)
-    },
-    branch_opts, varnames, SIMPLIFY = FALSE)
-  # enforce variable name
-  e <- sapply(
-    branch_opts,
-    function(x) {
-      if(grepl('^family_branch(.+)$', x$name)) {
-        stop(paste(
-          "Please specify a variable name for the branch rule:",
-          x$name))}})
-  # add to list
-  attr(.mverse, 'model_branches') <- append(
-    attr(.mverse, 'model_branches'),
-    branch_opts)
-  # add to mverse object
-  .mverse <- reset_parameters(.mverse)
+  nms <- sapply(rlang::enquos(...), rlang::quo_name)
+  brs <- list(...)
+  stopifnot(all(sapply(brs, inherits, "family_branch")))
+  .mverse <- add_branch(.mverse, brs, nms)
   invisible(.mverse)
 }

@@ -54,7 +54,7 @@ ttest_mverse <-
               htest$estimate
             )
           )) %>%
-          rename(
+          dplyr::rename(
             statistic = t,
             p.value = V2,
             conf.lower = V3,
@@ -66,10 +66,10 @@ ttest_mverse <-
         y = if (is.null(!!rlang::enexpr(y)))
           NULL
         else
-          data %>% pull(!!rlang::enexpr(y))
+          data %>% dplyr::pull(!!rlang::enexpr(y))
         htest <-
           t.test(
-            x = data %>% pull(!!rlang::enexpr(x)),
+            x = data %>% dplyr::pull(!!rlang::enexpr(x)),
             y = y,
             alternative = !!rlang::enexpr(alternative),
             mu = !!rlang::enexpr(mu),
@@ -86,7 +86,7 @@ ttest_mverse <-
               htest$estimate
             )
           )) %>%
-          rename(
+          dplyr::rename(
             statistic = t,
             p.value = V2,
             conf.lower = V3,
