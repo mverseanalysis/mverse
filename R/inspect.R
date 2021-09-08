@@ -385,55 +385,24 @@ summary.coxph_mverse <- function(object,
   if (output %in% c("estimates", "e")) {
     multiverse::inside(object, {
       if (summary(model)$n > 0) {
-        if (!!rlang::enexpr(conf.int) == FALSE) {
-          out <-
-            as.data.frame(t(c(
-              summary(model, scale = !!rlang::enexpr(scale))$coefficients
-            ))) %>%
-            dplyr::rename(
-              estimate = V1,
-              std.err = V3,
-              statistic = V4,
-              p.value = V5,
-              "exp(coef)" = V2
-            )
-        } else {
-          out <-
-            as.data.frame(t(c(
-              summary(model, scale = !!rlang::enexpr(scale))$coefficients[-2]
-              ,
-              summary(model, conf.int = !!rlang::enexpr(conf.level))$conf.int
-            ))) %>%
-            dplyr::rename(
-              estimate = V1,
-              std.err = V2,
-              statistic = V3,
-              p.value = V4,
-              "exp(coef)" = V5,
-              "exp(-conf)" = V6,
-              conf.low = V7,
-              conf.hight = V8
-            )
-        }
+        out <-
+          broom::tidy(model,!!rlang::enexpr(conf.int),!!rlang::enexpr(conf.level))
       }
 
       else {
         out <- data.frame(
+          term = "(None)",
           estimate = NA,
-          std.err = NA,
+          std.error = NA,
           statistic = NA,
-          p.value = NA,
-          "exp(coef)" = NA
+          p.value = NA
         )
         if (!!rlang::enexpr(conf.int))
           out <-
-            out %>% dplyr::mutate(
-              "exp(-conf)" = NA,
-              conf.low = NA,
-              conf.hight = NA
-            )
+            out %>% dplyr::mutate(conf.low = NA, conf.high = NA)
       }
     })
+
   } else if (output %in% c("c", "concordance")) {
     multiverse::inside(object, {
       if (summary(model)$n > 0)
