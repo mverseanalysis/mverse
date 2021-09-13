@@ -1,6 +1,6 @@
 #' Performs one or two sample t-tests on data columns.
 #'
-#' \code{t.test_mverse} performs t-tests across the multiverse.
+#' \code{ttest_mverse} performs t-tests across the multiverse.
 #' If x or y is specified, then performs one and two sample t-tests
 #' on specified columns of the data. If both x and y are NULL, then
 #' performs t.test based on the formula branches.
@@ -8,7 +8,7 @@
 #' @examples
 #' \dontrun{
 #' mv <- mv %>%
-#'   t.test_mverse()
+#'   ttest_mverse()
 #' }
 #' @param .mverse a \code{mverse} object.
 #' @param x (optional) column name of data within mverse object
@@ -20,7 +20,7 @@
 #' @param var.equal a logical variable indicating whether to treat the two variances as being equal.
 #' @param conf.level confidence level of the interval.
 #' @return A \code{ttest_mverse} object.
-#' @name t.test
+#' @name ttest
 #' @family {hypothesis testing methods}
 #' @export
 ttest_mverse <-
@@ -33,68 +33,60 @@ ttest_mverse <-
            var.equal = FALSE,
            conf.level = 0.95) {
     stopifnot(inherits(.mverse, "mverse"))
-    if (is.null(x) & is.null(y)) {
+    x <- rlang::enquo(x)
+    y <- rlang::enquo(y)
+    if (rlang::quo_is_null(x))
       multiverse::inside(.mverse, {
         htest <- t.test(
           formulae,
           data = data,
           alternative = !!rlang::enexpr(alternative),
-          mu = !!rlang::enexpr(mu),
-          paried = !!rlang::enexpr(paired),
-          var.equal = !!rlang::enexpr(var.equal),
-          conf.level = !!rlang::enexpr(conf.level)
+          mu = !! rlang::enexpr(mu),
+          paried = !! rlang::enexpr(paired),
+          var.equal = !! rlang::enexpr(var.equal),
+          conf.level = !! rlang::enexpr(conf.level)
         )
-
-        out <-
-          as.data.frame(t(
-            c(
-              htest$statistic,
-              htest$p.value,
-              htest$conf.int,
-              htest$estimate
-            )
-          )) %>%
-          dplyr::rename(
-            statistic = t,
-            p.value = V2,
-            conf.lower = V3,
-            conf.upper = V4
-          )
       })
-    } else {
+    else if (rlang::quo_is_null(y))
       multiverse::inside(.mverse, {
-        y = if (is.null(!!rlang::enexpr(y)))
-          NULL
-        else
-          data %>% dplyr::pull(!!rlang::enexpr(y))
-        htest <-
-          t.test(
-            x = data %>% dplyr::pull(!!rlang::enexpr(x)),
-            y = y,
-            alternative = !!rlang::enexpr(alternative),
-            mu = !!rlang::enexpr(mu),
-            paried = !!rlang::enexpr(paired),
-            var.equal = !!rlang::enexpr(var.equal),
-            conf.level = !!rlang::enexpr(conf.level)
-          )
-        out <-
-          as.data.frame(t(
-            c(
-              htest$statistic,
-              htest$p.value,
-              htest$conf.int,
-              htest$estimate
-            )
-          )) %>%
-          dplyr::rename(
-            statistic = t,
-            p.value = V2,
-            conf.lower = V3,
-            conf.upper = V4
-          )
+        htest <- t.test(
+          x = data %>% dplyr::pull(!! rlang::get_expr(x)),
+          alternative = !! rlang::enexpr(alternative),
+          mu = !! rlang::enexpr(mu),
+          paried = !! rlang::enexpr(paired),
+          var.equal = !! rlang::enexpr(var.equal),
+          conf.level = !! rlang::enexpr(conf.level)
+        )
       })
-    }
-
+    else
+      multiverse::inside(.mverse, {
+        htest <- t.test(
+          x = data %>% dplyr::pull(!! rlang::get_expr(x)),
+          y = data %>% dplyr::pull(!! rlang::get_expr(y)),
+          alternative = !! rlang::enexpr(alternative),
+          mu = !! rlang::enexpr(mu),
+          paried = !! rlang::enexpr(paired),
+          var.equal = !! rlang::enexpr(var.equal),
+          conf.level = !! rlang::enexpr(conf.level)
+        )
+      })
+    multiverse::inside(.mverse, {
+      out <-
+        as.data.frame(t(
+          c(
+            htest$statistic,
+            htest$p.value,
+            htest$conf.int,
+            htest$estimate
+          )
+        )) %>%
+        dplyr::rename(
+          statistic = t,
+          p.value = V2,
+          conf.lower = V3,
+          conf.upper = V4
+        )
+    })
     execute_multiverse(.mverse)
     mtable <- multiverse::extract_variables(.mverse, out) %>%
       tidyr::unnest(out) %>%
