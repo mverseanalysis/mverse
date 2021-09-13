@@ -6,3 +6,5 @@
 ^docs$
 ^pkgdown$
 .travis.yml
+^README\.Rmd$
+^.*\.csl

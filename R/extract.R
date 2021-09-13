@@ -8,6 +8,38 @@ extract <- function(...) {
 #' \code{extract} returns a tibble of selected values
 #' across the multiverse in a long format.
 #'
+#' @examples
+#' # Define mutate branches.
+#' hurricane_strength <- mutate_branch(
+#' # damage vs. wind speed vs.pressure
+#' NDAM,
+#' HighestWindSpeed,
+#' Minpressure_Updated_2014,
+#' # Standardized versions
+#' scale(NDAM),
+#' scale(HighestWindSpeed),
+#' -scale(Minpressure_Updated_2014),
+#' )
+#' y <- mutate_branch(
+#' alldeaths, log(alldeaths + 1)
+#' )
+#' # Create a mverse and add the branches.
+#' mv <- create_multiverse(hurricane) %>%
+#'  add_mutate_branch(hurricane_strength, y)
+#' execute_multiverse(mv)
+#' # Extract all branched columns from all universes
+#' extract(mv)
+#' # Specify the columns to extract from each universe using \code{columns}
+#' # You can select both branched and non-branched columns
+#' extract(mv, columns = c("hurricane_strength", "NDAM"))
+#' # Specify the universe to extract from using \code{universe}
+#' extract(mv, universe = 1)
+#' # Specify the number of universes to extract from using \code{nuni}
+#' # The universes are randomly selected
+#' extract(mv, nuni = 3)
+#' # Specify the proportion of data to extract from each universe using \code{frow}
+#' # The rows are randomly selected
+#' extract(mv, frow = 0.7)
 #' @param .mverse a \code{mverse} object.
 #' @param columns a character vector of column names to extract.
 #' @param universe an integer vector of universe ids to extract.
@@ -38,7 +70,6 @@ extract <- function(...) {
 #' 1 the method will return shuffle rows in each universe
 #' before returning them. If \code{frow} is greater than 1,
 #' the method randomly samples rows with replacement.
-#'
 #' @name extract
 #' @family {mverse methods}
 #' @export
@@ -48,8 +79,12 @@ extract.mverse <- function(
   stopifnot(inherits(.mverse, "mverse"))
   mtable <- summary(.mverse)
   if(is.null(columns)) columns <- unlist(
-    sapply(attr(.mverse, "manipulate_branch"),
-           function(x) if(inherits(x, "mutate_branch")) x$name))
+    sapply(
+      c(
+        attr(.mverse, 'branches_list'),
+        attr(.mverse, 'branches_conditioned_list')
+      ),
+      function(x) if(inherits(x, "mutate_branch")) x$name))
   columns <- c("universe", columns)
   if(is.null(universe)) {
     universe <- mtable$universe

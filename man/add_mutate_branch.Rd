@@ -19,15 +19,32 @@ The resulting \code{mverse} object.
 }
 \description{
 This method adds one or more mutate branches to
-an existing \code{mverse} object.
+an existing \code{mverse} object. Mutate branches
+are used to define options for adding a new
+column to the analysis dataset.
 }
 \examples{
-\dontrun{
-mv <- create_multiverse(df)
-x3 <- mutate_branch(x1+x2, mean(c(x1,x2)))
-mv <- mv \%>\%
-  add_mutate_branch(x3)
-}
+# Define mutate branches.
+hurricane_strength <- mutate_branch(
+  # damage vs. wind speed vs.pressure
+  NDAM,
+  HighestWindSpeed,
+  Minpressure_Updated_2014,
+  # Standardized versions
+  scale(NDAM),
+  scale(HighestWindSpeed),
+  -scale(Minpressure_Updated_2014),
+)
+y <- mutate_branch(
+  alldeaths, log(alldeaths + 1)
+)
+# Create a mverse and add the branches.
+mv <- create_multiverse(hurricane) \%>\%
+  add_mutate_branch(hurricane_strength) \%>\%
+  add_mutate_branch(y)
+# You can also add multiple branches with a single call.
+mv <- create_multiverse(hurricane) \%>\%
+  add_mutate_branch(hurricane_strength, y)
 }
 \seealso{
 Other {methods for working with a mutate branch}: 

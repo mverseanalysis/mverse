@@ -1,13 +1,20 @@
 ---
-title: "Case Study. Are female hurricanes deadlier than male hurricanes?"
-output: rmarkdown::html_vignette
+title: "Does naming a hurricane as a female cause more deaths?"
+output:
+  bookdown::html_document2:
+    base_format: rmarkdown::html_vignette
+    number_sections: false
+link-citations: yes
+pkgdown:
+  as_is: true
+csl: american-statistical-association.csl
 vignette: >
-  %\VignetteIndexEntry{Case Study. Are female hurricanes deadlier than male hurricanes?}
+  %\VignetteIndexEntry{Does naming a hurricane as a female cause more deaths?}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 references:
-  - id: original
-    title: "Female hurricanes are deadlier than male hurricanes"
+  - id: hurricane
+    title: 'Female hurricanes are deadlier than male hurricanes'
     type: article-journal
     issued:
       year: 2014
@@ -28,17 +35,69 @@ references:
       family: Viswanathan
     - given: "Joseph M."
       family: Hilbe
-  - id: multiverse
-    title: "multiverse: R package for creating explorable multiverse analysis"
-    type: entry
-    URL: https://mucollective.github.io/multiverse/
-    accessed:
-      year: 2020
+  - id: multiverseR
+    title: 'multiverse: Multiplexing Alternative Data Analyses in R Notebooks (Version 0.5.0)'
+    type: article-journal
+    URL: https://github.com/MUCollective/multiverse
+    issued:
+      year: 2021
+    journal: OSF Preprints
     author:
     - given: Abhraneel
       family: Sarma
+    - given: Alex
+      family: Kale
+    - given: Michael
+      family: Moon
+    - given: Nathan
+      family: Taback
+    - given: Fanny
+      family: Chevalier
+    - given: Jessica
+      family: Hullman
     - given: Matthew
       family: Kay
+  - id: multiverse
+    title: 'Increasing transparency through a multiverse analysis'
+    type: article-journal
+    issued:
+      year: 2016
+      month: 9
+      day: 29
+    URL: https://doi.org/10.1177/1745691616658637
+    DOI: 10.1177/1745691616658637
+    journal: Perspectives on Psychological Science
+    volume: 11
+    issue: 5
+    page: 702-712
+    author:
+    - given: Sara
+      family: Steegen
+    - given: Francis
+      family: Tuerlinckx
+    - given: Andrew
+      family: Gelman
+    - given: Wolf
+      family: Vanpaemel
+  - id: speccurve
+    title: 'Specification curve analsysis'
+    type: article-journal
+    issued:
+      year: 2020
+      month: 7
+      day: 27
+    URL: https://doi.org/10.1038/s41562-020-0912-z
+    DOI: 10.1038/s41562-020-0912-z
+    journal: Nature Human Behaviour
+    volume: 4
+    page: 1208-1214
+    author:
+      - given: Uri
+        family: Simonsohn
+      - given: "Joseph P."
+        family: Simmons
+      - given: "Leif D."
+        family: Nelson
   - id: boba
     title: "Boba: Authoring and Visualizing Multiverse Analyses"
     type: entry
@@ -61,163 +120,330 @@ references:
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE
-)
+library(kableExtra)
+knitr::opts_chunk$set(collapse = TRUE, echo = FALSE, message = FALSE)
 ```
 
-This case study is adapted from the `multiverse` package case study of the same analysis.
+In this case study, we demonstrate a multiverse analysis using `mverse` to examine whether naming a hurricane with a female name lead to more deaths. The case study closely follows the set of alternative analyses proposed by @speccurve challenging a previous study by @hurricane.
 
-## Initiate a multiverse
+## Background
 
-```{r load_data, warning=FALSE, message=FALSE}
-library(dplyr)
-library(tidyr)
-library(purrr)
-library(tidybayes)
+Figure \@ref(fig:top10) shows top 10 lists of the deadliest and of the most damaging hurricanes that landed in the U.S. between 1950 and 2012. The lists reveal that there are more female names in the deadliest list than in the most damaging list. It is also noticeable that some of the deadliest female hurricanes weren't among the most damaging - e.g., Audrey, Camille, and Agnes.
+
+```{r top10, fig.show='hold', fig.cap="While Katrina is both the deadliest and the most damaging hurricane, the top 10 lists are not consistent with more female hurricanes among the deadliest than the most damaging.", eval=TRUE}
+library(tidyverse)
 library(ggplot2)
 library(mverse)
-data('hurricane')
-# read and process data
-hurricane <- hurricane %>%
-  rename(
-    year = Year,
-    name = Name,
-    dam = NDAM,
-    death = alldeaths,
-    female = Gender_MF,
-    masfem = MasFem,
-    category = Category,
-    pressure = Minpressure_Updated_2014,
-    wind = HighestWindSpeed
-  ) %>%
-  mutate(
-    post = if_else(year > 1979, 1, 0),
-    zcat = as.numeric(scale(category)),
-    zmin = -scale(pressure),
-    zwin = as.numeric(scale(wind)),
-    z3 = as.numeric((zmin + zcat + zwin) / 3)
+hurricane2 <- hurricane %>% mutate(nameyear = paste(Name, Year, sep = ", "))
+topdeaths <- hurricane2 %>%
+  mutate(nameyear = factor(nameyear, levels = nameyear[order(alldeaths)])) %>%
+  arrange(-alldeaths) %>%
+  slice(1:10) 
+topdamages <- hurricane2 %>%
+  mutate(nameyear = factor(nameyear, levels = nameyear[order(NDAM)])) %>%
+  arrange(-NDAM) %>%
+  slice(1:10)
+p1 <- topdeaths %>%
+  ggplot(aes(x = nameyear, y = alldeaths, fill = MasFem > 6)) +
+  theme_void() +
+  geom_bar(stat = "identity", show.legend = FALSE) +
+  labs(title = "10 deadliest Atlantic hurricanes",
+       subtitle = "in the U.S between 1950 and 2012.") +
+  scale_y_continuous(labels = scales::comma, name = "Fatalities", position = "right") +
+  scale_fill_manual(values = c(8, 1)) +
+  coord_flip() +
+  geom_text(aes(label = Name), color = "white", size = 4, hjust = 1, nudge_y = -25,
+            data = topdeaths %>% filter(MasFem > 6, alldeaths > 350)) +
+  geom_text(aes(label = Name), color = "black", size = 4, hjust = 0, nudge_y = 25,
+            data = topdeaths %>% filter(MasFem > 6, alldeaths <= 350)) +
+  geom_text(aes(label = Name), color = 8, size = 4, hjust = 0, nudge_y = 25,
+            data = topdeaths %>% filter(MasFem <= 6)) +
+  theme(
+    plot.title = element_text(size = 12),
+    plot.subtitle = element_text(size = 12),
+    axis.text.x.top = element_text(size = 10),
+    axis.title.x.top = element_text(size = 10, hjust = 1),
+    plot.margin = margin(l= 10, r = 20)
   )
+p2 <- topdamages %>%
+  ggplot(aes(x = nameyear, y = NDAM, fill = MasFem > 6)) +
+  theme_void() +
+  geom_bar(stat = "identity", show.legend = FALSE) +
+  labs(title = "10 mosting damaging Atlantic hurricanes",
+       subtitle = "in the U.S between 1950 and 2012.",
+       caption = "1. Normlized to 2013 USD values.") +
+  scale_y_continuous(labels = scales::comma, position = "right",
+                     name = expression(Damage^1)) +
+  scale_fill_manual(values = c(8, 1)) +
+  coord_flip() +
+  geom_text(aes(label = Name), color = "white", size = 4, hjust = 1, nudge_y = -1000,
+            data = topdamages %>% filter(MasFem > 6)) +
+  geom_text(aes(label = Name), color = "black", size = 4, hjust = 1, nudge_y = -1000,
+            data = topdamages %>% filter(MasFem <= 6)) +
+  theme(
+    plot.title = element_text(size = 12),
+    plot.subtitle = element_text(size = 12),
+    plot.caption = element_text(size = 8, hjust = 0),
+    axis.text.x.top = element_text(size = 10),
+    axis.title.x.top = element_text(size = 10, hjust = 1),
+    plot.margin = margin(l= 10, r = 20)
+  )
+p1; p2
 ```
 
-```{r define_mverse}
-mv <- create_multiverse(hurricane)
+@hurricane hypothesized that this gap was due to people underestimating the severity of a hurricane when it's named with a female name. They investigated the hypothesis by assessing whether hurricanes with female names led to _more fatalities given equal strength_. They collected data on `r nrow(hurricane)` hurricanes that landed in the U.S. between 1950 and 2012. The dataset is included in the library as `hurricane` and contains the following information among others:
+
++   _MasFem_: Femininity rating on hurricane names (1:very masculine; 11: very feminine)
++   _Gender_MF_: Binary femininity indicator for hurricane names (1: feminine; 0 masculine)
++   _alldeaths_: Total fatality counts
++   _NDAM_: Property damage dollar amount normalized to 2013 USD
++   _HighestWindSpeed_: Maximum wind speed
++   _Minpressure_Updated_2014_: Minimum pressure
++   _Year_: Year
++   _Name_: Name
+
+Below are the first few lines of the dataset. See `?hurricane` for more details of the dataset.
+
+```{r echo=TRUE, message=FALSE}
+library(mverse)
+head(hurricane)
 ```
 
-## Define filter branches
+## Multiverse Analysis
 
-```{r filter_branch}
-death_outliers <- filter_branch(
-  TRUE,
-  name != 'Katrina',
-  !(name %in% c('Katrina', 'Audrey'))
+Figure \@ref(fig:top10) also reveals that Hurricane Katrina caused both the most fatalities and the greatest amount of property damage. In particular, hurricane Katrina caused more fatalities (`r topdeaths %>% filter(Name == "Katrina") %>% pull(alldeaths) %>% format(big.mark = ",")`) than the following nine deadliest hurricanes combined (`r topdeaths %>% filter(Name != "Katrina") %>% summarise(s = sum(alldeaths)) %>% pull(s) %>% format(big.mark = ",")`). To assess whether Hurricane Katrina should be considered an outlier, we can investigate the distribution of the fatalities as shown in top left panel of Figure \@ref(fig:dotplots). Based on the plot, we may decide to remove Katrina or Audrey along with Katrina.
+
+```{r dotplots, fig.show='hold', fig.cap="The distributions of different measures of hurricane strengths suggest that some hurricanes had extraordinary strengths."}
+p1 <- hurricane2 %>%
+  ggplot(aes(x = alldeaths, fill = Name %in% (hurricane %>% arrange(-alldeaths) %>% slice(1:2) %>% pull(Name))))+
+  theme_void() +
+  geom_dotplot(binwidth = 50, color = "white",
+               dotsize = 1, stackratio = 1,
+               show.legend = FALSE) +
+  geom_text(aes(label = nameyear, y = 0.05), hjust = 0,
+                color = 2, show.legend = FALSE, size = 3,
+                data = hurricane2 %>% arrange(-alldeaths) %>% slice(1:2)) +
+  scale_fill_manual(values = c(8, 2, 2)) +
+  labs(title = "Distribution of fatalities.", x = "Fatalities") +
+  theme(
+      plot.title = element_text(colour = "black", size = 10),
+      plot.subtitle = element_text(colour = "black", size = 10),
+      axis.text.y = element_text(size = 8, hjust = 1),
+      axis.title.y = element_text(size = 8, hjust = 1, angle = 90),
+      plot.margin = unit(rep(16, 4), "points")
+  ) +
+  coord_flip()
+p2 <- hurricane2 %>%
+  ggplot(aes(x = NDAM, fill = Name %in% (hurricane2 %>% arrange(-NDAM) %>% slice(1:2) %>% pull(Name)))) +
+  theme_void() +
+  geom_dotplot(binwidth = 5000, color = "white",
+               dotsize = 1, stackratio = 1,
+               show.legend = FALSE) +
+  geom_text(aes(label = nameyear, y = 0.06), hjust = 0,
+                color = 2, show.legend = FALSE, size = 3,
+                data = hurricane2 %>% arrange(-NDAM) %>% slice(1:2)) +
+  scale_fill_manual(values = c(8, 2)) +
+  labs(title = "Distribution of damage amounts.", x = "Damage (2013 USD)") +
+  theme(
+      plot.title = element_text(colour = "black", size = 10),
+      plot.subtitle = element_text(colour = "black", size = 10),
+      axis.text.y = element_text(size = 8, hjust = 1),
+      axis.title.y = element_text(size = 8, hjust = 1, angle = 90),
+      plot.margin = unit(rep(16, 4), "points")
+  ) +
+  coord_flip()
+p3 <- hurricane2 %>%
+  ggplot(aes(x = HighestWindSpeed, fill = Name %in% (hurricane2 %>% arrange(-HighestWindSpeed) %>% slice(1:2) %>% pull(Name)))) +
+  theme_void() +
+  geom_dotplot(binwidth = 5, color = "white", dotsize = 1, stackratio = 1,
+               show.legend = FALSE) +
+  geom_text(aes(label = nameyear, y = 0.07),
+                color = 2, show.legend = FALSE, hjust = 0, size = 3,
+                data = hurricane2 %>% arrange(-HighestWindSpeed) %>% slice(1:2)) +
+  scale_fill_manual(values = c(8, 2)) +
+  labs(title = "Distribution of the maximum wind speeds.", x = "Maximum Wind Speed") +
+  theme(
+    plot.title = element_text(colour = "black", size = 10),
+    plot.subtitle = element_text(colour = "black", size = 10),
+    axis.text.y = element_text(size = 8, hjust = 1),
+    axis.title.y = element_text(size = 8, hjust = 1, angle = 90),
+    plot.margin = unit(rep(16, 4), "points")
+  ) +
+  coord_flip()
+p4 <- hurricane2 %>%
+  ggplot(aes(x = Minpressure_Updated_2014, fill = nameyear %in% (hurricane2 %>% arrange(Minpressure_Updated_2014) %>% slice(1:2) %>% pull(nameyear)))) +
+  theme_void() +
+  geom_dotplot(binwidth = 5, color = "white", dotsize = 1, stackratio = 1,
+               show.legend = FALSE) +
+  geom_text(aes(label = nameyear, y = 0.07),
+                color = 2, show.legend = FALSE, hjust = 0, size = 3,
+                data = hurricane2 %>% arrange(Minpressure_Updated_2014) %>% slice(1:2)) +
+  scale_fill_manual(values = c(8, 2)) +
+  labs(title = "Distribution of the minimum pressures.", x = "Minimum Pressure") +
+  theme(
+    plot.title = element_text(colour = "black", size = 10),
+    plot.subtitle = element_text(colour = "black", size = 10),
+    axis.text.y = element_text(size = 8, hjust = 1),
+    axis.title.y = element_text(size = 8, hjust = 1, angle = 90),
+    plot.margin = unit(rep(16, 4), "points")
+  ) +
+  coord_flip()
+p1; p2; p3; p4
+```
+
+We can alternatively investigate distributions of other measures of hurricane strengths to decide which hurricanes to include in the analysis. Figure \@ref(fig:dotplots) displays distributions of the other measures of hurricane strengths available in the data. Based on different measures, we may exclude Andrew and Katrina, or Camille and Katrina from the analysis.
+
+In `mverse`, we call an analytical decision point such as the decision on outliers a _branch_. The alternative decisions for a branch are called _options_. For example, we have the following options for the outlier branch:
+
+1. Exclude Katrina and Audrey;
+2. Exclude Katrina and Andrew;
+3. Exclude Katrina and Camille;
+4. Exclude Katrina only; and
+5. Exclude none.
+
+The outlier branch is not the only analytical decision points where there can be more than one reasonable alternatives. @speccurve lists a set of analytical decisions with multiple alternatives to answer the research question with the given dataset. Table \@ref(tab:branches) lists the branches and options adopted from @speccurve. In the following sections, we demonstrate conducting a multiverse analysis using `mverse` based on the branches and options defined in Table \@ref(tab:branches).
+
+```{r branches, echo=FALSE}
+outliers_tbl <- c("Exclude Katrina and Audrey", "Exclude Katrina and Andrew", "Exclude Katrina and Camille", "Exclude Katrina only", "Exclude none")
+femininity_tbl <- c("Ratings on femininity (1 - 11)", "Binary femininity indicator")
+strength_tbl <- c("Property damage", "Maximum wind speed", "Minimum pressure", "Log of property damage")
+distribution_tbl <- c("Poisson regression on deaths", "Linear regression on log(deaths + 1)")
+assess_tbl <- c("Interaction effect between femininity and strength", "Main effect of femininity with no interaction")
+
+branches_tbl <- data.frame(
+  Branches = factor(c(rep("Which hurricanes to analyse", 5), rep("Measuring hurricane name's femininity", 2), rep("Measuring hurricane strength", 4), rep("Regression model type", 2), rep("Assessing evidence of gender-bias", 2))),
+  Options = c(outliers_tbl, femininity_tbl, strength_tbl, distribution_tbl, assess_tbl)
 )
-damage_outliers <- filter_branch(
-  TRUE,
-  name != 'Sandy',
-  !(name %in% c('Sandy', 'Andrew')),
-  !(name %in% c('Sandy', 'Andrew', 'Donna'))
+kable(branches_tbl %>% select(Options), col.names = c(""),
+      caption = "Branches and options for analysing the hurricane data adopted from @speccurve. For simplicity, we replaced a negative binomial regression model option with a Poisson regression model option.") %>%
+  pack_rows(index = table(branches_tbl %>% pull(Branches) %>% fct_inorder()))
+```
+
+## Initialize `mverse`
+
+First, we start by defining a `mverse` object with the dataset used for the analysis. `mverse` assumes a single dataset for the analysis and you must provide a dataset. The following line creates `mv` object of class `mverse` with `hurricane` dataset attached.
+
+```{r init, echo=TRUE}
+mv <- mverse(hurricane)
+```
+
+## Define Branches
+
+We now use the `*_branch()` methods to define branches in `mverse`. To define the branch on which hurricanes to analyse, we can use `filter_branch()` method which multiplexes `dplyr::filter()` method.
+
+```{r outlier_branch, echo=TRUE}
+outliers <- filter_branch(
+  ! Name %in% c("Katrina", "Audrey"),
+  ! Name %in% c("Katrina", "Andrew"),
+  ! Name %in% c("Katrina", "Camille"),
+  ! Name %in% c("Katrina"),
+  TRUE # include all
 )
+```
+
+To define the branches on how we measure hurricane name's femininity and hurricane strength, we can use `mutate_branch()` method. The method uses `dplyr::mutate()` in each universe to add a new column to the dataset according to the options provided.
+
+The following code defines a branch for the femininity column.
+
+```{r femininity_branch, echo=TRUE}
+femininity <- mutate_branch(MasFem, Gender_MF)
+```
+
+The following code defines a branch for the hurricane strength column.
+
+```{r strength_branch, echo=TRUE}
+strength <- mutate_branch(NDAM, HighestWindSpeed, Minpressure_Updated_2014, log(NDAM))
+```
+
+To specify the regression model type and the model, we need to provide both `formula` and `family` for the generalized models used in the analysis. We can use `mutate_branch()` again to specify the two options for the response variable, and `formula_branch()` and `family_branch()` to specify options for the model structure and distribution.
+
+```{r model_branch, echo=TRUE}
+y <- mutate_branch(alldeaths, log(alldeaths + 1))
+model <- formula_branch(
+  y ~ femininity * strength,
+  y ~ femininity + strength
+)
+distribution <- family_branch(poisson, gaussian)
+```
+
+## Add Branches
+
+After defining the branches, we need to add them to the `mverse` object (`mv`). We use appropriate `add_*_branch()` method for each type of branch as shown in the following code.
+
+```{r echo=TRUE}
 mv <- mv %>%
-  add_filter_branch(death_outliers, damage_outliers)
-summary(mv)
+  add_filter_branch(outliers) %>%
+  add_mutate_branch(femininity, strength, y) %>%
+  add_formula_branch(model) %>%
+  add_family_branch(distribution)
 ```
 
-## Define mutate branches
 
-```{r define_variables}
-femininity <- mutate_branch(
-  female,
-  masfem
-)
-damage <- mutate_branch(
-  dam,
-  log(dam)
-)
-mv <- mv %>%
-  add_mutate_branch(femininity, damage)
-summary(mv)
+## Condition Branches
+
+Note that we specified the response variable `y` with two options and the underlying distribution with two options. This results in expanding the multiverse by a factor of 4. We can check the interaction between the two branches using `tree()` method. `branches` argument allows us to look focus on the two branches instead of the whole multiverse.
+
+```{r echo=TRUE, fig.width=8}
+multiverse_tree(mv, label = TRUE, branches = c("y", "distribution"))
 ```
 
-## Define model branches
+However, fitting Poisson models with log transformed fatality counts (`log(alldeath + 1)`) is not a valid analysis. A Gaussian model with untransformed fatality counts (`alldeaths`) is also not one of the reasonable analysis paths considered in Table \@ref(tab:branches). We match an option in one branch to an option in another branch by using `branch_condition()`. The following codes matches `log(alldeaths + 1)` with `gaussian` and `alldeaths` with `poisson`.
 
-> `mverse` methods aren't implemented yet
-
-```{r fit_model}
-# wrapper for model branching to be implemented
-multiverse::inside(
-  mv, {
-    fit <- glm(
-      branch(
-        model,
-        'linear' ~ log(death + 1),
-        'poisson' ~ death
-      ) ~ branch(
-        femininity_damage_interaction,
-        'yes' ~ femininity * damage,
-        'no' ~ femininity + damage
-      ) + branch(
-        other_predictors,
-        'pressure' ~ femininity * zmin,
-        'wind' ~ femininity * zwin,
-        'category' ~ femininity * zcat,
-        'all' ~ femininity * z3,
-        'all_no_interaction' ~ z3,
-        'none' ~ NULL
-      ) + branch(
-        covariates,
-        '1' ~ NULL,
-        '2' ~ year:damage,
-        '3' ~ post:damage
-      ), family = branch(
-        model,
-        'linear' ~ gaussian,
-        'poisson' ~ poisson
-      ), data = data
-    )
-    # attach fitted values and standard errors to the original data
-    pred <- predict(fit, se.fit = TRUE, type = "response")
-    disagg_fit <- data %>%
-      mutate(
-        fitted = pred$fit,
-        se.fit = pred$se.fit,
-        df = df.residual(fit),
-        sigma = sigma(fit),
-        se.residual = sqrt(sum(residuals(fit)^2))/ df
-      )
-    pred2expectation <- function(mu, sigma) {
-      branch(model, "linear" ~ exp(mu + sigma^2/2) - 1, "poisson" ~ mu)
-    }
-    expectation <- disagg_fit %>%
-      mutate(expected_deaths = pred2expectation(fitted, sigma)) %>%
-      group_by(female) %>%
-      summarise(mean_deaths = mean(expected_deaths), .groups = "drop_last") %>%
-      compare_levels(mean_deaths, by = female)
-  }
-)
+```{r echo=TRUE}
+match_poisson <- branch_condition(alldeaths, poisson)
+match_log_lin <- branch_condition(log(alldeaths + 1), gaussian)
+mv <- add_branch_condition(mv, match_poisson, match_log_lin)
 ```
 
-## Execute and Inspect Results
+Checking the tree diagram again shows that the conditioning resulted in the two branches multiplexing by a factor of 2 instead of 4 as intended.
 
-```{r}
-# execute the multiverse
-mv <- mv %>%
-  execute_multiverse()
+```{r echo=TRUE, fig.width=8}
+multiverse_tree(mv, label = TRUE, branches = c("y", "distribution"))
 ```
 
-> `mverse` methods aren't implemented yet (will wait until `multiverse::extract_variables` is available in the released version of `multiverse`)
+We can also check the full multiverse tree without the `branches` argument. Note that since the output of `multiverse_tree()` is a ggplot object, you can use ggplot methods to further customize it.
 
-```{r extract_results, fig.width=8, fig.height=3, fig.cap="Estimated coefficient of femininity of a hurricane's name."}
-# a wrapper function to be implemented using multiverse::extract_variables
-fem_coefs <- multiverse::extract_variables(mv) %>%
-  mutate(res = map(.results, 'expectation')) %>%
-  unnest(res) %>%
-  rename(universe = .universe)
-fem_coefs %>%
-  arrange(mean_deaths) %>%
-  mutate(index = 1:nrow(.)) %>%
-  ggplot(aes(y = mean_deaths, x = index, color = model)) +
-  geom_point(alpha = 0.1) +
-  xlab('Universe') + ylab('Mean Difference in Expected Deaths') +
-  theme_minimal()
+```{r echo=TRUE, fig.width=8}
+multiverse_tree(mv) + ggplot2::theme(legend.position = "left")
 ```
+
+## Fit Models
+
+`mverse` package provides a `glm_mverse()` method for multiplexing `stats::glm()` across `mverse` objects.
+
+```{r echo=TRUE}
+mv <- glm_mverse(mv)
+```
+
+
+### Examining Analysis Results
+
+After completing the analysis, we can extract the results using `summary()`. The method returns a table with branching options, estimates, 95\% confidence intervals for all regression terms across the multiverse.
+
+```{r echo=TRUE}
+res <- summary(mv)
+head(res)
+```
+
+As the resulting data is in `tibble` format, we can use regular `tidyverse` grammar to manipulate the data. For example, we can focus on the estimates on the main effects (`femininity`) and the interaction effects (`femininity:strength`) across the multiverse. In the code below, we specifically focus on the estimate and the confidence intervals.
+
+```{r echo=TRUE, message=FALSE}
+library(tidyverse)
+res %>%
+  filter(term %in% c("femininity", "femininity:strength")) %>%
+  select(contains("_branch"), term, estimate, conf.low, conf.high)
+```
+
+We can also inspect the result graphically using `spec_curve()`. The method builds a specification curve [@speccurve] for a term in the regression model specified by `var`. The method also allows multiple ways of sorting the estimates. See `?spec_curve` for details. Below are specification curves for the main effect followed by one for the interaction effect, both constructed using `spec_curve()`. They are both sorted by whether the coefficient estimate is significant at 5\% level.
+
+```{r echo=TRUE, fig.width=8, fig.asp=0.56}
+spec_curve(mv, var = "femininity", color_order = TRUE)
+```
+
+```{r echo=TRUE, fig.width=8, fig.asp=0.56}
+spec_curve(mv, var = "femininity:strength", color_order = TRUE)
+```
+
+In both specification curves, we can see that all universes using the log-linear model result in non-significant estimates. When the Poisson model is used, the coefficient estimates aren't always significant.
+
+## References

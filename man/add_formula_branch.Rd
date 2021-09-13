@@ -19,20 +19,22 @@ The resulting \code{mverse} object.
 }
 \description{
 This method adds one or more formula branches to
-an existing \code{mverse} object. The formula branches
-are used to specify a model for the main analysis.
+an existing \code{mverse} object. Formula branches
+are used to specify model structure options for the analysis.
 }
 \examples{
-\dontrun{
-mv <- create_multiverse(df)
-model_spec <- formula_branch(y ~ x1 + x2, y ~ x1 * x2)
-mv <- mv \%>\%
-  add_formula_branch(model_spec)
-}
+# Define a formula branch.
+model_specifications <- formula_branch(
+  y ~ femininity,
+  y ~ femininity + hurricane_strength,
+  y ~ femininity * hurricane_strength
+)
+# Create a mverse, add the branch.
+mv <- create_multiverse(hurricane) \%>\%
+  add_formula_branch(model_specifications)
 }
 \seealso{
 Other {methods for working with a formula branch}: 
-\code{\link{family_branch}()},
 \code{\link{formula_branch}()}
 }
 \concept{{methods for working with a formula branch}}

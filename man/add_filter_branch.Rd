@@ -19,15 +19,21 @@ The resulting \code{mverse} object.
 }
 \description{
 This method adds one or more filter branches to
-an existing \code{mverse} object.
+an existing \code{mverse} object. Filter branches
+are used to define options for conditions
+for selecting subsets of data rows.
 }
 \examples{
-\dontrun{
-mv <- create_multiverse(df)
-x3 <- filter_branch(x1+x2, mean(c(x1,x2)))
-mv <- mv \%>\%
-  add_filter_branch(x3)
-}
+# Define a filter branch.
+hurricane_outliers <- filter_branch(
+  ! Name \%in\% c("Katrina", "Audrey", "Andrew"),
+  ! Name \%in\% c("Katrina"),
+  ! Name \%in\% c("Katrina"),
+  TRUE # include all
+)
+# Create a mverse and add the branch.
+mv <- create_multiverse(hurricane) \%>\%
+  add_filter_branch(hurricane_outliers)
 }
 \seealso{
 Other {methods for working with a filter branch}: 
