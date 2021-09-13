@@ -11,9 +11,9 @@ test_that("Branches require at least one rule.", {
 
 test_that("*_branch() defines branches without 'name'.", {
   expect_equal(
-    rlang::quo_name(mutate_branch(x + y)$opts[[1]]), "x + y")
+    rlang::quo_name(mutate_branch(x + y)$rules[[1]]), "x + y")
   expect_equal(
-    rlang::quo_name(filter_branch(x > 0)$opts[[1]]), "x > 0")
+    rlang::quo_name(filter_branch(x > 0)$rules[[1]]), "x > 0")
 })
 
 test_that("*_branch() defines branches with names specified.", {
@@ -30,23 +30,23 @@ test_that("*_branch() checks a provided name is a character.", {
     'Error: "name" must be a character object.')
 })
 
-test_that("*_brach() defines branches with multiple options.", {
+test_that("*_brach() defines branches with multiple rules.", {
   mbranch <- mutate_branch(x + y, x - y, x * y)
   expect_equal(
-    rlang::quo_name(mbranch$opts[[1]]), "x + y")
+    rlang::quo_name(mbranch$rules[[1]]), "x + y")
   expect_equal(
-    rlang::quo_name(mbranch$opts[[2]]), "x - y")
+    rlang::quo_name(mbranch$rules[[2]]), "x - y")
   expect_equal(
-    rlang::quo_name(mbranch$opts[[3]]), "x * y")
-  expect_equal(length(mbranch$opts), 3)
+    rlang::quo_name(mbranch$rules[[3]]), "x * y")
+  expect_equal(length(mbranch$rules), 3)
   fbranch <- filter_branch(x > 0, x < 0, x == 0)
   expect_equal(
-    rlang::quo_name(fbranch$opts[[1]]), "x > 0")
+    rlang::quo_name(fbranch$rules[[1]]), "x > 0")
   expect_equal(
-    rlang::quo_name(fbranch$opts[[2]]), "x < 0")
+    rlang::quo_name(fbranch$rules[[2]]), "x < 0")
   expect_equal(
-    rlang::quo_name(fbranch$opts[[3]]), "x == 0")
-  expect_equal(length(fbranch$opts), 3)
+    rlang::quo_name(fbranch$rules[[3]]), "x == 0")
+  expect_equal(length(fbranch$rules), 3)
 
 })
 
@@ -93,8 +93,8 @@ test_that("add_*_branch() adds a branch.", {
   mv %>%
     add_mutate_branch(mbranch) %>%
     add_filter_branch(fbranch)
-  expect_equal(attr(mv, "branches_list")[[1]]$name, "m")
-  expect_equal(attr(mv, "branches_list")[[2]]$name, "f")
+  expect_equal(attr(mv, "manipulate_branches")[[1]]$name, "m")
+  expect_equal(attr(mv, "manipulate_branches")[[2]]$name, "f")
 })
 
 test_that("add_*_branch() adds multiple branches in order.", {
@@ -109,7 +109,7 @@ test_that("add_*_branch() adds multiple branches in order.", {
     add_filter_branch(
       filter_branch(x > 0, x < 0, x == 0, name = "f1"),
       filter_branch(x > 0, x < 0, x == 0, name = "f2"))
-  nms <- sapply(attr(mv, "branches_list"), function(x) x$name)
+  nms <- sapply(attr(mv, "manipulate_branches"), function(x) x$name)
   expect_equal(nms, c("m1", "m2", "f1", "f2"))
 })
 

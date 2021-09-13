@@ -1,17 +1,15 @@
 #' Performs one or two sample t-tests on data columns.
 #'
-#' \code{ttest_mverse} performs t-tests across the multiverse.
-#' If x or y is specified, then performs one and two sample t-tests
-#' on specified columns of the data. If both x and y are NULL, then
-#' performs t.test based on the formula branches.
+#' \code{t.test_mverse} performs t-tests across the multiverse.
+#' You can specify
 #'
 #' @examples
 #' \dontrun{
 #' mv <- mv %>%
-#'   ttest_mverse()
+#'   t.test_mverse()
 #' }
 #' @param .mverse a \code{mverse} object.
-#' @param x (optional) column name of data within mverse object
+#' @param x column name of data within mverse object
 #' @param y (optional) column name of data within mverse object
 #' @param alternative a character string specifying the alternative hypothesis,
 #'        must be one of "two.sided" (default), "greater" or "less". You can specify just the initial letter.
@@ -20,12 +18,12 @@
 #' @param var.equal a logical variable indicating whether to treat the two variances as being equal.
 #' @param conf.level confidence level of the interval.
 #' @return A \code{ttest_mverse} object.
-#' @name ttest
+#' @name t.test
 #' @family {hypothesis testing methods}
 #' @export
 ttest_mverse <-
   function(.mverse,
-           x = NULL,
+           x,
            y = NULL,
            alternative = "two.sided",
            mu = 0,
@@ -33,44 +31,21 @@ ttest_mverse <-
            var.equal = FALSE,
            conf.level = 0.95) {
     stopifnot(inherits(.mverse, "mverse"))
-    x <- rlang::enquo(x)
-    y <- rlang::enquo(y)
-    if (rlang::quo_is_null(x))
-      multiverse::inside(.mverse, {
-        htest <- t.test(
-          formulae,
-          data = data,
-          alternative = !!rlang::enexpr(alternative),
-          mu = !! rlang::enexpr(mu),
-          paried = !! rlang::enexpr(paired),
-          var.equal = !! rlang::enexpr(var.equal),
-          conf.level = !! rlang::enexpr(conf.level)
-        )
-      })
-    else if (rlang::quo_is_null(y))
-      multiverse::inside(.mverse, {
-        htest <- t.test(
-          x = data %>% dplyr::pull(!! rlang::get_expr(x)),
-          alternative = !! rlang::enexpr(alternative),
-          mu = !! rlang::enexpr(mu),
-          paried = !! rlang::enexpr(paired),
-          var.equal = !! rlang::enexpr(var.equal),
-          conf.level = !! rlang::enexpr(conf.level)
-        )
-      })
-    else
-      multiverse::inside(.mverse, {
-        htest <- t.test(
-          x = data %>% dplyr::pull(!! rlang::get_expr(x)),
-          y = data %>% dplyr::pull(!! rlang::get_expr(y)),
-          alternative = !! rlang::enexpr(alternative),
-          mu = !! rlang::enexpr(mu),
-          paried = !! rlang::enexpr(paired),
-          var.equal = !! rlang::enexpr(var.equal),
-          conf.level = !! rlang::enexpr(conf.level)
-        )
-      })
     multiverse::inside(.mverse, {
+      y = if (is.null(!!rlang::enexpr(y)))
+        NULL
+      else
+        data %>% dplyr::pull(!!rlang::enexpr(y))
+      htest <-
+        t.test(
+          x = data %>% dplyr::pull(!!rlang::enexpr(x)),
+          y = y,
+          alternative = !!rlang::enexpr(alternative),
+          mu = !!rlang::enexpr(mu),
+          paried = !!rlang::enexpr(paired),
+          var.equal = !!rlang::enexpr(var.equal),
+          conf.level = !!rlang::enexpr(conf.level)
+        )
       out <-
         as.data.frame(t(
           c(
@@ -93,5 +68,5 @@ ttest_mverse <-
       dplyr::mutate(universe = factor(.universe)) %>%
       dplyr::select(-dplyr::starts_with(".")) %>%
       dplyr::select(universe, dplyr::everything())
-    display_branch_opts(mtable, .mverse)
+    display_branch_rules(mtable, .mverse)
   }

@@ -15,10 +15,14 @@ test_that("summary() prints the multiverse table for a mverse object.", {
   mtable <- summary(mv)
   mtable_expected <- tibble::tibble(
     universe = factor(1:(3^4)),
-    m1_branch = factor(rep(c("x + y", "x - y", "x * y"), each = 3^3)),
-    m2_branch = factor(rep(rep(c("x + y", "x - y", "x * y"), each = 3^2), 3)),
-    f1_branch = factor(rep(rep(c("x > 0", "x < 0", "x == 0"), each = 3), 3^2)),
-    f2_branch = factor(rep(c("x > 0", "x < 0", "x == 0"), 3^3)))
+    m1_branch = factor(rep(c("x + y", "x - y", "x * y"), each = 3^3),
+                       levels = c("x + y", "x - y", "x * y")),
+    m2_branch = factor(rep(rep(c("x + y", "x - y", "x * y"), each = 3^2), 3),
+                       levels = c("x + y", "x - y", "x * y")),
+    f1_branch = factor(rep(rep(c("x > 0", "x < 0", "x == 0"), each = 3), 3^2),
+                       levels = c("x > 0", "x < 0", "x == 0")),
+    f2_branch = factor(rep(c("x > 0", "x < 0", "x == 0"), 3^3),
+                       levels = c("x > 0", "x < 0", "x == 0")))
   expect_equal(nrow(mtable), 3^4)
   expect_equal(ncol(mtable), 5)
   expect_equal(

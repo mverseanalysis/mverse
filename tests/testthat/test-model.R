@@ -43,12 +43,3 @@ test_that("lm_mverse() expects a formula branch.", {
   mv <- mverse(mydf)
   expect_error(lm_mverse(mv), "Exactly one formula branch is required.")
 })
-
-test_that("glm_mverse() expects a formula branch.", {
-  n <- 10
-  mydf <- data.frame(x1 = 1:n, x2 = sample(1:n)) %>%
-    dplyr::mutate(y = rnorm(n, x1 + x2))
-  mv <- mverse(mydf)
-  expect_error(glm_mverse(mv), "Exactly one formula branch is required.")
-})
-

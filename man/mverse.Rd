@@ -20,10 +20,7 @@ Constructs a new mverse object which extends
 \code{multiverse::multiverse} object.
 }
 \examples{
-# Create a mverse object.
-mv <- mverse(hurricane)
-# create_multiverse() is an alias of mverse().
-mv <- create_multiverse(hurricane)
+mv <- mverse(soccer)
 }
 \seealso{
 Other {mverse methods}: 

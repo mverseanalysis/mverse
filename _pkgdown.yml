@@ -1,15 +1,2 @@
 destination: docs
 url: https://mverseanalysis.github.io/mverse
-figures:
-  dpi: 144
-articles:
-- title: Examples
-  navbar: Examples
-  contents:
-  - example-1
-  - getting-start
-  - regression
-- title: Case Studies
-  navbar: Case Studies
-  contents:
-  - hurricane

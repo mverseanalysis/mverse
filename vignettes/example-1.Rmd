@@ -1,9 +1,8 @@
 ---
-title: "Defining a branch for a column and extracting the branched values."
+title: "Example 1. Combining two independent ratings."
 output: rmarkdown::html_vignette
-csl: american-statistical-association.csl
 vignette: >
-  %\VignetteIndexEntry{Defining a branch for a column and extracting the branched values.}
+  %\VignetteIndexEntry{Example 1. Combining two independent ratings.}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 references:
@@ -153,24 +152,37 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-library(mverse)
 ```
 
-In this example, we demonstrate `mverse` makes it easy to define multiple definitions for a column in a dataset and compare the results of the different definitions. For the demonstration, we combine soccer player skin colour ratings by two independent raters (`rater1` and `rater2`) from `soccer` dataset included in the library. 
 
-## Introduction
+The library comes preloaded with
+a dataset, `soccer`, from [@datasrc] 
+on card counts per each pair between 
+2,053 soccer players and 3,147 referees.
+Below are the first few lines of the dataset.
 
-The data comes from @datasrc and contains `r format(nrow(soccer), big.mark = ",")` rows of player-referee pairs. For each player, two independent raters coded their skin tones on a 5-point scale ranging from _very light skin_ (`0.0`) to _very dark skin_ (`1.0`). For the purpose of demonstration, we only use a unique record per player and consider only those with both ratings.
-
-```{r load, message=FALSE}
+```{r load}
 library(mverse)
-df <- soccer[!is.na(soccer$rater1) & !is.na(soccer$rater2), 
-             c('playerShort', 'rater1', 'rater2')]
-df <- unique(df)
-head(df)
+knitr::kable(head(soccer)) # using kable for displaying data in html
 ```
 
-We would like to study the distribution of the player skin tones but the two independent rating do not always match. To combine the two ratings, we may choose to consider the following options:
+
+The dataset was used to study whether
+racial bias played a role when referees
+issued the cards. For each player,
+two independent raters coded their skin tones
+on a 5-point scale ranging 
+from _very light skin_ (`0.0`)
+to _very dark skin_ (`1.0`) 
+with _neither dark nor light skin_(`0.5`)
+as the centre value. 
+
+
+We would like to study the distribution
+of the player skin tones but the two independent 
+rating do not always match. 
+To combine the two ratings, you may consider
+the following options:
 
 1.  the mean numeric value
 2.  the darker rating of the two
@@ -178,184 +190,170 @@ We would like to study the distribution of the player skin tones but the two ind
 4.  the first rating only
 5.  the second rating only
 
-## Without the `mverse` library
+## 1. Without the `mverse` library.
 
-Let's first consider how you might study the five options using base R. First, we define the five options as separate variables in R.
+Let's first consider how you might 
+study the five options using base R.  
+First, we will define the five options
+as separate variables.
 
 ```{r base_r}
-skin_option_1 <- (df$rater1 + df$rater2) / 2 
-skin_option_2 <- ifelse(df$rater1 > df$rater2, df$rater1, df$rater2)
-skin_option_3 <- ifelse(df$rater1 < df$rater2, df$rater1, df$rater2)
-skin_option_4 <- df$rater1    
-skin_option_5 <- df$rater2    
+# remove rows with no rating
+soccer <- soccer[!is.na(soccer$rater1), ] 
+
+skin_option_1 <- (                # mean
+  soccer$rater1 + soccer$rater2) / 2 
+skin_option_2 <- ifelse(          # max
+  soccer$rater1 > soccer$rater2, 
+  soccer$rater1, soccer$rater2)
+skin_option_3 <- ifelse(          # min
+  soccer$rater1 < soccer$rater2, 
+  soccer$rater1, soccer$rater2)
+skin_option_4 <- soccer$rater1    # first
+skin_option_5 <- soccer$rater2    # second
 ```
 
-We can plot a histogram to study the distribution of the resulting skin tone value for each option. Below is the histogram for the first option (`skin_option_1`).
+We can plot their histograms to study the distributions.
+We will use the `ggplot2` library for plotting.
 
-```{r hist_base}
+```{r hist_base, fig.caption="Histogram of skin tones variale based on the first definition.", fig.width=5, fig.height=4, warning=FALSE}
 library(ggplot2)
 ggplot(mapping=aes(x = skin_option_1)) +
   geom_histogram(breaks = seq(0,1,0.2),
                  colour = 'white') +
-  labs(title = 'Histogram of player skin tones (Option 1: Mean).',
+  labs(title = 'Histogram of player skin tones.',
        x = 'Skin Tone', y = 'Count')
 ```
 
 
-For the remaining four options, we can repeat the step above to examine the distributions, or create a new data frame combining all five options to use in a ggplot as shown below. In both cases, users need to take care of plotting all five manually.
+Now, for the remaining four variable definitions,
+we will have to repeat the step above. 
 
-```{r hist_base_overlaid}
-skin_option_all <- data.frame(
-  x = c(skin_option_1, skin_option_2, skin_option_3, skin_option_4, skin_option_5),
-  Option = rep(c(
-    'Option 1: Mean', 'Option 2: Max', 'Option 3: Min', 
-    'Option 4: Rater 1', 'Option 5: Rater 2'), each = nrow(df)
-    )
-  )
-ggplot(data = skin_option_all) +
-  geom_histogram(aes(x = x), binwidth = 0.1) +
-  labs(title = 'Histogram of player skin tones for each option.',
-       x = 'Skin Tone', y = 'Count') +
-  facet_wrap(. ~ Option)
-```
+### Exercise.
+
+1.  Plot histograms for the remaining four options in base R.
+How would you display the five plots together?
+2.  How would you perform the same analysis 
+using the `tidyverse` package?
 
 
-## Branching using `mverse`
+## 2. Basic Branching using `mverse`.
 
-We now turn to `mverse` to create the five options above. First, we define a `mverse` object with the dataset. Note that `mverse` assumes a single dataset for each multiverse analysis.
+We will now learn how we can
+create the options using the `mverse` package.
+We first consider the first two options.
+
+1.  the mean numeric value
+2.  the darker rating of the two
+
+First, we will define a `mverse` object
+from the data set.
 
 ```{r create_mv}
-mv <- create_multiverse(df)
+mv <- create_multiverse(soccer)
 ```
 
-In `mverse` package, a _branch_ refers to a decision point in data analysis where you may consider more than one _option_. For example, a mutate branch - analogous to `mutate` method in `tidyverse`'s data manipulation grammar, lets you define a set of options for defining a new column in your dataset. 
-
-You can create a mutate branch with `mutate_branch()`. The syntax for defining the options inside `mutate_branch()` follows the `tidyverse`'s grammar as well. 
+In `mverse` package, an alternative variable definition
+is called a mutate branch - analogous to `mutate` method in `tidyverse`'s
+data manipulation grammar. You can create
+a mutate branch with the function `mutate_branch`.
 
 ```{r mutate_branch}
 skin_tone <- mutate_branch(
   (rater1 + rater2)/2,
-  ifelse(rater1 > rater2, rater1, rater2),
-  ifelse(rater1 < rater2, rater1, rater2),
-  rater1,
-  rater2
+  ifelse(rater1 > rater2, rater1, rater2)
 )
 ```
 
-You can then add the newly defined mutate branch to the `mv` object using `add_mutate_branch()`. 
+You can then add the mutate branch rules to the `mverse` object
+using `add_mutate_branch`. You can use the `tidyverse`'s
+`dplyr` grammar for defining the mutate rules.
 
 ```{r add_vb}
 mv <- mv %>%
-  add_mutate_branch(skin_tone)
+  add_mutate_branch(skin_tone) %>%
+  execute_multiverse()
 ```
 
-Adding a branch to a `mverse` object multiplies the number of environments defined inside the object so that the environments capture all unique analysis paths. Without any branches, a `mverse` object has a single environment. We call these environments _universes_. For example, adding the `skin_tone` mutate branch to `mv` results in $1 \times 5 = 5$  universes inside `mv`. In each universe, the analysis dataset now has a new column named `skin_tone` -  the name of the mutate branch object. 
+The object name `skin_tone` is the name of
+the new variable defined. Each alternative
+definition creates an alternative _universe_
+in the `mverse` object. `execute_multiverse`
+generates the new variable based
+on the branching rules provided by
+`add_mutate_branch`.
 
-You can check that the mutate branch was added with `summary()` method for the `mv` object. The method prints a _multiverse table_ that lists all universes with branches as columns and corresponding options as values defined in the `mv` object.
+You can see the mutate branch added with `summary`
+method for the `mverse` object. 
 
 ```{r check_multiverse}
 summary(mv)
 ```
 
-At this point, the values of the new column `skin_tone` are only populated in the first universe. To populate the values for all universes, we call `execute_multiverse`.
+### Exercise.
 
-```{r exec}
-execute_multiverse(mv)
-```
+1.  Define and add the mutate branches for the remaining three options.
+2.  Print the multiverse table. How many _universes_ does your multiverse produce?
 
-## Comparing between universes
+## 3. Comparing between Universes.
 
-In this section, we now examine and compare the distributions of `skin_tone` values between different options. You can extract the values in each universe using `extract()`. By default, the method returns all columns created by a mutate branch across all universes. In this example, we only have one column - `skin_tone`.
+In this section, we will now examine and compare the distributions of
+the mutate branches. You can extract the resulting value of branched
+variables using `extract` method. By default, it returns the branched
+variables across all universes with the universe index. Note that
+the universe index column is returned as a factor variable.
 
 ```{r extract_multiverse}
-branched <- extract(mv)
+branched <- extract(mv) 
+dim(branched)
 ```
 
-`branched` is dataset with `skin_tone` values from the first universe...
-
-```{r head_skin_tone}
-head(branched)
-```
-
-...as well as the last universe.
-
-```{r tail_skin_tone}
-tail(branched)
-```
-
-The method provides various options to select a subset of data as well. These are useful when the multiverse is too large and examining the whole multiverse is inefficient.
-
-Setting `universe = 2` extracts values from the second universe only. Checking the unique `universe` values in the returned dataset shows that the dataset indeed only consists of values from the second universe. 
-
-```{r ununi}
-branched_2 <- extract(mv, universe = 2)
-unique(branched_2$universe)
-```
-
-Setting `universe = c(1,2)` extracts values from both first and second universes.
-
-```{r ununi_1_2}
-branched_1_2 <- extract(mv, universe = c(1,2))
-unique(branched_1_2$universe)
-```
-
-`frow` provides the option to extract a random subset of rows in each universe. It takes a value between 0 and 1 that represent the fraction of values to extract from each universe. For example, setting `frow = 0.05` returns approximately 5\% of values from each universe.
+It provides various options to select a subset of data only.
+`universe` and `nuni` are useful if you want to select 
+a subset of universes in the multiverse. `frow` provides
+the option to extract a fraction of data in each universe.
 
 ```{r extract_fraction}
 frac <- extract(mv, frow =  0.05)
+nrow(frac)/nrow(branched)
 ```
 
-`frac` consists of values that are approximately 5\% of the first universe...
+Using the output tibble, you can construct plots to compare
+their distributions in different universes. For example,
+you can overlay density lines on a single plot.
 
-```{r check_frac_1}
-sum(frac$universe == 1)/sum(branched$universe == 1)
-```
-
-...plus approximately 5\% of the second universe...
-
-```{r check_frac_2}
-sum(frac$universe == 2)/sum(branched$universe == 2)
-```
-
-...and so on.
-
-```{r check_frac_all}
-sum(frac$universe == 3)/sum(branched$universe == 3)
-sum(frac$universe == 4)/sum(branched$universe == 4)
-sum(frac$universe == 5)/sum(branched$universe == 5)
-```
-
-Finally, we can construct plots to compare the distributions of `skin_tone` in different universes. For example, you can overlay density lines on a single plot.
-
-```{r compare_universe, warning=FALSE}
+```{r compare_universe, fig.caption="Density lines overlaid on a single plot.", fig.width=5, fig.height=4, warning=FALSE}
 branched %>%
   ggplot(mapping = aes(x = skin_tone, color = universe)) +
   geom_density(alpha = 0.2) +
-  labs(title = 'Density of player skin tones for each option.',
-       x = 'Skin Tone', y = 'Density') +
-  scale_color_discrete(labels = c(
-    'Option 1: Mean', 'Option 2: Max', 'Option 3: Min', 
-    'Option 4: Rater 1', 'Option 5: Rater 2'),
-    name = NULL
-  )
+  xlab('Skin Tone') +
+  ylab('Density') +
+  ggtitle('Density of player skin tones.')
 ```
 
-Another option is the use `ggplot`'s `facet_grid` function to generate multiple plots in a grid. `facet_wrap(. ~ universe)` generates individual plots for each universe.
+Another option is the use `ggplot`'s `facet_grid` function 
+to generate multiple plots in a grid.
 
-```{r compare_universe_hist, warning=FALSE}
+```{r compare_universe_hist, fig.caption="Histograms on a facet grid.", fig.width=5, fig.height=4, warning=FALSE}
 branched %>%
-  ggplot(mapping = aes(x = skin_tone)) +
-  geom_histogram(position = 'dodge', bins = 21) +
-  labs(title = 'Histogram of player skin tones for each option.',
-       y = 'Count', x='Skin Tone') + 
-  facet_wrap(
-    . ~ universe, 
-    labeller = labeller(univrse = c(
-    'Option 1: Mean', 'Option 2: Max', 'Option 3: Min', 
-    'Option 4: Rater 1', 'Option 5: Rater 2'))
-  ) 
+  ggplot(mapping = aes(x = skin_tone, fill = universe)) +
+  geom_histogram(position = 'dodge', bins = 10) +
+  labs(title = 'Histogram of player skin tones.',
+       y = 'Count', x='Skin Tone') + # you can add axis labels and plot title with labs.
+  facet_grid(. ~ universe) # generate histograms for each universe.
 ```
 
+### Exercise.
+
+1.  Use `geom_boxplot` to compare the distributions between 
+the five options.
+2.  Construct a grid of histograms for all the five options. 
+Use `universe ~ .` instead of `. ~ universe` in `facet_grid`. 
+
+## Discussion.
+
+1.  The five options each result in different distributions. Does one option provide a more _objective_ rating than others?
+2.  Among the three types of plots - density plot, histogram, and boxplot, which plot do you find the most effective at comparing different distributions? 
 
 
 ## References
