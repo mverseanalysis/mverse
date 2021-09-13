@@ -5,6 +5,7 @@
 \alias{summary.mverse}
 \alias{summary.lm_mverse}
 \alias{summary.glm_mverse}
+\alias{summary.coxph_mverse}
 \title{Display the multiverse table with results.}
 \usage{
 \method{summary}{mverse}(object, ...)
@@ -12,9 +13,18 @@
 \method{summary}{lm_mverse}(object, conf.int = TRUE, conf.level = 0.95, output = "estimates", ...)
 
 \method{summary}{glm_mverse}(object, conf.int = TRUE, conf.level = 0.95, output = "estimates", ...)
+
+\method{summary}{coxph_mverse}(
+  object,
+  conf.int = TRUE,
+  conf.level = 0.95,
+  scale = 1,
+  output = "estimates",
+  ...
+)
 }
 \arguments{
-\item{object}{a \code{glm_mverse} object.}
+\item{object}{a \code{coxph_mverse} object.}
 
 \item{...}{Ignored.}
 
@@ -25,12 +35,13 @@ includes the confidence intervals.}
 returned using \code{conf.int = TRUE}. Default value is 0.95.}
 
 \item{output}{The output of interest. The possible values are
-"estimates" ("e"), "df", "deviance" ("de"), and "aic" ("bic").
-Alternatively, the first letters may be used. Default value
-is "estimates".}
+"estimates" ("e"), "concordance" ("c"), "logtest" ("log"), "waldtest" ("wald"), and "sctest" ("sc").
+Default value is "estimates".}
 }
 \value{
 a multiverse table as a tibble.
+
+a multiverse table as a tibble
 
 a multiverse table as a tibble
 
@@ -46,6 +57,9 @@ represents a branch.
 results across the multiverse.
 
 \code{summary.glm_mverse} returns the \code{glm} regression
+results across the multiverse.
+
+\code{summary.coxph_mverse} returns the \code{coxph} regression
 results across the multiverse.
 }
 \examples{
@@ -152,6 +166,9 @@ glm_mverse()
 summary(mv)
 }
 \seealso{
+Other {summary method}: 
+\code{\link{AIC}()}
+
 Other {summary method}: 
 \code{\link{AIC}()}
 

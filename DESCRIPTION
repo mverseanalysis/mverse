@@ -34,7 +34,8 @@ Imports:
   stats,
   igraph,
   ggraph,
-  ggplot2
+  ggplot2,
+  survival
 Suggests:
   tidyverse,
   broom,

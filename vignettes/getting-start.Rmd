@@ -2,7 +2,7 @@
 title: "Getting started with mverse"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Case Study. Are female hurricanes deadlier than male hurricanes?}
+  %\VignetteIndexEntry{Getting started with mverse}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 references:
@@ -78,6 +78,7 @@ The typical workflow of multiverse analysis with `mverse` is
 # Loading packages
 ```{r load_package, warning=FALSE, message=FALSE}
 library(mverse)
+library(dplyr)
 ```
 
 # Data
@@ -176,7 +177,8 @@ mv_ttest <- create_multiverse(hurricane) %>%
   add_mutate_branch(femininity, damage)
 
 # Execute t test
-knitr::kable(ttest_mverse(mv_ttest, 'MinPressure_before', 'Minpressure_Updated_2014'))
+ttest_mverse(mv_ttest, 'MinPressure_before', 'Minpressure_Updated_2014')
+# knitr::kable()
 ```
 
 Another usage for `ttest_mverse` is to work with `formula_branch`. The formula need to follow the <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/t.test">formula interface</a> of `t.test`.
@@ -262,6 +264,7 @@ knitr::kable(summary(mv_glm, output="AIC"))
 ```
 
 ## Specification Curve
+
 `spec_curve` displays the specification curve of fitting `lm` or `glm` across the multiverse. It visualizes the estimated values of variables from the `summary`. 
 
 ```{r spec_curve.lm_mverse}

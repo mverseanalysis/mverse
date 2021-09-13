@@ -25,4 +25,8 @@ mv <- mv \%>\%
   fit_lm()
 }
 }
+\seealso{
+Other {model fitting methods}: 
+\code{\link{coxph_mverse}()}
+}
 \concept{{model fitting methods}}
