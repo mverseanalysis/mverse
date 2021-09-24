@@ -156,3 +156,45 @@ test_that("summary.lm_mverse(output = 'x') throws an invalid output argument err
   expect_error(summary(mv, output = "x"),
                "Invalid output argument.")
 })
+
+test_that("multiverse_tree() expects at least one branch.", {
+  mydf <- data.frame(x = c(1,2,3), y = c(4,5,6))
+  mv <- mverse(mydf)
+  expect_error(multiverse_tree(mv), "No branch to display in a tree.")
+})
+
+test_that("multiverse_tree() outputs a ggplot object.", {
+  z <- mutate_branch(x, y, name = "z")
+  w <- mutate_branch(x + y, x - y, name = "w")
+  mydf <- data.frame(x = c(1,2,3), y = c(4,5,6))
+  mv <- mverse(mydf) %>%
+    add_mutate_branch(z, w)
+  mtree <- multiverse_tree(mv)
+  expect_is(mtree, "ggplot")
+})
+
+test_that("multiverse_tree() draws a graph with nodes and edges.", {
+  z <- mutate_branch(x, y, name = "z")
+  w <- mutate_branch(x + y, x - y, name = "w")
+  mydf <- data.frame(x = c(1,2,3), y = c(4,5,6))
+  mv <- mverse(mydf) %>%
+    add_mutate_branch(z, w)
+  mtree <- multiverse_tree(mv)
+  expect_is(mtree$layers[[1]]$geom, "GeomEdgePath")
+  expect_is(mtree$layers[[2]]$geom, "GeomPoint")
+})
+
+test_that("multiverse_tree() draws a graph with correct data.", {
+  z <- mutate_branch(x, y, name = "z")
+  w <- mutate_branch(x + y, x - y, name = "w")
+  mydf <- data.frame(x = c(1,2,3), y = c(4,5,6))
+  mv <- mverse(mydf) %>%
+    add_mutate_branch(z, w)
+  mtree <- multiverse_tree(mv)
+  expect_equal(nrow(mtree$data), 7)
+  expect_equal(
+    mtree$data$name,
+    c("Data", "x", "y", "x_x + y", "x_x - y", "y_x + y", "y_x - y")
+  )
+})
+
