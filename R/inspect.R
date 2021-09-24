@@ -313,7 +313,7 @@ summary.glm_mverse <- function(object,
     multiverse::inside(object, {
       if (summary(model)$df[1] > 0)
         out <-
-          as.data.frame(t(c(AIC(model), BIC(model)))) %>%
+          as.data.frame(t(c(stats::AIC(model), stats::BIC(model)))) %>%
           dplyr::rename(AIC = V1,
                         BIC = V2)
       else
@@ -338,12 +338,13 @@ summary.glm_mverse <- function(object,
 #' results across the multiverse.
 #'
 #' @param object a \code{glm_mverse} object.
+#' @param ... ignored. for compatibility only.
+#' @param k ignored. for compatibility only.
 #' @return a multiverse table as a tibble
 #' @name AIC
 #' @family {summary method}
-#' @importFrom  stringr str_replace
 #' @export
-AIC.glm_mverse <- function(object) {
+AIC.glm_mverse <- function(object, ..., k = 2) {
   df <- summary.glm_mverse(object, output = "aic")
   df$BIC <- NULL
   df
@@ -351,12 +352,21 @@ AIC.glm_mverse <- function(object) {
 
 #' @rdname AIC
 #' @export
-BIC.glm_mverse <- function(object) {
+BIC.glm_mverse <- function(object, ...) {
   df <- summary.glm_mverse(object, output = "aic")
   df$AIC <- NULL
   df
 }
 
+#' @export
+AIC <- function(object, ..., k = 2) {
+  UseMethod('AIC')
+}
+
+#' @export
+BIC <- function(object, ...) {
+  UseMethod('BIC')
+}
 
 #' Display a summary of fitting \code{coxph} across the multiverse.
 #'
