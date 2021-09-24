@@ -46,7 +46,7 @@ performs t.test based on the formula branches.
 \examples{
 \dontrun{
 mv <- mv \%>\%
-  t.test_mverse()
+  ttest_mverse()
 }
 }
 \concept{{hypothesis testing methods}}

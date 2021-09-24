@@ -1,6 +1,19 @@
 #' Create a new branch condition.
 #'
-#' See [add_branch_condition] for examples.
+#' A branch condition conditions option \code{x} to
+#' depend on option \code{y}. When the branch condition
+#' is added to a \code{mverse} object, option \code{x}
+#' is executed only when \code{y} is. Use \code{reject = TRUE},
+#' to negate the condition.
+#'
+#' @examples
+#' # Example branches.
+#' y <- mutate_branch(alldeaths, log(alldeaths + 1))
+#' model <- formula_branch(y ~ femininity * strength, y ~ femininity + strength)
+#' # Define a new branch condition.
+#' match_poisson <- branch_condition(alldeaths, poisson)
+#' # Define a branch condition that reject an option dependent on another.
+#' match_log_lin <- branch_condition(log(alldeaths + 1), poisson, reject = TRUE)
 #'
 #' @param x option 1
 #' @param y option 2
@@ -13,6 +26,13 @@
 branch_condition <- function(x, y, reject = FALSE) {
   x <- stringr::str_replace(rlang::expr_name(rlang::enquo(x)), "^~", "")
   y <- stringr::str_replace(rlang::expr_name(rlang::enquo(y)), "^~", "")
+  if (any(stringr::str_starts(c(x, y), "\"")))
+    stop(
+      'You must provide the options as expressions not strings.',
+      '\ni.e.,',
+      '\n(x) Incorrect usage: branch_condition("x", "y")',
+      '\n(o) Correct usage: branch_condition(x, y)'
+    )
   structure(
     list(x = x, y = y, reject = reject),
     class = c("branch_condition")

@@ -18,7 +18,21 @@ with option 1 and option 2}
 A \code{branch_condition} object.
 }
 \description{
-See [add_branch_condition] for examples.
+A branch condition conditions option \code{x} to
+depend on option \code{y}. When the branch condition
+is added to a \code{mverse} object, option \code{x}
+is executed only when \code{y} is. Use \code{reject = TRUE},
+to negate the condition.
+}
+\examples{
+# Example branches.
+y <- mutate_branch(alldeaths, log(alldeaths + 1))
+model <- formula_branch(y ~ femininity * strength, y ~ femininity + strength)
+# Define a new branch condition.
+match_poisson <- branch_condition(alldeaths, poisson)
+# Define a branch condition that reject an option dependent on another.
+match_log_lin <- branch_condition(log(alldeaths + 1), poisson, reject = TRUE)
+
 }
 \seealso{
 Other {methods for working with a branch condition}: 
