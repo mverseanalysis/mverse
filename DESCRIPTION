@@ -1,7 +1,7 @@
 Package: mverse
 Type: Package
 Title: mverse: A User Friendly Multiverse Analysis Package in R for Researchers, Educators, and Students in Statistics
-Version: 0.0.2
+Version: 0.1.0
 Authors@R: c(
   person("Michael Jongho", "Moon", email = "moon@utstat.toronto.edu", 
   role = c("aut", "cre")),
@@ -34,8 +34,7 @@ Imports:
   stats,
   igraph,
   ggraph,
-  ggplot2,
-  survival
+  ggplot2
 Suggests:
   tidyverse,
   broom,

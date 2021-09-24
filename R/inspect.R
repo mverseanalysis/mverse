@@ -313,7 +313,7 @@ summary.glm_mverse <- function(object,
     multiverse::inside(object, {
       if (summary(model)$df[1] > 0)
         out <-
-          as.data.frame(t(c(AIC(model), BIC(model)))) %>%
+          as.data.frame(t(c(stats::AIC(model), stats::BIC(model)))) %>%
           dplyr::rename(AIC = V1,
                         BIC = V2)
       else
@@ -338,12 +338,13 @@ summary.glm_mverse <- function(object,
 #' results across the multiverse.
 #'
 #' @param object a \code{glm_mverse} object.
+#' @param ... ignored. for compatibility only.
+#' @param k ignored. for compatibility only.
 #' @return a multiverse table as a tibble
 #' @name AIC
 #' @family {summary method}
-#' @importFrom  stringr str_replace
 #' @export
-AIC.glm_mverse <- function(object) {
+AIC.glm_mverse <- function(object, ..., k = 2) {
   df <- summary.glm_mverse(object, output = "aic")
   df$BIC <- NULL
   df
@@ -351,115 +352,21 @@ AIC.glm_mverse <- function(object) {
 
 #' @rdname AIC
 #' @export
-BIC.glm_mverse <- function(object) {
+BIC.glm_mverse <- function(object, ...) {
   df <- summary.glm_mverse(object, output = "aic")
   df$AIC <- NULL
   df
 }
 
-
-#' Display a summary of fitting \code{coxph} across the multiverse.
-#'
-#' \code{summary.coxph_mverse} returns the \code{coxph} regression
-#' results across the multiverse.
-#' @param object a \code{coxph_mverse} object.
-#' @param conf.int When \code{TRUE} (default), the estimate output
-#'   includes the confidence intervals.
-#' @param conf.level The confidence level of the confidence interval
-#'   returned using \code{conf.int = TRUE}. Default value is 0.95.
-#' @param output The output of interest. The possible values are
-#'   "estimates" ("e"), "concordance" ("c"), "logtest" ("log"), "waldtest" ("wald"), and "sctest" ("sc").
-#'   Default value is "estimates".
-#' @param ... Ignored.
-#' @return a multiverse table as a tibble
-#' @name summary
-#' @family {summary method}
 #' @export
-summary.coxph_mverse <- function(object,
-                                 conf.int = TRUE,
-                                 conf.level = 0.95,
-                                 scale = 1,
-                                 output = "estimates",
-                                 ...)
-{
-  if (output %in% c("estimates", "e")) {
-    multiverse::inside(object, {
-      if (summary(model)$n > 0) {
-        out <-
-          broom::tidy(model,!!rlang::enexpr(conf.int),!!rlang::enexpr(conf.level))
-      }
-
-      else {
-        out <- data.frame(
-          term = "(None)",
-          estimate = NA,
-          std.error = NA,
-          statistic = NA,
-          p.value = NA
-        )
-        if (!!rlang::enexpr(conf.int))
-          out <-
-            out %>% dplyr::mutate(conf.low = NA, conf.high = NA)
-      }
-    })
-
-  } else if (output %in% c("c", "concordance")) {
-    multiverse::inside(object, {
-      if (summary(model)$n > 0)
-        out <-
-          as.data.frame(t(summary(model)$concordance)) %>%
-          dplyr::rename(statistic = C,
-                        std.err = "se(C)")
-      else
-        out <- data.frame(statistic = NA,
-                          std.err = NA)
-    })
-  } else if (tolower(output) %in% c("log", "logtest")) {
-    multiverse::inside(object, {
-      if (summary(model)$n > 0)
-        out <-
-          as.data.frame(t(summary(model)$logtest))
-      else
-        out <- data.frame(test = NA,
-                          df = NA,
-                          pvalue = NA)
-    })
-  } else if (tolower(output) %in% c("wald", "waldtest")) {
-    multiverse::inside(object, {
-      if (summary(model)$n > 0)
-        out <-
-          as.data.frame(t(summary(model)$waldtest))
-      else
-        out <- data.frame(test = NA,
-                          df = NA,
-                          pvalue = NA)
-    })
-  }
-  else if (tolower(output) %in% c("sc", "sctest")) {
-    multiverse::inside(object, {
-      if (summary(model)$n > 0)
-        out <-
-          as.data.frame(t(summary(model)$sctest))
-      else
-        out <- data.frame(test = NA,
-                          df = NA,
-                          pvalue = NA)
-    })
-  }
-  else {
-    stop("Invalid output argument.")
-  }
-  execute_multiverse(object)
-  mtable <- multiverse::extract_variables(object, out) %>%
-    tidyr::unnest(out) %>%
-    dplyr::mutate(universe = factor(.universe)) %>%
-    dplyr::select(-tidyselect::starts_with(".")) %>%
-    dplyr::select(universe, tidyselect::everything())
-  display_branch_opts(mtable, object)
+AIC <- function(object, ..., k = 2) {
+  UseMethod('AIC')
 }
 
-
-
+#' @export
+BIC <- function(object, ...) {
+  UseMethod('BIC')
+}
 
 #' Plot a multiverse tree diagram.
 #'

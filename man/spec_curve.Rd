@@ -4,7 +4,6 @@
 \alias{spec_curve}
 \alias{spec_curve.lm_mverse}
 \alias{spec_curve.glm_mverse}
-\alias{spec_curve.coxph_mverse}
 \title{Display a specification curve across the multiverse.}
 \usage{
 spec_curve(...)
@@ -27,18 +26,6 @@ spec_curve(...)
   conf.int = TRUE,
   conf.level = 0.95,
   option = names(multiverse::parameters(.glm_mverse)),
-  universe_order = FALSE,
-  color_order = FALSE,
-  color = (p.value < 0.05),
-  branch_order = NULL
-)
-
-\method{spec_curve}{coxph_mverse}(
-  .coxph_mverse,
-  var = NULL,
-  conf.int = TRUE,
-  conf.level = 0.95,
-  option = names(multiverse::parameters(.coxph_mverse)),
   universe_order = FALSE,
   color_order = FALSE,
   color = (p.value < 0.05),
@@ -69,23 +56,14 @@ according to the color.}
 \item{branch_order}{name for the branch to order.}
 
 \item{.glm_mverse}{a \code{glm_mverse} object.}
-
-\item{.coxph_mverse}{a \code{coxph_mverse} object.}
 }
 \value{
-a specification curve plot for the estimates
-
 a specification curve plot for the estimates
 
 a specification curve plot for the estimates
 }
 \description{
 \code{spec_curve.glm_mverse} returns the specification curve of \code{glm}
-regression results across the multiverse.
-Notice that the order of universes is not corresponding
-to the order in the summary table.
-
-\code{spec_curve.coxph_mverse} returns the specification curve of \code{coxph}
 regression results across the multiverse.
 Notice that the order of universes is not corresponding
 to the order in the summary table.

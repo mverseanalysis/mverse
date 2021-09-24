@@ -14,6 +14,9 @@ multiverse_tree(.mverse, label = FALSE, branches = NULL)
 \item{branches}{A character vector. Display a subset of branches
 when specified. Display all when NULL.}
 }
+\value{
+A \code{ggplot} object displaying the multiverse tree.
+}
 \description{
 A multiverse tree diagram displays the branching combination
 of all the branches added to the given \code{mverse} object

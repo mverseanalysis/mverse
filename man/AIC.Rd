@@ -6,12 +6,16 @@
 \alias{BIC.glm_mverse}
 \title{Display the AIC and BIC score of the fitted models across the multiverse}
 \usage{
-\method{AIC}{glm_mverse}(object)
+\method{AIC}{glm_mverse}(object, ..., k = 2)
 
-\method{BIC}{glm_mverse}(object)
+\method{BIC}{glm_mverse}(object, ...)
 }
 \arguments{
 \item{object}{a \code{glm_mverse} object.}
+
+\item{...}{ignored. for compatibility only.}
+
+\item{k}{ignored. for compatibility only.}
 }
 \value{
 a multiverse table as a tibble
