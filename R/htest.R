@@ -37,7 +37,7 @@ ttest_mverse <-
     y <- rlang::enquo(y)
     if (rlang::quo_is_null(x))
       multiverse::inside(.mverse, {
-        htest <- t.test(
+        htest <- stats::t.test(
           formulae,
           data = data,
           alternative = !!rlang::enexpr(alternative),
@@ -49,7 +49,7 @@ ttest_mverse <-
       })
     else if (rlang::quo_is_null(y))
       multiverse::inside(.mverse, {
-        htest <- t.test(
+        htest <- stats::t.test(
           x = data %>% dplyr::pull(!! rlang::get_expr(x)),
           alternative = !! rlang::enexpr(alternative),
           mu = !! rlang::enexpr(mu),
@@ -60,7 +60,7 @@ ttest_mverse <-
       })
     else
       multiverse::inside(.mverse, {
-        htest <- t.test(
+        htest <- stats::t.test(
           x = data %>% dplyr::pull(!! rlang::get_expr(x)),
           y = data %>% dplyr::pull(!! rlang::get_expr(y)),
           alternative = !! rlang::enexpr(alternative),

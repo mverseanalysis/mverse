@@ -16,7 +16,7 @@
 #' @name lm_mverse
 #' @family {model fitting methods}
 #' @export
-lm_mverse <- function(.mverse, ...) {
+lm_mverse <- function(.mverse) {
   stopifnot(inherits(.mverse, "mverse"))
   # check whether there is a formula branch (should be only 1)
   brs <- c(attr(.mverse, 'branches_conditioned_list'), attr(.mverse, 'branches_list'))
@@ -25,7 +25,7 @@ lm_mverse <- function(.mverse, ...) {
   if (sum(sapply(brs,inherits, "formula_branch")) != 1)
     stop("Exactly one formula branch is required.")
   # fit lm
-  multiverse::inside(.mverse, model <- lm(formulae, data = data))
+  multiverse::inside(.mverse, model <- stats::lm(formulae, data = data))
   attr(.mverse, "class") <- unique(c("lm_mverse", class(.mverse)))
   execute_multiverse(.mverse)
   invisible(.mverse)
@@ -58,7 +58,7 @@ lm_mverse <- function(.mverse, ...) {
 #' @return A \code{mverse} object with \code{glm} fitted.
 #' @name glm_mverse
 #' @export
-glm_mverse <- function(.mverse, ...) {
+glm_mverse <- function(.mverse) {
   stopifnot(inherits(.mverse, "mverse"))
   # check whether there is a formula branch (should be only 1)
   brs <- c(attr(.mverse, 'branches_conditioned_list'), attr(.mverse, 'branches_list'))
@@ -68,7 +68,7 @@ glm_mverse <- function(.mverse, ...) {
     stop("Exactly one formula branch is required.")
   # fit glm
   multiverse::inside(
-    .mverse, model <- glm(formulae, data = data, family = family))
+    .mverse, model <- stats::glm(formulae, data = data, family = family))
   attr(.mverse, "class") <- unique(c("glm_mverse", class(.mverse)))
   execute_multiverse(.mverse)
   invisible(.mverse)

@@ -1,8 +1,8 @@
 ---
-title: "Getting started with mverse"
+title: "Getting started with mverse v2"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Getting started with mverse}
+  %\VignetteIndexEntry{Getting started with mverse v2}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 references:

@@ -358,11 +358,13 @@ BIC.glm_mverse <- function(object, ...) {
   df
 }
 
+#' @rdname AIC
 #' @export
 AIC <- function(object, ..., k = 2) {
   UseMethod('AIC')
 }
 
+#' @rdname AIC
 #' @export
 BIC <- function(object, ...) {
   UseMethod('BIC')
@@ -529,7 +531,7 @@ multiverse_tree <-
         x %in% branches)]
     brs_name <- paste0(brs, "_branch")
     combs <- summary(.mverse)[brs_name] %>%
-      dplyr::mutate(across(.fns = as.character))
+      dplyr::mutate(dplyr::across(.fns = as.character))
     edges_list <-
       list(data.frame(
         from = "Data",
@@ -558,7 +560,7 @@ multiverse_tree <-
       scale_y_reverse(expand = c(0.1, 0.1)) +
       scale_x_continuous(expand = c(0.1, 0.1)) +
       scale_edge_color_manual(name = NULL,
-                              values = hcl(h = seq(0, 360, length.out = length(brs) + 1), l = 50),
+                              values = grDevices::hcl(h = seq(0, 360, length.out = length(brs) + 1), l = 50),
                               limits = brs) +
       theme(legend.position = "top")
     if (label)
