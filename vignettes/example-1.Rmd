@@ -1,6 +1,8 @@
 ---
 title: "Defining a branch for a column and extracting the branched values."
 output: rmarkdown::html_vignette
+resource_files:
+  - american-statistical-association.csl
 csl: american-statistical-association.csl
 vignette: >
   %\VignetteIndexEntry{Defining a branch for a column and extracting the branched values.}

@@ -4,7 +4,7 @@
 \alias{lm_mverse}
 \title{Fit \code{lm} across the multiverse.}
 \usage{
-lm_mverse(.mverse, ...)
+lm_mverse(.mverse)
 }
 \arguments{
 \item{.mverse}{a \code{mverse} object.}

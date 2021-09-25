@@ -7,6 +7,8 @@ output:
 link-citations: yes
 pkgdown:
   as_is: true
+resource_files:
+  - american-statistical-association.csl
 csl: american-statistical-association.csl
 vignette: >
   %\VignetteIndexEntry{Does naming a hurricane as a female cause more deaths?}

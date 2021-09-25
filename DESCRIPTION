@@ -37,7 +37,8 @@ Imports:
   igraph,
   ggraph,
   ggplot2,
-  cowplot
+  cowplot,
+  survival
 Suggests:
   scales,
   tidyverse,

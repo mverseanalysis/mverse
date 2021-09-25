@@ -6,6 +6,11 @@
 \usage{
 \method{print}{branch}(x, ...)
 }
+\arguments{
+\item{x}{a \code{branch} object.}
+
+\item{...}{ignored. for compatibility only.}
+}
 \description{
 Print method for \code{*_branch} objects.
 }
