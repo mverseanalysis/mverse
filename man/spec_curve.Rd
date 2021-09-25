@@ -6,14 +6,24 @@
 \alias{spec_curve.glm_mverse}
 \title{Display a specification curve across the multiverse.}
 \usage{
-spec_curve(...)
+spec_curve(
+  .object,
+  var,
+  conf.int,
+  conf.level,
+  option,
+  universe_order,
+  color_order,
+  color,
+  branch_order
+)
 
 \method{spec_curve}{lm_mverse}(
-  .lm_mverse,
+  .object,
   var = NULL,
   conf.int = TRUE,
   conf.level = 0.95,
-  option = names(multiverse::parameters(.lm_mverse)),
+  option = names(multiverse::parameters(.object)),
   universe_order = FALSE,
   color_order = FALSE,
   color = (p.value < 0.05),
@@ -21,11 +31,11 @@ spec_curve(...)
 )
 
 \method{spec_curve}{glm_mverse}(
-  .glm_mverse,
+  .object,
   var = NULL,
   conf.int = TRUE,
   conf.level = 0.95,
-  option = names(multiverse::parameters(.glm_mverse)),
+  option = names(multiverse::parameters(.object)),
   universe_order = FALSE,
   color_order = FALSE,
   color = (p.value < 0.05),
@@ -33,7 +43,7 @@ spec_curve(...)
 )
 }
 \arguments{
-\item{.lm_mverse}{a \code{lm_mverse} object.}
+\item{.object}{a \code{glm_mverse} object.}
 
 \item{var}{name for the variable to show.}
 
@@ -54,8 +64,6 @@ according to the color.}
 \item{color}{specify the color in the plot.}
 
 \item{branch_order}{name for the branch to order.}
-
-\item{.glm_mverse}{a \code{glm_mverse} object.}
 }
 \value{
 a specification curve plot for the estimates

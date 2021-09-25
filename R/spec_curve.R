@@ -2,7 +2,10 @@
 #' Display a specification curve across the multiverse.
 #' @rdname spec_curve
 #' @export
-spec_curve <- function(...) {
+spec_curve <- function(
+  .object, var, conf.int, conf.level,
+  option, universe_order, color_order,
+  color, branch_order) {
   UseMethod("spec_curve")
 }
 
@@ -11,7 +14,7 @@ spec_curve <- function(...) {
 #' Notice that the order of universes is not corresponding
 #' to the order in the summary table.
 #'
-#' @param .lm_mverse a \code{lm_mverse} object.
+#' @param .object a \code{lm_mverse} object.
 #' @param var name for the variable to show.
 #' @param conf.int When \code{TRUE} (default), the estimate output
 #'   includes the confidence intervals.
@@ -46,13 +49,13 @@ spec_curve <- function(...) {
 #' @family {spec_curve method}
 #' @export
 spec_curve.lm_mverse <- function(
-  .lm_mverse, var = NULL, conf.int = TRUE,
+  .object, var = NULL, conf.int = TRUE,
   conf.level = 0.95,
-  option = names(multiverse::parameters(.lm_mverse)),
+  option = names(multiverse::parameters(.object)),
   universe_order = FALSE,
   color_order = FALSE, color = (p.value < 0.05),
   branch_order = NULL) {
-  stopifnot(inherits(.lm_mverse, "lm_mverse"))
+  stopifnot(inherits(.object, "lm_mverse"))
   if (is.null(var)) {
     stop("Please specify the variable to display.")
   }
@@ -62,7 +65,7 @@ spec_curve.lm_mverse <- function(
   universe_order <<- universe_order
   color <- rlang::enquo(color)
   branch_order <- rlang::enquo(branch_order)
-  mtable <- summary(.lm_mverse,
+  mtable <- summary(.object,
                     conf.int = conf.int, conf.level = conf.level)
 
   data.spec_curve <- mtable %>%
@@ -102,7 +105,7 @@ spec_curve.lm_mverse <- function(
     ggplot2::scale_colour_brewer(palette = "Set1")
 
   data.info <- data.spec_curve %>%
-    tidyr::pivot_longer( !! names(multiverse::parameters(.lm_mverse)),
+    tidyr::pivot_longer( !! names(multiverse::parameters(.object)),
       names_to = "parameter_name",
       values_to = "parameter_option" ) %>%
     dplyr::filter(parameter_name %in% option)
@@ -146,7 +149,7 @@ spec_curve.lm_mverse <- function(
 #' Notice that the order of universes is not corresponding
 #' to the order in the summary table.
 #'
-#' @param .glm_mverse a \code{glm_mverse} object.
+#' @param .object a \code{glm_mverse} object.
 #' @param var name for the variable to show.
 #' @param conf.int When \code{TRUE} (default), the estimate output
 #'   includes the confidence intervals.
@@ -184,13 +187,13 @@ spec_curve.lm_mverse <- function(
 #' @family {spec_curve method}
 #' @export
 spec_curve.glm_mverse <- function(
-  .glm_mverse, var = NULL, conf.int = TRUE,
+  .object, var = NULL, conf.int = TRUE,
   conf.level = 0.95,
-  option = names(multiverse::parameters(.glm_mverse)),
+  option = names(multiverse::parameters(.object)),
   universe_order = FALSE,
   color_order = FALSE, color = (p.value < 0.05),
   branch_order = NULL) {
-  stopifnot(inherits(.glm_mverse, "glm_mverse"))
+  stopifnot(inherits(.object, "glm_mverse"))
   if (is.null(var)) {
     stop("Please specify the variable to display.")
   }
@@ -198,7 +201,7 @@ spec_curve.glm_mverse <- function(
   conf.int <<- conf.int
   conf.level <<- conf.level
   branch_order <- rlang::enquo(branch_order)
-  mtable <- summary(.glm_mverse,
+  mtable <- summary(.object,
                     conf.int = conf.int, conf.level = conf.level)
 
   data.spec_curve <- mtable %>%
@@ -238,7 +241,7 @@ spec_curve.glm_mverse <- function(
     ggplot2::scale_colour_brewer(palette = "Set1")
 
   data.info <- data.spec_curve %>%
-    tidyr::pivot_longer( !! names(multiverse::parameters(.glm_mverse)),
+    tidyr::pivot_longer( !! names(multiverse::parameters(.object)),
                          names_to = "parameter_name",
                          values_to = "parameter_option" ) %>%
     dplyr::filter(parameter_name %in% option)

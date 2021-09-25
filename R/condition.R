@@ -69,7 +69,9 @@ add_branch_condition <- function(.mverse, ...) {
 #' match_log_lin <- branch_condition(log(alldeaths + 1), poisson, reject = TRUE)
 #' mv <- add_branch_condition(mv, match_log_lin)
 #' summary(mv)
-#' @return A \code{mverse} object.
+#' @param .mverse a \code{mverse} object.
+#' @param ... branch conditions.
+#' @return a \code{mverse} object.
 #' @name add_branch_condition
 #' @family {methods for working with a branch condition}
 #' @export
@@ -122,7 +124,7 @@ add_branch_condition_single <- function(cond, .mverse) {
     br_x[['conds_on']] <- list(br_y)
   } else {
     if(! name(br_y) %in% sapply(br_x[['conds_on']], function(s) name(s)))
-      br_x[['conds_on']][[lenght(br_x[['conds_on']]) + 1]] <- br_y
+      br_x[['conds_on']][[length(br_x[['conds_on']]) + 1]] <- br_y
   }
   # add condition
   br_x[['conds']][which(as_option_list(br_x) == x)] <-

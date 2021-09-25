@@ -4,11 +4,16 @@
 \alias{AIC}
 \alias{AIC.glm_mverse}
 \alias{BIC.glm_mverse}
+\alias{BIC}
 \title{Display the AIC and BIC score of the fitted models across the multiverse}
 \usage{
 \method{AIC}{glm_mverse}(object, ..., k = 2)
 
 \method{BIC}{glm_mverse}(object, ...)
+
+AIC(object, ..., k = 2)
+
+BIC(object, ...)
 }
 \arguments{
 \item{object}{a \code{glm_mverse} object.}

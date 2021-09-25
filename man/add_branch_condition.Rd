@@ -9,8 +9,13 @@ add_branch_condition(.mverse, ...)
 
 \method{add_branch_condition}{mverse}(.mverse, ...)
 }
+\arguments{
+\item{.mverse}{a \code{mverse} object.}
+
+\item{...}{branch conditions.}
+}
 \value{
-A \code{mverse} object.
+a \code{mverse} object.
 }
 \description{
 This method adds one or more branch conditions to

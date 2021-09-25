@@ -78,6 +78,7 @@ add_branch <- function(.mverse, brs, nms) {
   return(.mverse)
 }
 
+#' @importFrom rlang :=
 code_branch <- function(.mverse, br) {
   stopifnot(inherits(br, "branch"))
   if(inherits(br, "mutate_branch")) {
@@ -94,7 +95,7 @@ code_branch <- function(.mverse, br) {
   } else if (inherits(br, "formula_branch")) {
     multiverse::inside(
       .mverse,
-      formulae <- formula(!! parse(br))
+      formulae <- stats::formula(!! parse(br))
     )
   } else if (inherits(br, "family_branch")) {
     multiverse::inside(
@@ -124,11 +125,13 @@ as_option_list <- function(x) {
   opts <- sapply(
     x$opts, function(s) stringr::str_replace(rlang::expr_name(s), "^~", ""))
   if(!is.null(x$name))
-    opts <- setNames(opts, paste0(x$name, "_", 1:length(opts)))
+    opts <- stats::setNames(opts, paste0(x$name, "_", 1:length(opts)))
   return(opts)
 }
 
 #' Print method for \code{*_branch} objects.
+#' @param x a \code{branch} object.
+#' @param ... ignored. for compatibility only.
 #' @export
 print.branch <- function(x, ...) {
   opts <- as_option_list(x)

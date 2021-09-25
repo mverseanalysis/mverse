@@ -26,7 +26,7 @@ test_that("glm_mverse() fits a glm model.", {
   mv <- mverse(mydf) %>%
     add_formula_branch(model_spec) %>%
     add_family_branch(fam) %>%
-    glm_mverse(mv)
+    glm_mverse()
   fitmverse <- (multiverse::extract_variables(mv, model) %>%
                   dplyr::pull(model))[[1]]
   fitmanual <- glm(y ~ x1 * x2, data = mydf, family = poisson)
