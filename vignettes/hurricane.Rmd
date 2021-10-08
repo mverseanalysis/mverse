@@ -5,9 +5,6 @@ output:
     base_format: rmarkdown::html_vignette
     number_sections: false
 link-citations: yes
-pkgdown:
-  as_is: true
-csl: american-statistical-association.csl
 vignette: >
   %\VignetteIndexEntry{Does naming a hurricane as a female cause more deaths?}
   %\VignetteEncoding{UTF-8}
