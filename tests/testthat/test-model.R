@@ -8,11 +8,9 @@ test_that("lm_mverse() fits a lm model.", {
   mv <- mverse(mydf) %>%
     add_formula_branch(model_spec) %>%
     lm_mverse()
-  fitmverse <- (multiverse::extract_variables(mv, model) %>%
-                  dplyr::pull(model))[[1]]
+  fitmverse <- summary(mv)
   fitmanual <- lm(y ~ x1 * x2, data = mydf)
-  expect_equal(class(fitmverse), "lm")
-  expect_identical(coef(fitmverse), coef(fitmanual))
+  expect_true(all(fitmverse[1:4, 4] == coef(fitmanual)))
 })
 
 
@@ -27,11 +25,9 @@ test_that("glm_mverse() fits a glm model.", {
     add_formula_branch(model_spec) %>%
     add_family_branch(fam) %>%
     glm_mverse()
-  fitmverse <- (multiverse::extract_variables(mv, model) %>%
-                  dplyr::pull(model))[[1]]
+  fitmverse <- summary(mv)
   fitmanual <- glm(y ~ x1 * x2, data = mydf, family = poisson)
-  expect_equal(class(fitmverse)[1], "glm")
-  expect_identical(coef(fitmverse), coef(fitmanual))
+  expect_true(all(fitmverse[1:4, 5] == coef(fitmanual)))
 })
 
 test_that("lm_mverse() expects a formula branch.", {
