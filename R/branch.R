@@ -26,7 +26,7 @@ parse.branch <- function(br) {
       function(i, x) paste0(
         "'", br$name, '_', i, "'",
         ifelse(has_cond, br$conds[i], ""),
-        "~", rlang::quo_name(x)),
+        "~", rlang::quo_text(x)),
       1:length(br$opts), br$opts),
     collapse=',')
   # parse as an expression
