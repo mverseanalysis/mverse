@@ -7,7 +7,7 @@ display_branch_opts <- function(mtable, .mverse) {
   function(vb) {
     opts <- character(length(vb$opts))
     for (i in 1:length(vb$opts))
-      opts[i] <- rlang::quo_name(vb$opts[[i]])
+      opts[i] <- rlang::quo_text(vb$opts[[i]])
     out <- list(opts)
     names(out) <- vb$name
     out

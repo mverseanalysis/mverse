@@ -27,6 +27,26 @@ test_that("summary() prints the multiverse table for a mverse object.", {
   expect_identical(mtable, mtable_expected)
 })
 
+test_that("summary() doesn't truncate long branch options.", {
+  mydf <- data.frame(col1=c(1,2,3), col2=4:6, col3=7:9)
+  mbranch <- mutate_branch(
+    dplyr::if_else(col1 > 1, "a", dplyr::if_else(col1 == 1, "b", "c")))
+  fbranch <- formula_branch(
+    cbind(col1, col2 - col1) ~ col3 + col3^2 + col3^3 + col3^4 + exp(col3 + col3^2),
+    cbind(col1, col2 - col1) ~ col3 + col3^2 + col3^3 + col3^4 + exp(col3) + exp(col3^2)
+  )
+  mv <- mverse(mydf)
+  add_mutate_branch(mv, mbranch)
+  add_formula_branch(mv, fbranch)
+  expect_true(any(stringr::str_detect(
+    sapply(unlist(summary(mv)), as.character),
+    "dplyr::if_else\\(col1 > 1,")))
+  expect_true(any(
+    stringr::str_detect(
+      sapply(unlist(summary(mv)), as.character),
+      "cbind\\(col1, col2 - col1\\)")))
+})
+
 test_that("Universe is a categorical variable in the mutiverse table.", {
   mydf <- data.frame(
     x=c(1,2,3),

@@ -93,7 +93,8 @@ test_that("parse() handles long branch options.", {
       sapply(multiverse::code(mv), as.character),
       "dplyr::if_else\\(col1 > 1,")))
   fbranch <- formula_branch(
-    cbind(col1, col2 - col1) ~ col3 + col3^2 + col3^3 + col3^4 + exp(col3 + col3^2)
+    cbind(col1, col2 - col1) ~ col3 + col3^2 + col3^3 + col3^4 + exp(col3 + col3^2),
+    cbind(col1, col2 - col1) ~ col3 + col3^2 + col3^3 + col3^4 + exp(col3) + exp(col3^2)
   )
   add_formula_branch(mv, fbranch)
   expect_true(any(
