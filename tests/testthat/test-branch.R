@@ -82,17 +82,24 @@ test_that("parse() creates a branching command for multiverse.", {
 })
 
 test_that("parse() handles long branch options.", {
-  mydf <- data.frame(col1=c(1,2,3))
+  mydf <- data.frame(col1=c(1,2,3), col2=4:6, col3=7:9)
   mbranch <- mutate_branch(
     dplyr::if_else(col1 > 1, "a", dplyr::if_else(col1 == 1, "b", "c")))
   mv <- mverse(mydf) %>%
     add_mutate_branch(mbranch)
   execute_multiverse(mv)
-  multiverse::code(mv)[[3]]
   expect_true(any(
     stringr::str_detect(
       sapply(multiverse::code(mv), as.character),
       "dplyr::if_else\\(col1 > 1,")))
+  fbranch <- formula_branch(
+    cbind(col1, col2 - col1) ~ col3 + col3^2 + col3^3 + col3^4 + exp(col3 + col3^2)
+  )
+  add_formula_branch(mv, fbranch)
+  expect_true(any(
+    stringr::str_detect(
+      sapply(multiverse::code(mv), as.character),
+      "cbind\\(col1, col2 - col1\\)")))
 })
 
 context("Branch Add and Remove")
