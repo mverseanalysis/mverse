@@ -123,7 +123,7 @@ reset_parameters <- function(.mverse) {
 
 as_option_list <- function(x) {
   opts <- sapply(
-    x$opts, function(s) stringr::str_replace(rlang::expr_name(s), "^~", ""))
+    x$opts, function(s) stringr::str_replace(rlang::expr_text(s), "^~", ""))
   if(!is.null(x$name))
     opts <- stats::setNames(opts, paste0(x$name, "_", 1:length(opts)))
   return(opts)
