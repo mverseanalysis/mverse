@@ -24,8 +24,8 @@
 #' @family {methods for working with a branch condition}
 #' @export
 branch_condition <- function(x, y, reject = FALSE) {
-  x <- stringr::str_replace(rlang::expr_name(rlang::enquo(x)), "^~", "")
-  y <- stringr::str_replace(rlang::expr_name(rlang::enquo(y)), "^~", "")
+  x <- stringr::str_replace(rlang::expr_text(rlang::enquo(x)), "^~", "")
+  y <- stringr::str_replace(rlang::expr_text(rlang::enquo(y)), "^~", "")
   if (any(stringr::str_starts(c(x, y), "\"")))
     stop(
       'You must provide the options as expressions not strings.',
