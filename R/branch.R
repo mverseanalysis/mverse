@@ -44,7 +44,7 @@ parse.formula_branch <- function(br) {
       function(i, x) paste0(
         "'", br$name, '_', i, "'",
         ifelse(has_cond, br$conds[i], ""),
-        "~ formula(", rlang::quo_name(x), ")"),
+        "~ formula(", rlang::quo_text(x), ")"),
       1:length(br$opts), br$opts),
     collapse=',')
   # parse as an expression
