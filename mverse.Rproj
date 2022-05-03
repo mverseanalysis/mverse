@@ -19,7 +19,5 @@ BuildType: Package
 PackageUseDevtools: Yes
 PackageCleanBeforeInstall: Yes
 PackageInstallArgs: --no-multiarch --with-keep.source
-PackageBuildArgs: --resave-data
-PackageBuildBinaryArgs: --latex --html --resave-data
-PackageCheckArgs: --resave-data
+PackageBuildBinaryArgs: --latex --html
 PackageRoxygenize: rd,collate,namespace,vignette
