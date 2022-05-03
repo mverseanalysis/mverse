@@ -1,9 +1,6 @@
 ---
 title: "Does naming a hurricane as a female cause more deaths?"
-output:
-  bookdown::html_document2:
-    base_format: rmarkdown::html_vignette
-    number_sections: false
+output: rmarkdown::html_vignette
 link-citations: yes
 pkgdown:
   as_is: true
