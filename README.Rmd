@@ -3,7 +3,6 @@ output:
   bookdown::github_document2:
     fig_caption: true
     number_sections: false
-csl: american-statistical-association.csl
 references:
   - id: hurricane
     title: 'Female hurricanes are deadlier than male hurricanes'
@@ -108,6 +107,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/mverseanalysis/mverse/workflows/R-CMD-check/badge.svg)](https://github.com/mverseanalysis/mverse/actions)
+[![Codecov test coverage](https://codecov.io/gh/mverseanalysis/mverse/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mverseanalysis/mverse?branch=master)
 <!-- badges: end -->
 
 _mverse_ is an extension to multiverse package [@multiverseR]

@@ -5,6 +5,9 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/mverseanalysis/mverse/workflows/R-CMD-check/badge.svg)](https://github.com/mverseanalysis/mverse/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/mverseanalysis/mverse/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mverseanalysis/mverse?branch=master)
 <!-- badges: end -->
 
 *mverse* is an extension to multiverse package (Sarma et al. 2021) which
@@ -15,11 +18,8 @@ examples for researchers, educators, and students in statistics.
 ## Installation
 
 <!-- You can install the released version of mverse from [CRAN](https://CRAN.R-project.org) with: -->
-
 <!-- ``` r -->
-
 <!-- install.packages("mverse") -->
-
 <!-- ``` -->
 
 You can install the development version from
@@ -34,25 +34,15 @@ devtools::install_github("mverseanalysis/mverse")
 
 The following demonstration performs a multiverse analysis using
 `hurricane` dataset (Jung et al. 2014) included in the library. We first
-create 6 universes as described in Figure <a href="#fig:tree">1</a>. A
-filter *branch* with 2 *options* and a mutate *branch* with 3 *options*
-results in 6 *universes* in total. We then fit a Poisson regression
-model across the multiverse and inspect a coefficient estimate. See
+create 6 universes as described in Figure
+<a href="#fig:tree"><strong>??</strong></a>. A filter *branch* with 2
+*options* and a mutate *branch* with 3 *options* results in 6
+*universes* in total. We then fit a Poisson regression model across the
+multiverse and inspect a coefficient estimate. See
 `vignette("hurricane")` for a detailed analysis as well as the
 terminologies used.
 
-<div class="figure">
-
-<img src="man/figures/README-tree-1.png" alt="Having one branch with 2 options and another with 3 results in 2 x 3 = 6 universes in total." width="100%" />
-
-<p class="caption">
-
-Figure 1: Having one branch with 2 options and another with 3 results in
-2 x 3 = 6 universes in total.
-
-</p>
-
-</div>
+<img src="man/figures/README-tree-1.png" title="Having one branch with 2 options and another with 3 results in 2 x 3 = 6 universes in total." alt="Having one branch with 2 options and another with 3 results in 2 x 3 = 6 universes in total." width="100%" />
 
 ### Initiate
 
@@ -130,7 +120,7 @@ multiverse.
 ``` r
 res <- summary(mv)
 res
-#> # A tibble: 24 x 12
+#> # A tibble: 24 × 12
 #>    universe outliers_branch  strength_branch model_branch distribution_br… term 
 #>    <fct>    <fct>            <fct>           <fct>        <fct>            <chr>
 #>  1 1        "!Name %in% c(\… NDAM            alldeaths ~… poisson          (Int…
@@ -157,23 +147,24 @@ library(tidyverse)
 res %>%
   filter(term == "MasFem") %>%
   select(outliers_branch, strength_branch, term, estimate, conf.low, conf.high)
-#> # A tibble: 6 x 6
-#>   outliers_branch           strength_branch    term  estimate conf.low conf.high
-#>   <fct>                     <fct>              <chr>    <dbl>    <dbl>     <dbl>
-#> 1 "!Name %in% c(\"Katrina\… NDAM               MasF…  0.134     0.112     0.157 
-#> 2 "!Name %in% c(\"Katrina\… HighestWindSpeed   MasF…  0.254     0.177     0.332 
-#> 3 "!Name %in% c(\"Katrina\… Minpressure_Updat… MasF…  0.0575   -0.743     0.854 
-#> 4 "!Name %in% c(\"Katrina\… NDAM               MasF…  0.0600    0.0366    0.0839
-#> 5 "!Name %in% c(\"Katrina\… HighestWindSpeed   MasF…  0.151     0.0717    0.231 
-#> 6 "!Name %in% c(\"Katrina\… Minpressure_Updat… MasF… -0.00504  -0.825     0.811
+#> # A tibble: 6 × 6
+#>   outliers_branch              strength_branch term  estimate conf.low conf.high
+#>   <fct>                        <fct>           <chr>    <dbl>    <dbl>     <dbl>
+#> 1 "!Name %in% c(\"Katrina\")"  NDAM            MasF…  0.134     0.112     0.157 
+#> 2 "!Name %in% c(\"Katrina\")"  HighestWindSpe… MasF…  0.254     0.177     0.332 
+#> 3 "!Name %in% c(\"Katrina\")"  Minpressure_Up… MasF…  0.0575   -0.743     0.854 
+#> 4 "!Name %in% c(\"Katrina\", … NDAM            MasF…  0.0600    0.0366    0.0839
+#> 5 "!Name %in% c(\"Katrina\", … HighestWindSpe… MasF…  0.151     0.0717    0.231 
+#> 6 "!Name %in% c(\"Katrina\", … Minpressure_Up… MasF… -0.00504  -0.825     0.811
 ```
 
 ### Plot a Specification Curve
 
 We can also inspect the result graphically using `spec_curve()`. The
-method builds a specification curve (Simonsohn et al. 2020) for a term
-in the regression model specified by `var`. The method also allows
-multiple ways of sorting the estimates. See `?spec_curve` for details.
+method builds a specification curve (Simonsohn, Simmons, and Nelson
+2020) for a term in the regression model specified by `var`. The method
+also allows multiple ways of sorting the estimates. See `?spec_curve`
+for details.
 
 ``` r
 spec_curve(mv, var = "MasFem")
@@ -183,37 +174,38 @@ spec_curve(mv, var = "MasFem")
 
 ## References
 
-<div id="refs" class="references">
+<div id="refs" class="references csl-bib-body hanging-indent">
 
-<div id="ref-hurricane">
+<div id="ref-hurricane" class="csl-entry">
 
-Jung, K., Shavitt, S., Viswanathan, M., and Hilbe, J. M. (2014), “Female
-hurricanes are deadlier than male hurricanes,” 111, 8782–8787.
-<https://doi.org/10.1073/pnas.1402786111>.
-
-</div>
-
-<div id="ref-multiverseR">
-
-Sarma, A., Kale, A., Moon, M., Taback, N., Chevalier, F., Hullman, J.,
-and Kay, M. (2021), “multiverse: Multiplexing Alternative Data Analyses
-in R Notebooks (Version 0.5.0).”
+Jung, Kiju, Sharon Shavitt, Madhu Viswanathan, and Joseph M. Hilbe.
+2014. “Female Hurricanes Are Deadlier Than Male Hurricanes” 111 (24):
+8782–87. <https://doi.org/10.1073/pnas.1402786111>.
 
 </div>
 
-<div id="ref-speccurve">
+<div id="ref-multiverseR" class="csl-entry">
 
-Simonsohn, U., Simmons, J. P., and Nelson, L. D. (2020), “Specification
-curve analsysis,” 4, 1208–1214.
+Sarma, Abhraneel, Alex Kale, Michael Moon, Nathan Taback, Fanny
+Chevalier, Jessica Hullman, and Matthew Kay. 2021. “Multiverse:
+Multiplexing Alternative Data Analyses in R Notebooks (Version 0.5.0).”
+<https://github.com/MUCollective/multiverse>.
+
+</div>
+
+<div id="ref-speccurve" class="csl-entry">
+
+Simonsohn, Uri, Joseph P. Simmons, and Leif D. Nelson. 2020.
+“Specification Curve Analsysis” 4 (July): 1208–14.
 <https://doi.org/10.1038/s41562-020-0912-z>.
 
 </div>
 
-<div id="ref-multiverse">
+<div id="ref-multiverse" class="csl-entry">
 
-Steegen, S., Tuerlinckx, F., Gelman, A., and Vanpaemel, W. (2016),
-“Increasing transparency through a multiverse analysis,” 11, 702–712.
-<https://doi.org/10.1177/1745691616658637>.
+Steegen, Sara, Francis Tuerlinckx, Andrew Gelman, and Wolf Vanpaemel.
+2016. “Increasing Transparency Through a Multiverse Analysis” 11 (5):
+702–12. <https://doi.org/10.1177/1745691616658637>.
 
 </div>
 
