@@ -26,7 +26,7 @@ spec_curve(
   option = names(multiverse::parameters(.object)),
   universe_order = FALSE,
   color_order = FALSE,
-  color = (p.value < 0.05),
+  color = "p.value < 0.05",
   branch_order = NULL
 )
 
@@ -38,7 +38,7 @@ spec_curve(
   option = names(multiverse::parameters(.object)),
   universe_order = FALSE,
   color_order = FALSE,
-  color = (p.value < 0.05),
+  color = "p.value < 0.05",
   branch_order = NULL
 )
 }
@@ -81,11 +81,13 @@ to the order in the summary table.
 mv <- mverse(hurricane)
 # Define and add a mutate branch
 femininity <- mutate_branch(
- MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1)
+  MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1
+)
 add_mutate_branch(mv, femininity)
 # Define and add a formula branch
 model <- formula_branch(
- alldeaths ~ femininity, log(alldeaths + 1) ~ femininity)
+  alldeaths ~ femininity, log(alldeaths + 1) ~ femininity
+)
 add_formula_branch(mv, model)
 # Fit a lm model
 lm_mverse(mv)
@@ -96,11 +98,13 @@ spec_curve(mv, var = "femininityTRUE")
 mv <- mverse(hurricane)
 # Define and add a mutate branch
 femininity <- mutate_branch(
- MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1)
+  MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1
+)
 add_mutate_branch(mv, femininity)
 # Define and add a formula branch
 model <- formula_branch(
- alldeaths ~ femininity, alldeaths ~ femininity * HighestWindSpeed)
+  alldeaths ~ femininity, alldeaths ~ femininity * HighestWindSpeed
+)
 add_formula_branch(mv, model)
 # Define and add a family branch
 model_family <- family_branch(gaussian, poisson)

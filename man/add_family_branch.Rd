@@ -26,7 +26,7 @@ when using \code{glm_mverse()}.
 \examples{
 # Define a family branch.
 model_distributions <- family_branch(
- gaussian, poisson(link = "log")
+  gaussian, poisson(link = "log")
 )
 # Create a mverse and add the branch.
 mv <- create_multiverse(hurricane) \%>\%

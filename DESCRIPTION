@@ -1,31 +1,31 @@
 Package: mverse
 Type: Package
-Title: "mverse": A User Friendly "Multiverse" Analysis Package in R 
+Title: A User Friendly Multiverse Analysis Package in R 
     for Researchers, Educators, and Students in Statistics
 Version: 0.1.0
 Authors@R: c(
-  person("Michael Jongho", "Moon", email = "moon@utstat.toronto.edu", 
+  person("Michael Jongho", "Moon", email = "michael.moon@mail.utoronto.ca", 
   role = c("aut", "cre")),
   person("Haoda", "Li", email = "haoda.li@mail.utoronto.ca", 
   role = c("aut")),
   person("Mingwei", "Xu", email = "yuka.xu@mail.utoronto.ca", 
   role = c("aut")),
   person("Alison", "Gibbs", email = "alison.gibbs@utoronto.ca",
-  role = c("aut")),
+  role = c("ctb")),
   person("Nathan", "Taback", email = "nathan.taback@utoronto.ca",
   role = "aut"),
-  person("Fanny", "Chevalier", email = "fanny@cs.tornto.edu",
+  person("Fanny", "Chevalier", email = "fanny@dgp.toronto.edu",
   role = "aut")
   )
-Maintainer: Michael Jongho Moon <moon@utstat.toronto.edu>
-Description: "mverse" is an extension to "multiverse" package 
+Maintainer: Michael Jongho Moon <michael.moon@mail.utoronto.ca>
+Description: This package is an extension to "multiverse" package 
     (Sarma A., Kale A., Moon M., Taback N., Chevalier F., Hullman J., Kay M., 2021) 
     <doi:10.31219/osf.io/yfbwm>, which allows users perform to create explorable 
     "multiverse" analysis in R. This extension provides an additional level of
     abstraction to the "multiverse" package with the aim of creating
     user friendly syntax to researchers, educators, and students in statistics. 
     The "mverse" syntax is designed to allow piping and takes hints from
-    the "tidyverse" grammar. The package allows users to define and inpect
+    the "tidyverse" grammar. The package allows users to define and inspect
     "multiverse" analysis using familiar syntax in R.
 License: GPL (>= 3)
 Encoding: UTF-8
@@ -51,6 +51,7 @@ Imports:
   ggplot2,
   cowplot
 Suggests:
+  MASS,
   testthat (>= 2.1.0),
   pkgdown (>= 1.5.1),
   covr,
@@ -59,4 +60,4 @@ Suggests:
   kableExtra
 RoxygenNote: 7.1.2
 VignetteBuilder: knitr
-URL: https://github.com/mverseanalysis/mverse, https://mverseanalysis.github.io/mverse
+URL: https://github.com/mverseanalysis/mverse/, https://mverseanalysis.github.io/mverse/

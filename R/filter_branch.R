@@ -3,9 +3,9 @@
 #' @examples
 #' # Define a filter branch.
 #' hurricane_outliers <- filter_branch(
-#'   ! Name %in% c("Katrina", "Audrey", "Andrew"),
-#'   ! Name %in% c("Katrina"),
-#'   ! Name %in% c("Katrina"),
+#'   !Name %in% c("Katrina", "Audrey", "Andrew"),
+#'   !Name %in% c("Katrina"),
+#'   !Name %in% c("Katrina"),
 #'   TRUE # include all
 #' )
 #' # Create a mverse and add the branch.
@@ -19,17 +19,19 @@
 #' @export
 filter_branch <- function(..., name = NULL) {
   opts <- rlang::enquos(...)
-  if(!length(opts) > 0)
-    stop('Error: Provide at least one rule.')
-  if(!(is.character(name) | is.null(name)))
+  if (!length(opts) > 0) {
+    stop("Error: Provide at least one rule.")
+  }
+  if (!(is.character(name) | is.null(name))) {
     stop('Error: "name" must be a character object.')
+  }
   structure(
     list(
       opts = opts,
       name = name
-      ),
+    ),
     class = c("filter_branch", "branch")
-    )
+  )
 }
 
 #' @rdname add_filter_branch
@@ -50,9 +52,9 @@ add_filter_branch <- function(.mverse, ...) {
 #' @examples
 #' # Define a filter branch.
 #' hurricane_outliers <- filter_branch(
-#'   ! Name %in% c("Katrina", "Audrey", "Andrew"),
-#'   ! Name %in% c("Katrina"),
-#'   ! Name %in% c("Katrina"),
+#'   !Name %in% c("Katrina", "Audrey", "Andrew"),
+#'   !Name %in% c("Katrina"),
+#'   !Name %in% c("Katrina"),
 #'   TRUE # include all
 #' )
 #' # Create a mverse and add the branch.

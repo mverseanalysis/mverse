@@ -3,7 +3,7 @@
 #' @examples
 #' # Define a family branch.
 #' model_distributions <- family_branch(
-#'  gaussian, poisson(link = "log")
+#'   gaussian, poisson(link = "log")
 #' )
 #' # Create a mverse and add the branch.
 #' mv <- create_multiverse(hurricane) %>%
@@ -16,17 +16,19 @@
 #' @export
 family_branch <- function(..., name = NULL) {
   opts <- rlang::enquos(...)
-  if(!length(opts) > 0)
-    stop('Error: Provide at least one rule.')
-  if(!(is.character(name) | is.null(name)))
+  if (!length(opts) > 0) {
+    stop("Error: Provide at least one rule.")
+  }
+  if (!(is.character(name) | is.null(name))) {
     stop('Error: "name" must be a character object.')
+  }
   structure(
     list(
       opts = opts,
       name = name
-      ),
+    ),
     class = c("family_branch", "branch")
-    )
+  )
 }
 
 #' @rdname add_family_branch
@@ -47,7 +49,7 @@ add_family_branch <- function(.mverse, ...) {
 #' @examples
 #' # Define a family branch.
 #' model_distributions <- family_branch(
-#'  gaussian, poisson(link = "log")
+#'   gaussian, poisson(link = "log")
 #' )
 #' # Create a mverse and add the branch.
 #' mv <- create_multiverse(hurricane) %>%

@@ -1,6 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^\data-raw$
 ^README.md$
 ^_pkgdown\.yml$
 ^docs$
@@ -8,3 +7,5 @@
 .travis.yml
 ^README\.Rmd$
 ^.*\.csl
+cran-comments.md
+^data-raw$

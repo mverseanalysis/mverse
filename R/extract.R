@@ -11,21 +11,21 @@ extract <- function(...) {
 #' @examples
 #' # Define mutate branches.
 #' hurricane_strength <- mutate_branch(
-#' # damage vs. wind speed vs.pressure
-#' NDAM,
-#' HighestWindSpeed,
-#' Minpressure_Updated_2014,
-#' # Standardized versions
-#' scale(NDAM),
-#' scale(HighestWindSpeed),
-#' -scale(Minpressure_Updated_2014),
+#'   # damage vs. wind speed vs.pressure
+#'   NDAM,
+#'   HighestWindSpeed,
+#'   Minpressure_Updated_2014,
+#'   # Standardized versions
+#'   scale(NDAM),
+#'   scale(HighestWindSpeed),
+#'   -scale(Minpressure_Updated_2014),
 #' )
 #' y <- mutate_branch(
-#' alldeaths, log(alldeaths + 1)
+#'   alldeaths, log(alldeaths + 1)
 #' )
 #' # Create a mverse and add the branches.
 #' mv <- create_multiverse(hurricane) %>%
-#'  add_mutate_branch(hurricane_strength, y)
+#'   add_mutate_branch(hurricane_strength, y)
 #' execute_multiverse(mv)
 #' # Extract all branched columns from all universes
 #' extract(mv)
@@ -37,8 +37,8 @@ extract <- function(...) {
 #' # Specify the number of universes to extract from using \code{nuni}
 #' # The universes are randomly selected
 #' extract(mv, nuni = 3)
-#' # Specify the proportion of data to extract from each universe using \code{frow}
-#' # The rows are randomly selected
+#' # Specify the proportion of data to extract from each universe using
+#' # \code{frow}. The rows are randomly selected
 #' extract(mv, frow = 0.7)
 #' @param .mverse a \code{mverse} object.
 #' @param columns a character vector of column names to extract.
@@ -73,40 +73,52 @@ extract <- function(...) {
 #' @name extract
 #' @family {mverse methods}
 #' @export
-extract.mverse <- function(
-  .mverse, columns = NULL, universe = NULL,
-  nuni = NULL, frow = NULL, ...) {
+extract.mverse <- function(.mverse, columns = NULL, universe = NULL,
+                           nuni = NULL, frow = NULL, ...) {
+  data <- NULL # suppress R CMD Check Note
   stopifnot(inherits(.mverse, "mverse"))
   mtable <- summary(.mverse)
-  if(is.null(columns)) columns <- unlist(
-    sapply(
-      c(
-        attr(.mverse, 'branches_list'),
-        attr(.mverse, 'branches_conditioned_list')
-      ),
-      function(x) if(inherits(x, "mutate_branch")) x$name))
+  if (is.null(columns)) {
+    columns <- unlist(
+      sapply(
+        c(
+          attr(.mverse, "branches_list"),
+          attr(.mverse, "branches_conditioned_list")
+        ),
+        function(x) if (inherits(x, "mutate_branch")) x$name
+      )
+    )
+  }
   columns <- c("universe", columns)
-  if(is.null(universe)) {
+  if (is.null(universe)) {
     universe <- mtable$universe
-    if(!is.null(nuni)) {
-      if(length(nuni) > 1) {
+    if (!is.null(nuni)) {
+      if (length(nuni) > 1) {
         warning("Only the first value of nuni is used.")
         nuni <- nuni[1]
       }
       stopifnot(
         "nuni must be less than or equal to the number of universes." =
-          length(universe) >= nuni)
-      universe <- sample(universe, nuni)}}
+          length(universe) >= nuni
+      )
+      universe <- sample(universe, nuni)
+    }
+  }
   stopifnot(length(universe) > 0)
   extracted <- lapply(
     universe, function(x) {
       ex <- multiverse::extract_variable_from_universe(.mverse, x, data)
-      if(!is.null(frow)) {
+      if (!is.null(frow)) {
         stopifnot("frow must be a positive value." = frow > 0)
-        ex <- dplyr::sample_frac(ex, size = frow,
-                                 replace = (frow > 1))}
+        ex <- dplyr::sample_frac(ex,
+          size = frow,
+          replace = (frow > 1)
+        )
+      }
       ex$universe <- x
-      ex })
+      ex
+    }
+  )
   extracted <- dplyr::bind_rows(extracted)
   extracted %>%
     dplyr::select(columns)

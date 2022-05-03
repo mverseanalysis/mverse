@@ -24,13 +24,16 @@ ttest_mverse(
 \item{y}{(optional) column name of data within mverse object}
 
 \item{alternative}{a character string specifying the alternative hypothesis,
-must be one of "two.sided" (default), "greater" or "less". You can specify just the initial letter.}
+must be one of "two.sided" (default), "greater" or "less". You can
+specify just the initial letter.}
 
-\item{mu}{a number indicating the true value of the mean (or difference in means if you are performing a two sample test).}
+\item{mu}{a number indicating the true value of the mean (or difference
+in means if you are performing a two sample test).}
 
 \item{paired}{a logical indicating whether you want a paired t-test.}
 
-\item{var.equal}{a logical variable indicating whether to treat the two variances as being equal.}
+\item{var.equal}{a logical variable indicating whether to treat the two
+variances as being equal.}
 
 \item{conf.level}{confidence level of the interval.}
 }

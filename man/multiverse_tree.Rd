@@ -25,9 +25,10 @@ zooming into a subset of branches using \code{branches} parameter.
 }
 \examples{
 # Display a multiverse tree with multiple branches.
-outliers <- filter_branch(! Name \%in\% c("Katrina", "Audrey"), TRUE)
+outliers <- filter_branch(!Name \%in\% c("Katrina", "Audrey"), TRUE)
 femininity <- mutate_branch(MasFem, Gender_MF)
-strength <- mutate_branch(NDAM, HighestWindSpeed, Minpressure_Updated_2014, log(NDAM))
+strength <- mutate_branch(
+  NDAM, HighestWindSpeed, Minpressure_Updated_2014, log(NDAM))
 y <- mutate_branch(alldeaths, log(alldeaths + 1))
 model <- formula_branch(y ~ femininity * strength, y ~ femininity + strength)
 distribution <- family_branch(poisson, gaussian)

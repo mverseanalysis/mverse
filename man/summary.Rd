@@ -69,9 +69,9 @@ mv <- create_multiverse(hurricane) \%>\%
 summary(mv)
 # Define a filter branch.
 hurricane_outliers <- filter_branch(
-  ! Name \%in\% c("Katrina", "Audrey", "Andrew"),
-  ! Name \%in\% c("Katrina"),
-  ! Name \%in\% c("Katrina"),
+  !Name \%in\% c("Katrina", "Audrey", "Andrew"),
+  !Name \%in\% c("Katrina"),
+  !Name \%in\% c("Katrina"),
   TRUE # include all
 )
 # Add the additional branch and inspect.
@@ -79,75 +79,75 @@ mv <- add_filter_branch(mv, hurricane_outliers)
 summary(mv)
 # Define mutate branches.
 hurricane_strength <- mutate_branch(
-# damage vs. wind speed vs.pressure
-NDAM,
-HighestWindSpeed,
-Minpressure_Updated_2014,
-# Standardized versions
-scale(NDAM),
-scale(HighestWindSpeed),
--scale(Minpressure_Updated_2014),
+  # damage vs. wind speed vs.pressure
+  NDAM,
+  HighestWindSpeed,
+  Minpressure_Updated_2014,
+  # Standardized versions
+  scale(NDAM),
+  scale(HighestWindSpeed),
+  -scale(Minpressure_Updated_2014),
 )
 y <- mutate_branch(
-alldeaths, log(alldeaths + 1)
+  alldeaths, log(alldeaths + 1)
 )
 # Define a filter branch.
 hurricane_outliers <- filter_branch(
-! Name \%in\% c("Katrina", "Audrey", "Andrew"),
-! Name \%in\% c("Katrina"),
-! Name \%in\% c("Katrina"),
-TRUE # include all
+  !Name \%in\% c("Katrina", "Audrey", "Andrew"),
+  !Name \%in\% c("Katrina"),
+  !Name \%in\% c("Katrina"),
+  TRUE # include all
 )
 # Define a formula branch.
 model_specifications <- formula_branch(
-y ~ femininity,
-y ~ femininity + hurricane_strength,
-y ~ femininity * hurricane_strength
+  y ~ femininity,
+  y ~ femininity + hurricane_strength,
+  y ~ femininity * hurricane_strength
 )
 # Create a mverse, add the branches, and fit lm models.
 mv <- create_multiverse(hurricane) \%>\%
-add_filter_branch(hurricane_outliers) \%>\%
-add_mutate_branch(hurricane_strength, y) \%>\%
-add_formula_branch(model_specifications) \%>\%
-lm_mverse()
+  add_filter_branch(hurricane_outliers) \%>\%
+  add_mutate_branch(hurricane_strength, y) \%>\%
+  add_formula_branch(model_specifications) \%>\%
+  lm_mverse()
 # Display the multiverse table with estimated coefficients.
 summary(mv)
 # Define mutate branches.
 hurricane_strength <- mutate_branch(
-# damage vs. wind speed vs.pressure
-NDAM,
-HighestWindSpeed,
-Minpressure_Updated_2014,
-# Standardized versions
-scale(NDAM),
-scale(HighestWindSpeed),
--scale(Minpressure_Updated_2014),
+  # damage vs. wind speed vs.pressure
+  NDAM,
+  HighestWindSpeed,
+  Minpressure_Updated_2014,
+  # Standardized versions
+  scale(NDAM),
+  scale(HighestWindSpeed),
+  -scale(Minpressure_Updated_2014),
 )
 y <- mutate_branch(
-alldeaths, log(alldeaths + 1)
+  alldeaths, log(alldeaths + 1)
 )
 # Define a filter branch.
 hurricane_outliers <- filter_branch(
-  ! Name \%in\% c("Katrina", "Audrey", "Andrew"),
-! Name \%in\% c("Katrina"),
-! Name \%in\% c("Katrina"),
-TRUE # include all
+  !Name \%in\% c("Katrina", "Audrey", "Andrew"),
+  !Name \%in\% c("Katrina"),
+  !Name \%in\% c("Katrina"),
+  TRUE # include all
 )
 # Define a formula branch.
 model_specifications <- formula_branch(
-y ~ femininity,
-y ~ femininity + hurricane_strength,
-y ~ femininity * hurricane_strength
+  y ~ femininity,
+  y ~ femininity + hurricane_strength,
+  y ~ femininity * hurricane_strength
 )
 # Define a family branch.
 model_distributions <- family_branch(gaussian, poisson)
 # Create a mverse, add the branches, and fit glm models.
 mv <- create_multiverse(hurricane) \%>\%
-add_filter_branch(hurricane_outliers) \%>\%
-add_mutate_branch(hurricane_strength, y) \%>\%
-add_formula_branch(model_specifications) \%>\%
-add_family_branch(model_distributions) \%>\%
-glm_mverse()
+  add_filter_branch(hurricane_outliers) \%>\%
+  add_mutate_branch(hurricane_strength, y) \%>\%
+  add_formula_branch(model_specifications) \%>\%
+  add_family_branch(model_distributions) \%>\%
+  glm_mverse()
 # Display the multiverse table with estimated coefficients.
 summary(mv)
 }

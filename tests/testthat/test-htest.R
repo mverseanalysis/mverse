@@ -7,12 +7,12 @@ test_that("ttest_mverse() computes t.test with specified x, y columns", {
   mbranch <- mutate_branch(a + b, a - b, a * b, name = "m")
   mv %>%
     add_mutate_branch(mbranch) %>%
-    ttest_mverse(x='a')
+    ttest_mverse(x = "a")
   fitmverse <- multiverse::extract_variables(mv, out) %>%
     tidyr::unnest(out)
   fitmanual <- t.test(mydf$a)
   expect_true(fitmverse$statistic[1] == fitmanual$statistic)
-  ttest_mverse(mv, 'a', 'm')
+  ttest_mverse(mv, "a", "m")
   fitmverse <- multiverse::extract_variables(mv, out) %>%
     tidyr::unnest(out)
   fitmanual <- t.test(mydf$a, mydf$a + mydf$b)
@@ -28,6 +28,6 @@ test_that("ttest_mverse() computes t.test with formula branch", {
     ttest_mverse()
   fitmverse <- multiverse::extract_variables(mv, out) %>%
     tidyr::unnest(out)
-  fitmanual <- t.test(extra ~ group, data=sleep)
+  fitmanual <- t.test(extra ~ group, data = sleep)
   expect_true(fitmverse$statistic[1] == fitmanual$statistic)
 })

@@ -24,17 +24,19 @@
 #' @export
 mutate_branch <- function(..., name = NULL) {
   opts <- rlang::enquos(...)
-  if(!length(opts) > 0)
-    stop('Error: Provide at least one rule.')
-  if(!(is.character(name) | is.null(name)))
+  if (!length(opts) > 0) {
+    stop("Error: Provide at least one rule.")
+  }
+  if (!(is.character(name) | is.null(name))) {
     stop('Error: "name" must be a character object.')
+  }
   structure(
     list(
       opts = opts,
       name = name
-      ),
+    ),
     class = c("mutate_branch", "branch")
-    )
+  )
 }
 
 #' @rdname add_mutate_branch

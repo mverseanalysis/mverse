@@ -1,6 +1,6 @@
 context("Branch Conditioning")
 
-mydf <- data.frame(x = c(1,2,3), y = c(4,5,6))
+mydf <- data.frame(x = c(1, 2, 3), y = c(4, 5, 6))
 
 test_that("branch_condition() stores x and y options without evaluating the expressions.", {
   cond <- branch_condition(log(x + 1), y)
@@ -11,7 +11,7 @@ test_that("branch_condition() stores x and y options without evaluating the expr
 test_that("branch_condition() expects expressions not strings.", {
   expect_error(
     cond <- branch_condition("log(x + 1)", "y"),
-    '^You must provide the options as expressions not strings..+',
+    "^You must provide the options as expressions not strings..+",
   )
 })
 
@@ -32,7 +32,7 @@ test_that("add_branch_condition() adds a branch condition.", {
     add_branch_condition(cond)
   expect_equal(attr(mv, "conditions_list")[[1]], cond)
   expect_equal(attr(mv, "branches_conditioned_list")[[1]]$conds_on[[1]], w)
-  expect_match(attr(mv, "branches_conditioned_list")[[1]]$conds['z_1'], "==")
+  expect_match(attr(mv, "branches_conditioned_list")[[1]]$conds["z_1"], "==")
 })
 
 test_that("add_branch_condition() stores negation.", {
@@ -43,11 +43,11 @@ test_that("add_branch_condition() stores negation.", {
   mv <- mverse(mydf) %>%
     add_mutate_branch(z, w) %>%
     add_branch_condition(cond)
-  expect_match(attr(mv, "branches_conditioned_list")[[1]]$conds['z_1'], "==")
+  expect_match(attr(mv, "branches_conditioned_list")[[1]]$conds["z_1"], "==")
   mv <- mverse(mydf) %>%
     add_mutate_branch(z, w) %>%
     add_branch_condition(cond_n)
-  expect_match(attr(mv, "branches_conditioned_list")[[1]]$conds['z_1'], "!=")
+  expect_match(attr(mv, "branches_conditioned_list")[[1]]$conds["z_1"], "!=")
 })
 
 test_that("add_branch_condition() stops double conditioning.", {

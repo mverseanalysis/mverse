@@ -37,10 +37,8 @@ references:
 
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE
-)
-Sys.setenv(LANG="en")
+knitr::opts_chunk$set(collapse = TRUE)
+Sys.setenv(LANG = "en")
 ```
 This vignette describes the workflow of linear regression modeling in the multiverse with the following functions:
 
@@ -53,7 +51,7 @@ We will use the Boston housing dataset {@boston} as an example. This dataset has
 
 
 ```{r load}
-library(MASS)
+Boston <- MASS::Boston
 library(mverse)
 knitr::kable(head(Boston)) # using kable for displaying data in html
 ```
@@ -61,6 +59,7 @@ knitr::kable(head(Boston)) # using kable for displaying data in html
 ## Simple Linear Regression with `mverse`
 
 In order to perform a linear regression in the multiverse, we create a formula branch with all defensive formulas, add it the `mverse` object, and execute `lm` on each universe by calling `lm_mverse`.
+
 ```{r lm}
 # create a mverse object with the Boston dataset
 mv <- create_multiverse(Boston)
@@ -76,7 +75,9 @@ mv <- mv %>%
   add_formula_branch(formulas) %>% 
   lm_mverse()
 ```
+
 By default, `summary` will give the estimates of parameters for each model. You can also output other information by changing the `output` parameter.
+
 ```{r summary_lm}
 # using kable for displaying data in html
 # output estimates by default, or by "estimates" or "e"
@@ -90,6 +91,7 @@ knitr::kable(summary(mv, output="r"))
 ```
 
 ## Generalized Linear Regression with `mverse`
+
 For GLM, we use `family_branch` to create options for different error distributions and link functions. 
 
 ```{r glm}
@@ -113,7 +115,9 @@ mv <- mv %>%
   add_family_branch(families) %>% 
   glm_mverse()
 ```
+
 Similarly, use `summary` to inspect the model results
+
 ```{r summary_glm}
 # using kable for displaying data in html
 # output estimates by default, or by "estimates" or "e"

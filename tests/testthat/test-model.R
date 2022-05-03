@@ -45,4 +45,3 @@ test_that("glm_mverse() expects a formula branch.", {
   mv <- mverse(mydf)
   expect_error(glm_mverse(mv), "Exactly one formula branch is required.")
 })
-

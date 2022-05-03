@@ -18,12 +18,17 @@
 #' @export
 lm_mverse <- function(.mverse) {
   stopifnot(inherits(.mverse, "mverse"))
+  formulae <- NULL
+  data <- NULL # suppress R CMD Check Note
   # check whether there is a formula branch (should be only 1)
-  brs <- c(attr(.mverse, 'branches_conditioned_list'), attr(.mverse, 'branches_list'))
-  if (length(brs) == 0)
+  brs <- c(
+    attr(.mverse, "branches_conditioned_list"), attr(.mverse, "branches_list"))
+  if (length(brs) == 0) {
     stop("Exactly one formula branch is required.")
-  if (sum(sapply(brs,inherits, "formula_branch")) != 1)
+  }
+  if (sum(sapply(brs, inherits, "formula_branch")) != 1) {
     stop("Exactly one formula branch is required.")
+  }
   # fit lm
   multiverse::inside(.mverse, model <- stats::lm(formulae, data = data))
   attr(.mverse, "class") <- unique(c("lm_mverse", class(.mverse)))
@@ -60,15 +65,22 @@ lm_mverse <- function(.mverse) {
 #' @export
 glm_mverse <- function(.mverse) {
   stopifnot(inherits(.mverse, "mverse"))
+  formulae <- NULL
+  data <- NULL
+  family <- NULL # suppress R CMD Check Note
   # check whether there is a formula branch (should be only 1)
-  brs <- c(attr(.mverse, 'branches_conditioned_list'), attr(.mverse, 'branches_list'))
-  if (length(brs) == 0)
+  brs <- c(
+    attr(.mverse, "branches_conditioned_list"), attr(.mverse, "branches_list"))
+  if (length(brs) == 0) {
     stop("Exactly one formula branch is required.")
-  if (sum(sapply(brs,inherits, "formula_branch")) != 1)
+  }
+  if (sum(sapply(brs, inherits, "formula_branch")) != 1) {
     stop("Exactly one formula branch is required.")
+  }
   # fit glm
   multiverse::inside(
-    .mverse, model <- stats::glm(formulae, data = data, family = family))
+    .mverse, model <- stats::glm(formulae, data = data, family = family)
+  )
   attr(.mverse, "class") <- unique(c("glm_mverse", class(.mverse)))
   execute_multiverse(.mverse)
   invisible(.mverse)

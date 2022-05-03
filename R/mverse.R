@@ -1,3 +1,7 @@
+#' @importFrom magrittr %>%
+#' @export
+magrittr::`%>%`
+
 #' Create a new \code{mverse} object
 #'
 #' Constructs a new mverse object which extends
@@ -12,14 +16,15 @@
 #' @return A \code{mverse} object with the source dataframe attached.
 #' @name mverse
 #' @family {mverse methods}
+#' @import multiverse
 #' @export
 mverse <- function(data) {
   stopifnot(is.data.frame(data))
-  .mverse <- multiverse::multiverse()
-  attr(.mverse, 'source') <- data
-  attr(.mverse, 'branches_list') <- list()
-  attr(.mverse, 'branches_conditioned_list') <- list()
-  attr(.mverse, 'conditions_list') <- list()
+  .mverse <- multiverse()
+  attr(.mverse, "source") <- data
+  attr(.mverse, "branches_list") <- list()
+  attr(.mverse, "branches_conditioned_list") <- list()
+  attr(.mverse, "conditions_list") <- list()
   attr(.mverse, "class") <- c("mverse", class(.mverse))
   .mverse
 }

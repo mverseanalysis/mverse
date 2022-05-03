@@ -26,13 +26,14 @@
 branch_condition <- function(x, y, reject = FALSE) {
   x <- stringr::str_replace(rlang::expr_text(rlang::enquo(x)), "^~", "")
   y <- stringr::str_replace(rlang::expr_text(rlang::enquo(y)), "^~", "")
-  if (any(stringr::str_starts(c(x, y), "\"")))
+  if (any(stringr::str_starts(c(x, y), "\""))) {
     stop(
-      'You must provide the options as expressions not strings.',
-      '\ni.e.,',
+      "You must provide the options as expressions not strings.",
+      "\ni.e.,",
       '\n(x) Incorrect usage: branch_condition("x", "y")',
-      '\n(o) Correct usage: branch_condition(x, y)'
+      "\n(o) Correct usage: branch_condition(x, y)"
     )
+  }
   structure(
     list(x = x, y = y, reject = reject),
     class = c("branch_condition")
@@ -78,10 +79,11 @@ add_branch_condition <- function(.mverse, ...) {
 add_branch_condition.mverse <- function(.mverse, ...) {
   conds <- list(...)
   # add condition to branches
-  e <- sapply(conds, add_branch_condition_single, .mverse)
+  sapply(conds, add_branch_condition_single, .mverse)
   # add to list
   attr(.mverse, "conditions_list") <- append(
-    attr(.mverse, "conditions_list"), conds)
+    attr(.mverse, "conditions_list"), conds
+  )
   # reparse branches
   .mverse <- reset_parameters(.mverse)
   invisible(.mverse)
@@ -89,57 +91,69 @@ add_branch_condition.mverse <- function(.mverse, ...) {
 
 add_branch_condition_single <- function(cond, .mverse) {
   stopifnot(inherits(cond, "branch_condition"))
-  brs <- attr(.mverse, 'branches_list')
-  for(i in 1:length(brs)) {
-    if(any(as_option_list(brs[[i]]) == cond$x)) {
+  brs <- attr(.mverse, "branches_list")
+  for (i in seq_len(length(brs))) {
+    if (any(as_option_list(brs[[i]]) == cond$x)) {
       br_x <- brs[[i]]
       br_x_i <- i
-    } else if(any(as_option_list(brs[[i]]) == cond$y))
+    } else if (any(as_option_list(brs[[i]]) == cond$y)) {
       br_y <- brs[[i]]
-  }
-  brs_c <- attr(.mverse, 'branches_conditioned_list')
-  if(length(brs_c) > 0)
-    for(i in 1:length(brs_c)) {
-      if(any(as_option_list(brs_c[[i]]) == cond$x)) {
-        if(which(as_option_list(brs_c[[i]]) == cond$x) %in% which(nchar(brs_c[[i]]$conds) > 0))
-          stop(
-            "Option ", cond$x, " is already conditioned. Try conditioning on another option.")
-        else
-          br_x <- brs_c[[i]]
-      }
-      else if(any(as_option_list(brs_c[[i]]) == cond$y))
-        br_y <- brs_c[[i]]
     }
+  }
+  brs_c <- attr(.mverse, "branches_conditioned_list")
+  if (length(brs_c) > 0) {
+    for (i in seq_len(length(brs_c))) {
+      if (any(as_option_list(brs_c[[i]]) == cond$x)) {
+        if (which(as_option_list(brs_c[[i]]) == cond$x) %in%
+            which(nchar(brs_c[[i]]$conds) > 0)) {
+          stop(
+            "Option ", cond$x,
+            " is already conditioned. Try conditioning on another option."
+          )
+        } else {
+          br_x <- brs_c[[i]]
+        }
+      } else if (any(as_option_list(brs_c[[i]]) == cond$y)) {
+        br_y <- brs_c[[i]]
+      }
+    }
+  }
   # switch x and y to avoid circular conditioning
   x <- cond$x
   y <- cond$y
-  if (name(br_x) %in% sapply(br_y[['conds_on']], function(s) name(s))) {
-    tmp <- x; x <- y; y <- tmp
-    tmp <- br_x; br_x <- br_y; br_y <- tmp
+  if (name(br_x) %in% sapply(br_y[["conds_on"]], function(s) name(s))) {
+    tmp <- x
+    x <- y
+    y <- tmp
+    tmp <- br_x
+    br_x <- br_y
+    br_y <- tmp
     rm(br_x_i)
   }
-  if (!'conds' %in% names(br_x)) {
-    br_x[['conds']] <- character(length(br_x$opts))
-    names(br_x[['conds']]) <- names(as_option_list(br_x))
-    br_x[['conds_on']] <- list(br_y)
+  if (!"conds" %in% names(br_x)) {
+    br_x[["conds"]] <- character(length(br_x$opts))
+    names(br_x[["conds"]]) <- names(as_option_list(br_x))
+    br_x[["conds_on"]] <- list(br_y)
   } else {
-    if(! name(br_y) %in% sapply(br_x[['conds_on']], function(s) name(s)))
-      br_x[['conds_on']][[length(br_x[['conds_on']]) + 1]] <- br_y
+    if (!name(br_y) %in% sapply(br_x[["conds_on"]], function(s) name(s))) {
+      br_x[["conds_on"]][[length(br_x[["conds_on"]]) + 1]] <- br_y
+    }
   }
   # add condition
-  br_x[['conds']][which(as_option_list(br_x) == x)] <-
+  br_x[["conds"]][which(as_option_list(br_x) == x)] <-
     paste0(
       "%when% (", br_y$name, "_branch", ifelse(cond$reject, " != \"", " == \""),
       names(as_option_list(br_y))[as_option_list(br_y) == y],
       "\")"
     )
-  if(name(br_x) %in% sapply(brs_c, function(s) name(s)))
-    attr(.mverse, 'branches_conditioned_list')[[
-      which(name(br_x) == sapply(brs_c, function(s) name(s)))]] <- br_x
-  else
-    attr(.mverse, 'branches_conditioned_list')[[length(brs_c) + 1]] <- br_x
-  if(exists("br_x_i"))
-    attr(.mverse, 'branches_list')[[br_x_i]] <- NULL
-  return(invisible())
+  if (name(br_x) %in% sapply(brs_c, function(s) name(s))) {
+    attr(.mverse, "branches_conditioned_list")[[
+    which(name(br_x) == sapply(brs_c, function(s) name(s)))]] <- br_x
+  } else {
+    attr(.mverse, "branches_conditioned_list")[[length(brs_c) + 1]] <- br_x
+  }
+  if (exists("br_x_i")) {
+    attr(.mverse, "branches_list")[[br_x_i]] <- NULL
+  }
+  invisible()
 }
-

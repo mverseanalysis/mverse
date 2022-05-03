@@ -26,9 +26,9 @@ for selecting subsets of data rows.
 \examples{
 # Define a filter branch.
 hurricane_outliers <- filter_branch(
-  ! Name \%in\% c("Katrina", "Audrey", "Andrew"),
-  ! Name \%in\% c("Katrina"),
-  ! Name \%in\% c("Katrina"),
+  !Name \%in\% c("Katrina", "Audrey", "Andrew"),
+  !Name \%in\% c("Katrina"),
+  !Name \%in\% c("Katrina"),
   TRUE # include all
 )
 # Create a mverse and add the branch.

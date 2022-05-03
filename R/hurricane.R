@@ -1,7 +1,8 @@
 #' Data on Atlantic hurricanes in the U.S. between 1950 and 2012.
 #'
-#' A dataset for the study conducted by Jung et al. (2014) in
-#' \href{https://doi.org/10.1073/pnas.1402786111}{Female hurricanes are deadlier than male hurricanes}.
+#' A data set for the study conducted by Jung et al. (2014) in
+#' \href{https://doi.org/10.1073/pnas.1402786111}{Female hurricanes are
+#' deadlier than male hurricanes}.
 #'
 #' @format A data frame with 94 rows and 12 variables:
 #' \describe{

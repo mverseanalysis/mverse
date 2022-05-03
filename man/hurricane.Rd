@@ -36,8 +36,9 @@ Kiju Jung, Sharon Shavitt, Madhu Viswanathan, and Joseph M. Hilbe.
 hurricane
 }
 \description{
-A dataset for the study conducted by Jung et al. (2014) in
-\href{https://doi.org/10.1073/pnas.1402786111}{Female hurricanes are deadlier than male hurricanes}.
+A data set for the study conducted by Jung et al. (2014) in
+\href{https://doi.org/10.1073/pnas.1402786111}{Female hurricanes are
+deadlier than male hurricanes}.
 }
 \details{
 The dataset was collected by Jung et al. in their study

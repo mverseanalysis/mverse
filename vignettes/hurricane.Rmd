@@ -19,7 +19,6 @@ references:
       year: 2014
       month: 6
       day: 17
-    URL: https://doi.org/10.1073/pnas.1402786111
     DOI: 10.1073/pnas.1402786111
     journal: Proceeedings fo the National Academiy of Sciences of the United States of America
     volume: 111
