@@ -39,11 +39,8 @@ Imports:
   dplyr,
   tidyr,
   tidyselect,
-  tibble,
   stringr,
   stats,
-  scales,
-  tidyverse,
   broom,
   grDevices,
   igraph,
@@ -51,6 +48,8 @@ Imports:
   ggplot2,
   cowplot
 Suggests:
+  tidyverse,
+  scales,
   MASS,
   testthat (>= 2.1.0),
   pkgdown (>= 1.5.1),
