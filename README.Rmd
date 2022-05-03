@@ -107,6 +107,7 @@ knitr::opts_chunk$set(
 # mverse
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/mverseanalysis/mverse/workflows/R-CMD-check/badge.svg)](https://github.com/mverseanalysis/mverse/actions)
 <!-- badges: end -->
 
 _mverse_ is an extension to multiverse package [@multiverseR]

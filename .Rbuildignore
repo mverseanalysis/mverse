@@ -4,8 +4,8 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
-.travis.yml
 ^README\.Rmd$
 ^.*\.csl
 cran-comments.md
 ^data-raw$
+^\.github$
