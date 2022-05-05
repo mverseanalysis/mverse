@@ -8,3 +8,5 @@
 .travis.yml
 ^README\.Rmd$
 ^.*\.csl
+^doc$
+^Meta$

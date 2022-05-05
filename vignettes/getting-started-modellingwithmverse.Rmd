@@ -1,0 +1,221 @@
+---
+title: "GLM modelling with mverse v2"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with mverse v2}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+references:
+  - id: original
+    title: "Female hurricanes are deadlier than male hurricanes"
+    type: article-journal
+    issued:
+      year: 2014
+      month: 6
+      day: 17
+    URL: https://doi.org/10.1073/pnas.1402786111
+    DOI: 10.1073/pnas.1402786111
+    journal: Proceeedings fo the National Academiy of Sciences of the United States of America
+    volume: 111
+    issue: 24
+    page: 8782-8787
+    author:
+    - given: Kiju
+      family: Jung
+    - given: Sharon
+      family: Shavitt
+    - given: Madhu
+      family: Viswanathan
+    - given: "Joseph M."
+      family: Hilbe
+  - id: multiverse
+    title: "multiverse: R package for creating explorable multiverse analysis"
+    type: entry
+    URL: https://mucollective.github.io/multiverse/
+    accessed:
+      year: 2020
+    author:
+    - given: Abhraneel
+      family: Sarma
+    - given: Matthew
+      family: Kay
+  - id: boba
+    title: "Boba: Authoring and Visualizing Multiverse Analyses"
+    type: entry
+    URL: https://arxiv.org/abs/2007.05551
+    issued:
+      year: 2020
+      month: 7
+      day: 30
+    accessed:
+      year: 2020
+    author:
+    - given: Yang
+      family: Liu
+    - given: Alex
+      family: Kale
+    - given: Tim
+      family: Althoff
+    - given: Jeffrey
+      family: Heer
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE
+)
+```
+
+This vignette aims to introduce the workflow of a multiverse analysis with GLM modelling using `mverse`.
+
+The typical workflow of a multiverse analysis with `mverse` is
+
+1.  Initialize a `multiverse` object with the dataset.
+2.  Define all the decisions as *branches*.
+3.  Add defined *branches* into the `multiverse` object.
+4.  Run models, hypothesis tests, and plots.
+
+# Loading packages
+
+```{r load_package, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(mverse)
+```
+
+# Example: a `multiverse` analysis to explore the severity of Feminine-named hurricanes versus Feminine-named versus Masculine-named hurricanes
+
+We will use the `hurricane` dataset [@original] as an example.
+
+```{r load_data, warning=FALSE, message=FALSE}
+glimpse(hurricane)
+```
+
+To start a multiverse analysis, first use `create_multiverse` to create an `mverse` object with `hurricane`. At this point the multiverse is empty.
+
+```{r create_object}
+mv <- create_multiverse(hurricane)
+summary(mv)
+```
+
+# Define Branches in the Multiverse
+
+Each branch defines a different statistical analysis by using a subset of data, transforming columns, or a statistical model.  Each combination of these branches defines a "universe", or analysis paths. Branches are defined using `X_branch(...)`, where `...` are expressions that define a data wrangling or modelling decision, such as excluding certain hurricane names from an analysis, deriving new variables for analysis (mutating), or using different models. Once branches are defined we can look at the impact of the combination of these decisions.
+
+## Branches for Data munipulation
+
+`filter_branch` takes logical predicates, and finds the observations where the condition is `TRUE`.
+
+`filter_branch` can, for example, be used to exclude outliers. Excluding hurricane `Katrina` or `Audrey` removes the hurricanes with the most deaths.
+
+```{r filter_branch}
+
+# Exclude up to 2 most extreme observations in term of death
+death_outliers <- filter_branch(
+  TRUE, # keep all observations
+  Name != 'Katrina', # excludes the most deadly observation
+  !(Name %in% c('Katrina', 'Audrey')) # excludes the two most deadly observations
+)
+```
+
+`mutate_branch` takes expressions that can modify data columns, and can be used to provide different definitions or transformations of a column.
+
+```{r mutate_branch}
+# Define femininity 
+femininity <- mutate_branch(
+  Gender_MF, # based on binary gender
+  MasFem # based on the scale
+)
+
+# Define damage
+damage <- mutate_branch(
+  NDAM, # No transform
+  log(NDAM) # log transform
+)
+```
+
+## GLM Branches for Modelling and Hypothesis Tests
+
+`mverse` can define different `glm` models as branches. The formula for a `glm` model (e.g., `y ~ x`) can be defined using `formula_branch`, and `family_branch` defines the member of the exponential family used via a `family` object.
+
+Let's add two formulas and two members of the exponential family as branches.
+
+The formulas are:
+
+-   `alldeaths ~ MasFem + damage + HighestWindSpeed`
+
+-   `alldeaths ~ MasFem * damage + HighestWindSpeed`
+
+The exponential family members are:
+
+-   `gaussian()`
+
+-   `poisson()`
+
+```{r modelling_branch}
+# Define the formulas 
+formulas <- formula_branch(
+  alldeaths ~ MasFem + damage + HighestWindSpeed, # simplest additive model
+  alldeaths ~ MasFem * damage + HighestWindSpeed, # interactions between femininity and damage
+)
+
+
+families <- family_branch(
+  gaussian(),
+  poisson()
+)
+```
+
+# Add branches to the multiverse
+
+After defining all branches, we need to add the branches to the multiverse object `mv` by using `add_X_branch`. 
+
+```{r add_branches}
+mv %>%
+  add_filter_branch(death_outliers) %>%
+  add_mutate_branch(femininity, damage) %>%
+  add_formula_branch(formulas) %>%
+  add_family_branch(families)
+```
+
+After adding all branches, we can inspect the branches definitions using `summary`.   There are 3 options for `death_outliers`, 2 options for `femininity`, 2 options for `damage`, 2 options for formulas, and 2 options for families.  So, this leads to $3 \times 2 \times 2 \times 2 \times 2 = 48$ universes.
+
+```{r}
+mv_summary <- summary(mv)
+
+nrow(mv_summary)
+```
+
+The first and last branches of `mv` are shown below.  The first branch doesn't exclude outliers, uses the binary definition of gender, no transformation of damage, uses an additive model, and treats the response as Gaussian; the second branch excludes `Katrina` and `Audrey`, uses a continuous definition of Gender, log transforms damage, uses a model with an interaction, and treats the response as Poisson.
+
+
+```{r}
+mv_summary[c(1,48),]
+```
+
+# Executing the analysis
+
+Computing each of the 48 analyses can be done using `glm_mverse`.  
+
+```{r fit_model}
+glm_mverse(mv) 
+```
+
+This won't print the results, but instead they are stored in `mv`.
+
+# Inspecting the Results
+
+Calling `summary(mv)` again will provide estimates, test statistics and other useful information as a data frame. There are many options for displaying different output, see the vignette on regression and hypothesis tests.  The numerical estimates from the first universe is shown below.
+
+```{r summary}
+mv_model_summary <- summary(mv)
+
+mv_model_summary[1:4, c(1, 7:13)]
+```
+
+# Visualizing the Results
+
+For multiverse analysis, a specification curve is one of the suggested visualizations for multiverse analysis. You can use `spec_curve` to visualize the variable estimates in each universe. There are many options for creating specification curves with different orderings and variables, check the vignette on specification curves.
+
+```{r spec_curve.glm_mverse}
+spec_curve(mv, var = "damage")
+```
