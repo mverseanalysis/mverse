@@ -1,6 +1,15 @@
 
 #' Display a specification curve across the multiverse.
+#'
+#' This family of methods displays the specification curve analysis as
+#' proposed by Simonsohn, Simmons, and Nelson
+#' (\href{https://doi.org/10.1038/s41562-020-0912-z}{2020}).
+#'
 #' @rdname spec_curve
+#' @source
+#' Uri Simonsohn, Joseph P. Simmons, and Leif D. Nelson. (2020).
+#' “Specification curve analysis” \emph{Nature Human Behaviour},
+#' 4, 1208–14. \url{https://doi.org/10.1038/s41562-020-0912-z}
 #' @export
 spec_curve <- function(.object, var, conf.int, conf.level,
                        option, universe_order, color_order,
