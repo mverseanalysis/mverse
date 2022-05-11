@@ -1,7 +1,6 @@
 Package: mverse
 Type: Package
-Title: "mverse": A User Friendly "Multiverse" Analysis Package in R 
-    for Researchers, Educators, and Students in Statistics
+Title: Tidy Multiverse Analysis Made Simple
 Version: 0.1.0
 Authors@R: c(
   person("Michael Jongho", "Moon", email = "moon@utstat.toronto.edu", 
@@ -10,12 +9,12 @@ Authors@R: c(
   role = c("aut")),
   person("Mingwei", "Xu", email = "yuka.xu@mail.utoronto.ca", 
   role = c("aut")),
-  person("Alison", "Gibbs", email = "alison.gibbs@utoronto.ca",
-  role = c("aut")),
   person("Nathan", "Taback", email = "nathan.taback@utoronto.ca",
   role = "aut"),
   person("Fanny", "Chevalier", email = "fanny@cs.tornto.edu",
-  role = "aut")
+  role = "aut"),
+  person("Alison", "Gibbs", email = "alison.gibbs@utoronto.ca",
+  role = c("ctb"))
   )
 Maintainer: Michael Jongho Moon <moon@utstat.toronto.edu>
 Description: "mverse" is an extension to "multiverse" package 

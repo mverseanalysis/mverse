@@ -10,9 +10,9 @@ extract(...)
 \method{extract}{mverse}(
   .mverse,
   columns = NULL,
-  universe = NULL,
   nuni = NULL,
   frow = NULL,
+  mutate_cols = TRUE,
   ...
 )
 }
@@ -23,11 +23,11 @@ extract(...)
 
 \item{columns}{a character vector of column names to extract.}
 
-\item{universe}{an integer vector of universe ids to extract.}
-
 \item{nuni}{a positive integer for the number of universes to extract.}
 
 \item{frow}{proportion of rows to extract from each universe.}
+
+\item{universe}{an integer vector of universe ids to extract.}
 }
 \description{
 \code{extract} returns a tibble of selected values

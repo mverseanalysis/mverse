@@ -1,0 +1,130 @@
+---
+title: "Basic Regressions with mverse"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Basic Regressions with mverse}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+references:
+  - id: multiverse
+    title: "multiverse: R package for creating explorable multiverse analysis"
+    type: entry
+    URL: https://mucollective.github.io/multiverse/
+    accessed:
+      year: 2020
+    author:
+    - given: Abhraneel
+      family: Sarma
+    - given: Matthew
+      family: Kay
+  - id: boston
+    title: Hedonic prices and the demand for clean air
+    author: 
+    - family: Harrison Jr
+      given: David
+    - family: Rubinfeld
+      given: Daniel L
+    container-title: Journal of environmental economics and management
+    type: article-journal
+    volume: 5
+    number: 1
+    pages: 81-102
+    issued:
+      year: 1978
+    publisher: Elsevier
+---
+
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, fig.width=7
+)
+Sys.setenv(LANG="en")
+```
+This vignette describes the workflow of linear regression modeling in the multiverse with the following functions:
+
+ * `formula_branch()`, `add_formula_branch`: create branches for regression formulas and add them to a `mverse` object.
+ * `lm_mverse()`: fit a simple linear model with the given formula branches and family branches.
+ * `summary()`: provide a summary of the fitted models in different branches. 
+ * `spec_curve()`: display the specification curve of a model.
+
+
+```{r load, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(mverse)
+```
+
+We will use the Boston housing dataset {@boston} as an example. This dataset has 506 observations on 14 variables. This dataset is extensively used in regression analyses and algorithm benchmarks. The objective is to predict the median value of a home (`medv`) with the feature variables.
+
+```{r}
+glimpse(MASS::Boston) # using kable for displaying data in html
+```
+
+
+## Simple Linear Regression with `mverse`
+
+In order to perform a linear regression in the multiverse, we create a formula branch with all the models we wish to explore, add it the `mverse` object, and execute `lm` on each universe by calling `lm_mverse`.
+
+Create a multiverse with `mverse`.
+
+```{r lm}
+mv <- create_multiverse(MASS::Boston)
+```
+
+We can explore models of the median value of home prices `medv` on different combinations of the following explanatory variables: proportion of adults without some high school education and proportion of male workers classified as laborers (`lstat`), average number of rooms per dwelling (`rm`), per capita crime rate (`crim`), and property tax (`tax`).
+
+Create the models with `formula_branch()`
+
+```{r}
+formulas <- formula_branch(medv ~ log(lstat) * rm,
+                           medv ~ log(lstat) * tax,
+                           medv ~ log(lstat) * tax * rm)
+```
+
+Add the models to the multiverse `mv`.
+
+```{r}
+mv <- mv %>% add_formula_branch(formulas)
+```
+
+Fit `lm()` across `mv` using `lm_mverse()`.
+
+```{r}
+lm_mverse(mv)
+```
+
+
+By default, `summary` will give the estimates of parameters for each model. You can also output other information by changing the `output` parameter.
+
+
+```{r summary_lm}
+summary(mv)
+```
+
+Changing `output` to `df` yields the degrees of freedom table.  
+
+```{r}
+summary(mv, output = "df")
+```
+
+Other options include F (`output = "f"`) statistics 
+
+```{r}
+summary(mv, output = "f")
+```
+
+and $R^2$ (`output = "r"`).
+
+```{r}
+# output R-squared by `r.squared` or "r"
+summary(mv, output = "r")
+```
+
+
+Finally, we can display how the effect of number of rooms in a dwelling `log(lstat)` using `spec_curve`.  
+
+```{r}
+spec_curve(mv, var = "log(lstat)") 
+```
+

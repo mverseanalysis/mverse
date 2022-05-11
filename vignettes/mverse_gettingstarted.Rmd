@@ -1,9 +1,9 @@
 ---
-title: "Defining a branch for a column and extracting the branched values."
+title: "Getting started with mverse"
 output: rmarkdown::html_vignette
 link-citations: yes
 vignette: >
-  %\VignetteIndexEntry{Defining a branch for a column and extracting the branched values.}
+  %\VignetteIndexEntry{Basic Multiverse Analysis with mverse}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 references:
@@ -150,25 +150,161 @@ references:
 
 ```{r setup, include = FALSE, message=FALSE, warning=FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
+  collapse = TRUE, fig.width=7, fig.height=4)
 library(tidyverse)
 library(mverse)
 ```
 
-In this example, we demonstrate `mverse` makes it easy to define multiple definitions for a column in a dataset and compare the results of the different definitions. For the demonstration, we combine soccer player skin colour ratings by two independent raters (`rater1` and `rater2`) from `soccer` dataset included in the library. 
+## Simple Example: Transform and Summarise One Numeric Column
 
-## Introduction
+Suppose that we have a column `col1` that we wish to transform in three different ways and compute the five number summary of the column after the transformations.
+
+```{r}
+library(tidyverse)
+library(mverse)
+
+set.seed(6)
+
+df <- tibble(col1 = rnorm(5, 0, 1), col2 = col1 + runif(5))
+```
+
+
+### Step 1: `create_multiverse` of the data frame
+
+```{r}
+mv <- create_multiverse(df)
+```
+
+
+### Step 2: `mutate_branch` to transform `col1`
+
+```{r}
+# Step 2: create a branch - each branch corresponds to a universe
+
+transformation_branch <- mutate_branch(col1 = col1,
+                                       col1_t1 = log(abs(col1 + 1)),
+                                       col1_t2 = abs(col1))
+```
+
+
+
+### Step 3: `add_mutate_branch` to `mv`
+
+```{r}
+mv <- mv %>% add_mutate_branch(transformation_branch)
+```
+
+
+### Step 4: `execute_multiverse` to execute the transformations
+
+```{r}
+mv <- execute_multiverse(mv)
+```
+
+### Step 5: Extract Transformed Values from `mv`
+
+`extract` to add the column to `df_transformed` that labels transformations.
+
+```{r}
+df_transformed <- extract(mv)
+
+df_transformed %>% head()
+```
+
+
+### Step 5: use `tidyverse` to compute the summary and plot the distribution of each transformation (universe)
+
+```{r}
+df_transformed %>% 
+  group_by(transformation_branch_branch) %>% 
+  summarise(n = n(), 
+            mean = mean(transformation_branch), 
+            sd = sd(transformation_branch),
+            median = median(transformation_branch),
+            IQR = IQR(transformation_branch))
+
+
+df_transformed %>% 
+  ggplot(aes(x = transformation_branch)) + geom_histogram(bins = 3) + facet_wrap(vars(transformation_branch_branch))
+```
+
+## Simple Example: Using `mverse` to Fit Three Simple Linear Regression of a Transformed Column
+
+
+### Step 1: `create_multiverse` of the data frame
+
+```{r}
+mv1 <- create_multiverse(df)
+```
+
+
+### Step 2: Create `formula_branch` of the linear regression models
+
+```{r}
+formulas <- formula_branch(col2 ~ col1, 
+                           col2 ~ log(abs(col1 + 1)), 
+                           col2 ~ abs(col1))
+```
+
+
+### Step 3: `add_formula_branch` to multiverse of data frame
+
+```{r}
+mv1 <- mv1 %>% add_formula_branch(formulas)
+```
+
+### Step 3: `lm_mverse` to compute linear regression models across the multiverse
+
+```{r}
+lm_mverse(mv1)
+```
+
+
+### Step 4: Use `summary` to extract regression output
+
+```{r}
+summary(mv1)
+```
+
+Let's compare using `mverse` to using `tidyverse` and base R to fit the three models.
+
+One way to do this using tidyverse is to create a list of the model formulas then map the list to `lm`.
+
+```{r }
+mod1 <- formula(col2 ~ col1)
+
+mod2 <- formula(col2 ~ log(abs(col1 + 1)))
+
+mod3 <- formula(col2 ~ abs(col1))
+
+models <- list(mod1, mod2, mod3)
+
+models %>% 
+  map(lm, data = df) %>% 
+  map(broom::tidy) %>% 
+  bind_rows()
+```
+
+Using base R we can use `lappy` instead of 
+
+```{r}
+modfit <- lapply(models, function(x) lm(x, data = df))
+
+lapply(modfit, function(x) summary(x)[4])
+```
+
+## Are Soccer Referees Biased?
+
+In this example, we use a real dataset that demonstrates how `mverse` makes it easy to define multiple definitions for a column and compare the results of the different definitions. We combine soccer player skin colour ratings by two independent raters (`rater1` and `rater2`) from `soccer` dataset included in `mverse`. 
 
 The data comes from @datasrc and contains `r format(nrow(soccer), big.mark = ",")` rows of player-referee pairs. For each player, two independent raters coded their skin tones on a 5-point scale ranging from _very light skin_ (`0.0`) to _very dark skin_ (`1.0`). For the purpose of demonstration, we only use a unique record per player and consider only those with both ratings.
 
 ```{r load, message=FALSE}
 library(mverse)
-df <- soccer[!is.na(soccer$rater1) & !is.na(soccer$rater2), 
+soccer_bias <- soccer[!is.na(soccer$rater1) & !is.na(soccer$rater2), 
              c('playerShort', 'rater1', 'rater2')]
-df <- unique(df)
-head(df)
+soccer_bias <- unique(soccer_bias)
+head(soccer_bias)
 ```
 
 We would like to study the distribution of the player skin tones but the two independent rating do not always match. To combine the two ratings, we may choose to consider the following options:
@@ -179,16 +315,16 @@ We would like to study the distribution of the player skin tones but the two ind
 4.  the first rating only
 5.  the second rating only
 
-## Without the `mverse` library
+## Analysis using Base R and Tidyverse
 
-Let's first consider how you might study the five options using base R. First, we define the five options as separate variables in R.
+Let's first consider how you might study the five options using R without `mverse`. First, we define the five options as separate variables in R.
 
 ```{r base_r}
-skin_option_1 <- (df$rater1 + df$rater2) / 2 
-skin_option_2 <- ifelse(df$rater1 > df$rater2, df$rater1, df$rater2)
-skin_option_3 <- ifelse(df$rater1 < df$rater2, df$rater1, df$rater2)
-skin_option_4 <- df$rater1    
-skin_option_5 <- df$rater2    
+skin_option_1 <- (soccer_bias$rater1 + soccer_bias$rater2) / 2 
+skin_option_2 <- ifelse(soccer_bias$rater1 > soccer_bias$rater2, soccer_bias$rater1, soccer_bias$rater2)
+skin_option_3 <- ifelse(soccer_bias$rater1 < soccer_bias$rater2, soccer_bias$rater1, soccer_bias$rater2)
+skin_option_4 <- soccer_bias$rater1    
+skin_option_5 <- soccer_bias$rater2    
 ```
 
 We can plot a histogram to study the distribution of the resulting skin tone value for each option. Below is the histogram for the first option (`skin_option_1`).
@@ -220,16 +356,17 @@ ggplot(data = skin_option_all) +
   facet_wrap(. ~ Option)
 ```
 
+## Analysis Using `mverse`
 
-## Branching using `mverse`
+### Branching Using `mverse`
 
-We now turn to `mverse` to create the five options above. First, we define a `mverse` object with the dataset. Note that `mverse` assumes a single dataset for each multiverse analysis.
+We now turn to `mverse` to create the five options above. First, we define an `mverse` object with the dataset. Note that `mverse` assumes a single dataset for each multiverse analysis.
 
 ```{r create_mv}
-mv <- create_multiverse(df)
+soccer_bias_mv <- create_multiverse(soccer_bias)
 ```
 
-In `mverse` package, a _branch_ refers to a decision point in data analysis where you may consider more than one _option_. For example, a mutate branch - analogous to `mutate` method in `tidyverse`'s data manipulation grammar, lets you define a set of options for defining a new column in your dataset. 
+A _branch_ in `mverse` refers to different modelling or data wrangling decisions.  For example, a mutate branch - analogous to `mutate` method in `tidyverse`'s data manipulation grammar, lets you define a set of options for defining a new column in your dataset. 
 
 You can create a mutate branch with `mutate_branch()`. The syntax for defining the options inside `mutate_branch()` follows the `tidyverse`'s grammar as well. 
 
@@ -243,11 +380,10 @@ skin_tone <- mutate_branch(
 )
 ```
 
-You can then add the newly defined mutate branch to the `mv` object using `add_mutate_branch()`. 
+Then add the newly defined mutate branch to the `mv` object using `add_mutate_branch()`. 
 
 ```{r add_vb}
-mv <- mv %>%
-  add_mutate_branch(skin_tone)
+soccer_bias_mv <- soccer_bias_mv %>% add_mutate_branch(skin_tone)
 ```
 
 Adding a branch to a `mverse` object multiplies the number of environments defined inside the object so that the environments capture all unique analysis paths. Without any branches, a `mverse` object has a single environment. We call these environments _universes_. For example, adding the `skin_tone` mutate branch to `mv` results in $1 \times 5 = 5$  universes inside `mv`. In each universe, the analysis dataset now has a new column named `skin_tone` -  the name of the mutate branch object. 
@@ -255,76 +391,56 @@ Adding a branch to a `mverse` object multiplies the number of environments defin
 You can check that the mutate branch was added with `summary()` method for the `mv` object. The method prints a _multiverse table_ that lists all universes with branches as columns and corresponding options as values defined in the `mv` object.
 
 ```{r check_multiverse}
-summary(mv)
+summary(soccer_bias_mv)
 ```
 
 At this point, the values of the new column `skin_tone` are only populated in the first universe. To populate the values for all universes, we call `execute_multiverse`.
 
 ```{r exec}
-execute_multiverse(mv)
+execute_multiverse(soccer_bias_mv)
 ```
 
-## Comparing between universes
+### Summarizing The Distribution Of Each Branch Option
 
 In this section, we now examine and compare the distributions of `skin_tone` values between different options. You can extract the values in each universe using `extract()`. By default, the method returns all columns created by a mutate branch across all universes. In this example, we only have one column - `skin_tone`.
 
 ```{r extract_multiverse}
-branched <- extract(mv)
+branched <- mverse::extract(soccer_bias_mv)
 ```
 
-`branched` is dataset with `skin_tone` values from the first universe...
+`branched` is a dataset with `skin_tone` values. If we want to extract the `skin_tone` values that were computed using the average of the two raters then we can filter `branched` by `skin_tone_branch` values equal to `(rater1 + rater2)/2`.  Alternatively, we could filter by `universe == 1`.
 
 ```{r head_skin_tone}
-head(branched)
+branched %>% 
+  filter(skin_tone_branch == "(rater1 + rater2)/2" ) %>% 
+  head()
 ```
 
-...as well as the last universe.
+The distribution of each method for calculating skin tone can be computed by grouping the levels of `skin_tone_branch`.
 
-```{r tail_skin_tone}
-tail(branched)
+```{r}
+branched %>% 
+  group_by(skin_tone_branch) %>% 
+  summarise(n = n(), mean = mean(skin_tone), 
+            sd = sd(skin_tone), median = median(skin_tone), IQR = IQR(skin_tone))
 ```
 
-The method provides various options to select a subset of data as well. These are useful when the multiverse is too large and examining the whole multiverse is inefficient.
 
-Setting `universe = 2` extracts values from the second universe only. Checking the unique `universe` values in the returned dataset shows that the dataset indeed only consists of values from the second universe. 
-
-```{r ununi}
-branched_2 <- extract(mv, universe = 2)
-unique(branched_2$universe)
-```
-
-Setting `universe = c(1,2)` extracts values from both first and second universes.
-
-```{r ununi_1_2}
-branched_1_2 <- extract(mv, universe = c(1,2))
-unique(branched_1_2$universe)
-```
-
-`frow` provides the option to extract a random subset of rows in each universe. It takes a value between 0 and 1 that represent the fraction of values to extract from each universe. For example, setting `frow = 0.05` returns approximately 5\% of values from each universe.
+Selecting a random subset of rows data is useful when the multiverse is large.  The `frow` parameter in `extract()` provides the option to extract a random subset of rows in each universe. It takes a value between 0 and 1 that represent the fraction of values to extract from each universe. For example, setting `frow = 0.05` returns approximately 5\% of values from each universe (i.e., `skin_tone_branch` in this case).
 
 ```{r extract_fraction}
-frac <- extract(mv, frow =  0.05)
+frac <- extract(soccer_bias_mv, frow =  0.05)
 ```
 
-`frac` consists of values that are approximately 5\% of the first universe...
+So, each universe is a 20% of the random sample.
 
-```{r check_frac_1}
-sum(frac$universe == 1)/sum(branched$universe == 1)
+```{r}
+frac %>%
+  group_by(universe) %>%
+  tally() %>%
+  mutate(percent = (n / sum(n)) * 100)
 ```
 
-...plus approximately 5\% of the second universe...
-
-```{r check_frac_2}
-sum(frac$universe == 2)/sum(branched$universe == 2)
-```
-
-...and so on.
-
-```{r check_frac_all}
-sum(frac$universe == 3)/sum(branched$universe == 3)
-sum(frac$universe == 4)/sum(branched$universe == 4)
-sum(frac$universe == 5)/sum(branched$universe == 5)
-```
 
 Finally, we can construct plots to compare the distributions of `skin_tone` in different universes. For example, you can overlay density lines on a single plot.
 
