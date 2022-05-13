@@ -153,11 +153,13 @@ spec_curve(mv, var = "femininityTRUE")
 mv <- mverse(hurricane)
 # Define and add a mutate branch
 femininity <- mutate_branch(
- MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1)
+  MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1
+)
 add_mutate_branch(mv, femininity)
 # Define and add a formula branch
 model <- formula_branch(
- alldeaths ~ femininity, alldeaths ~ femininity * HighestWindSpeed)
+  alldeaths ~ femininity, alldeaths ~ femininity * HighestWindSpeed
+)
 add_formula_branch(mv, model)
 # Define and add a family branch
 # Fit a glm.nb model
