@@ -4,6 +4,7 @@
 \alias{spec_curve}
 \alias{spec_curve.lm_mverse}
 \alias{spec_curve.glm_mverse}
+\alias{spec_curve.glm.nb_mverse}
 \title{Display a specification curve across the multiverse.}
 \source{
 Uri Simonsohn, Joseph P. Simmons, and Leif D. Nelson. (2020).
@@ -20,7 +21,8 @@ spec_curve(
   universe_order,
   color_order,
   color,
-  branch_order
+  branch_order,
+  yaxis_text_size
 )
 
 \method{spec_curve}{lm_mverse}(
@@ -31,8 +33,9 @@ spec_curve(
   option = names(multiverse::parameters(.object)),
   universe_order = FALSE,
   color_order = FALSE,
-  color = "p.value < 0.05",
-  branch_order = NULL
+  color = (p.value < 0.05),
+  branch_order = NULL,
+  yaxis_text_size = 8
 )
 
 \method{spec_curve}{glm_mverse}(
@@ -43,12 +46,26 @@ spec_curve(
   option = names(multiverse::parameters(.object)),
   universe_order = FALSE,
   color_order = FALSE,
-  color = "p.value < 0.05",
-  branch_order = NULL
+  color = (p.value < 0.05),
+  branch_order = NULL,
+  yaxis_text_size = 8
+)
+
+\method{spec_curve}{glm.nb_mverse}(
+  .object,
+  var = NULL,
+  conf.int = TRUE,
+  conf.level = 0.95,
+  option = names(multiverse::parameters(.object)),
+  universe_order = FALSE,
+  color_order = FALSE,
+  color = (p.value < 0.05),
+  branch_order = NULL,
+  yaxis_text_size = 8
 )
 }
 \arguments{
-\item{.object}{a \code{glm_mverse} object.}
+\item{.object}{a \code{glm.nb_mverse} object.}
 
 \item{var}{name for the variable to show.}
 
@@ -69,8 +86,12 @@ according to the color.}
 \item{color}{specify the color in the plot.}
 
 \item{branch_order}{name for the branch to order.}
+
+\item{yaxis_text_size}{text size of y-axis label}
 }
 \value{
+a specification curve plot for the estimates
+
 a specification curve plot for the estimates
 
 a specification curve plot for the estimates
@@ -81,6 +102,11 @@ proposed by Simonsohn, Simmons, and Nelson
 (\href{https://doi.org/10.1038/s41562-020-0912-z}{2020}).
 
 \code{spec_curve.glm_mverse} returns the specification curve of \code{glm}
+regression results across the multiverse.
+Notice that the order of universes is not corresponding
+to the order in the summary table.
+
+\code{spec_curve.glm.nb_mverse} returns the specification curve of \code{glm.nb}
 regression results across the multiverse.
 Notice that the order of universes is not corresponding
 to the order in the summary table.
@@ -119,6 +145,22 @@ add_formula_branch(mv, model)
 model_family <- family_branch(gaussian, poisson)
 add_family_branch(mv, model_family)
 # Fit a glm model
+glm_mverse(mv)
+# Display the specification curve
+spec_curve(mv, var = "femininityTRUE")
+
+# Create a mverse object
+mv <- mverse(hurricane)
+# Define and add a mutate branch
+femininity <- mutate_branch(
+ MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1)
+add_mutate_branch(mv, femininity)
+# Define and add a formula branch
+model <- formula_branch(
+ alldeaths ~ femininity, alldeaths ~ femininity * HighestWindSpeed)
+add_formula_branch(mv, model)
+# Define and add a family branch
+# Fit a glm.nb model
 glm_mverse(mv)
 # Display the specification curve
 spec_curve(mv, var = "femininityTRUE")

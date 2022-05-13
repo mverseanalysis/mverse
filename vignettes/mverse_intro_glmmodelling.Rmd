@@ -1,0 +1,340 @@
+---
+title: "GLM Modelling with mverse"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{GLM Modelling with mverse}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+references:
+  - id: original
+    title: "Female hurricanes are deadlier than male hurricanes"
+    type: article-journal
+    issued:
+      year: 2014
+      month: 6
+      day: 17
+    URL: https://doi.org/10.1073/pnas.1402786111
+    DOI: 10.1073/pnas.1402786111
+    journal: Proceeedings fo the National Academiy of Sciences of the United States of America
+    volume: 111
+    issue: 24
+    page: 8782-8787
+    author:
+    - given: Kiju
+      family: Jung
+    - given: Sharon
+      family: Shavitt
+    - given: Madhu
+      family: Viswanathan
+    - given: "Joseph M."
+      family: Hilbe
+  - id: multiverse
+    title: "multiverse: R package for creating explorable multiverse analysis"
+    type: entry
+    URL: https://mucollective.github.io/multiverse/
+    accessed:
+      year: 2020
+    author:
+    - given: Abhraneel
+      family: Sarma
+    - given: Matthew
+      family: Kay
+  - id: boba
+    title: "Boba: Authoring and Visualizing Multiverse Analyses"
+    type: entry
+    URL: https://arxiv.org/abs/2007.05551
+    issued:
+      year: 2020
+      month: 7
+      day: 30
+    accessed:
+      year: 2020
+    author:
+    - given: Yang
+      family: Liu
+    - given: Alex
+      family: Kale
+    - given: Tim
+      family: Althoff
+    - given: Jeffrey
+      family: Heer
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,  fig.width=7, fig.height=4
+)
+```
+
+This vignette aims to introduce the workflow of a multiverse analysis with GLM modelling using `mverse`.
+
+The typical workflow of a multiverse analysis with `mverse` is
+
+1.  Initialize a `multiverse` object with the dataset.
+2.  Define all the different data analyses (i.e., analytical decisions) as *branches*.
+3.  Add defined *branches* into the `multiverse` object.
+4.  Run models, hypothesis tests, and plots.
+
+
+# Exploring The Severity Of Feminine-named Versus Masculine-named Hurricanes
+
+
+```{r load_package, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(mverse)
+```
+
+
+`mverse` ships with the `hurricane` dataset used in @original.
+
+```{r load_data, warning=FALSE, message=FALSE}
+glimpse(hurricane)
+```
+
+To start a multiverse analysis, first use `create_multiverse` to create an `mverse` object with `hurricane`. At this point the multiverse is empty.
+
+```{r create_object}
+hurricane_mv <- create_multiverse(hurricane)
+```
+
+# Define Branches in the Hurricane Multiverse
+
+Each branch defines a different statistical analysis by using a subset of data, transforming columns, or a statistical model. Each combination of these branches defines a "universe", or analysis path. Branches are defined using `X_branch(...)`, where `...` are expressions that define a data wrangling or modelling option/analytic decision that you wish to explore, such as excluding certain hurricane names from an analysis, deriving new variables for analysis (mutating), or using different models. Once branches are defined we can look at the impact of the combination of these decisions.
+
+## Branches for Data munipulation
+
+`filter_branch` takes logical predicates, and finds the observations where the condition is `TRUE`.
+
+The distribution of `alldeaths` is shown below.
+
+
+```{r}
+hurricane %>% 
+  ggplot(aes(alldeaths)) + 
+  geom_histogram(bins = 25) + 
+  stat_bin(aes(label = ..count..), bins = 25, geom = "text", vjust = -.7, size = 2)
+```
+
+It looks like there are a few outliers.  Let's find out the names of these hurricanes.
+
+```{r}
+hurricane %>% 
+  filter(alldeaths > median(alldeaths)) %>% 
+  arrange(desc(alldeaths)) %>% 
+  select(Name, alldeaths) %>% 
+  head()
+```
+
+
+`filter_branch()` can be used to exclude outliers. Excluding hurricane `Katrina` or `Audrey` removes the hurricanes with the most deaths.
+
+```{r filter_branch}
+death_outliers <- filter_branch(obs_all = TRUE, 
+                                obs_noKat = Name != 'Katrina',
+                                obs_noKatAud = !(Name %in% c('Katrina', 'Audrey')))
+```
+
+Now, let's add this branch to `hurricane_mv`.
+
+```{r}
+hurricane_mv <- hurricane_mv %>% add_filter_branch(death_outliers)
+
+summary(hurricane_mv)
+```
+
+
+`mutate_branch()` takes expressions that can modify data columns, and can be used to provide different definitions or transformations of a column.
+
+Consider two different definitions of femininity: `Gender_MF` is a binary classification of gender, and `MasFem` is a continuous rating of Femininity.
+
+```{r mutate_branch}
+femininity <- mutate_branch(binary_gender = Gender_MF, 
+                            cts_gender = MasFem)
+```
+
+Consider normalized damage (`NDAM`) and the log of `NDAM`.
+
+```{r}
+damage <- mutate_branch(damage_orig = NDAM, 
+                        damage_log = log(NDAM))
+```
+
+
+Now, let's add these branches to `hurricane_mv`.
+
+```{r}
+hurricane_mv <- hurricane_mv %>% add_mutate_branch(femininity, damage)
+
+summary(hurricane_mv)
+```
+Each row of the multiverse `hurricane_mv` corresponds to each combination of `death_outliers` (3), `femininity` (2), and `damage` (2) for a total of $3 \times 2 \times 2 = 12$ combinations.
+
+
+## GLM Branches for Modelling
+
+`mverse` can define different `glm()` models as branches. The formula for a `glm` model (e.g., `y ~ x`) can be defined using `formula_branch`, and `family_branch` defines the member of the exponential family used via a `family` object.
+
+We can create formulas using the branches above or simply use the columns in dataframe.  If we use the branches `depvars`, `damage`, and `depvars` in a formula such as
+
+`depvars ~ damage + femininity`
+
+We can add it to `hurricane_mv` with `add_formula_branch()`. 
+
+```{r}
+models <- formula_branch(alldeaths ~ damage + femininity)
+
+hurricane_mv <- hurricane_mv %>% add_formula_branch(models)
+
+summary(hurricane_mv)
+```
+
+Finally, let's create a `family_branch()` that defines two different members of the Exponential family as branches.
+
+```{r modelling_branch}
+distributions <- family_branch(poisson, gaussian)
+```
+
+Adding this branch to `hurricane_mv` with `add_family_branch()`.
+
+```{r}
+hurricane_mv <- hurricane_mv %>% add_family_branch(distributions)
+
+summary(hurricane_mv)
+```
+
+Now, we have $12 \times 2 = 24$ different combinations.
+
+`multiverse_tree` can be used to view `hurricane_mv`.  The tree below shows that `alldeaths` is modelled using both Gaussian and Poisson distributions.
+
+```{r}
+multiverse_tree(hurricane_mv, label = TRUE, branches = c("models", "distributions"))
+```
+
+
+```{r}
+glm_mverse(hurricane_mv)
+
+glm_summary <- summary(hurricane_mv)
+
+glm_summary
+```
+Each model has three rows, each corresponding to a summary of a model coefficient.
+
+The specification curve for the coefficient of `femininity` is shown below.
+
+```{r, fig.height=8}
+spec_curve(hurricane_mv, var = "femininity", color_order = TRUE)
+```
+
+## Condition Branches 
+
+The assumption that `alldeaths` follows a Normal distribution is tenuous, but transforming the `alldeaths` using $t(x)=\log(x+1)$ could result in a dependent variable that is closer to a Normal distribution.
+
+```{r}
+hurricane %>% ggplot(aes(sample = alldeaths)) + stat_qq() + stat_qq_line()
+
+hurricane %>% mutate(logd = log(alldeaths+1)) %>% ggplot(aes(sample = logd)) + stat_qq() + stat_qq_line()
+```
+
+
+Let's set up a similar multiverse analysis to the one above.
+
+```{r}
+hurricane_mv <- create_multiverse(hurricane)
+
+dep_var <- mutate_branch(alldeaths, log(alldeaths + 1))
+
+femininity <- mutate_branch(binary_gender = Gender_MF, 
+                            cts_gender = MasFem)
+
+damage <- mutate_branch(damage_orig = NDAM, 
+                        damage_log = log(NDAM))
+
+models <- formula_branch(dep_var ~ damage + femininity)
+
+distributions <- family_branch(poisson, gaussian)
+
+hurricane_mv <- hurricane_mv %>% 
+  add_mutate_branch(dep_var, femininity, damage) %>%
+  add_formula_branch(models) %>% 
+  add_family_branch(distributions)
+
+```
+
+Using `multiverse_tree()` to display the multiverse tree of `dep_var` and `distributions` shows that `log(alldeaths + 1)` and `alldeaths` will be modelled as both Gaussian and Poisson.
+
+```{r}
+multiverse_tree(hurricane_mv, label = TRUE, c("dep_var", "distributions"))
+```
+
+In order to specify that `hurricane_mv` should only contain analyses where `log(alldeaths + 1)` is modelled using a Gaussian and `alldeaths` modelled using Poisson we can use `branch_condition()` and `add_branch_condition()` to add it to `hurricane_mv`.
+
+
+```{r}
+match_poisson <- branch_condition(alldeaths, poisson)
+
+match_log_lin <- branch_condition(log(alldeaths + 1), gaussian)
+
+hurricane_mv <- add_branch_condition(hurricane_mv, match_poisson, match_log_lin)
+```
+
+The multiverse tree shows that `log(alldeaths + 1)` will _only_ be modelled as Gaussian and `alldeaths` will _only_ be modelled as Poisson.
+
+```{r}
+multiverse_tree(hurricane_mv, label = TRUE, c("dep_var", "distributions"))
+```
+
+```{r}
+glm_mverse(hurricane_mv)
+
+summary(hurricane_mv)
+```
+
+A summary of the 24 models on the `femininity` coefficients is shown in the specification curve.
+
+```{r}
+spec_curve(hurricane_mv, var = "femininity", color_order = TRUE)
+```
+
+## Negative Binomial Regression
+
+@original used negative binomial regression to analyse the severity of female versus male hurricane names on number of deaths.  In this section we will `glm.nb_mverse()` to do a similar analysis.
+
+First, let's setup the multiverse of analyses.
+
+
+```{r}
+hurricane_nb_mv <- create_multiverse(hurricane)
+
+femininity <- mutate_branch(binary_gender = Gender_MF, 
+                            cts_gender = MasFem)
+
+damage <- mutate_branch(damage_orig = NDAM, 
+                        damage_log = log(NDAM))
+
+models <- formula_branch(alldeaths ~ damage + femininity)
+
+hurricane_nb_mv <- hurricane_nb_mv %>% 
+  add_mutate_branch(femininity, damage) %>%
+  add_formula_branch(models) 
+```
+
+A summary of `hurricane_nb_mv` shows the four models in the multiverse.
+
+```{r}
+summary(hurricane_nb_mv)
+```
+
+Next, use `glm.nb_mverse()` to fit the negative binomial regressions.
+
+```{r}
+glm.nb_mverse(hurricane_nb_mv)
+
+summary(hurricane_nb_mv)
+```
+
+Finally, we can plot the specification curve. 
+
+```{r}
+spec_curve(hurricane_nb_mv, var = "femininity", color_order = TRUE)
+```

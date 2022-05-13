@@ -50,8 +50,8 @@ This vignette describes the workflow of linear regression modeling in the multiv
 We will use the Boston housing dataset {@boston} as an example. This dataset has 506 observations on 14 variables. This dataset is extensively used in regression analyses and algorithm benchmarks. The objective is to predict the median value of a home (`medv`) with the feature variables.
 
 
-```{r load}
-Boston <- MASS::Boston
+```{r load, warning=FALSE, message=FALSE}
+library(MASS)
 library(mverse)
 knitr::kable(head(Boston)) # using kable for displaying data in html
 ```
@@ -164,4 +164,3 @@ mv <- mv %>%
 
 knitr::kable(summary(mv, output="de"))
 ```
-

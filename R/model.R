@@ -85,3 +85,30 @@ glm_mverse <- function(.mverse) {
   execute_multiverse(.mverse)
   invisible(.mverse)
 }
+
+
+
+#' Fit a Negative Binomial Regression model across the multiverse
+#' \code{glm.nb_mverse} fits \code{MASS::glm.nb} across the multiverse
+#' according to model specifications provided by \code{formula_branch}.
+#' At least one \code{formula_branch} must have been added.
+#'
+#' @name glm.nb_mverse
+#' @export
+
+glm.nb_mverse <- function(.mverse) {
+  stopifnot(inherits(.mverse, "mverse"))
+  # check whether there is a formula branch (should be only 1)
+  brs <- c(attr(.mverse, 'branches_conditioned_list'), attr(.mverse, 'branches_list'))
+  if (length(brs) == 0)
+    stop("Exactly one formula branch is required.")
+  if (sum(sapply(brs,inherits, "formula_branch")) != 1)
+    stop("Exactly one formula branch is required.")
+  # fit glm
+  multiverse::inside(
+    .mverse, model <- MASS::glm.nb(formulae, data = data))
+  attr(.mverse, "class") <- unique(c("glm.nb_mverse", class(.mverse)))
+  execute_multiverse(.mverse)
+  invisible(.mverse)
+}
+

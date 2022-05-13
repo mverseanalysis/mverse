@@ -207,7 +207,7 @@ summary.lm_mverse <- function(
 }
 
 
-#' Display a summary of fitting \code{glm} across the multiverse.
+#' Display a summary of fitting \code{glm_mverse} across the multiverse.
 #'
 #' \code{summary.glm_mverse} returns the \code{glm} regression
 #' results across the multiverse.
@@ -368,6 +368,97 @@ AIC <- function(object, ..., k = 2) {
 BIC <- function(object, ...) {
   UseMethod("BIC")
 }
+
+
+#' Display a summary of fitting \code{glm.nb_mverse} across the multiverse.
+#'
+#' @param object
+#' @param conf.int
+#' @param conf.level
+#' @param output
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
+summary.glm.nb_mverse <- function(object,
+                                  conf.int = TRUE,
+                                  conf.level = 0.95,
+                                  output = "estimates",
+                                  ...) {
+  if (output %in% c("estimates", "e")) {
+    multiverse::inside(object, {
+      if (summary(model)$df[1] > 0)
+        out <-
+          broom::tidy(model,
+                      !!rlang::enexpr(conf.int),
+                      !!rlang::enexpr(conf.level))
+      else {
+        out <- data.frame(
+          term = "(None)",
+          estimate = NA,
+          std.error = NA,
+          statistic = NA,
+          p.value = NA
+        )
+        if (!!rlang::enexpr(conf.int))
+          out <-
+            out %>% dplyr::mutate(conf.low = NA, conf.high = NA)
+      }
+    })
+  } else if (output == "df") {
+    multiverse::inside(object, {
+      if (summary(model)$df[1] > 0)
+        out <-
+          as.data.frame(t(c(
+            summary(model)$df.residual, summary(model)$df.null
+          ))) %>%
+          dplyr::rename(df.residual = V1,
+                        df.null = V2)
+      else
+        out <- data.frame(df.residual = NA,
+                          df.null = NA)
+    })
+  } else if (output %in% c("de", "deviance")) {
+    multiverse::inside(object, {
+      if (summary(model)$df[1] > 0)
+        out <-
+          as.data.frame(t(c(
+            summary(model)$deviance, summary(model)$null.deviance
+          ))) %>%
+          dplyr::rename(deviance = V1,
+                        null.deviance = V2)
+      else
+        out <- data.frame(deviance = NA,
+                          null.deviance = NA)
+    })
+  } else if (tolower(output) %in% c("aic", "bic")) {
+    multiverse::inside(object, {
+      if (summary(model)$df[1] > 0)
+        out <-
+          as.data.frame(t(c(stats::AIC(model), stats::BIC(model)))) %>%
+          dplyr::rename(AIC = V1,
+                        BIC = V2)
+      else
+        out <- data.frame(AIC = NA,
+                          BIC = NA)
+    })
+  } else {
+    stop("Invalid output argument.")
+  }
+  execute_multiverse(object)
+  mtable <- multiverse::extract_variables(object, out) %>%
+    tidyr::unnest(out) %>%
+    dplyr::mutate(universe = factor(.universe)) %>%
+    dplyr::select(-tidyselect::starts_with(".")) %>%
+    dplyr::select(universe, tidyselect::everything())
+  display_branch_opts(mtable, object)
+}
+
+
+
 
 #' Plot a multiverse tree diagram.
 #'

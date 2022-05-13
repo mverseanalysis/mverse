@@ -10,3 +10,5 @@ cran-comments.md
 ^data-raw$
 ^\.github$
 ^codecov\.yml$
+^doc$
+^Meta$

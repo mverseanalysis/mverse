@@ -73,9 +73,9 @@ extract <- function(...) {
 #' @name extract
 #' @family {mverse methods}
 #' @export
-extract.mverse <- function(.mverse, columns = NULL, universe = NULL,
-                           nuni = NULL, frow = NULL, ...) {
-  data <- NULL # suppress R CMD Check Note
+extract.mverse <- function(
+  .mverse, columns = NULL,
+  nuni = NULL, frow = NULL, mutate_cols = TRUE, ...) {
   stopifnot(inherits(.mverse, "mverse"))
   mtable <- summary(.mverse)
   if (is.null(columns)) {
@@ -90,7 +90,7 @@ extract.mverse <- function(.mverse, columns = NULL, universe = NULL,
     )
   }
   columns <- c("universe", columns)
-  if (is.null(universe)) {
+  #if(is.null(universe)) {
     universe <- mtable$universe
     if (!is.null(nuni)) {
       if (length(nuni) > 1) {
@@ -99,11 +99,8 @@ extract.mverse <- function(.mverse, columns = NULL, universe = NULL,
       }
       stopifnot(
         "nuni must be less than or equal to the number of universes." =
-          length(universe) >= nuni
-      )
-      universe <- sample(universe, nuni)
-    }
-  }
+          length(universe) >= nuni)
+      universe <- sample(universe, nuni)}#}
   stopifnot(length(universe) > 0)
   extracted <- lapply(
     universe, function(x) {
@@ -120,6 +117,12 @@ extract.mverse <- function(.mverse, columns = NULL, universe = NULL,
     }
   )
   extracted <- dplyr::bind_rows(extracted)
-  extracted %>%
-    dplyr::select(columns)
+  #extracted %>%
+  #  dplyr::select(columns) %>%
+  #  dplyr::left_join(mtable, by = "universe")
+  if (mutate_cols == FALSE)
+    extracted %>% dplyr::select(columns)
+  else
+    extracted %>% dplyr::select(columns) %>%
+    dplyr::left_join(mtable, by = "universe")
 }
