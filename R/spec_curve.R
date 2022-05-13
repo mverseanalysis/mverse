@@ -11,10 +11,9 @@
 #' “Specification curve analysis” \emph{Nature Human Behaviour},
 #' 4, 1208–14. \url{https://doi.org/10.1038/s41562-020-0912-z}
 #' @export
-spec_curve <- function(
-  .object, var, conf.int, conf.level,
-  option, universe_order, color_order,
-  color, branch_order, yaxis_text_size) {
+spec_curve <- function(.object, var, conf.int, conf.level,
+                       option, universe_order, color_order,
+                       color, branch_order, yaxis_text_size) {
   UseMethod("spec_curve")
 }
 
@@ -62,13 +61,12 @@ spec_curve <- function(
 #' @import ggplot2
 #' @importFrom rlang .data
 #' @export
-spec_curve.lm_mverse <- function(
-  .object, var = NULL, conf.int = TRUE,
-  conf.level = 0.95,
-  option = names(multiverse::parameters(.object)),
-  universe_order = FALSE,
-  color_order = FALSE, color = (p.value < 0.05),
-  branch_order = NULL, yaxis_text_size = 8) {
+spec_curve.lm_mverse <- function(.object, var = NULL, conf.int = TRUE,
+                                 conf.level = 0.95,
+                                 option = names(multiverse::parameters(.object)),
+                                 universe_order = FALSE,
+                                 color_order = FALSE, color = (p.value < 0.05),
+                                 branch_order = NULL, yaxis_text_size = 8) {
   stopifnot(inherits(.object, "lm_mverse"))
   if (is.null(var)) {
     stop("Please specify the variable to display.")
@@ -153,16 +151,18 @@ spec_curve.lm_mverse <- function(
 
   p2 <- p2 +
     ylab("Branch Options") +
-    facet_grid(parameter_name ~ ., space="free_y", scales="free_y")+
-    theme(strip.placement = "outside",
-          strip.background = element_rect(fill=NA,colour=NA),
-          panel.background = element_rect(fill = "white", colour = NA),
-          panel.grid = element_line(colour = "grey92"),
-          panel.grid.minor = element_line(size = rel(0.5)),
-          panel.spacing.x = unit(0.15,"cm"),
-          panel.spacing.y = unit(1.25, "lines"),
-          strip.text.y = element_text(angle = 0, face="bold", size=8),
-          legend.position = "none") +
+    facet_grid(parameter_name ~ ., space = "free_y", scales = "free_y") +
+    theme(
+      strip.placement = "outside",
+      strip.background = element_rect(fill = NA, colour = NA),
+      panel.background = element_rect(fill = "white", colour = NA),
+      panel.grid = element_line(colour = "grey92"),
+      panel.grid.minor = element_line(size = rel(0.5)),
+      panel.spacing.x = unit(0.15, "cm"),
+      panel.spacing.y = unit(1.25, "lines"),
+      strip.text.y = element_text(angle = 0, face = "bold", size = 8),
+      legend.position = "none"
+    ) +
     scale_colour_brewer(palette = "Set1") +
     theme(axis.title.y = element_text(size = yaxis_text_size))
 
@@ -221,13 +221,12 @@ spec_curve.lm_mverse <- function(
 #' @name spec_curve
 #' @family {spec_curve method}
 #' @export
-spec_curve.glm_mverse <- function(
-  .object, var = NULL, conf.int = TRUE,
-  conf.level = 0.95,
-  option = names(multiverse::parameters(.object)),
-  universe_order = FALSE,
-  color_order = FALSE, color = (p.value < 0.05),
-  branch_order = NULL, yaxis_text_size = 8) {
+spec_curve.glm_mverse <- function(.object, var = NULL, conf.int = TRUE,
+                                  conf.level = 0.95,
+                                  option = names(multiverse::parameters(.object)),
+                                  universe_order = FALSE,
+                                  color_order = FALSE, color = (p.value < 0.05),
+                                  branch_order = NULL, yaxis_text_size = 8) {
   stopifnot(inherits(.object, "glm_mverse"))
   if (is.null(var)) {
     stop("Please specify the variable to display.")
@@ -302,21 +301,25 @@ spec_curve.glm_mverse <- function(
 
   p2 <- p2 +
     ylab("Branch Options") +
-    facet_grid(parameter_name ~ ., space="free_y", scales="free_y")+
-    theme(strip.placement = "outside",
-                   strip.background = element_rect(fill=NA,colour=NA),
-                   panel.background = element_rect(fill = "white", colour = NA),
-                   panel.grid = element_line(colour = "grey92"),
-                   panel.grid.minor = element_line(size = rel(0.5)),
-                   panel.spacing.x = unit(0.15,"cm"),
-                   panel.spacing.y = unit(1.25, "lines"),
-                   strip.text.y = element_text(angle = 0, face="bold", size=8),
-                   legend.position = "none") +
+    facet_grid(parameter_name ~ ., space = "free_y", scales = "free_y") +
+    theme(
+      strip.placement = "outside",
+      strip.background = element_rect(fill = NA, colour = NA),
+      panel.background = element_rect(fill = "white", colour = NA),
+      panel.grid = element_line(colour = "grey92"),
+      panel.grid.minor = element_line(size = rel(0.5)),
+      panel.spacing.x = unit(0.15, "cm"),
+      panel.spacing.y = unit(1.25, "lines"),
+      strip.text.y = element_text(angle = 0, face = "bold", size = 8),
+      legend.position = "none"
+    ) +
     scale_colour_brewer(palette = "Set1") +
     theme(axis.title.y = element_text(size = yaxis_text_size))
 
-  cowplot::plot_grid(p1, p2, axis = "bltr",
-                     align = "v", ncol = 1, rel_heights = c(1, 2))
+  cowplot::plot_grid(p1, p2,
+    axis = "bltr",
+    align = "v", ncol = 1, rel_heights = c(1, 2)
+  )
 }
 
 
@@ -347,11 +350,13 @@ spec_curve.glm_mverse <- function(
 #' mv <- mverse(hurricane)
 #' # Define and add a mutate branch
 #' femininity <- mutate_branch(
-#'  MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1)
+#'   MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1
+#' )
 #' add_mutate_branch(mv, femininity)
 #' # Define and add a formula branch
 #' model <- formula_branch(
-#'  alldeaths ~ femininity, alldeaths ~ femininity * HighestWindSpeed)
+#'   alldeaths ~ femininity, alldeaths ~ femininity * HighestWindSpeed
+#' )
 #' add_formula_branch(mv, model)
 #' # Define and add a family branch
 #' # Fit a glm.nb model
@@ -364,13 +369,12 @@ spec_curve.glm_mverse <- function(
 #' @import ggplot2
 #' @family {spec_curve method}
 #' @export
-spec_curve.glm.nb_mverse <- function(
-    .object, var = NULL, conf.int = TRUE,
-    conf.level = 0.95,
-    option = names(multiverse::parameters(.object)),
-    universe_order = FALSE,
-    color_order = FALSE, color = (p.value < 0.05),
-    branch_order = NULL, yaxis_text_size = 8) {
+spec_curve.glm.nb_mverse <- function(.object, var = NULL, conf.int = TRUE,
+                                     conf.level = 0.95,
+                                     option = names(multiverse::parameters(.object)),
+                                     universe_order = FALSE,
+                                     color_order = FALSE, color = (p.value < 0.05),
+                                     branch_order = NULL, yaxis_text_size = 8) {
   stopifnot(inherits(.object, "glm.nb_mverse"))
   if (is.null(var)) {
     stop("Please specify the variable to display.")
@@ -380,7 +384,8 @@ spec_curve.glm.nb_mverse <- function(
   conf.level <<- conf.level
   branch_order <- rlang::enquo(branch_order)
   mtable <- summary(.object,
-                    conf.int = conf.int, conf.level = conf.level)
+    conf.int = conf.int, conf.level = conf.level
+  )
 
   data.spec_curve <- mtable %>%
     dplyr::filter(term == var)
@@ -408,48 +413,61 @@ spec_curve.glm.nb_mverse <- function(
   p1 <- data.spec_curve %>%
     ggplot(aes(.universe, estimate, color = !!color)) +
     geom_point(size = 0.25) +
-    labs(x = "", y = paste("coefficient of\n:",var))
+    labs(x = "", y = paste("coefficient of\n:", var))
 
   if (conf.int == TRUE) {
-    p1 <- p1 + geom_pointrange(aes(ymin = conf.low,
-                                                     ymax = conf.high),
-                                        alpha = 0.2,size=0.25)}
+    p1 <- p1 + geom_pointrange(aes(
+      ymin = conf.low,
+      ymax = conf.high
+    ),
+    alpha = 0.2, size = 0.25
+    )
+  }
   p1 <- p1 +
     theme_minimal() + theme(axis.title.y = element_text(size = yaxis_text_size))
-    scale_colour_brewer(palette = "Set1")
+  scale_colour_brewer(palette = "Set1")
 
   data.info <- data.spec_curve %>%
-    tidyr::pivot_longer( !! names(multiverse::parameters(.object)),
-                         names_to = "parameter_name",
-                         values_to = "parameter_option" ) %>%
+    tidyr::pivot_longer(!!names(multiverse::parameters(.object)),
+      names_to = "parameter_name",
+      values_to = "parameter_option"
+    ) %>%
     dplyr::filter(parameter_name %in% option)
 
   p2 <- data.info %>%
     ggplot() +
-    geom_point(aes(x = .universe, y = parameter_option,
-                                     color = !!color), size = 2,shape = 124)
+    geom_point(aes(
+      x = .universe, y = parameter_option,
+      color = !!color
+    ), size = 2, shape = 124)
 
   if (universe_order == FALSE) {
     p2 <- p2 + xlab("") +
-      theme(axis.ticks.x = element_blank(),
-                     axis.text.x = element_blank())
-    p1 <- p1 + theme(axis.ticks.x = element_blank(),
-                              axis.text.x = element_blank())
+      theme(
+        axis.ticks.x = element_blank(),
+        axis.text.x = element_blank()
+      )
+    p1 <- p1 + theme(
+      axis.ticks.x = element_blank(),
+      axis.text.x = element_blank()
+    )
   } else {
     p2 <- p2 + xlab("universe #")
   }
 
   p2 <- p2 + ylab("Branch Options") +
-    facet_grid(parameter_name ~ ., space="free_y", scales="free_y")+
-    theme(strip.placement = "outside",
-                   strip.background = element_rect(fill=NA,colour=NA),
-                   panel.background = element_rect(fill = "white", colour = NA),
-                   panel.grid = element_line(colour = "grey92"),
-                   panel.grid.minor = element_line(size = rel(0.5)),
-                   panel.spacing.x=unit(0.15,"cm"),
-                   panel.spacing.y=unit(1.25, "lines"),
-                   strip.text.y = element_text(angle = 0, face="bold", size=8),
-                   legend.position = "none") +
+    facet_grid(parameter_name ~ ., space = "free_y", scales = "free_y") +
+    theme(
+      strip.placement = "outside",
+      strip.background = element_rect(fill = NA, colour = NA),
+      panel.background = element_rect(fill = "white", colour = NA),
+      panel.grid = element_line(colour = "grey92"),
+      panel.grid.minor = element_line(size = rel(0.5)),
+      panel.spacing.x = unit(0.15, "cm"),
+      panel.spacing.y = unit(1.25, "lines"),
+      strip.text.y = element_text(angle = 0, face = "bold", size = 8),
+      legend.position = "none"
+    ) +
     scale_colour_brewer(palette = "Set1") + theme(axis.title.y = element_text(size = yaxis_text_size))
 
   cowplot::plot_grid(

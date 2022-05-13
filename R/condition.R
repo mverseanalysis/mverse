@@ -105,7 +105,7 @@ add_branch_condition_single <- function(cond, .mverse) {
     for (i in seq_len(length(brs_c))) {
       if (any(as_option_list(brs_c[[i]]) == cond$x)) {
         if (which(as_option_list(brs_c[[i]]) == cond$x) %in%
-            which(nchar(brs_c[[i]]$conds) > 0)) {
+          which(nchar(brs_c[[i]]$conds) > 0)) {
           stop(
             "Option ", cond$x,
             " is already conditioned. Try conditioning on another option."

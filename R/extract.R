@@ -73,9 +73,8 @@ extract <- function(...) {
 #' @name extract
 #' @family {mverse methods}
 #' @export
-extract.mverse <- function(
-  .mverse, columns = NULL,
-  nuni = NULL, frow = NULL, mutate_cols = TRUE, ...) {
+extract.mverse <- function(.mverse, columns = NULL,
+                           nuni = NULL, frow = NULL, mutate_cols = TRUE, ...) {
   stopifnot(inherits(.mverse, "mverse"))
   mtable <- summary(.mverse)
   if (is.null(columns)) {
@@ -90,17 +89,19 @@ extract.mverse <- function(
     )
   }
   columns <- c("universe", columns)
-  #if(is.null(universe)) {
-    universe <- mtable$universe
-    if (!is.null(nuni)) {
-      if (length(nuni) > 1) {
-        warning("Only the first value of nuni is used.")
-        nuni <- nuni[1]
-      }
-      stopifnot(
-        "nuni must be less than or equal to the number of universes." =
-          length(universe) >= nuni)
-      universe <- sample(universe, nuni)}#}
+  # if(is.null(universe)) {
+  universe <- mtable$universe
+  if (!is.null(nuni)) {
+    if (length(nuni) > 1) {
+      warning("Only the first value of nuni is used.")
+      nuni <- nuni[1]
+    }
+    stopifnot(
+      "nuni must be less than or equal to the number of universes." =
+        length(universe) >= nuni
+    )
+    universe <- sample(universe, nuni)
+  } # }
   stopifnot(length(universe) > 0)
   extracted <- lapply(
     universe, function(x) {
@@ -117,12 +118,14 @@ extract.mverse <- function(
     }
   )
   extracted <- dplyr::bind_rows(extracted)
-  #extracted %>%
+  # extracted %>%
   #  dplyr::select(columns) %>%
   #  dplyr::left_join(mtable, by = "universe")
-  if (mutate_cols == FALSE)
+  if (mutate_cols == FALSE) {
     extracted %>% dplyr::select(columns)
-  else
-    extracted %>% dplyr::select(columns) %>%
-    dplyr::left_join(mtable, by = "universe")
+  } else {
+    extracted %>%
+      dplyr::select(columns) %>%
+      dplyr::left_join(mtable, by = "universe")
+  }
 }

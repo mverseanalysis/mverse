@@ -131,8 +131,8 @@ summary.mverse <- function(object, ...) {
 #' @family {summary method}
 #' @importFrom rlang .data
 #' @export
-summary.lm_mverse <- function(
-    object, conf.int = TRUE, conf.level = 0.95, output = "estimates", ...) {
+summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
+                              output = "estimates", ...) {
   model <- NULL # suppress R CMD Check Note
   if (output %in% c("estimates", "e")) {
     multiverse::inside(object, {
@@ -266,8 +266,8 @@ summary.lm_mverse <- function(
 #' @family {summary method}
 #' @importFrom rlang .data
 #' @export
-summary.glm_mverse <- function(
-    object, conf.int = TRUE, conf.level = 0.95, output = "estimates", ...) {
+summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
+                               output = "estimates", ...) {
   model <- NULL # suppress R CMD Check Note
   if (output %in% c("estimates", "e")) {
     multiverse::inside(object, {
@@ -382,20 +382,18 @@ BIC <- function(object, ...) {
 #' @export
 #'
 #' @examples
-
-summary.glm.nb_mverse <- function(object,
-                                  conf.int = TRUE,
-                                  conf.level = 0.95,
-                                  output = "estimates",
-                                  ...) {
+summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
+                                  output = "estimates", ...) {
   if (output %in% c("estimates", "e")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0)
+      if (summary(model)$df[1] > 0) {
         out <-
-          broom::tidy(model,
-                      !!rlang::enexpr(conf.int),
-                      !!rlang::enexpr(conf.level))
-      else {
+          broom::tidy(
+            model,
+            !!rlang::enexpr(conf.int),
+            !!rlang::enexpr(conf.level)
+          )
+      } else {
         out <- data.frame(
           term = "(None)",
           estimate = NA,
@@ -403,47 +401,63 @@ summary.glm.nb_mverse <- function(object,
           statistic = NA,
           p.value = NA
         )
-        if (!!rlang::enexpr(conf.int))
+        if (!!rlang::enexpr(conf.int)) {
           out <-
             out %>% dplyr::mutate(conf.low = NA, conf.high = NA)
+        }
       }
     })
   } else if (output == "df") {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0)
+      if (summary(model)$df[1] > 0) {
         out <-
           as.data.frame(t(c(
             summary(model)$df.residual, summary(model)$df.null
           ))) %>%
-          dplyr::rename(df.residual = V1,
-                        df.null = V2)
-      else
-        out <- data.frame(df.residual = NA,
-                          df.null = NA)
+          dplyr::rename(
+            df.residual = V1,
+            df.null = V2
+          )
+      } else {
+        out <- data.frame(
+          df.residual = NA,
+          df.null = NA
+        )
+      }
     })
   } else if (output %in% c("de", "deviance")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0)
+      if (summary(model)$df[1] > 0) {
         out <-
           as.data.frame(t(c(
             summary(model)$deviance, summary(model)$null.deviance
           ))) %>%
-          dplyr::rename(deviance = V1,
-                        null.deviance = V2)
-      else
-        out <- data.frame(deviance = NA,
-                          null.deviance = NA)
+          dplyr::rename(
+            deviance = V1,
+            null.deviance = V2
+          )
+      } else {
+        out <- data.frame(
+          deviance = NA,
+          null.deviance = NA
+        )
+      }
     })
   } else if (tolower(output) %in% c("aic", "bic")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0)
+      if (summary(model)$df[1] > 0) {
         out <-
           as.data.frame(t(c(stats::AIC(model), stats::BIC(model)))) %>%
-          dplyr::rename(AIC = V1,
-                        BIC = V2)
-      else
-        out <- data.frame(AIC = NA,
-                          BIC = NA)
+          dplyr::rename(
+            AIC = V1,
+            BIC = V2
+          )
+      } else {
+        out <- data.frame(
+          AIC = NA,
+          BIC = NA
+        )
+      }
     })
   } else {
     stop("Invalid output argument.")
@@ -472,7 +486,8 @@ summary.glm.nb_mverse <- function(object,
 #' outliers <- filter_branch(!Name %in% c("Katrina", "Audrey"), TRUE)
 #' femininity <- mutate_branch(MasFem, Gender_MF)
 #' strength <- mutate_branch(
-#'   NDAM, HighestWindSpeed, Minpressure_Updated_2014, log(NDAM))
+#'   NDAM, HighestWindSpeed, Minpressure_Updated_2014, log(NDAM)
+#' )
 #' y <- mutate_branch(alldeaths, log(alldeaths + 1))
 #' model <- formula_branch(y ~ femininity * strength, y ~ femininity + strength)
 #' distribution <- family_branch(poisson, gaussian)
@@ -501,76 +516,74 @@ summary.glm.nb_mverse <- function(object,
 #' @return A \code{ggplot} object displaying the multiverse tree.
 #' @name multiverse_tree
 #' @export
-multiverse_tree <-
-  function(.mverse,
-           label = FALSE,
-           branches = NULL) {
-    # sort: conditioned -> conditioned on -> others
-    brs <- unique(sapply(
-      c(
-        attr(.mverse, "branches_conditioned_list"),
-        sapply(attr(.mverse, "branches_conditioned_list"), function(t) {
-          t$conds_on
-        }),
-        attr(.mverse, "branches_list")
-      ),
-      function(s) {
-        name(s)
-      }
-    ))
-    if (length(brs) == 0) stop("No branch to display in a tree.")
-    if (!is.null(branches)) {
-      brs <- brs[sapply(brs, function(x) {
-        x %in% branches
-      })]
+multiverse_tree <- function(.mverse, label = FALSE, branches = NULL) {
+  # sort: conditioned -> conditioned on -> others
+  brs <- unique(sapply(
+    c(
+      attr(.mverse, "branches_conditioned_list"),
+      sapply(attr(.mverse, "branches_conditioned_list"), function(t) {
+        t$conds_on
+      }),
+      attr(.mverse, "branches_list")
+    ),
+    function(s) {
+      name(s)
     }
-    brs_name <- paste0(brs, "_branch")
-    combs <- summary(.mverse)[brs_name] %>%
-      dplyr::mutate(dplyr::across(.fns = as.character))
-    edges_list <-
-      list(data.frame(
-        from = "Data",
-        to = unique(combs[[1]]),
-        branch = brs[1]
-      ))
-    v_labels <- c("Data")
-    for (i in seq_len(length(brs_name))) {
-      pairs <- combs[, 1:i] %>%
-        dplyr::distinct_all() %>%
-        tidyr::unite("to", 1:i, remove = FALSE) %>%
-        tidyr::unite("from", 2:i, remove = FALSE) %>%
-        dplyr::mutate(branch = brs[i])
-      if (i > 1) {
-        edges_list[[length(edges_list) + 1]] <- pairs %>%
-          dplyr::select(.data$from, .data$to, .data$branch) %>%
-          dplyr::distinct_all()
-      }
-      v_labels <- c(v_labels, pairs %>% dplyr::pull(i + 2))
-    }
-    edges <- do.call(rbind, edges_list)
-    g <- graph_from_data_frame(edges)
-    plt <- ggraph(g, layout = "dendrogram", circular = FALSE) +
-      geom_edge_link(aes(color = .data$branch)) +
-      theme_void() +
-      coord_flip() +
-      scale_y_reverse(expand = c(0.1, 0.1)) +
-      scale_x_continuous(expand = c(0.1, 0.1)) +
-      scale_edge_color_manual(
-        name = NULL,
-        values = grDevices::hcl(
-          h = seq(0, 360, length.out = length(brs) + 1), l = 50),
-        limits = brs
-      ) +
-      theme(legend.position = "top")
-    if (label) {
-      plt <- plt +
-        geom_node_label(
-          aes(label = v_labels),
-          hjust = 1,
-          vjust = 1.2,
-          label.size = 0,
-          size = max(2, min(4, 300 / length(v_labels)))
-        )
-    }
-    plt + geom_node_point(size = min(1, 100 / length(v_labels)))
+  ))
+  if (length(brs) == 0) stop("No branch to display in a tree.")
+  if (!is.null(branches)) {
+    brs <- brs[sapply(brs, function(x) {
+      x %in% branches
+    })]
   }
+  brs_name <- paste0(brs, "_branch")
+  combs <- summary(.mverse)[brs_name] %>%
+    dplyr::mutate(dplyr::across(.fns = as.character))
+  edges_list <-
+    list(data.frame(
+      from = "Data",
+      to = unique(combs[[1]]),
+      branch = brs[1]
+    ))
+  v_labels <- c("Data")
+  for (i in seq_len(length(brs_name))) {
+    pairs <- combs[, 1:i] %>%
+      dplyr::distinct_all() %>%
+      tidyr::unite("to", 1:i, remove = FALSE) %>%
+      tidyr::unite("from", 2:i, remove = FALSE) %>%
+      dplyr::mutate(branch = brs[i])
+    if (i > 1) {
+      edges_list[[length(edges_list) + 1]] <- pairs %>%
+        dplyr::select(.data$from, .data$to, .data$branch) %>%
+        dplyr::distinct_all()
+    }
+    v_labels <- c(v_labels, pairs %>% dplyr::pull(i + 2))
+  }
+  edges <- do.call(rbind, edges_list)
+  g <- graph_from_data_frame(edges)
+  plt <- ggraph(g, layout = "dendrogram", circular = FALSE) +
+    geom_edge_link(aes(color = .data$branch)) +
+    theme_void() +
+    coord_flip() +
+    scale_y_reverse(expand = c(0.1, 0.1)) +
+    scale_x_continuous(expand = c(0.1, 0.1)) +
+    scale_edge_color_manual(
+      name = NULL,
+      values = grDevices::hcl(
+        h = seq(0, 360, length.out = length(brs) + 1), l = 50
+      ),
+      limits = brs
+    ) +
+    theme(legend.position = "top")
+  if (label) {
+    plt <- plt +
+      geom_node_label(
+        aes(label = v_labels),
+        hjust = 1,
+        vjust = 1.2,
+        label.size = 0,
+        size = max(2, min(4, 300 / length(v_labels)))
+      )
+  }
+  plt + geom_node_point(size = min(1, 100 / length(v_labels)))
+}
