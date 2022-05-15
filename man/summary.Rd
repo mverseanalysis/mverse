@@ -5,6 +5,7 @@
 \alias{summary.mverse}
 \alias{summary.lm_mverse}
 \alias{summary.glm_mverse}
+\alias{summary.glm.nb_mverse}
 \title{Display the multiverse table with results.}
 \usage{
 \method{summary}{mverse}(object, ...)
@@ -12,9 +13,11 @@
 \method{summary}{lm_mverse}(object, conf.int = TRUE, conf.level = 0.95, output = "estimates", ...)
 
 \method{summary}{glm_mverse}(object, conf.int = TRUE, conf.level = 0.95, output = "estimates", ...)
+
+\method{summary}{glm.nb_mverse}(object, conf.int = TRUE, conf.level = 0.95, output = "estimates", ...)
 }
 \arguments{
-\item{object}{a \code{glm_mverse} object.}
+\item{object}{a \code{glm.nb_mverse} object.}
 
 \item{...}{Ignored.}
 
@@ -35,6 +38,8 @@ a multiverse table as a tibble.
 a multiverse table as a tibble
 
 a multiverse table as a tibble
+
+a multiverse table as a tibble
 }
 \description{
 This method returns the multiverse table
@@ -46,6 +51,9 @@ represents a branch.
 results across the multiverse.
 
 \code{summary.glm_mverse} returns the \code{glm} regression
+results across the multiverse.
+
+\code{summary.glm.nb_mverse} returns the \code{MASS::glm.nb} regression
 results across the multiverse.
 }
 \examples{
@@ -150,8 +158,46 @@ mv <- create_multiverse(hurricane) \%>\%
   glm_mverse()
 # Display the multiverse table with estimated coefficients.
 summary(mv)
+# Define mutate branches.
+hurricane_strength <- mutate_branch(
+  # damage vs. wind speed vs.pressure
+  NDAM,
+  HighestWindSpeed,
+  Minpressure_Updated_2014,
+  # Standardized versions
+  scale(NDAM),
+  scale(HighestWindSpeed),
+  -scale(Minpressure_Updated_2014),
+)
+y <- mutate_branch(
+  alldeaths, log(alldeaths + 1)
+)
+# Define a filter branch.
+hurricane_outliers <- filter_branch(
+  !Name \%in\% c("Katrina", "Audrey", "Andrew"),
+  !Name \%in\% c("Katrina"),
+  !Name \%in\% c("Katrina"),
+  TRUE # include all
+)
+# Define a formula branch.
+model_specifications <- formula_branch(
+  y ~ femininity,
+  y ~ femininity + hurricane_strength,
+  y ~ femininity * hurricane_strength
+)
+# Create a mverse, add the branches, and fit glm models.
+mv <- create_multiverse(hurricane) \%>\%
+  add_filter_branch(hurricane_outliers) \%>\%
+  add_mutate_branch(hurricane_strength, y) \%>\%
+  add_formula_branch(model_specifications) \%>\%
+  glm.nb_mverse()
+# Display the multiverse table with estimated coefficients.
+summary(mv)
 }
 \seealso{
+Other {summary method}: 
+\code{\link{AIC}()}
+
 Other {summary method}: 
 \code{\link{AIC}()}
 

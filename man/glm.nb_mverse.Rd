@@ -2,16 +2,31 @@
 % Please edit documentation in R/model.R
 \name{glm.nb_mverse}
 \alias{glm.nb_mverse}
-\title{Fit a Negative Binomial Regression model across the multiverse
-\code{glm.nb_mverse} fits \code{MASS::glm.nb} across the multiverse
-according to model specifications provided by \code{formula_branch}.
-At least one \code{formula_branch} must have been added.}
+\title{Fit negative binomial regression models across the multiverse}
 \usage{
 glm.nb_mverse(.mverse)
 }
+\arguments{
+\item{.mverse}{a \code{mverse} object.}
+}
+\value{
+A \code{mverse} object with \code{glm.nb} fitted.
+}
 \description{
-Fit a Negative Binomial Regression model across the multiverse
 \code{glm.nb_mverse} fits \code{MASS::glm.nb} across the multiverse
 according to model specifications provided by \code{formula_branch}.
 At least one \code{formula_branch} must have been added.
 }
+\examples{
+\dontrun{
+model_spec <- formula_branch(y ~ x1)
+mv <- mv \%>\%
+  add_formula_branch(model_spec) \%>\%
+  fit_glm.nb()
+}
+}
+\seealso{
+Other {model fitting methods}: 
+\code{\link{lm_mverse}()}
+}
+\concept{{model fitting methods}}

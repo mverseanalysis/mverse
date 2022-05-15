@@ -3,6 +3,7 @@
 extract <- function(...) {
   UseMethod("extract")
 }
+
 #' Extract branched values.
 #'
 #' \code{extract} returns a tibble of selected values
@@ -29,22 +30,23 @@ extract <- function(...) {
 #' execute_multiverse(mv)
 #' # Extract all branched columns from all universes
 #' extract(mv)
-#' # Specify the columns to extract from each universe using \code{columns}
+#' # Specify the columns to extract from each universe using columns
 #' # You can select both branched and non-branched columns
 #' extract(mv, columns = c("hurricane_strength", "NDAM"))
-#' # Specify the universe to extract from using \code{universe}
+#' # Specify the universe to extract from using universe
 #' extract(mv, universe = 1)
-#' # Specify the number of universes to extract from using \code{nuni}
+#' # Specify the number of universes to extract from using nuni
 #' # The universes are randomly selected
 #' extract(mv, nuni = 3)
 #' # Specify the proportion of data to extract from each universe using
-#' # \code{frow}. The rows are randomly selected
+#' # frow. The rows are randomly selected
 #' extract(mv, frow = 0.7)
 #' @param .mverse a \code{mverse} object.
 #' @param columns a character vector of column names to extract.
-#' @param universe an integer vector of universe ids to extract.
 #' @param nuni a positive integer for the number of universes to extract.
 #' @param frow proportion of rows to extract from each universe.
+#' @param include_branch_options when \code{TRUE} (default), include the mutate
+#'   statements used to specified the options for each branched columns
 #' @param ... Ignored.
 #' @details This method extracts data values across
 #' the multiverse. You can specify a subset of data
@@ -74,22 +76,26 @@ extract <- function(...) {
 #' @family {mverse methods}
 #' @export
 extract.mverse <- function(.mverse, columns = NULL,
-                           nuni = NULL, frow = NULL, mutate_cols = TRUE, ...) {
+                           nuni = NULL, frow = NULL,
+                           include_branch_options = TRUE, ...) {
   stopifnot(inherits(.mverse, "mverse"))
+  data <- NULL # suppress R CMD check note
   mtable <- summary(.mverse)
-  if (is.null(columns)) {
-    columns <- unlist(
-      sapply(
-        c(
-          attr(.mverse, "branches_list"),
-          attr(.mverse, "branches_conditioned_list")
-        ),
-        function(x) if (inherits(x, "mutate_branch")) x$name
-      )
+  branched_columns <- unlist(
+    sapply(
+      c(
+        attr(.mverse, "branches_list"),
+        attr(.mverse, "branches_conditioned_list")
+      ),
+      function(x) if (inherits(x, "mutate_branch")) x$name
     )
+  )
+  if (is.null(columns)) {
+    columns <- branched_columns
+  } else {
+    branched_columns <- branched_columns[branched_columns %in% columns]
   }
   columns <- c("universe", columns)
-  # if(is.null(universe)) {
   universe <- mtable$universe
   if (!is.null(nuni)) {
     if (length(nuni) > 1) {
@@ -101,7 +107,7 @@ extract.mverse <- function(.mverse, columns = NULL,
         length(universe) >= nuni
     )
     universe <- sample(universe, nuni)
-  } # }
+  }
   stopifnot(length(universe) > 0)
   extracted <- lapply(
     universe, function(x) {
@@ -118,14 +124,11 @@ extract.mverse <- function(.mverse, columns = NULL,
     }
   )
   extracted <- dplyr::bind_rows(extracted)
-  # extracted %>%
-  #  dplyr::select(columns) %>%
-  #  dplyr::left_join(mtable, by = "universe")
-  if (mutate_cols == FALSE) {
-    extracted %>% dplyr::select(columns)
-  } else {
+  if (include_branch_options) {
     extracted %>%
-      dplyr::select(columns) %>%
-      dplyr::left_join(mtable, by = "universe")
+      dplyr::left_join(mtable, by = "universe") %>%
+      dplyr::select(columns, paste0(branched_columns, "_branch"))
+  } else {
+    dplyr::select(extracted, columns)
   }
 }

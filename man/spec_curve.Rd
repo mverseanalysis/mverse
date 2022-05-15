@@ -10,58 +10,66 @@
 Uri Simonsohn, Joseph P. Simmons, and Leif D. Nelson. (2020).
 “Specification curve analysis” \emph{Nature Human Behaviour},
 4, 1208–14. \url{https://doi.org/10.1038/s41562-020-0912-z}
+
+Uri Simonsohn, Joseph P. Simmons, and Leif D. Nelson. (2020).
+“Specification curve analysis” \emph{Nature Human Behaviour},
+4, 1208–14. \url{https://doi.org/10.1038/s41562-020-0912-z}
 }
 \usage{
-spec_curve(
-  .object,
-  var,
-  conf.int,
-  conf.level,
-  option,
-  universe_order,
-  color_order,
-  color,
-  branch_order,
-  yaxis_text_size
-)
+spec_curve(.object, var, ...)
 
 \method{spec_curve}{lm_mverse}(
   .object,
-  var = NULL,
+  var,
   conf.int = TRUE,
   conf.level = 0.95,
   option = names(multiverse::parameters(.object)),
   universe_order = FALSE,
   color_order = FALSE,
-  color = (p.value < 0.05),
+  color = "p.value < 0.05",
   branch_order = NULL,
-  yaxis_text_size = 8
+  point_size = 0.25,
+  grid_size = 2,
+  point_alpha = 0.2,
+  brewer_palette = "Set2",
+  yaxis_text_size = 8,
+  ...
 )
 
 \method{spec_curve}{glm_mverse}(
   .object,
-  var = NULL,
+  var,
   conf.int = TRUE,
   conf.level = 0.95,
   option = names(multiverse::parameters(.object)),
   universe_order = FALSE,
   color_order = FALSE,
-  color = (p.value < 0.05),
+  color = "p.value < 0.05",
   branch_order = NULL,
-  yaxis_text_size = 8
+  point_size = 0.25,
+  grid_size = 2,
+  point_alpha = 0.2,
+  brewer_palette = "Set2",
+  yaxis_text_size = 8,
+  ...
 )
 
 \method{spec_curve}{glm.nb_mverse}(
   .object,
-  var = NULL,
+  var,
   conf.int = TRUE,
   conf.level = 0.95,
   option = names(multiverse::parameters(.object)),
   universe_order = FALSE,
   color_order = FALSE,
-  color = (p.value < 0.05),
+  color = "p.value < 0.05",
   branch_order = NULL,
-  yaxis_text_size = 8
+  point_size = 0.25,
+  grid_size = 2,
+  point_alpha = 0.2,
+  brewer_palette = "Set2",
+  yaxis_text_size = 8,
+  ...
 )
 }
 \arguments{
@@ -69,23 +77,33 @@ spec_curve(
 
 \item{var}{name for the variable to show.}
 
-\item{conf.int}{When \code{TRUE} (default), the estimate output
+\item{...}{ignored.}
+
+\item{conf.int}{when \code{TRUE} (default), the estimate output
 includes the confidence intervals.}
 
-\item{conf.level}{The confidence level of the confidence interval
+\item{conf.level}{the confidence level of the confidence interval
 returned using \code{conf.int = TRUE}. Default value is 0.95.}
 
 \item{option}{a vector of branches to show the options included.}
 
-\item{universe_order}{When \code{TRUE}, order the universes according to
+\item{universe_order}{when \code{TRUE}, order the universes according to
 the order in the summary table.}
 
-\item{color_order}{When \code{TRUE}, the estimated value will be ordered
+\item{color_order}{when \code{TRUE}, the estimated value will be ordered
 according to the color.}
 
 \item{color}{specify the color in the plot.}
 
 \item{branch_order}{name for the branch to order.}
+
+\item{point_size}{size of points on the top plot.}
+
+\item{grid_size}{size of points on the bottom plot.}
+
+\item{point_alpha}{alpha level of points and point ranges.}
+
+\item{brewer_palette}{name of colorbrewer palette for the plot.}
 
 \item{yaxis_text_size}{text size of y-axis label}
 }
@@ -93,23 +111,15 @@ according to the color.}
 a specification curve plot for the estimates
 
 a specification curve plot for the estimates
-
-a specification curve plot for the estimates
 }
 \description{
-This family of methods displays the specification curve analysis as
+\code{spec_curve} returns the specification curve  as
 proposed by Simonsohn, Simmons, and Nelson
 (\href{https://doi.org/10.1038/s41562-020-0912-z}{2020}).
-
-\code{spec_curve.glm_mverse} returns the specification curve of \code{glm}
-regression results across the multiverse.
-Notice that the order of universes is not corresponding
-to the order in the summary table.
-
-\code{spec_curve.glm.nb_mverse} returns the specification curve of \code{glm.nb}
-regression results across the multiverse.
-Notice that the order of universes is not corresponding
-to the order in the summary table.
+\code{spec_curve} are available for \code{mverse} objects fitted with
+\code{lm_mverse()}, \code{glm_mverse()}, and \code{glm.nb_mverse()}.
+Notice that the order of universes may not correspond to the order
+in the summary table.
 }
 \examples{
 # Create a mverse object
@@ -121,14 +131,13 @@ femininity <- mutate_branch(
 add_mutate_branch(mv, femininity)
 # Define and add a formula branch
 model <- formula_branch(
-  alldeaths ~ femininity, log(alldeaths + 1) ~ femininity
+  alldeaths ~ femininity, alldeaths ~ femininity * HighestWindSpeed
 )
 add_formula_branch(mv, model)
 # Fit a lm model
 lm_mverse(mv)
 # Display the specification curve
 spec_curve(mv, var = "femininityTRUE")
-
 # Create a mverse object
 mv <- mverse(hurricane)
 # Define and add a mutate branch
@@ -142,8 +151,8 @@ model <- formula_branch(
 )
 add_formula_branch(mv, model)
 # Define and add a family branch
-model_family <- family_branch(gaussian, poisson)
-add_family_branch(mv, model_family)
+fam <- family_branch(gaussian)
+add_family_branch(mv, fam)
 # Fit a glm model
 glm_mverse(mv)
 # Display the specification curve
@@ -161,11 +170,9 @@ model <- formula_branch(
   alldeaths ~ femininity, alldeaths ~ femininity * HighestWindSpeed
 )
 add_formula_branch(mv, model)
-# Define and add a family branch
 # Fit a glm.nb model
-glm_mverse(mv)
+glm.nb_mverse(mv)
 # Display the specification curve
 spec_curve(mv, var = "femininityTRUE")
 
 }
-\concept{{spec_curve method}}

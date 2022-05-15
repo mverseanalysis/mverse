@@ -2,7 +2,7 @@
 % Please edit documentation in R/model.R
 \name{lm_mverse}
 \alias{lm_mverse}
-\title{Fit \code{lm} across the multiverse.}
+\title{Fit linear regression models across the multiverse.}
 \usage{
 lm_mverse(.mverse)
 }
@@ -24,5 +24,9 @@ mv <- mv \%>\%
   add_formula_branch(model_spec) \%>\%
   fit_lm()
 }
+}
+\seealso{
+Other {model fitting methods}: 
+\code{\link{glm.nb_mverse}()}
 }
 \concept{{model fitting methods}}

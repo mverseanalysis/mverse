@@ -372,18 +372,63 @@ BIC <- function(object, ...) {
 
 #' Display a summary of fitting \code{glm.nb_mverse} across the multiverse.
 #'
-#' @param object
-#' @param conf.int
-#' @param conf.level
-#' @param output
-#' @param ...
-#'
-#' @return
-#' @export
+#' \code{summary.glm.nb_mverse} returns the \code{MASS::glm.nb} regression
+#' results across the multiverse.
 #'
 #' @examples
+#' # Define mutate branches.
+#' hurricane_strength <- mutate_branch(
+#'   # damage vs. wind speed vs.pressure
+#'   NDAM,
+#'   HighestWindSpeed,
+#'   Minpressure_Updated_2014,
+#'   # Standardized versions
+#'   scale(NDAM),
+#'   scale(HighestWindSpeed),
+#'   -scale(Minpressure_Updated_2014),
+#' )
+#' y <- mutate_branch(
+#'   alldeaths, log(alldeaths + 1)
+#' )
+#' # Define a filter branch.
+#' hurricane_outliers <- filter_branch(
+#'   !Name %in% c("Katrina", "Audrey", "Andrew"),
+#'   !Name %in% c("Katrina"),
+#'   !Name %in% c("Katrina"),
+#'   TRUE # include all
+#' )
+#' # Define a formula branch.
+#' model_specifications <- formula_branch(
+#'   y ~ femininity,
+#'   y ~ femininity + hurricane_strength,
+#'   y ~ femininity * hurricane_strength
+#' )
+#' # Create a mverse, add the branches, and fit glm models.
+#' mv <- create_multiverse(hurricane) %>%
+#'   add_filter_branch(hurricane_outliers) %>%
+#'   add_mutate_branch(hurricane_strength, y) %>%
+#'   add_formula_branch(model_specifications) %>%
+#'   glm.nb_mverse()
+#' # Display the multiverse table with estimated coefficients.
+#' summary(mv)
+#' @param object a \code{glm.nb_mverse} object.
+#' @param conf.int When \code{TRUE} (default), the estimate output
+#'   includes the confidence intervals.
+#' @param conf.level The confidence level of the confidence interval
+#'   returned using \code{conf.int = TRUE}. Default value is 0.95.
+#' @param output The output of interest. The possible values are
+#'   "estimates" ("e"), "df", "deviance" ("de"), and "aic" ("bic").
+#'   Alternatively, the first letters may be used. Default value
+#'   is "estimates".
+#' @param ... Ignored.
+#' @return a multiverse table as a tibble
+#' @name summary
+#' @family {summary method}
+#' @importFrom rlang .data
+#' @export
 summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
                                   output = "estimates", ...) {
+  model <- NULL # suppress R CMD Check Note
   if (output %in% c("estimates", "e")) {
     multiverse::inside(object, {
       if (summary(model)$df[1] > 0) {
@@ -415,8 +460,8 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
             summary(model)$df.residual, summary(model)$df.null
           ))) %>%
           dplyr::rename(
-            df.residual = V1,
-            df.null = V2
+            df.residual = .data$V1,
+            df.null = .data$V2
           )
       } else {
         out <- data.frame(
@@ -433,8 +478,8 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
             summary(model)$deviance, summary(model)$null.deviance
           ))) %>%
           dplyr::rename(
-            deviance = V1,
-            null.deviance = V2
+            deviance = .data$V1,
+            null.deviance = .data$V2
           )
       } else {
         out <- data.frame(
@@ -449,8 +494,8 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
         out <-
           as.data.frame(t(c(stats::AIC(model), stats::BIC(model)))) %>%
           dplyr::rename(
-            AIC = V1,
-            BIC = V2
+            AIC = .data$V1,
+            BIC = .data$V2
           )
       } else {
         out <- data.frame(
@@ -465,12 +510,11 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
   execute_multiverse(object)
   mtable <- multiverse::extract_variables(object, out) %>%
     tidyr::unnest(out) %>%
-    dplyr::mutate(universe = factor(.universe)) %>%
+    dplyr::mutate(universe = factor(.data$.universe)) %>%
     dplyr::select(-tidyselect::starts_with(".")) %>%
-    dplyr::select(universe, tidyselect::everything())
+    dplyr::select(.data$universe, tidyselect::everything())
   display_branch_opts(mtable, object)
 }
-
 
 
 

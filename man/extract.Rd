@@ -12,7 +12,7 @@ extract(...)
   columns = NULL,
   nuni = NULL,
   frow = NULL,
-  mutate_cols = TRUE,
+  include_branch_options = TRUE,
   ...
 )
 }
@@ -27,7 +27,8 @@ extract(...)
 
 \item{frow}{proportion of rows to extract from each universe.}
 
-\item{universe}{an integer vector of universe ids to extract.}
+\item{include_branch_options}{when \code{TRUE} (default), include the mutate
+statements used to specified the options for each branched columns}
 }
 \description{
 \code{extract} returns a tibble of selected values
@@ -80,16 +81,16 @@ mv <- create_multiverse(hurricane) \%>\%
 execute_multiverse(mv)
 # Extract all branched columns from all universes
 extract(mv)
-# Specify the columns to extract from each universe using \code{columns}
+# Specify the columns to extract from each universe using columns
 # You can select both branched and non-branched columns
 extract(mv, columns = c("hurricane_strength", "NDAM"))
-# Specify the universe to extract from using \code{universe}
+# Specify the universe to extract from using universe
 extract(mv, universe = 1)
-# Specify the number of universes to extract from using \code{nuni}
+# Specify the number of universes to extract from using nuni
 # The universes are randomly selected
 extract(mv, nuni = 3)
 # Specify the proportion of data to extract from each universe using
-# \code{frow}. The rows are randomly selected
+# frow. The rows are randomly selected
 extract(mv, frow = 0.7)
 }
 \seealso{

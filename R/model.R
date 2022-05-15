@@ -1,4 +1,4 @@
-#' Fit \code{lm} across the multiverse.
+#' Fit linear regression models across the multiverse.
 #'
 #' \code{lm_mverse} fits \code{lm} across the multiverse
 #' according to model specifications provided by \code{formula_branch}.
@@ -38,7 +38,7 @@ lm_mverse <- function(.mverse) {
 }
 
 
-#' Fit \code{glm} across the multiverse.
+#' Fit generalized linear regression models across the multiverse.
 #'
 #' \code{glm_mverse} fits \code{glm} across the multiverse
 #' according to model specifications provided by \code{formula_branch}.
@@ -89,17 +89,29 @@ glm_mverse <- function(.mverse) {
 }
 
 
-
-#' Fit a Negative Binomial Regression model across the multiverse
+#' Fit negative binomial regression models across the multiverse
+#'
 #' \code{glm.nb_mverse} fits \code{MASS::glm.nb} across the multiverse
 #' according to model specifications provided by \code{formula_branch}.
 #' At least one \code{formula_branch} must have been added.
 #'
+#' @examples
+#' \dontrun{
+#' model_spec <- formula_branch(y ~ x1)
+#' mv <- mv %>%
+#'   add_formula_branch(model_spec) %>%
+#'   fit_glm.nb()
+#' }
+#' @param .mverse a \code{mverse} object.
+#' @return A \code{mverse} object with \code{glm.nb} fitted.
+#' @family {model fitting methods}
 #' @name glm.nb_mverse
 #' @export
 
 glm.nb_mverse <- function(.mverse) {
   stopifnot(inherits(.mverse, "mverse"))
+  formulae <- NULL
+  data <- NULL # suppress R CMD Check Note
   # check whether there is a formula branch (should be only 1)
   brs <- c(attr(.mverse, "branches_conditioned_list"), attr(.mverse, "branches_list"))
   if (length(brs) == 0) {

@@ -22,7 +22,7 @@ test_that("extract() extracts values of branched variables from multiverse data.
     (mydf$x * mydf$y)[c(mydf$x > 0)],
     (mydf$x * mydf$y)[c(mydf$x < 0)]
   )
-  expect_equal(ncol(extract(mv)), 2)
+  expect_equal(ncol(extract(mv)), 3)
   expect_equal(nrow(extract(mv)), 6)
   expect_identical(extract(mv)[["m"]], mexp)
 })

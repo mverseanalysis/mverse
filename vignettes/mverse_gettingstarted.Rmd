@@ -3,7 +3,7 @@ title: "Getting started with mverse"
 output: rmarkdown::html_vignette
 link-citations: yes
 vignette: >
-  %\VignetteIndexEntry{Basic Multiverse Analysis with mverse}
+  %\VignetteIndexEntry{Getting started with mverse}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 references:
@@ -223,9 +223,9 @@ df_transformed %>%
             median = median(transformation_branch),
             IQR = IQR(transformation_branch))
 
-
 df_transformed %>% 
-  ggplot(aes(x = transformation_branch)) + geom_histogram(bins = 3) + facet_wrap(vars(transformation_branch_branch))
+  ggplot(aes(x = transformation_branch)) + geom_histogram(bins = 3) +
+  facet_wrap(vars(transformation_branch_branch))
 ```
 
 ## Simple Example: Using `mverse` to Fit Three Simple Linear Regression of a Transformed Column

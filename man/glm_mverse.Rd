@@ -2,7 +2,7 @@
 % Please edit documentation in R/model.R
 \name{glm_mverse}
 \alias{glm_mverse}
-\title{Fit \code{glm} across the multiverse.}
+\title{Fit generalized linear regression models across the multiverse.}
 \usage{
 glm_mverse(.mverse)
 }
