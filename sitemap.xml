@@ -1,7 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://mverseanalysis.github.io/mverse/404.html</loc>
+  </url>
+  <url>
+    <loc>https://mverseanalysis.github.io/mverse/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://mverseanalysis.github.io/mverse/articles/mverse_gettingstarted.html</loc>
+  </url>
+  <url>
+    <loc>https://mverseanalysis.github.io/mverse/articles/mverse_intro_glmmodelling.html</loc>
+  </url>
+  <url>
+    <loc>https://mverseanalysis.github.io/mverse/articles/mverse_intro_regressionmodelling.html</loc>
+  </url>
+  <url>
+    <loc>https://mverseanalysis.github.io/mverse/authors.html</loc>
+  </url>
+  <url>
     <loc>https://mverseanalysis.github.io/mverse/index.html</loc>
+  </url>
+  <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/AIC.html</loc>
+  </url>
+  <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/add_branch_condition.html</loc>
   </url>
   <url>
     <loc>https://mverseanalysis.github.io/mverse/reference/add_family_branch.html</loc>
@@ -14,6 +38,9 @@
   </url>
   <url>
     <loc>https://mverseanalysis.github.io/mverse/reference/add_mutate_branch.html</loc>
+  </url>
+  <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/branch_condition.html</loc>
   </url>
   <url>
     <loc>https://mverseanalysis.github.io/mverse/reference/execute_multiverse.html</loc>
@@ -31,10 +58,22 @@
     <loc>https://mverseanalysis.github.io/mverse/reference/formula_branch.html</loc>
   </url>
   <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/glm.nb_mverse.html</loc>
+  </url>
+  <url>
     <loc>https://mverseanalysis.github.io/mverse/reference/glm_mverse.html</loc>
   </url>
   <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/hurricane.html</loc>
+  </url>
+  <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/index.html</loc>
+  </url>
+  <url>
     <loc>https://mverseanalysis.github.io/mverse/reference/lm_mverse.html</loc>
+  </url>
+  <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/multiverse_tree.html</loc>
   </url>
   <url>
     <loc>https://mverseanalysis.github.io/mverse/reference/mutate_branch.html</loc>
@@ -43,18 +82,21 @@
     <loc>https://mverseanalysis.github.io/mverse/reference/mverse.html</loc>
   </url>
   <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/print.branch.html</loc>
+  </url>
+  <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/reexports.html</loc>
+  </url>
+  <url>
     <loc>https://mverseanalysis.github.io/mverse/reference/soccer.html</loc>
+  </url>
+  <url>
+    <loc>https://mverseanalysis.github.io/mverse/reference/spec_curve.html</loc>
   </url>
   <url>
     <loc>https://mverseanalysis.github.io/mverse/reference/summary.html</loc>
   </url>
   <url>
-    <loc>https://mverseanalysis.github.io/mverse/reference/t.test.html</loc>
-  </url>
-  <url>
-    <loc>https://mverseanalysis.github.io/mverse/articles/example-1.html</loc>
-  </url>
-  <url>
-    <loc>https://mverseanalysis.github.io/mverse/articles/hurricane.html</loc>
+    <loc>https://mverseanalysis.github.io/mverse/reference/ttest.html</loc>
   </url>
 </urlset>
