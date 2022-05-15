@@ -6,8 +6,7 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/mverseanalysis/mverse/workflows/R-CMD-check/badge.svg)](https://github.com/mverseanalysis/mverse/actions)
-[![Codecov test
-coverage](https://codecov.io/gh/mverseanalysis/mverse/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mverseanalysis/mverse?branch=master)
+<!-- [![Codecov test coverage](https://codecov.io/gh/mverseanalysis/mverse/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mverseanalysis/mverse?branch=master) -->
 <!-- badges: end -->
 
 *mverse* is an extension to multiverse package (Sarma et al. 2021) which
@@ -34,15 +33,19 @@ devtools::install_github("mverseanalysis/mverse")
 
 The following demonstration performs a multiverse analysis using
 `hurricane` dataset (Jung et al. 2014) included in the library. We first
-create 6 universes as described in Figure
-<a href="#fig:tree"><strong>??</strong></a>. A filter *branch* with 2
+create 6 universes as described in Figure 1. A filter *branch* with 2
 *options* and a mutate *branch* with 3 *options* results in 6
 *universes* in total. We then fit a Poisson regression model across the
 multiverse and inspect a coefficient estimate. See
 `vignette("hurricane")` for a detailed analysis as well as the
 terminologies used.
 
-<img src="man/figures/README-tree-1.png" title="Having one branch with 2 options and another with 3 results in 2 x 3 = 6 universes in total." alt="Having one branch with 2 options and another with 3 results in 2 x 3 = 6 universes in total." width="100%" />
+<img src="man/figures/README-tree-1.png" width="100%" />
+
+<caption>
+Figure 1. Having one branch with 2 options and another with 3 results in
+2 x 3 = 6 universes in total.
+</caption>
 
 ### Initiate
 
@@ -150,12 +153,12 @@ res %>%
 #> # A tibble: 6 × 6
 #>   outliers_branch              strength_branch term  estimate conf.low conf.high
 #>   <fct>                        <fct>           <chr>    <dbl>    <dbl>     <dbl>
-#> 1 "!Name %in% c(\"Katrina\")"  NDAM            MasF…  0.134     0.112     0.157 
-#> 2 "!Name %in% c(\"Katrina\")"  HighestWindSpe… MasF…  0.254     0.177     0.332 
-#> 3 "!Name %in% c(\"Katrina\")"  Minpressure_Up… MasF…  0.0575   -0.743     0.854 
-#> 4 "!Name %in% c(\"Katrina\", … NDAM            MasF…  0.0600    0.0366    0.0839
-#> 5 "!Name %in% c(\"Katrina\", … HighestWindSpe… MasF…  0.151     0.0717    0.231 
-#> 6 "!Name %in% c(\"Katrina\", … Minpressure_Up… MasF… -0.00504  -0.825     0.811
+#> 1 "!Name %in% c(\"Katrina\")"  NDAM            MasF…   0.0623  0.0427     0.0822
+#> 2 "!Name %in% c(\"Katrina\")"  HighestWindSpe… MasF…   0.0531 -0.00942    0.116 
+#> 3 "!Name %in% c(\"Katrina\")"  Minpressure_Up… MasF…  -0.845  -1.59      -0.103 
+#> 4 "!Name %in% c(\"Katrina\", … NDAM            MasF…   0.0623  0.0427     0.0822
+#> 5 "!Name %in% c(\"Katrina\", … HighestWindSpe… MasF…   0.0956  0.0301     0.161 
+#> 6 "!Name %in% c(\"Katrina\", … Minpressure_Up… MasF…  -1.02   -1.81      -0.247
 ```
 
 ### Plot a Specification Curve

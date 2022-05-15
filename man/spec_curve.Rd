@@ -30,7 +30,7 @@ spec_curve(.object, var, ...)
   branch_order = NULL,
   point_size = 0.25,
   grid_size = 2,
-  point_alpha = 0.2,
+  point_alpha = 1,
   brewer_palette = "Set2",
   yaxis_text_size = 8,
   ...
@@ -48,7 +48,7 @@ spec_curve(.object, var, ...)
   branch_order = NULL,
   point_size = 0.25,
   grid_size = 2,
-  point_alpha = 0.2,
+  point_alpha = 1,
   brewer_palette = "Set2",
   yaxis_text_size = 8,
   ...
@@ -66,7 +66,7 @@ spec_curve(.object, var, ...)
   branch_order = NULL,
   point_size = 0.25,
   grid_size = 2,
-  point_alpha = 0.2,
+  point_alpha = 1,
   brewer_palette = "Set2",
   yaxis_text_size = 8,
   ...

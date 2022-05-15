@@ -1,7 +1,6 @@
 ---
 output: 
   bookdown::github_document2:
-    fig_caption: true
     number_sections: false
 references:
   - id: hurricane
@@ -133,9 +132,9 @@ devtools::install_github("mverseanalysis/mverse")
 
 ## Usage
 
-The following demonstration performs a multiverse analysis using `hurricane` dataset [@hurricane] included in the library. We first create 6 universes as described in Figure \@ref(fig:tree). A filter _branch_ with 2 _options_ and a mutate _branch_ with 3 _options_ results in 6 _universes_ in total. We then fit a Poisson regression model across the multiverse and inspect a coefficient estimate. See `vignette("hurricane")` for a detailed analysis as well as the terminologies used.
+The following demonstration performs a multiverse analysis using `hurricane` dataset [@hurricane] included in the library. We first create 6 universes as described in Figure 1. A filter _branch_ with 2 _options_ and a mutate _branch_ with 3 _options_ results in 6 _universes_ in total. We then fit a Poisson regression model across the multiverse and inspect a coefficient estimate. See `vignette("hurricane")` for a detailed analysis as well as the terminologies used.
 
-```{r tree, message=FALSE, fig.asp=9/16, dpi=144, fig.cap="Having one branch with 2 options and another with 3 results in 2 x 3 = 6 universes in total."}
+```{r tree, message=FALSE, fig.asp=9/16, dpi=144}
 library(ggplot2)
 library(igraph)
 library(ggraph)
@@ -192,6 +191,7 @@ ggraph(g, layout = 'dendrogram', circular = FALSE) +
   theme(legend.position = "left")
 ```
 
+<caption>Figure 1. Having one branch with 2 options and another with 3 results in 2 x 3 = 6 universes in total.</caption>
 
 ### Initiate
 

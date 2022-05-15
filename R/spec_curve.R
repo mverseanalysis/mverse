@@ -64,7 +64,7 @@ spec_curve.lm_mverse <- function(.object, var , conf.int = TRUE,
                               universe_order = FALSE, color_order = FALSE,
                               color = "p.value < 0.05", branch_order = NULL,
                               point_size = .25, grid_size = 2,
-                              point_alpha = .2, brewer_palette = "Set2",
+                              point_alpha = 1, brewer_palette = "Set2",
                               yaxis_text_size = 8, ...) {
   stopifnot(inherits(.object, "mverse"))
   spec_curve_table <- get_spec_curve_table(
@@ -118,7 +118,7 @@ spec_curve.glm_mverse <- function(.object, var , conf.int = TRUE,
                                  universe_order = FALSE, color_order = FALSE,
                                  color = "p.value < 0.05", branch_order = NULL,
                                  point_size = .25, grid_size = 2,
-                                 point_alpha = .2, brewer_palette = "Set2",
+                                 point_alpha = 1, brewer_palette = "Set2",
                                  yaxis_text_size = 8, ...) {
   stopifnot(inherits(.object, "mverse"))
   spec_curve_table <- get_spec_curve_table(
@@ -174,7 +174,7 @@ spec_curve.glm.nb_mverse <- function(.object, var , conf.int = TRUE,
                                  universe_order = FALSE, color_order = FALSE,
                                  color = "p.value < 0.05", branch_order = NULL,
                                  point_size = .25, grid_size = 2,
-                                 point_alpha = .2, brewer_palette = "Set2",
+                                 point_alpha = 1, brewer_palette = "Set2",
                                  yaxis_text_size = 8, ...) {
   stopifnot(inherits(.object, "mverse"))
   spec_curve_table <- get_spec_curve_table(
