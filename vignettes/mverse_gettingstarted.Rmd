@@ -151,8 +151,6 @@ references:
 ```{r setup, include = FALSE, message=FALSE, warning=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE, fig.width=7, fig.height=4)
-library(tidyverse)
-library(mverse)
 ```
 
 ## Simple Example: Transform and Summarise One Numeric Column

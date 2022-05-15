@@ -6,9 +6,6 @@ articles:
 - title: Examples
   navbar: Examples
   contents:
-  - example-1
-  - regression
-- title: Case Studies
-  navbar: Case Studies
-  contents:
-  - hurricane
+  - mverse_gettingstarted
+  - mverse_intro_glmmodelling
+  - mverse_intro_regressionmodelling
