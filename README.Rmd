@@ -70,7 +70,7 @@ references:
     - given: Wolf
       family: Vanpaemel
   - id: speccurve
-    title: 'Specification curve analsysis'
+    title: 'Specification curve analysis'
     type: article-journal
     issued:
       year: 2020

@@ -26,7 +26,7 @@ You can install the development version from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("mverseanalysis/mverse", build_vignettes = TRUE)
+devtools::install_github("mverseanalysis/mverse")
 ```
 
 ## Usage
@@ -199,7 +199,7 @@ Multiplexing Alternative Data Analyses in R Notebooks (Version 0.5.0).”
 <div id="ref-speccurve" class="csl-entry">
 
 Simonsohn, Uri, Joseph P. Simmons, and Leif D. Nelson. 2020.
-“Specification Curve Analsysis” 4 (July): 1208–14.
+“Specification Curve Analysis” 4 (July): 1208–14.
 <https://doi.org/10.1038/s41562-020-0912-z>.
 
 </div>

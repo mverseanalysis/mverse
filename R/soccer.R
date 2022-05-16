@@ -4,7 +4,7 @@
 #' playing in the first male divisions of England, Germany, France,
 #' and Spain in the 2012-2013 season and 3,147 referees
 #' that these players played under in professional matches.
-#' The dataset contains other covariates including 2 independen
+#' The dataset contains other covariates including 2 independent
 #' skin tone ratings per player.
 #' Each line represents a player-referee pair.
 #'

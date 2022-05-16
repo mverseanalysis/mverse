@@ -32,7 +32,7 @@
 #' \emph{Female hurricanes are deadlier than male hurricanes}.
 #' Their study didn't include hurricanes Katrina and Audrey which were
 #' deemed as outliers. Simonsohn et al. collected the extra data for
-#' \href{https://doi.org/10.1038/s41562-020-0912-z}{Specification curve anlaysis}
+#' \href{https://doi.org/10.1038/s41562-020-0912-z}{Specification curve analysis}
 #' including an additional femininity index based on an MTUrk survey
 #' and updated normalized damage amount in 2015 U.S. dollars.
 #'
@@ -41,9 +41,9 @@
 #' Audrey are from Simonsohn et al. (2020) except minimum pressure updated
 #' in 2014. They were retrieved from
 #' \href{https://www.aoml.noaa.gov/hrd/hurdat/All_U.S._Hurricanes.html}{
-#' Continental Uniated States Hurricane Impacts/Landfalls 1851-2021} table
+#' Continental United States Hurricane Impacts/Landfalls 1851-2021} table
 #' maintained by U.S. National Oceanic and Atmospheric Administration.
-#' Maximum wind speeed, femininity index from MTUrk survey, and
+#' Maximum wind speed, femininity index from MTUrk survey, and
 #' 2015 damage amounts are also from Simonsohn et al. (2020).
 #'
 #' @source
