@@ -203,18 +203,18 @@ the method randomly samples rows with replacement.</p>
 <span class="r-in"><span class="co"># The universes are randomly selected</span></span>
 <span class="r-in"><span class="fu">extract</span><span class="op">(</span><span class="va">mv</span>, nuni <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 282 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    universe hurricane_strength[,1]     y hurricane_strength_branch      y_branch</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                          <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 11                        0.217     2 -scale(Minpressure_Updated_20… alldeat…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 11                        0.473     4 -scale(Minpressure_Updated_20… alldeat…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 11                       -<span style="color: #BB0000;">1.06</span>      3 -scale(Minpressure_Updated_20… alldeat…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 11                       -<span style="color: #BB0000;">1.17</span>      1 -scale(Minpressure_Updated_20… alldeat…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 11                       -<span style="color: #BB0000;">1.06</span>      0 -scale(Minpressure_Updated_20… alldeat…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 11                        0.217    60 -scale(Minpressure_Updated_20… alldeat…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 11                        0.524    20 -scale(Minpressure_Updated_20… alldeat…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 11                        1.34     20 -scale(Minpressure_Updated_20… alldeat…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 11                        0.114     0 -scale(Minpressure_Updated_20… alldeat…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 11                       -<span style="color: #BB0000;">1.17</span>    200 -scale(Minpressure_Updated_20… alldeat…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    universe hurricane_strength[,1]     y hurricane_strength_branch y_branch     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 10                        0.682 1.10  scale(HighestWindSpeed)   log(alldeath…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 10                        1.13  1.61  scale(HighestWindSpeed)   log(alldeath…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 10                       -<span style="color: #BB0000;">0.876</span> 1.39  scale(HighestWindSpeed)   log(alldeath…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 10                       -<span style="color: #BB0000;">0.876</span> 0.693 scale(HighestWindSpeed)   log(alldeath…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 10                       -<span style="color: #BB0000;">0.876</span> 0     scale(HighestWindSpeed)   log(alldeath…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 10                        0.682 4.11  scale(HighestWindSpeed)   log(alldeath…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 10                        0.682 3.04  scale(HighestWindSpeed)   log(alldeath…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 10                        1.79  3.04  scale(HighestWindSpeed)   log(alldeath…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 10                        0.682 0     scale(HighestWindSpeed)   log(alldeath…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 10                       -<span style="color: #BB0000;">0.876</span> 5.30  scale(HighestWindSpeed)   log(alldeath…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 272 more rows</span></span>
 <span class="r-in"><span class="co"># Specify the proportion of data to extract from each universe using</span></span>
 <span class="r-in"><span class="co"># frow. The rows are randomly selected</span></span>
@@ -222,16 +222,16 @@ the method randomly samples rows with replacement.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 792 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    universe hurricane_strength[,1]     y hurricane_strength_branch y_branch </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 1                           430     0 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 1                          <span style="text-decoration: underline;">6</span>190    21 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 1                          <span style="text-decoration: underline;">2</span>030     0 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 1                           170     8 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 1                          <span style="text-decoration: underline;">7</span>110    41 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 1                            51     1 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 1                            94     0 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 1                            70     1 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 1                          <span style="text-decoration: underline;">1</span>540    15 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 1                            58     1 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 1                           540     1 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 1                          <span style="text-decoration: underline;">4</span>730    12 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 1                           160     1 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 1                         <span style="text-decoration: underline;">66</span>730    62 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 1                          <span style="text-decoration: underline;">6</span>190    21 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 1                           800     3 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 1                            51     1 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 1                          <span style="text-decoration: underline;">1</span>430     8 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 1                            <span style="color: #BB0000;">NA</span>   416 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 1                         <span style="text-decoration: underline;">24</span>000     5 NDAM                      alldeaths</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 782 more rows</span></span>
 </code></pre></div>
     </div>
