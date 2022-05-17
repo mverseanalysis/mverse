@@ -30,7 +30,7 @@ mv <- create_multiverse(hurricane) \%>\%
   add_filter_branch(hurricane_outliers)
 }
 \seealso{
-Other {filter branch functions}: 
+Other filter branch functions: 
 \code{\link{add_filter_branch}()}
 }
-\concept{{filter branch functions}}
+\concept{filter branch functions}

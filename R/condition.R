@@ -21,7 +21,7 @@
 #'   with option 1 and option 2
 #' @return A \code{branch_condition} object.
 #' @name branch_condition
-#' @family {branch condition functions}
+#' @family branch condition functions
 #' @export
 branch_condition <- function(x, y, reject = FALSE) {
   x <- stringr::str_replace(rlang::expr_text(rlang::enquo(x)), "^~", "")
@@ -74,7 +74,7 @@ add_branch_condition <- function(.mverse, ...) {
 #' @param ... branch conditions.
 #' @return a \code{mverse} object.
 #' @name add_branch_condition
-#' @family {branch condition functions}
+#' @family branch condition functions
 #' @export
 add_branch_condition.mverse <- function(.mverse, ...) {
   conds <- list(...)

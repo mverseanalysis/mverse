@@ -14,7 +14,7 @@
 #' @param .mverse a \code{mverse} object.
 #' @return A \code{mverse} object with \code{lm} fitted.
 #' @name lm_mverse
-#' @family {model fitting functions}
+#' @family model fitting functions
 #' @export
 lm_mverse <- function(.mverse) {
   stopifnot(inherits(.mverse, "mverse"))
@@ -63,7 +63,7 @@ lm_mverse <- function(.mverse) {
 #' @param .mverse a \code{mverse} object.
 #' @return A \code{mverse} object with \code{glm} fitted.
 #' @name glm_mverse
-#' @family {model fitting functions}
+#' @family model fitting functions
 #' @export
 glm_mverse <- function(.mverse) {
   stopifnot(inherits(.mverse, "mverse"))
@@ -106,7 +106,7 @@ glm_mverse <- function(.mverse) {
 #' @param .mverse a \code{mverse} object.
 #' @return A \code{mverse} object with \code{glm.nb} fitted.
 #' @name glm.nb_mverse
-#' @family {model fitting functions}
+#' @family model fitting functions
 #' @export
 glm.nb_mverse <- function(.mverse) {
   stopifnot(inherits(.mverse, "mverse"))
