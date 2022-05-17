@@ -24,7 +24,6 @@
 #' @param conf.level confidence level of the interval.
 #' @return A \code{ttest_mverse} object.
 #' @name ttest
-#' @family {hypothesis testing methods}
 #' @importFrom rlang .data
 #' @export
 ttest_mverse <-

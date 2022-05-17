@@ -15,7 +15,7 @@
 #' @return a \code{formula_branch} object.
 #'
 #' @name formula_branch
-#' @family {methods for working with a formula branch}
+#' @family {formula branch functions}
 #' @export
 formula_branch <- function(..., name = NULL) {
   opts <- rlang::enquos(...)
@@ -60,7 +60,7 @@ add_formula_branch <- function(.mverse, ...) {
 #'   add_formula_branch(model_specifications)
 #' @return The resulting \code{mverse} object.
 #' @name add_formula_branch
-#' @family {methods for working with a formula branch}
+#' @family {formula branch functions}
 #' @export
 add_formula_branch.mverse <- function(.mverse, ...) {
   nms <- sapply(rlang::enquos(...), rlang::quo_name)

@@ -70,7 +70,7 @@ references:
     - given: Wolf
       family: Vanpaemel
   - id: speccurve
-    title: 'Specification curve analsysis'
+    title: 'Specification curve analysis'
     type: article-journal
     issued:
       year: 2020
@@ -127,7 +127,7 @@ You can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("mverseanalysis/mverse")
+devtools::install_github("mverseanalysis/mverse", build_vignettes = TRUE)
 ```
 
 ## Usage

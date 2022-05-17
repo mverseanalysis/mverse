@@ -20,7 +20,7 @@
 #' @return a mutate_branch object.
 #'
 #' @name mutate_branch
-#' @family {methods for working with a mutate branch}
+#' @family {mutate branch functions}
 #' @export
 mutate_branch <- function(..., name = NULL) {
   opts <- rlang::enquos(...)
@@ -78,7 +78,7 @@ add_mutate_branch <- function(.mverse, ...) {
 #'   add_mutate_branch(hurricane_strength, y)
 #' @return The resulting \code{mverse} object.
 #' @name add_mutate_branch
-#' @family {methods for working with a mutate branch}
+#' @family {mutate branch functions}
 #' @export
 add_mutate_branch.mverse <- function(.mverse, ...) {
   nms <- sapply(rlang::enquos(...), rlang::quo_name)

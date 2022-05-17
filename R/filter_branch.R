@@ -15,7 +15,7 @@
 #' @param name Name for the new filter.
 #' @return a filter_branch object.
 #' @name filter_branch
-#' @family {methods for working with a filter branch}
+#' @family {filter branch functions}
 #' @export
 filter_branch <- function(..., name = NULL) {
   opts <- rlang::enquos(...)
@@ -62,7 +62,7 @@ add_filter_branch <- function(.mverse, ...) {
 #'   add_filter_branch(hurricane_outliers)
 #' @return The resulting \code{mverse} object.
 #' @name add_filter_branch
-#' @family {methods for working with a filter branch}
+#' @family {filter branch functions}
 #' @export
 add_filter_branch.mverse <- function(.mverse, ...) {
   nms <- sapply(rlang::enquos(...), rlang::quo_name)

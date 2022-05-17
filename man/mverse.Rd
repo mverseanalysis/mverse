@@ -25,9 +25,3 @@ mv <- mverse(hurricane)
 # create_multiverse() is an alias of mverse().
 mv <- create_multiverse(hurricane)
 }
-\seealso{
-Other {mverse methods}: 
-\code{\link{execute_multiverse}()},
-\code{\link{extract}()}
-}
-\concept{{mverse methods}}

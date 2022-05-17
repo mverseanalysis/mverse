@@ -26,11 +26,6 @@ BIC(object, ...)
 a multiverse table as a tibble
 }
 \description{
-display the AIC and BIC score of \code{glm} regression
+Display the AIC and BIC score of \code{glm} regression
 results across the multiverse.
 }
-\seealso{
-Other {summary method}: 
-\code{\link{summary}()}
-}
-\concept{{summary method}}

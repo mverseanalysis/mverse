@@ -101,7 +101,7 @@ hurricane_mv <- create_multiverse(hurricane)
 
 Each branch defines a different statistical analysis by using a subset of data, transforming columns, or a statistical model. Each combination of these branches defines a "universe", or analysis path. Branches are defined using `X_branch(...)`, where `...` are expressions that define a data wrangling or modelling option/analytic decision that you wish to explore, such as excluding certain hurricane names from an analysis, deriving new variables for analysis (mutating), or using different models. Once branches are defined we can look at the impact of the combination of these decisions.
 
-## Branches for Data munipulation
+## Branches for Data Manipulation
 
 `filter_branch` takes logical predicates, and finds the observations where the condition is `TRUE`.
 

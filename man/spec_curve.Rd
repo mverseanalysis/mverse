@@ -9,11 +9,7 @@
 \source{
 Uri Simonsohn, Joseph P. Simmons, and Leif D. Nelson. (2020).
 “Specification curve analysis” \emph{Nature Human Behaviour},
-4, 1208–14. \url{https://doi.org/10.1038/s41562-020-0912-z}
-
-Uri Simonsohn, Joseph P. Simmons, and Leif D. Nelson. (2020).
-“Specification curve analysis” \emph{Nature Human Behaviour},
-4, 1208–14. \url{https://doi.org/10.1038/s41562-020-0912-z}
+4, 1208–14. \doi{10.1038/s41562-020-0912-z}
 }
 \usage{
 spec_curve(.object, var, ...)
@@ -109,70 +105,68 @@ according to the color.}
 }
 \value{
 a specification curve plot for the estimates
-
-a specification curve plot for the estimates
 }
 \description{
 \code{spec_curve} returns the specification curve  as
 proposed by Simonsohn, Simmons, and Nelson
-(\href{https://doi.org/10.1038/s41562-020-0912-z}{2020}).
+(2020) <doi:10.1038/s41562-020-0912-z>.
 \code{spec_curve} are available for \code{mverse} objects fitted with
 \code{lm_mverse()}, \code{glm_mverse()}, and \code{glm.nb_mverse()}.
 Notice that the order of universes may not correspond to the order
 in the summary table.
 }
 \examples{
-# Create a mverse object
-mv <- mverse(hurricane)
-# Define and add a mutate branch
+\dontrun{
+
+# Display a specification curve for \code{lm} models
+# fitted across the multiverse.
 femininity <- mutate_branch(
-  MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1
+  MasFem > 6, MasFem > mean(MasFem)
 )
-add_mutate_branch(mv, femininity)
-# Define and add a formula branch
 model <- formula_branch(
-  alldeaths ~ femininity, alldeaths ~ femininity * HighestWindSpeed
+  alldeaths ~ femininity,
+  alldeaths ~ femininity + HighestWindSpeed
 )
-add_formula_branch(mv, model)
-# Fit a lm model
-lm_mverse(mv)
-# Display the specification curve
+mv <- mverse(hurricane) \%>\%
+  add_mutate_branch(femininity) \%>\%
+  add_formula_branch(model) \%>\%
+  lm_mverse()
 spec_curve(mv, var = "femininityTRUE")
-# Create a mverse object
-mv <- mverse(hurricane)
-# Define and add a mutate branch
+}
+\dontrun{
+
+# Display a specification curve for \code{glm} models
+# fitted across the multiverse.
 femininity <- mutate_branch(
-  MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1
+  MasFem > 6, MasFem > mean(MasFem)
 )
-add_mutate_branch(mv, femininity)
-# Define and add a formula branch
 model <- formula_branch(
-  alldeaths ~ femininity, alldeaths ~ femininity * HighestWindSpeed
+  alldeaths ~ femininity,
+  alldeaths ~ femininity + HighestWindSpeed
 )
-add_formula_branch(mv, model)
-# Define and add a family branch
 fam <- family_branch(gaussian)
-add_family_branch(mv, fam)
-# Fit a glm model
-glm_mverse(mv)
-# Display the specification curve
+mv <- mverse(hurricane) \%>\%
+  add_mutate_branch(femininity) \%>\%
+  add_formula_branch(model) \%>\%
+  add_family_branch(fam) \%>\%
+  glm_mverse()
 spec_curve(mv, var = "femininityTRUE")
+}
+\dontrun{
 
-# Create a mverse object
-mv <- mverse(hurricane)
-# Define and add a mutate branch
+# Display a specification curve for \code{glm.nb} models
+# fitted across the multiverse.
 femininity <- mutate_branch(
-  MasFem > 6, MasFem > mean(MasFem), Gender_MF == 1
+  MasFem > 6, MasFem > mean(MasFem)
 )
-add_mutate_branch(mv, femininity)
-# Define and add a formula branch
 model <- formula_branch(
-  alldeaths ~ femininity, alldeaths ~ femininity * HighestWindSpeed
+  alldeaths ~ femininity,
+  alldeaths ~ femininity + HighestWindSpeed
 )
-add_formula_branch(mv, model)
-# Fit a glm.nb model
-glm.nb_mverse(mv)
-# Display the specification curve
+mv <- mverse(hurricane) \%>\%
+  add_mutate_branch(femininity) \%>\%
+  add_formula_branch(model) \%>\%
+  glm.nb_mverse()
 spec_curve(mv, var = "femininityTRUE")
-
+}
 }
