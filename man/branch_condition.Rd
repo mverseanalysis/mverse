@@ -35,7 +35,7 @@ match_log_lin <- branch_condition(log(alldeaths + 1), poisson, reject = TRUE)
 
 }
 \seealso{
-Other {methods for working with a branch condition}: 
+Other {branch condition functions}: 
 \code{\link{add_branch_condition}()}
 }
-\concept{{methods for working with a branch condition}}
+\concept{{branch condition functions}}

@@ -93,9 +93,4 @@ extract(mv, nuni = 3)
 # frow. The rows are randomly selected
 extract(mv, frow = 0.7)
 }
-\seealso{
-Other {mverse methods}: 
-\code{\link{execute_multiverse}()},
-\code{\link{mverse}()}
-}
 \concept{{mverse methods}}

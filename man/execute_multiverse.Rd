@@ -39,9 +39,3 @@ mv <- create_multiverse(hurricane) \%>\%
 # Execute the multiverse; the variables are populated after the execution.
 execute_multiverse(mv)
 }
-\seealso{
-Other {mverse methods}: 
-\code{\link{extract}()},
-\code{\link{mverse}()}
-}
-\concept{{mverse methods}}

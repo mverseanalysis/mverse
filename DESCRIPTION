@@ -17,7 +17,7 @@ Authors@R: c(
   role = c("ctb"))
   )
 Maintainer: Michael Jongho Moon <michael.moon@mail.utoronto.ca>
-Description: This package is an extension to "multiverse" package
+Description: Extends "multiverse" package
     (Sarma A., Kale A., Moon M., Taback N., Chevalier F., Hullman J., Kay M., 2021)
     <doi:10.31219/osf.io/yfbwm>, which allows users perform to create explorable
     "multiverse" analysis in R. This extension provides an additional level of

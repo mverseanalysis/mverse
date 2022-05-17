@@ -1,7 +1,7 @@
 #' Data on Atlantic hurricanes in the U.S. between 1950 and 2012.
 #'
 #' A dataset for the study conducted by Jung et al. (2014) in
-#' \href{https://doi.org/10.1073/pnas.1402786111}{Female hurricanes are
+#' \doi{10.1073/pnas.1402786111}{Female hurricanes are
 #' deadlier than male hurricanes}.
 #'
 #' @format A data frame with 94 rows and 12 variables:
@@ -32,7 +32,7 @@
 #' \emph{Female hurricanes are deadlier than male hurricanes}.
 #' Their study didn't include hurricanes Katrina and Audrey which were
 #' deemed as outliers. Simonsohn et al. collected the extra data for
-#' \href{https://doi.org/10.1038/s41562-020-0912-z}{Specification curve analysis}
+#' \doi{10.1038/s41562-020-0912-z}{Specification curve analysis}
 #' including an additional femininity index based on an MTUrk survey
 #' and updated normalized damage amount in 2015 U.S. dollars.
 #'
@@ -50,10 +50,10 @@
 #' Kiju Jung, Sharon Shavitt, Madhu Viswanathan, and Joseph M. Hilbe.
 #' (2014). "Female hurricanes are deadlier than male hurricanes."
 #' \emph{Proceedings of the National Academy of Sciences}, 111(24), 8782-8787.
-#' \url{https://doi.org/10.1073/pnas.1402786111}
+#' \doi{10.1073/pnas.1402786111}
 #' @source
 #' Uri Simonsohn, Joseph P. Simmons, and Leif D. Nelson. (2020).
 #' “Specification curve analysis” \emph{Nature Human Behaviour},
-#' 4, 1208–14. \url{https://doi.org/10.1038/s41562-020-0912-z}
+#' 4, 1208–14. \doi{10.1038/s41562-020-0912-z}
 #'
 "hurricane"

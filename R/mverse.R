@@ -15,7 +15,6 @@ magrittr::`%>%`
 #' @param data source datafame.
 #' @return A \code{mverse} object with the source dataframe attached.
 #' @name mverse
-#' @family {mverse methods}
 #' @import multiverse
 #' @export
 mverse <- function(data) {
@@ -67,7 +66,6 @@ execute_multiverse <- function(.mverse) {
 #' execute_multiverse(mv)
 #' @return The resulting \code{mverse} object.
 #' @name execute_multiverse
-#' @family {mverse methods}
 #' @export
 execute_multiverse.mverse <- function(.mverse) {
   stopifnot(inherits(.mverse, "mverse"))

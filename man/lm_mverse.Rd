@@ -26,7 +26,8 @@ mv <- mv \%>\%
 }
 }
 \seealso{
-Other {model fitting methods}: 
-\code{\link{glm.nb_mverse}()}
+Other {model fitting functions}: 
+\code{\link{glm.nb_mverse}()},
+\code{\link{glm_mverse}()}
 }
-\concept{{model fitting methods}}
+\concept{{model fitting functions}}

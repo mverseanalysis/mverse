@@ -52,4 +52,3 @@ mv <- mv \%>\%
   ttest_mverse()
 }
 }
-\concept{{hypothesis testing methods}}

@@ -47,7 +47,7 @@ mv <- create_multiverse(hurricane) \%>\%
   add_mutate_branch(hurricane_strength, y)
 }
 \seealso{
-Other {methods for working with a mutate branch}: 
+Other {mutate branch functions}: 
 \code{\link{mutate_branch}()}
 }
-\concept{{methods for working with a mutate branch}}
+\concept{{mutate branch functions}}

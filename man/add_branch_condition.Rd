@@ -42,7 +42,7 @@ mv <- add_branch_condition(mv, match_log_lin)
 summary(mv)
 }
 \seealso{
-Other {methods for working with a branch condition}: 
+Other {branch condition functions}: 
 \code{\link{branch_condition}()}
 }
-\concept{{methods for working with a branch condition}}
+\concept{{branch condition functions}}

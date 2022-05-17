@@ -1,108 +1,182 @@
-==> devtools::check()
 
-ℹ Updating mverse documentation
-ℹ Loading mverse
-Loading required package: multiverse
-Loading required package: knitr
-Writing NAMESPACE
-Writing NAMESPACE
-Writing hurricane.Rd
-Writing soccer.Rd
-── Building ───────────────────────────────────────────────────── mverse ──
-Setting env vars:
-• CFLAGS    : -Wall -pedantic -fdiagnostics-color=always
-• CXXFLAGS  : -Wall -pedantic -fdiagnostics-color=always
-• CXX11FLAGS: -Wall -pedantic -fdiagnostics-color=always
-• CXX14FLAGS: -Wall -pedantic -fdiagnostics-color=always
-• CXX17FLAGS: -Wall -pedantic -fdiagnostics-color=always
-• CXX20FLAGS: -Wall -pedantic -fdiagnostics-color=always
-───────────────────────────────────────────────────────────────────────────
-✔  checking for file ‘/Users/moon/Documents/Projects/mverse/DESCRIPTION’ ...
-─  preparing ‘mverse’:
-✔  checking DESCRIPTION meta-information ...
-─  installing the package to build vignettes
-✔  creating vignettes (12.3s)
-─  checking for LF line-endings in source and make files and shell scripts
-─  checking for empty or unneeded directories
-   Removed empty directory ‘mverse/tests/testthat/_snaps’
-─  building ‘mverse_0.1.0.tar.gz’
-   
-── Checking ───────────────────────────────────────────────────── mverse ──
-Setting env vars:
-• _R_CHECK_CRAN_INCOMING_USE_ASPELL_: TRUE
-• _R_CHECK_CRAN_INCOMING_REMOTE_    : FALSE
-• _R_CHECK_CRAN_INCOMING_           : FALSE
-• _R_CHECK_FORCE_SUGGESTS_          : FALSE
-• NOT_CRAN                          : true
-── R CMD check ────────────────────────────────────────────────────────────
-─  using log directory ‘/Users/moon/Documents/Projects/mverse.Rcheck’
-─  using R version 4.1.2 (2021-11-01)
-─  using platform: aarch64-apple-darwin20 (64-bit)
-─  using session charset: UTF-8
-─  using options ‘--no-manual --as-cran’
-✔  checking for file ‘mverse/DESCRIPTION’ ...
-─  checking extension type ... Package
-─  this is package ‘mverse’ version ‘0.1.0’
-─  package encoding: UTF-8
-✔  checking package namespace information ...
-✔  checking package dependencies (2.8s)
-✔  checking if this is a source package ...
-✔  checking if there is a namespace
-✔  checking for executable files ...
-✔  checking for hidden files and directories ...
-✔  checking for portable file names ...
-✔  checking for sufficient/correct file permissions
-✔  checking whether package ‘mverse’ can be installed (3.8s)
-✔  checking installed package size ...
-✔  checking package directory ...
-✔  checking for future file timestamps ...
-✔  checking ‘build’ directory
-✔  checking DESCRIPTION meta-information ...
-✔  checking top-level files ...
-✔  checking for left-over files
-✔  checking index information ...
-✔  checking package subdirectories ...
-✔  checking R files for non-ASCII characters ...
-✔  checking R files for syntax errors ...
-✔  checking whether the package can be loaded (497ms)
-✔  checking whether the package can be loaded with stated dependencies (463ms)
-✔  checking whether the package can be unloaded cleanly (461ms)
-✔  checking whether the namespace can be loaded with stated dependencies (445ms)
-✔  checking whether the namespace can be unloaded cleanly (481ms)
-✔  checking loading without being on the library search path (515ms)
-✔  checking dependencies in R code (507ms)
-✔  checking S3 generic/method consistency (1.2s)
-✔  checking replacement functions (466ms)
-✔  checking foreign function calls (498ms)
-✔  checking R code for possible problems (2.9s)
-✔  checking Rd files ...
-✔  checking Rd metadata ...
-✔  checking Rd line widths ...
-✔  checking Rd cross-references ...
-✔  checking for missing documentation entries (614ms)
-✔  checking for code/documentation mismatches (1.8s)
-✔  checking Rd \usage sections (1.3s)
-✔  checking Rd contents ...
-✔  checking for unstated dependencies in examples ...
-✔  checking contents of ‘data’ directory (520ms)
-✔  checking data for non-ASCII characters (654ms)
-✔  checking LazyData
-✔  checking data for ASCII and uncompressed saves ...
-✔  checking installed files from ‘inst/doc’ ...
-✔  checking files in ‘vignettes’ ...
-✔  checking examples (7.8s)
-✔  checking for unstated dependencies in vignettes ...
-✔  checking package vignettes in ‘inst/doc’ ...
-✔  checking re-building of vignette outputs (10.7s)
-✔  checking for non-standard things in the check directory
-✔  checking for detritus in the temp directory
-   
-   
-── R CMD check results ────────────────────────────────── mverse 0.1.0 ────
-Duration: 40.2s
+This is the first CRAN release.
+
+## Local `devtools:check()` result
+
+── R CMD check results ───────────────────────────────────────────────────── mverse 0.1.0 ────
+Duration: 33.5s
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
 R CMD check succeeded
 
-This is the first CRAN release.
+## RHub `devtools::check_rhub()` result
+
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: 'Michael Jongho Moon <michael.moon@mail.utoronto.ca>'
+
+New submission
+
+Possibly misspelled words in DESCRIPTION:
+  Hullman (21:59)
+  Multiverse (3:13)
+  Sarma (21:6)
+  Taback (21:34)
+  explorable (22:71)
+  multiverse (20:23, 23:6, 24:25, 28:6)
+  mverse (26:10)
+  tidyverse (27:10)
+
+Found the following (possibly) invalid URLs:
+  URL: https://doi.org/10.1073/pnas.1402786111
+    From: man/hurricane.Rd
+          inst/doc/mverse_intro_glmmodelling.html
+    Status: 503
+    Message: Service Unavailable
+
+Found the following \keyword or \concept entries with Rd markup:
+  File 'add_branch_condition.Rd':
+    \concept{{branch condition functions}}
+  File 'add_family_branch.Rd':
+    \concept{{family branch functions}}
+  File 'add_filter_branch.Rd':
+    \concept{{filter branch functions}}
+  File 'add_formula_branch.Rd':
+    \concept{{formula branch functions}}
+  File 'add_mutate_branch.Rd':
+    \concept{{mutate branch functions}}
+  File 'branch_condition.Rd':
+    \concept{{branch condition functions}}
+  File 'extract.Rd':
+    \concept{{mverse methods}}
+  File 'family_branch.Rd':
+    \concept{{family branch functions}}
+  File 'filter_branch.Rd':
+    \concept{{filter branch functions}}
+  File 'formula_branch.Rd':
+    \concept{{formula branch functions}}
+  File 'glm.nb_mverse.Rd':
+    \concept{{model fitting functions}}
+  File 'glm_mverse.Rd':
+    \concept{{model fitting functions}}
+  File 'lm_mverse.Rd':
+    \concept{{model fitting functions}}
+  File 'mutate_branch.Rd':
+    \concept{{mutate branch functions}}
+    
+* checking for detritus in the temp directory ... NOTE
+Found the following files/directories:
+  'lastMiKTeXException'
+
+## Winbuilder `devtools::check_win_devel()` result
+
+* using log directory 'd:/RCompile/CRANguest/R-devel/mverse.Rcheck'
+* using R Under development (unstable) (2022-05-16 r82368 ucrt)
+* using platform: x86_64-w64-mingw32 (64-bit)
+* using session charset: UTF-8
+* checking for file 'mverse/DESCRIPTION' ... OK
+* checking extension type ... Package
+* this is package 'mverse' version '0.1.0'
+* package encoding: UTF-8
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: 'Michael Jongho Moon <michael.moon@mail.utoronto.ca>'
+
+New submission
+
+Possibly misspelled words in DESCRIPTION:
+  Hullman (21:59)
+  Sarma (21:6)
+  Taback (21:34)
+  explorable (22:71)
+  mverse (26:10)
+  tidyverse (27:10)
+
+Found the following (possibly) invalid URLs:
+  URL: https://doi.org/10.1073/pnas.1402786111
+    From: man/hurricane.Rd
+          inst/doc/mverse_intro_glmmodelling.html
+    Status: 503
+    Message: Service Unavailable
+
+Found the following \keyword or \concept entries with Rd markup:
+  File 'add_branch_condition.Rd':
+    \concept{{branch condition functions}}
+  File 'add_family_branch.Rd':
+    \concept{{family branch functions}}
+  File 'add_filter_branch.Rd':
+    \concept{{filter branch functions}}
+  File 'add_formula_branch.Rd':
+    \concept{{formula branch functions}}
+  File 'add_mutate_branch.Rd':
+    \concept{{mutate branch functions}}
+  File 'branch_condition.Rd':
+    \concept{{branch condition functions}}
+  File 'extract.Rd':
+    \concept{{mverse methods}}
+  File 'family_branch.Rd':
+    \concept{{family branch functions}}
+  File 'filter_branch.Rd':
+    \concept{{filter branch functions}}
+  File 'formula_branch.Rd':
+    \concept{{formula branch functions}}
+  File 'glm.nb_mverse.Rd':
+    \concept{{model fitting functions}}
+  File 'glm_mverse.Rd':
+    \concept{{model fitting functions}}
+  File 'lm_mverse.Rd':
+    \concept{{model fitting functions}}
+  File 'mutate_branch.Rd':
+    \concept{{mutate branch functions}}
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking whether package 'mverse' can be installed ... OK
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking for future file timestamps ... OK
+* checking 'build' directory ... OK
+* checking DESCRIPTION meta-information ... OK
+* checking top-level files ... OK
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking R files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking loading without being on the library search path ... OK
+* checking use of S3 registration ... OK
+* checking dependencies in R code ... OK
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... [11s] OK
+* checking Rd files ... [1s] OK
+* checking Rd metadata ... OK
+* checking Rd line widths ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... OK
+* checking for code/documentation mismatches ... OK
+* checking Rd \usage sections ... OK
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... OK
+* checking contents of 'data' directory ... OK
+* checking data for non-ASCII characters ... OK
+* checking LazyData ... OK
+* checking data for ASCII and uncompressed saves ... OK
+* checking installed files from 'inst/doc' ... OK
+* checking files in 'vignettes' ... OK
+* checking examples ... [7s] OK
+* checking for unstated dependencies in vignettes ... OK
+* checking package vignettes in 'inst/doc' ... OK
+* checking re-building of vignette outputs ... [54s] OK
+* checking PDF version of manual ... OK
+* checking for detritus in the temp directory ... OK
+* DONE
+Status: 1 NOTE
