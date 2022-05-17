@@ -3,8 +3,8 @@ This is the first CRAN release.
 
 ## Local `devtools:check()` result
 
-── R CMD check results ───────────────────────────────────────────────────── mverse 0.1.0 ────
-Duration: 33.5s
+── R CMD check results ────────────────────────────────── mverse 0.1.0 ────
+Duration: 36.2s
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
@@ -12,18 +12,15 @@ R CMD check succeeded
 
 ## RHub `devtools::check_rhub()` result
 
-* checking CRAN incoming feasibility ... NOTE
-Maintainer: 'Michael Jongho Moon <michael.moon@mail.utoronto.ca>'
+Maintainer: ‘Michael Jongho Moon <michael.moon@mail.utoronto.ca>’
 
 New submission
 
 Possibly misspelled words in DESCRIPTION:
   Hullman (21:59)
-  Multiverse (3:13)
   Sarma (21:6)
   Taback (21:34)
   explorable (22:71)
-  multiverse (20:23, 23:6, 24:25, 28:6)
   mverse (26:10)
   tidyverse (27:10)
 
@@ -34,50 +31,9 @@ Found the following (possibly) invalid URLs:
     Status: 503
     Message: Service Unavailable
 
-Found the following \keyword or \concept entries with Rd markup:
-  File 'add_branch_condition.Rd':
-    \concept{{branch condition functions}}
-  File 'add_family_branch.Rd':
-    \concept{{family branch functions}}
-  File 'add_filter_branch.Rd':
-    \concept{{filter branch functions}}
-  File 'add_formula_branch.Rd':
-    \concept{{formula branch functions}}
-  File 'add_mutate_branch.Rd':
-    \concept{{mutate branch functions}}
-  File 'branch_condition.Rd':
-    \concept{{branch condition functions}}
-  File 'extract.Rd':
-    \concept{{mverse methods}}
-  File 'family_branch.Rd':
-    \concept{{family branch functions}}
-  File 'filter_branch.Rd':
-    \concept{{filter branch functions}}
-  File 'formula_branch.Rd':
-    \concept{{formula branch functions}}
-  File 'glm.nb_mverse.Rd':
-    \concept{{model fitting functions}}
-  File 'glm_mverse.Rd':
-    \concept{{model fitting functions}}
-  File 'lm_mverse.Rd':
-    \concept{{model fitting functions}}
-  File 'mutate_branch.Rd':
-    \concept{{mutate branch functions}}
-    
-* checking for detritus in the temp directory ... NOTE
-Found the following files/directories:
-  'lastMiKTeXException'
 
 ## Winbuilder `devtools::check_win_devel()` result
 
-* using log directory 'd:/RCompile/CRANguest/R-devel/mverse.Rcheck'
-* using R Under development (unstable) (2022-05-16 r82368 ucrt)
-* using platform: x86_64-w64-mingw32 (64-bit)
-* using session charset: UTF-8
-* checking for file 'mverse/DESCRIPTION' ... OK
-* checking extension type ... Package
-* this is package 'mverse' version '0.1.0'
-* package encoding: UTF-8
 * checking CRAN incoming feasibility ... NOTE
 Maintainer: 'Michael Jongho Moon <michael.moon@mail.utoronto.ca>'
 
@@ -98,85 +54,3 @@ Found the following (possibly) invalid URLs:
     Status: 503
     Message: Service Unavailable
 
-Found the following \keyword or \concept entries with Rd markup:
-  File 'add_branch_condition.Rd':
-    \concept{{branch condition functions}}
-  File 'add_family_branch.Rd':
-    \concept{{family branch functions}}
-  File 'add_filter_branch.Rd':
-    \concept{{filter branch functions}}
-  File 'add_formula_branch.Rd':
-    \concept{{formula branch functions}}
-  File 'add_mutate_branch.Rd':
-    \concept{{mutate branch functions}}
-  File 'branch_condition.Rd':
-    \concept{{branch condition functions}}
-  File 'extract.Rd':
-    \concept{{mverse methods}}
-  File 'family_branch.Rd':
-    \concept{{family branch functions}}
-  File 'filter_branch.Rd':
-    \concept{{filter branch functions}}
-  File 'formula_branch.Rd':
-    \concept{{formula branch functions}}
-  File 'glm.nb_mverse.Rd':
-    \concept{{model fitting functions}}
-  File 'glm_mverse.Rd':
-    \concept{{model fitting functions}}
-  File 'lm_mverse.Rd':
-    \concept{{model fitting functions}}
-  File 'mutate_branch.Rd':
-    \concept{{mutate branch functions}}
-* checking package namespace information ... OK
-* checking package dependencies ... OK
-* checking if this is a source package ... OK
-* checking if there is a namespace ... OK
-* checking for hidden files and directories ... OK
-* checking for portable file names ... OK
-* checking whether package 'mverse' can be installed ... OK
-* checking installed package size ... OK
-* checking package directory ... OK
-* checking for future file timestamps ... OK
-* checking 'build' directory ... OK
-* checking DESCRIPTION meta-information ... OK
-* checking top-level files ... OK
-* checking for left-over files ... OK
-* checking index information ... OK
-* checking package subdirectories ... OK
-* checking R files for non-ASCII characters ... OK
-* checking R files for syntax errors ... OK
-* checking whether the package can be loaded ... OK
-* checking whether the package can be loaded with stated dependencies ... OK
-* checking whether the package can be unloaded cleanly ... OK
-* checking whether the namespace can be loaded with stated dependencies ... OK
-* checking whether the namespace can be unloaded cleanly ... OK
-* checking loading without being on the library search path ... OK
-* checking use of S3 registration ... OK
-* checking dependencies in R code ... OK
-* checking S3 generic/method consistency ... OK
-* checking replacement functions ... OK
-* checking foreign function calls ... OK
-* checking R code for possible problems ... [11s] OK
-* checking Rd files ... [1s] OK
-* checking Rd metadata ... OK
-* checking Rd line widths ... OK
-* checking Rd cross-references ... OK
-* checking for missing documentation entries ... OK
-* checking for code/documentation mismatches ... OK
-* checking Rd \usage sections ... OK
-* checking Rd contents ... OK
-* checking for unstated dependencies in examples ... OK
-* checking contents of 'data' directory ... OK
-* checking data for non-ASCII characters ... OK
-* checking LazyData ... OK
-* checking data for ASCII and uncompressed saves ... OK
-* checking installed files from 'inst/doc' ... OK
-* checking files in 'vignettes' ... OK
-* checking examples ... [7s] OK
-* checking for unstated dependencies in vignettes ... OK
-* checking package vignettes in 'inst/doc' ... OK
-* checking re-building of vignette outputs ... [54s] OK
-* checking PDF version of manual ... OK
-* checking for detritus in the temp directory ... OK
-* DONE
-Status: 1 NOTE

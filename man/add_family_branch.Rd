@@ -33,7 +33,7 @@ mv <- create_multiverse(hurricane) \%>\%
   add_family_branch(model_distributions)
 }
 \seealso{
-Other {family branch functions}: 
+Other family branch functions: 
 \code{\link{family_branch}()}
 }
-\concept{{family branch functions}}
+\concept{family branch functions}

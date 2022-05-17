@@ -93,4 +93,3 @@ extract(mv, nuni = 3)
 # frow. The rows are randomly selected
 extract(mv, frow = 0.7)
 }
-\concept{{mverse methods}}

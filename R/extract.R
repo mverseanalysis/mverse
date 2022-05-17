@@ -73,7 +73,6 @@ extract <- function(...) {
 #' before returning them. If \code{frow} is greater than 1,
 #' the method randomly samples rows with replacement.
 #' @name extract
-#' @family {mverse methods}
 #' @export
 extract.mverse <- function(.mverse, columns = NULL,
                            nuni = NULL, frow = NULL,

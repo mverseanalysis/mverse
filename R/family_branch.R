@@ -12,7 +12,7 @@
 #' @param name Name for the new family.
 #' @return a \code{family_branch} object.
 #' @name family_branch
-#' @family {family branch functions}
+#' @family family branch functions
 #' @export
 family_branch <- function(..., name = NULL) {
   opts <- rlang::enquos(...)
@@ -56,7 +56,7 @@ add_family_branch <- function(.mverse, ...) {
 #'   add_family_branch(model_distributions)
 #' @return The resulting \code{mverse} object.
 #' @name add_family_branch
-#' @family {family branch functions}
+#' @family family branch functions
 #' @export
 add_family_branch.mverse <- function(.mverse, ...) {
   nms <- sapply(rlang::enquos(...), rlang::quo_name)
