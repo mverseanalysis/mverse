@@ -97,7 +97,8 @@ when specified. Display all when NULL.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Display a multiverse tree with multiple branches.</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in"><span class="co"># Display a multiverse tree with multiple branches.</span></span>
 <span class="r-in"><span class="va">outliers</span> <span class="op">&lt;-</span> <span class="fu"><a href="filter_branch.html">filter_branch</a></span><span class="op">(</span><span class="op">!</span><span class="va">Name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Katrina"</span>, <span class="st">"Audrey"</span><span class="op">)</span>, <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">femininity</span> <span class="op">&lt;-</span> <span class="fu"><a href="mutate_branch.html">mutate_branch</a></span><span class="op">(</span><span class="va">MasFem</span>, <span class="va">Gender_MF</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">strength</span> <span class="op">&lt;-</span> <span class="fu"><a href="mutate_branch.html">mutate_branch</a></span><span class="op">(</span></span>
@@ -112,19 +113,16 @@ when specified. Display all when NULL.</p></dd>
 <span class="r-in">  <span class="fu"><a href="add_formula_branch.html">add_formula_branch</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="add_family_branch.html">add_family_branch</a></span><span class="op">(</span><span class="va">distribution</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">multiverse_tree</span><span class="op">(</span><span class="va">mv</span><span class="op">)</span></span>
-<span class="r-plt img"><img src="multiverse_tree-1.png" alt="" width="1050" height="649"></span>
 <span class="r-in"><span class="co"># Display a multiverse tree with branch conditions.</span></span>
 <span class="r-in"><span class="va">match_poisson</span> <span class="op">&lt;-</span> <span class="fu"><a href="branch_condition.html">branch_condition</a></span><span class="op">(</span><span class="va">alldeaths</span>, <span class="va">poisson</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">match_log_lin</span> <span class="op">&lt;-</span> <span class="fu"><a href="branch_condition.html">branch_condition</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">alldeaths</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span>, <span class="va">gaussian</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="add_branch_condition.html">add_branch_condition</a></span><span class="op">(</span><span class="va">mv</span>, <span class="va">match_poisson</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="add_branch_condition.html">add_branch_condition</a></span><span class="op">(</span><span class="va">mv</span>, <span class="va">match_log_lin</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">multiverse_tree</span><span class="op">(</span><span class="va">mv</span><span class="op">)</span></span>
-<span class="r-plt img"><img src="multiverse_tree-2.png" alt="" width="1050" height="649"></span>
 <span class="r-in"><span class="co"># Display a multiverse tree for a subset of branches</span></span>
 <span class="r-in"><span class="co"># with label for each option.</span></span>
 <span class="r-in"><span class="fu">multiverse_tree</span><span class="op">(</span><span class="va">mv</span>, branches <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y"</span>, <span class="st">"distribution"</span><span class="op">)</span>, label <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-plt img"><img src="multiverse_tree-3.png" alt="" width="1050" height="649"></span>
-<span class="r-in"></span>
+<span class="r-in"><span class="op">}</span></span>
 </code></pre></div>
     </div>
   </div>
