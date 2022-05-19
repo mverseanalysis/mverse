@@ -19,7 +19,8 @@
 #'   the order in the summary table.
 #' @param color_order when \code{TRUE}, the estimated value will be ordered
 #'   according to the color.
-#' @param color specify the color in the plot.
+#' @param color an expression to indicate how colors are assigned to markers.
+#'   By default, colors are assigned based on 'p.value < 0.05'.
 #' @param branch_order name for the branch to order.
 #' @param point_size size of points on the top plot.
 #' @param grid_size size of points on the bottom plot.
@@ -56,6 +57,8 @@ spec_curve <- function(.object, var, ...) {
 #'   add_formula_branch(model) %>%
 #'   lm_mverse()
 #' spec_curve(mv, var = "femininityTRUE")
+#' # plot based on 90% confidence interval
+#' spec_curve(mv, var = "femininityTRUE", color = p.value < .1)
 #' }
 #' @importFrom rlang .data
 #' @export
@@ -63,7 +66,7 @@ spec_curve.lm_mverse <- function(.object, var , conf.int = TRUE,
                               conf.level = 0.95,
                               option = names(multiverse::parameters(.object)),
                               universe_order = FALSE, color_order = FALSE,
-                              color = "p.value < 0.05", branch_order = NULL,
+                              color = NULL, branch_order = NULL,
                               point_size = .25, grid_size = 2,
                               point_alpha = 1, brewer_palette = "Set2",
                               yaxis_text_size = 8, ...) {
@@ -75,12 +78,12 @@ spec_curve.lm_mverse <- function(.object, var , conf.int = TRUE,
   )
 
   p1 <- plot_spec_curve_curve(
-    spec_curve_table, var, !!rlang::enexpr(conf.int), !!rlang::enexpr(color),
+    spec_curve_table, var, !!rlang::enexpr(conf.int),
     option, point_size, point_alpha, brewer_palette, yaxis_text_size
   )
   p2 <- plot_spec_curve_grid(
     spec_curve_table, names(multiverse::parameters(.object)), option,
-    !!rlang::enexpr(color), grid_size, brewer_palette, yaxis_text_size
+    grid_size, brewer_palette, yaxis_text_size
   )
   if (universe_order) {
     p2 <- p2 + xlab("universe number")
@@ -110,6 +113,8 @@ spec_curve.lm_mverse <- function(.object, var , conf.int = TRUE,
 #'   add_family_branch(fam) %>%
 #'   glm_mverse()
 #' spec_curve(mv, var = "femininityTRUE")
+#' # plot based on 90% confidence interval
+#' spec_curve(mv, var = "femininityTRUE", color = p.value < .1)
 #' }
 #' @importFrom rlang .data
 #' @export
@@ -117,7 +122,7 @@ spec_curve.glm_mverse <- function(.object, var , conf.int = TRUE,
                                  conf.level = 0.95,
                                  option = names(multiverse::parameters(.object)),
                                  universe_order = FALSE, color_order = FALSE,
-                                 color = "p.value < 0.05", branch_order = NULL,
+                                 color = NULL, branch_order = NULL,
                                  point_size = .25, grid_size = 2,
                                  point_alpha = 1, brewer_palette = "Set2",
                                  yaxis_text_size = 8, ...) {
@@ -129,12 +134,12 @@ spec_curve.glm_mverse <- function(.object, var , conf.int = TRUE,
   )
 
   p1 <- plot_spec_curve_curve(
-    spec_curve_table, var, !!rlang::enexpr(conf.int), !!rlang::enexpr(color),
+    spec_curve_table, var, !!rlang::enexpr(conf.int),
     option, point_size, point_alpha, brewer_palette, yaxis_text_size
   )
   p2 <- plot_spec_curve_grid(
     spec_curve_table, names(multiverse::parameters(.object)), option,
-    !!rlang::enexpr(color), grid_size, brewer_palette, yaxis_text_size
+    grid_size, brewer_palette, yaxis_text_size
   )
   if (universe_order) {
     p2 <- p2 + xlab("universe number")
@@ -161,6 +166,8 @@ spec_curve.glm_mverse <- function(.object, var , conf.int = TRUE,
 #'   add_formula_branch(model) %>%
 #'   glm.nb_mverse()
 #' spec_curve(mv, var = "femininityTRUE")
+#' # plot based on 90% confidence interval
+#' spec_curve(mv, var = "femininityTRUE", color = p.value < .1)
 #' }
 #' @rdname spec_curve
 #' @importFrom rlang .data
@@ -169,7 +176,7 @@ spec_curve.glm.nb_mverse <- function(.object, var , conf.int = TRUE,
                                  conf.level = 0.95,
                                  option = names(multiverse::parameters(.object)),
                                  universe_order = FALSE, color_order = FALSE,
-                                 color = "p.value < 0.05", branch_order = NULL,
+                                 color = NULL, branch_order = NULL,
                                  point_size = .25, grid_size = 2,
                                  point_alpha = 1, brewer_palette = "Set2",
                                  yaxis_text_size = 8, ...) {
@@ -181,12 +188,12 @@ spec_curve.glm.nb_mverse <- function(.object, var , conf.int = TRUE,
   )
 
   p1 <- plot_spec_curve_curve(
-    spec_curve_table, var, !!rlang::enexpr(conf.int), !!rlang::enexpr(color),
+    spec_curve_table, var, !!rlang::enexpr(conf.int),
     option, point_size, point_alpha, brewer_palette, yaxis_text_size
   )
   p2 <- plot_spec_curve_grid(
     spec_curve_table, names(multiverse::parameters(.object)), option,
-    !!rlang::enexpr(color), grid_size, brewer_palette, yaxis_text_size
+    grid_size, brewer_palette, yaxis_text_size
   )
   if (universe_order) {
     p2 <- p2 + xlab("universe number")
@@ -201,22 +208,30 @@ get_spec_curve_table <- function(.object, var, conf.int, conf.level,
                                  branch_order, universe_order,
                                  color_order, color) {
   branch_order <- rlang::enquo(branch_order)
+  color <- rlang::enquo(color)
   spec_curve_table <- summary(
     .object,
     conf.int = !!rlang::enexpr(conf.int),
     conf.level = !!rlang::enexpr(conf.level)
   ) %>%
     dplyr::filter(.data$term == var) %>%
-    dplyr::arrange(.data$universe)
+    dplyr::arrange(.data$universe) %>%
+    dplyr::mutate(
+      color_group = ifelse(
+        rlang::quo_is_null(color),
+        .data$p.value <= 0.05,
+        !! color
+      )
+    )
   if (!universe_order) {
     if (color_order) {
       if (rlang::quo_is_null(branch_order)) {
         spec_curve_table <- dplyr::arrange(
-          spec_curve_table, {{ color }}, .data$estimate
+          spec_curve_table, .data$color_group, .data$estimate
         )
       } else {
         spec_curve_table <- dplyr::arrange(
-          spec_curve_table, !! branch_order, {{ color }}, .data$estimate
+          spec_curve_table, !! branch_order, .data$color_group, .data$estimate
         )
       }
     } else {
@@ -234,12 +249,12 @@ get_spec_curve_table <- function(.object, var, conf.int, conf.level,
 
 #' @import ggplot2
 #' @importFrom rlang .data
-plot_spec_curve_curve <- function(spec_curve_table, var, conf.int, color,
+plot_spec_curve_curve <- function(spec_curve_table, var, conf.int,
                                   option, point_size, point_alpha,
                                   brewer_palette, yaxis_text_size) {
   plt <- ggplot(
     spec_curve_table,
-    aes(.data$x, .data$estimate, color = {{ color }})) +
+    aes(.data$x, .data$estimate, color = .data$color_group)) +
     geom_point(size = point_size) +
     labs(x = NULL, y = paste0("coefficient of \n:", var)) +
     theme_minimal() +
@@ -262,7 +277,7 @@ plot_spec_curve_curve <- function(spec_curve_table, var, conf.int, color,
 
 #' @import ggplot2
 #' @importFrom rlang .data
-plot_spec_curve_grid <- function(spec_curve_table, parameters, option, color,
+plot_spec_curve_grid <- function(spec_curve_table, parameters, option,
                                  grid_size, brewer_palette, yaxis_text_size) {
   spec_curve_table %>%
     tidyr::pivot_longer(
@@ -273,7 +288,7 @@ plot_spec_curve_grid <- function(spec_curve_table, parameters, option, color,
     dplyr::filter(.data$parameter_name %in% option) %>%
     ggplot() +
     geom_point(
-      aes(x = .data$x, y = .data$parameter_option, color = {{ color }}),
+      aes(x = .data$x, y = .data$parameter_option, color = .data$color_group),
       size = grid_size, shape = 124
     ) +
     labs(x = NULL, y = "Branch Options") +

@@ -22,7 +22,7 @@ spec_curve(.object, var, ...)
   option = names(multiverse::parameters(.object)),
   universe_order = FALSE,
   color_order = FALSE,
-  color = "p.value < 0.05",
+  color = NULL,
   branch_order = NULL,
   point_size = 0.25,
   grid_size = 2,
@@ -40,7 +40,7 @@ spec_curve(.object, var, ...)
   option = names(multiverse::parameters(.object)),
   universe_order = FALSE,
   color_order = FALSE,
-  color = "p.value < 0.05",
+  color = NULL,
   branch_order = NULL,
   point_size = 0.25,
   grid_size = 2,
@@ -58,7 +58,7 @@ spec_curve(.object, var, ...)
   option = names(multiverse::parameters(.object)),
   universe_order = FALSE,
   color_order = FALSE,
-  color = "p.value < 0.05",
+  color = NULL,
   branch_order = NULL,
   point_size = 0.25,
   grid_size = 2,
@@ -89,7 +89,8 @@ the order in the summary table.}
 \item{color_order}{when \code{TRUE}, the estimated value will be ordered
 according to the color.}
 
-\item{color}{specify the color in the plot.}
+\item{color}{an expression to indicate how colors are assigned to markers.
+By default, colors are assigned based on 'p.value < 0.05'.}
 
 \item{branch_order}{name for the branch to order.}
 
@@ -132,6 +133,8 @@ mv <- mverse(hurricane) \%>\%
   add_formula_branch(model) \%>\%
   lm_mverse()
 spec_curve(mv, var = "femininityTRUE")
+# plot based on 90\% confidence interval
+spec_curve(mv, var = "femininityTRUE", color = p.value < .1)
 }
 \donttest{
 
@@ -151,6 +154,8 @@ mv <- mverse(hurricane) \%>\%
   add_family_branch(fam) \%>\%
   glm_mverse()
 spec_curve(mv, var = "femininityTRUE")
+# plot based on 90\% confidence interval
+spec_curve(mv, var = "femininityTRUE", color = p.value < .1)
 }
 \donttest{
 
@@ -168,5 +173,7 @@ mv <- mverse(hurricane) \%>\%
   add_formula_branch(model) \%>\%
   glm.nb_mverse()
 spec_curve(mv, var = "femininityTRUE")
+# plot based on 90\% confidence interval
+spec_curve(mv, var = "femininityTRUE", color = p.value < .1)
 }
 }

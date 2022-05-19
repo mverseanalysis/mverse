@@ -4,7 +4,7 @@
 \alias{multiverse_tree}
 \title{Plot a multiverse tree diagram.}
 \usage{
-multiverse_tree(.mverse, label = FALSE, branches = NULL)
+multiverse_tree(.mverse, label = FALSE, branches = NULL, label_size = NULL)
 }
 \arguments{
 \item{.mverse}{A \code{mverse} object.}
@@ -13,6 +13,8 @@ multiverse_tree(.mverse, label = FALSE, branches = NULL)
 
 \item{branches}{A character vector. Display a subset of branches
 when specified. Display all when NULL.}
+
+\item{label_size}{A numeric. Set size of option labels.}
 }
 \value{
 A \code{ggplot} object displaying the multiverse tree.

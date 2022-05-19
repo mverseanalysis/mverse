@@ -498,12 +498,14 @@ BIC <- function(object, ...) {
 #' @param label A logical. Display options as labels when TRUE.
 #' @param branches A character vector. Display a subset of branches
 #'   when specified. Display all when NULL.
+#' @param label_size A numeric. Set size of option labels.
 #' @import igraph ggraph ggplot2
 #' @importFrom rlang .data
 #' @return A \code{ggplot} object displaying the multiverse tree.
 #' @name multiverse_tree
 #' @export
-multiverse_tree <- function(.mverse, label = FALSE, branches = NULL) {
+multiverse_tree <- function(.mverse, label = FALSE,
+                            branches = NULL, label_size = NULL) {
   # sort: conditioned -> conditioned on -> others
   brs <- unique(sapply(
     c(
@@ -569,7 +571,7 @@ multiverse_tree <- function(.mverse, label = FALSE, branches = NULL) {
         hjust = 1,
         vjust = 1.2,
         label.size = 0,
-        size = max(2, min(4, 300 / length(v_labels)))
+        size = ifelse(is.null(label_size), 7, label_size)
       )
   }
   plt + geom_node_point(size = min(1, 100 / length(v_labels)))
