@@ -20,7 +20,7 @@
 #' @param color_order when \code{TRUE}, the estimated value will be ordered
 #'   according to the color.
 #' @param color an expression to indicate how colors are assigned to markers.
-#'   By default, colors are assigned based on 'p.value < 0.05'.
+#'   By default, colors are assigned based on 'p.value <= 0.05'.
 #' @param branch_order name for the branch to order.
 #' @param point_size size of points on the top plot.
 #' @param grid_size size of points on the bottom plot.
@@ -79,7 +79,8 @@ spec_curve.lm_mverse <- function(.object, var , conf.int = TRUE,
 
   p1 <- plot_spec_curve_curve(
     spec_curve_table, var, !!rlang::enexpr(conf.int),
-    option, point_size, point_alpha, brewer_palette, yaxis_text_size
+    option, point_size, point_alpha, brewer_palette,
+    yaxis_text_size, !!rlang::enexpr(color)
   )
   p2 <- plot_spec_curve_grid(
     spec_curve_table, names(multiverse::parameters(.object)), option,
@@ -135,7 +136,8 @@ spec_curve.glm_mverse <- function(.object, var , conf.int = TRUE,
 
   p1 <- plot_spec_curve_curve(
     spec_curve_table, var, !!rlang::enexpr(conf.int),
-    option, point_size, point_alpha, brewer_palette, yaxis_text_size
+    option, point_size, point_alpha, brewer_palette,
+    yaxis_text_size, !!rlang::enexpr(color)
   )
   p2 <- plot_spec_curve_grid(
     spec_curve_table, names(multiverse::parameters(.object)), option,
@@ -186,10 +188,10 @@ spec_curve.glm.nb_mverse <- function(.object, var , conf.int = TRUE,
     !!rlang::enexpr(branch_order), universe_order, color_order,
     !!rlang::enexpr(color)
   )
-
   p1 <- plot_spec_curve_curve(
     spec_curve_table, var, !!rlang::enexpr(conf.int),
-    option, point_size, point_alpha, brewer_palette, yaxis_text_size
+    option, point_size, point_alpha, brewer_palette,
+    yaxis_text_size, !!rlang::enexpr(color)
   )
   p2 <- plot_spec_curve_grid(
     spec_curve_table, names(multiverse::parameters(.object)), option,
@@ -215,14 +217,17 @@ get_spec_curve_table <- function(.object, var, conf.int, conf.level,
     conf.level = !!rlang::enexpr(conf.level)
   ) %>%
     dplyr::filter(.data$term == var) %>%
-    dplyr::arrange(.data$universe) %>%
-    dplyr::mutate(
-      color_group = ifelse(
-        rlang::quo_is_null(color),
-        .data$p.value <= 0.05,
-        !! color
-      )
+    dplyr::arrange(.data$universe)
+  if (rlang::quo_is_null(color)) {
+    spec_curve_table <- dplyr::mutate(
+      spec_curve_table, color_group = .data$p.value <= 0.05
     )
+  } else{
+    spec_curve_table <- dplyr::mutate(
+      spec_curve_table, color_group = !! color
+    )
+  }
+
   if (!universe_order) {
     if (color_order) {
       if (rlang::quo_is_null(branch_order)) {
@@ -251,7 +256,9 @@ get_spec_curve_table <- function(.object, var, conf.int, conf.level,
 #' @importFrom rlang .data
 plot_spec_curve_curve <- function(spec_curve_table, var, conf.int,
                                   option, point_size, point_alpha,
-                                  brewer_palette, yaxis_text_size) {
+                                  brewer_palette, yaxis_text_size,
+                                  color) {
+  color <- rlang::enquo(color)
   plt <- ggplot(
     spec_curve_table,
     aes(.data$x, .data$estimate, color = .data$color_group)) +
@@ -263,7 +270,14 @@ plot_spec_curve_curve <- function(spec_curve_table, var, conf.int,
       axis.ticks.x = element_blank(),
       axis.text.x = element_blank()
     ) +
-    scale_colour_brewer(palette = brewer_palette)
+    scale_colour_brewer(
+      palette = brewer_palette,
+      name = ifelse(
+        rlang::quo_is_null(color),
+        "p.value <= 0.05",
+        rlang::as_label(color)
+      )
+    )
   if (conf.int) {
     return(
       plt + geom_pointrange(

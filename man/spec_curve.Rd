@@ -90,7 +90,7 @@ the order in the summary table.}
 according to the color.}
 
 \item{color}{an expression to indicate how colors are assigned to markers.
-By default, colors are assigned based on 'p.value < 0.05'.}
+By default, colors are assigned based on 'p.value <= 0.05'.}
 
 \item{branch_order}{name for the branch to order.}
 
