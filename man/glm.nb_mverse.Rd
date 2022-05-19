@@ -18,11 +18,27 @@ according to model specifications provided by \code{formula_branch}.
 At least one \code{formula_branch} must have been added.
 }
 \examples{
-\dontrun{
-model_spec <- formula_branch(y ~ x1)
-mv <- mv \%>\%
-  add_formula_branch(model_spec) \%>\%
-  fit_glm.nb()
+\donttest{
+
+# Fitting \code{glm.nb} models across a multiverse.
+hurricane_strength <- mutate_branch(
+  NDAM,
+  HighestWindSpeed,
+  Minpressure_Updated_2014
+)
+hurricane_outliers <- filter_branch(
+  !Name \%in\% c("Katrina", "Audrey", "Andrew"),
+  TRUE # include all
+)
+model_specifications <- formula_branch(
+  alldeaths ~ femininity,
+  alldeaths ~ femininity + hurricane_strength
+)
+mv <- create_multiverse(hurricane) \%>\%
+  add_filter_branch(hurricane_outliers) \%>\%
+  add_mutate_branch(hurricane_strength) \%>\%
+  add_formula_branch(model_specifications) \%>\%
+  glm.nb_mverse()
 }
 }
 \seealso{

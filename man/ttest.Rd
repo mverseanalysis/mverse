@@ -47,8 +47,19 @@ on specified columns of the data. If both x and y are NULL, then
 performs t.test based on the formula branches.
 }
 \examples{
-\dontrun{
+# Performing a unpaired two sample t-test.
+mv <- mverse(soccer)
+x <- mutate_branch(
+  ((rater1 + rater2) / 2) > mean((rater1 + rater2) / 2),
+  ifelse(rater1 > rater2, rater1, rater2) >
+    mean(ifelse(rater1 > rater2, rater1, rater2))
+)
+y <- mutate_branch(
+  redCards, yellowCards, yellowReds
+)
+two_sample_form <- formula_branch(y ~ x)
 mv <- mv \%>\%
-  ttest_mverse()
-}
+  add_mutate_branch(x, y) \%>\%
+  add_formula_branch(two_sample_form)
+ttest_mverse(mv)
 }

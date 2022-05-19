@@ -11,6 +11,9 @@
 
 \item{...}{ignored. for compatibility only.}
 }
+\value{
+No return value, called for printing only.
+}
 \description{
 Print method for \code{*_branch} objects.
 }

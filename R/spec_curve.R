@@ -40,7 +40,7 @@ spec_curve <- function(.object, var, ...) {
 
 #' @rdname spec_curve
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'
 #' # Display a specification curve for \code{lm} models
 #' # fitted across the multiverse.
@@ -92,7 +92,7 @@ spec_curve.lm_mverse <- function(.object, var , conf.int = TRUE,
 
 #' @rdname spec_curve
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'
 #' # Display a specification curve for \code{glm} models
 #' # fitted across the multiverse.
@@ -145,7 +145,7 @@ spec_curve.glm_mverse <- function(.object, var , conf.int = TRUE,
 }
 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'
 #' # Display a specification curve for \code{glm.nb} models
 #' # fitted across the multiverse.

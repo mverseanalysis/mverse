@@ -17,15 +17,15 @@ Authors@R: c(
   role = c("ctb"))
   )
 Maintainer: Michael Jongho Moon <michael.moon@mail.utoronto.ca>
-Description: Extends "multiverse" package
+Description: Extends 'multiverse' package
     (Sarma A., Kale A., Moon M., Taback N., Chevalier F., Hullman J., Kay M., 2021)
     <doi:10.31219/osf.io/yfbwm>, which allows users perform to create explorable
-    "multiverse" analysis in R. This extension provides an additional level of
-    abstraction to the "multiverse" package with the aim of creating
+    multiverse analysis in R. This extension provides an additional level of
+    abstraction to the 'multiverse' package with the aim of creating
     user friendly syntax to researchers, educators, and students in statistics.
-    The "mverse" syntax is designed to allow piping and takes hints from
-    the "tidyverse" grammar. The package allows users to define and inspect
-    "multiverse" analysis using familiar syntax in R.
+    The 'mverse' syntax is designed to allow piping and takes hints from
+    the 'tidyverse' grammar. The package allows users to define and inspect
+    multiverse analysis using familiar syntax in R.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true

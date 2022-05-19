@@ -47,7 +47,7 @@ the summary table includes results of the fitted models
 across the multiverse.
 }
 \examples{
-\dontrun{
+\donttest{
 
 # Displaying the multiverse table without any fitted values.
 hurricane_strength <- mutate_branch(
@@ -68,7 +68,7 @@ hurricane_outliers <- filter_branch(
 mv <- add_filter_branch(mv, hurricane_outliers)
 summary(mv)
 }
-\dontrun{
+\donttest{
 
 # Displaying the multiverse table with \code{lm} models fitted.
 hurricane_strength <- mutate_branch(
@@ -94,7 +94,7 @@ mv <- create_multiverse(hurricane) \%>\%
   lm_mverse()
 summary(mv)
 }
-\dontrun{
+\donttest{
 
 # Displaying the multiverse table with \code{glm} models fitted.
 hurricane_strength <- mutate_branch(
@@ -119,7 +119,7 @@ mv <- create_multiverse(hurricane) \%>\%
   glm_mverse()
 summary(mv)
 }
-\dontrun{
+\donttest{
 
 # Displaying the multiverse table with \code{glm.nb} models fitted.
 hurricane_strength <- mutate_branch(

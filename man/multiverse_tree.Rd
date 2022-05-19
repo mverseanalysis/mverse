@@ -24,7 +24,7 @@ taking any branch conditions defined. The method also allows
 zooming into a subset of branches using \code{branches} parameter.
 }
 \examples{
-\dontrun{
+\donttest{
 # Display a multiverse tree with multiple branches.
 outliers <- filter_branch(!Name \%in\% c("Katrina", "Audrey"), TRUE)
 femininity <- mutate_branch(MasFem, Gender_MF)

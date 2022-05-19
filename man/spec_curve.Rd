@@ -116,7 +116,7 @@ Notice that the order of universes may not correspond to the order
 in the summary table.
 }
 \examples{
-\dontrun{
+\donttest{
 
 # Display a specification curve for \code{lm} models
 # fitted across the multiverse.
@@ -133,7 +133,7 @@ mv <- mverse(hurricane) \%>\%
   lm_mverse()
 spec_curve(mv, var = "femininityTRUE")
 }
-\dontrun{
+\donttest{
 
 # Display a specification curve for \code{glm} models
 # fitted across the multiverse.
@@ -152,7 +152,7 @@ mv <- mverse(hurricane) \%>\%
   glm_mverse()
 spec_curve(mv, var = "femininityTRUE")
 }
-\dontrun{
+\donttest{
 
 # Display a specification curve for \code{glm.nb} models
 # fitted across the multiverse.

@@ -12,7 +12,7 @@ magrittr::`%>%`
 #' mv <- mverse(hurricane)
 #' # create_multiverse() is an alias of mverse().
 #' mv <- create_multiverse(hurricane)
-#' @param data source datafame.
+#' @param data source dataframe.
 #' @return A \code{mverse} object with the source dataframe attached.
 #' @name mverse
 #' @import multiverse

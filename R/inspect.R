@@ -41,7 +41,7 @@ display_branch_opts <- function(mtable, .mverse) {
 #' @return a multiverse table as a tibble.
 #' @name summary
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'
 #' # Displaying the multiverse table without any fitted values.
 #' hurricane_strength <- mutate_branch(
@@ -76,7 +76,7 @@ summary.mverse <- function(object, ...) {
 
 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'
 #' # Displaying the multiverse table with \code{lm} models fitted.
 #' hurricane_strength <- mutate_branch(
@@ -191,7 +191,7 @@ summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
 
 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'
 #' # Displaying the multiverse table with \code{glm} models fitted.
 #' hurricane_strength <- mutate_branch(
@@ -295,7 +295,7 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
 }
 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'
 #' # Displaying the multiverse table with \code{glm.nb} models fitted.
 #' hurricane_strength <- mutate_branch(
@@ -468,7 +468,7 @@ BIC <- function(object, ...) {
 #' zooming into a subset of branches using \code{branches} parameter.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Display a multiverse tree with multiple branches.
 #' outliers <- filter_branch(!Name %in% c("Katrina", "Audrey"), TRUE)
 #' femininity <- mutate_branch(MasFem, Gender_MF)
