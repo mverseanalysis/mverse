@@ -4,7 +4,13 @@
 \alias{multiverse_tree}
 \title{Plot a multiverse tree diagram.}
 \usage{
-multiverse_tree(.mverse, label = FALSE, branches = NULL, label_size = NULL)
+multiverse_tree(
+  .mverse,
+  label = FALSE,
+  branches = NULL,
+  label_size = NULL,
+  label_angle = 0
+)
 }
 \arguments{
 \item{.mverse}{A \code{mverse} object.}
@@ -15,6 +21,8 @@ multiverse_tree(.mverse, label = FALSE, branches = NULL, label_size = NULL)
 when specified. Display all when NULL.}
 
 \item{label_size}{A numeric. Set size of option labels.}
+
+\item{label_angle}{A numeric. Rotate option labels.}
 }
 \value{
 A \code{ggplot} object displaying the multiverse tree.
@@ -51,5 +59,8 @@ multiverse_tree(mv)
 # Display a multiverse tree for a subset of branches
 # with label for each option.
 multiverse_tree(mv, branches = c("y", "distribution"), label = TRUE)
+# adjusting size and orientation of the labels
+multiverse_tree(mv, branches = c("y", "distribution"),
+  label = TRUE, label_size = 4, label_angle = 45)
 }
 }

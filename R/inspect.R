@@ -493,19 +493,24 @@ BIC <- function(object, ...) {
 #' # Display a multiverse tree for a subset of branches
 #' # with label for each option.
 #' multiverse_tree(mv, branches = c("y", "distribution"), label = TRUE)
+#' # adjusting size and orientation of the labels
+#' multiverse_tree(mv, branches = c("y", "distribution"),
+#'   label = TRUE, label_size = 4, label_angle = 45)
 #' }
 #' @param .mverse A \code{mverse} object.
 #' @param label A logical. Display options as labels when TRUE.
 #' @param branches A character vector. Display a subset of branches
 #'   when specified. Display all when NULL.
 #' @param label_size A numeric. Set size of option labels.
+#' @param label_angle A numeric. Rotate option labels.
 #' @import igraph ggraph ggplot2
 #' @importFrom rlang .data
 #' @return A \code{ggplot} object displaying the multiverse tree.
 #' @name multiverse_tree
 #' @export
 multiverse_tree <- function(.mverse, label = FALSE,
-                            branches = NULL, label_size = NULL) {
+                            branches = NULL, label_size = NULL,
+                            label_angle = 0) {
   # sort: conditioned -> conditioned on -> others
   brs <- unique(sapply(
     c(
@@ -566,12 +571,12 @@ multiverse_tree <- function(.mverse, label = FALSE,
     theme(legend.position = "top")
   if (label) {
     plt <- plt +
-      geom_node_label(
+      geom_node_text(
         aes(label = v_labels),
         hjust = 1,
         vjust = 1.2,
-        label.size = 0,
-        size = ifelse(is.null(label_size), 7, label_size)
+        size = ifelse(is.null(label_size), 7, label_size),
+        angle = label_angle
       )
   }
   plt + geom_node_point(size = min(1, 100 / length(v_labels)))
