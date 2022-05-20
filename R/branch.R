@@ -153,6 +153,7 @@ as_option_list <- function(x) {
 #' Print method for \code{*_branch} objects.
 #' @param x a \code{branch} object.
 #' @param ... ignored. for compatibility only.
+#' @return No return value, called for printing only.
 #' @export
 print.branch <- function(x, ...) {
   opts <- as_option_list(x)
@@ -182,4 +183,5 @@ print.branch <- function(x, ...) {
     "  Options\n", opts_m, conds_m,
     sep = ""
   )
+  invisible()
 }

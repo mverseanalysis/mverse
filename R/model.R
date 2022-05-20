@@ -5,11 +5,30 @@
 #' At least one \code{formula_branch} must have been added.
 #'
 #' @examples
-#' \dontrun{
-#' model_spec <- formula_branch(y ~ x1)
-#' mv <- mv %>%
-#'   add_formula_branch(model_spec) %>%
-#'   fit_lm()
+#' \donttest{
+#'
+#' # Fitting \code{lm} models fitted across a multiverse.
+#' hurricane_strength <- mutate_branch(
+#'   NDAM,
+#'   HighestWindSpeed,
+#'   Minpressure_Updated_2014
+#' )
+#' y <- mutate_branch(
+#'   alldeaths, log(alldeaths + 1)
+#' )
+#' hurricane_outliers <- filter_branch(
+#'   !Name %in% c("Katrina", "Audrey", "Andrew"),
+#'   TRUE # include all
+#' )
+#' model_specifications <- formula_branch(
+#'   y ~ femininity,
+#'   y ~ femininity + hurricane_strength
+#' )
+#' mv <- create_multiverse(hurricane) %>%
+#'   add_filter_branch(hurricane_outliers) %>%
+#'   add_mutate_branch(hurricane_strength, y) %>%
+#'   add_formula_branch(model_specifications) %>%
+#'   lm_mverse()
 #' }
 #' @param .mverse a \code{mverse} object.
 #' @return A \code{mverse} object with \code{lm} fitted.
@@ -50,15 +69,29 @@ lm_mverse <- function(.mverse) {
 #' distribution with an identity link.
 #'
 #' @examples
-#' \dontrun{
-#' model_spec <- formula_branch(y ~ x1)
-#' fam <- family_branch(
-#'   poisson, gaussian(link = "log")
+#' \donttest{
+#'
+#' # Fitting \code{glm} models across a multiverse.
+#' hurricane_strength <- mutate_branch(
+#'   NDAM,
+#'   HighestWindSpeed,
+#'   Minpressure_Updated_2014
 #' )
-#' mv <- mv %>%
-#'   add_formula_branch(model_spec) %>%
-#'   add_family_banch(fam) %>%
-#'   fit_glm()
+#' hurricane_outliers <- filter_branch(
+#'   !Name %in% c("Katrina", "Audrey", "Andrew"),
+#'   TRUE # include all
+#' )
+#' model_specifications <- formula_branch(
+#'   alldeaths ~ femininity,
+#'   alldeaths ~ femininity + hurricane_strength
+#' )
+#' model_distributions <- family_branch(poisson)
+#' mv <- create_multiverse(hurricane) %>%
+#'   add_filter_branch(hurricane_outliers) %>%
+#'   add_mutate_branch(hurricane_strength) %>%
+#'   add_formula_branch(model_specifications) %>%
+#'   add_family_branch(model_distributions) %>%
+#'   glm_mverse()
 #' }
 #' @param .mverse a \code{mverse} object.
 #' @return A \code{mverse} object with \code{glm} fitted.
@@ -97,11 +130,27 @@ glm_mverse <- function(.mverse) {
 #' At least one \code{formula_branch} must have been added.
 #'
 #' @examples
-#' \dontrun{
-#' model_spec <- formula_branch(y ~ x1)
-#' mv <- mv %>%
-#'   add_formula_branch(model_spec) %>%
-#'   fit_glm.nb()
+#' \donttest{
+#'
+#' # Fitting \code{glm.nb} models across a multiverse.
+#' hurricane_strength <- mutate_branch(
+#'   NDAM,
+#'   HighestWindSpeed,
+#'   Minpressure_Updated_2014
+#' )
+#' hurricane_outliers <- filter_branch(
+#'   !Name %in% c("Katrina", "Audrey", "Andrew"),
+#'   TRUE # include all
+#' )
+#' model_specifications <- formula_branch(
+#'   alldeaths ~ femininity,
+#'   alldeaths ~ femininity + hurricane_strength
+#' )
+#' mv <- create_multiverse(hurricane) %>%
+#'   add_filter_branch(hurricane_outliers) %>%
+#'   add_mutate_branch(hurricane_strength) %>%
+#'   add_formula_branch(model_specifications) %>%
+#'   glm.nb_mverse()
 #' }
 #' @param .mverse a \code{mverse} object.
 #' @return A \code{mverse} object with \code{glm.nb} fitted.

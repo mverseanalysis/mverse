@@ -23,15 +23,29 @@ the default behaviour of \code{glm} using the Gaussian
 distribution with an identity link.
 }
 \examples{
-\dontrun{
-model_spec <- formula_branch(y ~ x1)
-fam <- family_branch(
-  poisson, gaussian(link = "log")
+\donttest{
+
+# Fitting \code{glm} models across a multiverse.
+hurricane_strength <- mutate_branch(
+  NDAM,
+  HighestWindSpeed,
+  Minpressure_Updated_2014
 )
-mv <- mv \%>\%
-  add_formula_branch(model_spec) \%>\%
-  add_family_banch(fam) \%>\%
-  fit_glm()
+hurricane_outliers <- filter_branch(
+  !Name \%in\% c("Katrina", "Audrey", "Andrew"),
+  TRUE # include all
+)
+model_specifications <- formula_branch(
+  alldeaths ~ femininity,
+  alldeaths ~ femininity + hurricane_strength
+)
+model_distributions <- family_branch(poisson)
+mv <- create_multiverse(hurricane) \%>\%
+  add_filter_branch(hurricane_outliers) \%>\%
+  add_mutate_branch(hurricane_strength) \%>\%
+  add_formula_branch(model_specifications) \%>\%
+  add_family_branch(model_distributions) \%>\%
+  glm_mverse()
 }
 }
 \seealso{

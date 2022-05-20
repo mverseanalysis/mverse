@@ -266,7 +266,7 @@ summary(mv1)
 
 Let's compare using `mverse` to using `tidyverse` and base R to fit the three models.
 
-One way to do this using tidyverse is to create a list of the model formulas then map the list to `lm`.
+One way to do this using `tidyverse` is to create a list of the model formulas then map the list to `lm`.
 
 ```{r }
 mod1 <- formula(col2 ~ col1)
@@ -313,7 +313,7 @@ We would like to study the distribution of the player skin tones but the two ind
 4.  the first rating only
 5.  the second rating only
 
-## Analysis using Base R and Tidyverse
+## Analysis using Base R and `Tidyverse`
 
 Let's first consider how you might study the five options using R without `mverse`. First, we define the five options as separate variables in R.
 

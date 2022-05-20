@@ -72,6 +72,8 @@ extract <- function(...) {
 #' 1 the method will return shuffle rows in each universe
 #' before returning them. If \code{frow} is greater than 1,
 #' the method randomly samples rows with replacement.
+#' @return a tibble containing the selected columns
+#'   across the multiverse.
 #' @name extract
 #' @export
 extract.mverse <- function(.mverse, columns = NULL,

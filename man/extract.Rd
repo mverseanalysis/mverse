@@ -30,6 +30,10 @@ extract(...)
 \item{include_branch_options}{when \code{TRUE} (default), include the mutate
 statements used to specified the options for each branched columns}
 }
+\value{
+a tibble containing the selected columns
+  across the multiverse.
+}
 \description{
 \code{extract} returns a tibble of selected values
 across the multiverse in a long format.
