@@ -249,7 +249,7 @@
 <span class="co">## <span style="color: #BCBCBC;">6</span> 3        col2 ~ abs(col1)  abs(…    0.734     0.360      2.04 0.134    -<span style="color: #BB0000;">0.412</span> </span>
 <span class="co">## <span style="color: #949494;"># … with 1 more variable: conf.high &lt;dbl&gt;</span></span></code></pre></div>
 <p>Let’s compare using <code>mverse</code> to using <code>tidyverse</code> and base R to fit the three models.</p>
-<p>One way to do this using tidyverse is to create a list of the model formulas then map the list to <code>lm</code>.</p>
+<p>One way to do this using <code>tidyverse</code> is to create a list of the model formulas then map the list to <code>lm</code>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">formula</a></span><span class="op">(</span><span class="va">col2</span> <span class="op">~</span> <span class="va">col1</span><span class="op">)</span>
 
@@ -326,7 +326,7 @@
 </ol>
 </div>
 <div class="section level2">
-<h2 id="analysis-using-base-r-and-tidyverse">Analysis using Base R and Tidyverse<a class="anchor" aria-label="anchor" href="#analysis-using-base-r-and-tidyverse"></a>
+<h2 id="analysis-using-base-r-and-tidyverse">Analysis using Base R and <code>Tidyverse</code><a class="anchor" aria-label="anchor" href="#analysis-using-base-r-and-tidyverse"></a>
 </h2>
 <p>Let’s first consider how you might study the five options using R without <code>mverse</code>. First, we define the five options as separate variables in R.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">

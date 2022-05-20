@@ -94,7 +94,7 @@ in the summary table.</p>
   option <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">multiverse</span><span class="fu">::</span><span class="fu"><a href="http://mucollective.github.io/multiverse/reference/accessors.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">.object</span><span class="op">)</span><span class="op">)</span>,
   universe_order <span class="op">=</span> <span class="cn">FALSE</span>,
   color_order <span class="op">=</span> <span class="cn">FALSE</span>,
-  color <span class="op">=</span> <span class="st">"p.value &lt; 0.05"</span>,
+  color <span class="op">=</span> <span class="cn">NULL</span>,
   branch_order <span class="op">=</span> <span class="cn">NULL</span>,
   point_size <span class="op">=</span> <span class="fl">0.25</span>,
   grid_size <span class="op">=</span> <span class="fl">2</span>,
@@ -113,7 +113,7 @@ in the summary table.</p>
   option <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">multiverse</span><span class="fu">::</span><span class="fu"><a href="http://mucollective.github.io/multiverse/reference/accessors.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">.object</span><span class="op">)</span><span class="op">)</span>,
   universe_order <span class="op">=</span> <span class="cn">FALSE</span>,
   color_order <span class="op">=</span> <span class="cn">FALSE</span>,
-  color <span class="op">=</span> <span class="st">"p.value &lt; 0.05"</span>,
+  color <span class="op">=</span> <span class="cn">NULL</span>,
   branch_order <span class="op">=</span> <span class="cn">NULL</span>,
   point_size <span class="op">=</span> <span class="fl">0.25</span>,
   grid_size <span class="op">=</span> <span class="fl">2</span>,
@@ -132,7 +132,7 @@ in the summary table.</p>
   option <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">multiverse</span><span class="fu">::</span><span class="fu"><a href="http://mucollective.github.io/multiverse/reference/accessors.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">.object</span><span class="op">)</span><span class="op">)</span>,
   universe_order <span class="op">=</span> <span class="cn">FALSE</span>,
   color_order <span class="op">=</span> <span class="cn">FALSE</span>,
-  color <span class="op">=</span> <span class="st">"p.value &lt; 0.05"</span>,
+  color <span class="op">=</span> <span class="cn">NULL</span>,
   branch_order <span class="op">=</span> <span class="cn">NULL</span>,
   point_size <span class="op">=</span> <span class="fl">0.25</span>,
   grid_size <span class="op">=</span> <span class="fl">2</span>,
@@ -172,7 +172,8 @@ the order in the summary table.</p></dd>
 <dd><p>when <code>TRUE</code>, the estimated value will be ordered
 according to the color.</p></dd>
 <dt>color</dt>
-<dd><p>specify the color in the plot.</p></dd>
+<dd><p>an expression to indicate how colors are assigned to markers.
+By default, colors are assigned based on 'p.value &lt;= 0.05'.</p></dd>
 <dt>branch_order</dt>
 <dd><p>name for the branch to order.</p></dd>
 <dt>point_size</dt>
@@ -193,7 +194,7 @@ according to the color.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Display a specification curve for \code{lm} models</span></span>
 <span class="r-in"><span class="co"># fitted across the multiverse.</span></span>
@@ -209,8 +210,12 @@ according to the color.</p></dd>
 <span class="r-in">  <span class="fu"><a href="add_formula_branch.html">add_formula_branch</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="lm_mverse.html">lm_mverse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">spec_curve</span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"femininityTRUE"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-plt img"><img src="spec_curve-1.png" alt="" width="1050" height="649"></span>
+<span class="r-in"><span class="co"># plot based on 90% confidence interval</span></span>
+<span class="r-in"><span class="fu">spec_curve</span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"femininityTRUE"</span>, color <span class="op">=</span> <span class="va">p.value</span> <span class="op">&lt;</span> <span class="fl">.1</span><span class="op">)</span></span>
+<span class="r-plt img"><img src="spec_curve-2.png" alt="" width="1050" height="649"></span>
+<span class="r-in"><span class="co"># }</span></span>
+<span class="r-in"><span class="co"># \donttest{</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Display a specification curve for \code{glm} models</span></span>
 <span class="r-in"><span class="co"># fitted across the multiverse.</span></span>
@@ -228,8 +233,12 @@ according to the color.</p></dd>
 <span class="r-in">  <span class="fu"><a href="add_family_branch.html">add_family_branch</a></span><span class="op">(</span><span class="va">fam</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="glm_mverse.html">glm_mverse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">spec_curve</span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"femininityTRUE"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-plt img"><img src="spec_curve-3.png" alt="" width="1050" height="649"></span>
+<span class="r-in"><span class="co"># plot based on 90% confidence interval</span></span>
+<span class="r-in"><span class="fu">spec_curve</span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"femininityTRUE"</span>, color <span class="op">=</span> <span class="va">p.value</span> <span class="op">&lt;</span> <span class="fl">.1</span><span class="op">)</span></span>
+<span class="r-plt img"><img src="spec_curve-4.png" alt="" width="1050" height="649"></span>
+<span class="r-in"><span class="co"># }</span></span>
+<span class="r-in"><span class="co"># \donttest{</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Display a specification curve for \code{glm.nb} models</span></span>
 <span class="r-in"><span class="co"># fitted across the multiverse.</span></span>
@@ -245,7 +254,11 @@ according to the color.</p></dd>
 <span class="r-in">  <span class="fu"><a href="add_formula_branch.html">add_formula_branch</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="glm.nb_mverse.html">glm.nb_mverse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">spec_curve</span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"femininityTRUE"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-plt img"><img src="spec_curve-5.png" alt="" width="1050" height="649"></span>
+<span class="r-in"><span class="co"># plot based on 90% confidence interval</span></span>
+<span class="r-in"><span class="fu">spec_curve</span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"femininityTRUE"</span>, color <span class="op">=</span> <span class="va">p.value</span> <span class="op">&lt;</span> <span class="fl">.1</span><span class="op">)</span></span>
+<span class="r-plt img"><img src="spec_curve-6.png" alt="" width="1050" height="649"></span>
+<span class="r-in"><span class="co"># }</span></span>
 </code></pre></div>
     </div>
   </div>
