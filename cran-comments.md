@@ -3,8 +3,8 @@ This is the first CRAN release.
 
 ## Local `devtools:check()` result
 
-── R CMD check results ────────────────────────────────── mverse 0.1.0 ────
-Duration: 39.2s
+── R CMD check results ───────────────────────────────────────────── mverse 0.1.0 ────
+Duration: 37.9s
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
@@ -31,7 +31,7 @@ Found the following (possibly) invalid URLs:
           inst/doc/mverse_intro_glmmodelling.html
     Status: 503
     Message: Service Unavailable
-
+    
 * checking for detritus in the temp directory ... NOTE
 Found the following files/directories:
   'lastMiKTeXException'
@@ -55,3 +55,4 @@ Found the following (possibly) invalid URLs:
           inst/doc/mverse_intro_glmmodelling.html
     Status: 503
     Message: Service Unavailable
+
