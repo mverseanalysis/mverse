@@ -207,16 +207,16 @@ the method randomly samples rows with replacement.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 282 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    universe hurricane_strength[,1]     y hurricane_strength_branch y_branch </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 1                          <span style="text-decoration: underline;">1</span>590     2 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 1                          <span style="text-decoration: underline;">5</span>350     4 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 1                           150     3 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 1                            58     1 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 1                            15     0 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 1                         <span style="text-decoration: underline;">19</span>321    60 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 1                          <span style="text-decoration: underline;">3</span>230    20 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 1                         <span style="text-decoration: underline;">24</span>260    20 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 1                          <span style="text-decoration: underline;">2</span>030     0 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 1                         <span style="text-decoration: underline;">14</span>730   200 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 7                        -<span style="color: #BB0000;">0.439</span>     2 scale(NDAM)               alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 7                        -<span style="color: #BB0000;">0.148</span>     4 scale(NDAM)               alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 7                        -<span style="color: #BB0000;">0.550</span>     3 scale(NDAM)               alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 7                        -<span style="color: #BB0000;">0.558</span>     1 scale(NDAM)               alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 7                        -<span style="color: #BB0000;">0.561</span>     0 scale(NDAM)               alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 7                         0.932    60 scale(NDAM)               alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 7                        -<span style="color: #BB0000;">0.312</span>    20 scale(NDAM)               alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 7                         1.31     20 scale(NDAM)               alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 7                        -<span style="color: #BB0000;">0.405</span>     0 scale(NDAM)               alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 7                         0.577   200 scale(NDAM)               alldeaths</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 272 more rows</span></span>
 <span class="r-in"><span class="co"># Specify the proportion of data to extract from each universe using</span></span>
 <span class="r-in"><span class="co"># frow. The rows are randomly selected</span></span>
@@ -224,16 +224,16 @@ the method randomly samples rows with replacement.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 792 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    universe hurricane_strength[,1]     y hurricane_strength_branch y_branch </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 1                             1     0 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 1                          <span style="text-decoration: underline;">4</span>730    12 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 1                         <span style="text-decoration: underline;">20</span>510    10 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 1                          <span style="text-decoration: underline;">6</span>870    22 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 1                           160     1 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 1                            96     3 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 1                          <span style="text-decoration: underline;">1</span>590     2 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 1                          <span style="text-decoration: underline;">8</span>260    26 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 1                           170     8 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 1                            35     0 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 1                             6     3 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 1                          <span style="text-decoration: underline;">6</span>200     7 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 1                          <span style="text-decoration: underline;">6</span>870    22 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 1                          <span style="text-decoration: underline;">4</span>980    51 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 1                         <span style="text-decoration: underline;">10</span>690    62 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 1                           800     3 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 1                           500     2 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 1                          <span style="text-decoration: underline;">3</span>020     8 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 1                           410     3 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 1                           250     3 NDAM                      alldeaths</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 782 more rows</span></span>
 </code></pre></div>
     </div>
