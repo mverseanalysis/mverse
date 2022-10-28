@@ -4,9 +4,9 @@
 # mverse
 
 <!-- badges: start -->
-
-[![R-CMD-check](https://github.com/mverseanalysis/mverse/workflows/R-CMD-check/badge.svg)](https://github.com/mverseanalysis/mverse/actions)
 <!-- [![Codecov test coverage](https://codecov.io/gh/mverseanalysis/mverse/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mverseanalysis/mverse?branch=master) -->
+
+[![R-CMD-check](https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 *mverse* is an extension to multiverse package (Sarma et al. 2021) which
