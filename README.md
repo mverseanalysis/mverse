@@ -16,17 +16,19 @@ examples for researchers, educators, and students in statistics.
 
 ## Installation
 
-<!-- You can install the released version of mverse from [CRAN](https://CRAN.R-project.org) with: -->
-<!-- ``` r -->
-<!-- install.packages("mverse") -->
-<!-- ``` -->
+You can install the released version of mverse from
+[CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("mverse")
+```
 
 You can install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("mverseanalysis/mverse", build_vignettes = TRUE)
+devtools::install_github("mverseanalysis/mverse", head = "dev", build_vignettes = TRUE)
 ```
 
 ## Usage
@@ -124,20 +126,23 @@ multiverse.
 res <- summary(mv)
 res
 #> # A tibble: 24 × 12
-#>    universe outliers_branch  strength_branch model_branch distribution_br… term 
-#>    <fct>    <fct>            <fct>           <fct>        <fct>            <chr>
-#>  1 1        "!Name %in% c(\… NDAM            alldeaths ~… poisson          (Int…
-#>  2 1        "!Name %in% c(\… NDAM            alldeaths ~… poisson          stre…
-#>  3 1        "!Name %in% c(\… NDAM            alldeaths ~… poisson          MasF…
-#>  4 1        "!Name %in% c(\… NDAM            alldeaths ~… poisson          stre…
-#>  5 2        "!Name %in% c(\… HighestWindSpe… alldeaths ~… poisson          (Int…
-#>  6 2        "!Name %in% c(\… HighestWindSpe… alldeaths ~… poisson          stre…
-#>  7 2        "!Name %in% c(\… HighestWindSpe… alldeaths ~… poisson          MasF…
-#>  8 2        "!Name %in% c(\… HighestWindSpe… alldeaths ~… poisson          stre…
-#>  9 3        "!Name %in% c(\… Minpressure_Up… alldeaths ~… poisson          (Int…
-#> 10 3        "!Name %in% c(\… Minpressure_Up… alldeaths ~… poisson          stre…
-#> # … with 14 more rows, and 6 more variables: estimate <dbl>, std.error <dbl>,
-#> #   statistic <dbl>, p.value <dbl>, conf.low <dbl>, conf.high <dbl>
+#>    universe outliers_br…¹ stren…² model…³ distr…⁴ term  estimate std.e…⁵ stati…⁶
+#>    <fct>    <fct>         <fct>   <fct>   <fct>   <chr>    <dbl>   <dbl>   <dbl>
+#>  1 1        "!Name %in% … NDAM    alldea… poisson (Int…  2.13e+0 8.04e-2  26.5  
+#>  2 1        "!Name %in% … NDAM    alldea… poisson stre…  3.02e-5 2.63e-6  11.5  
+#>  3 1        "!Name %in% … NDAM    alldea… poisson MasF…  6.23e-2 1.01e-2   6.19 
+#>  4 1        "!Name %in% … NDAM    alldea… poisson stre…  7.96e-7 3.20e-7   2.49 
+#>  5 2        "!Name %in% … Highes… alldea… poisson (Int… -8.59e-2 2.65e-1  -0.324
+#>  6 2        "!Name %in% … Highes… alldea… poisson stre…  2.35e-2 2.17e-3  10.8  
+#>  7 2        "!Name %in% … Highes… alldea… poisson MasF…  5.31e-2 3.20e-2   1.66 
+#>  8 2        "!Name %in% … Highes… alldea… poisson stre…  3.32e-4 2.60e-4   1.28 
+#>  9 3        "!Name %in% … Minpre… alldea… poisson (Int…  4.74e+1 3.17e+0  15.0  
+#> 10 3        "!Name %in% … Minpre… alldea… poisson stre… -4.69e-2 3.34e-3 -14.0  
+#> # … with 14 more rows, 3 more variables: p.value <dbl>, conf.low <dbl>,
+#> #   conf.high <dbl>, and abbreviated variable names ¹​outliers_branch,
+#> #   ²​strength_branch, ³​model_branch, ⁴​distribution_branch, ⁵​std.error,
+#> #   ⁶​statistic
+#> # ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names
 ```
 
 The resulting data is a `tibble` object and we can use regular
@@ -151,14 +156,15 @@ res %>%
   filter(term == "MasFem") %>%
   select(outliers_branch, strength_branch, term, estimate, conf.low, conf.high)
 #> # A tibble: 6 × 6
-#>   outliers_branch              strength_branch term  estimate conf.low conf.high
-#>   <fct>                        <fct>           <chr>    <dbl>    <dbl>     <dbl>
-#> 1 "!Name %in% c(\"Katrina\")"  NDAM            MasF…   0.0623  0.0427     0.0822
-#> 2 "!Name %in% c(\"Katrina\")"  HighestWindSpe… MasF…   0.0531 -0.00942    0.116 
-#> 3 "!Name %in% c(\"Katrina\")"  Minpressure_Up… MasF…  -0.845  -1.59      -0.103 
-#> 4 "!Name %in% c(\"Katrina\", … NDAM            MasF…   0.0623  0.0427     0.0822
-#> 5 "!Name %in% c(\"Katrina\", … HighestWindSpe… MasF…   0.0956  0.0301     0.161 
-#> 6 "!Name %in% c(\"Katrina\", … Minpressure_Up… MasF…  -1.02   -1.81      -0.247
+#>   outliers_branch                         stren…¹ term  estim…² conf.low conf.…³
+#>   <fct>                                   <fct>   <chr>   <dbl>    <dbl>   <dbl>
+#> 1 "!Name %in% c(\"Katrina\")"             NDAM    MasF…  0.0623  0.0427   0.0822
+#> 2 "!Name %in% c(\"Katrina\")"             Highes… MasF…  0.0531 -0.00942  0.116 
+#> 3 "!Name %in% c(\"Katrina\")"             Minpre… MasF… -0.845  -1.59    -0.103 
+#> 4 "!Name %in% c(\"Katrina\", \"Audrey\")" NDAM    MasF…  0.0623  0.0427   0.0822
+#> 5 "!Name %in% c(\"Katrina\", \"Audrey\")" Highes… MasF…  0.0956  0.0301   0.161 
+#> 6 "!Name %in% c(\"Katrina\", \"Audrey\")" Minpre… MasF… -1.02   -1.81    -0.247 
+#> # … with abbreviated variable names ¹​strength_branch, ²​estimate, ³​conf.high
 ```
 
 ### Plot a Specification Curve

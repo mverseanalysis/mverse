@@ -117,17 +117,17 @@ and students in statistics.
 
 ## Installation
 
-<!-- You can install the released version of mverse from [CRAN](https://CRAN.R-project.org) with: -->
+You can install the released version of mverse from [CRAN](https://CRAN.R-project.org) with:
 
-<!-- ``` r -->
-<!-- install.packages("mverse") -->
-<!-- ``` -->
+``` r
+install.packages("mverse")
+```
 
 You can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("mverseanalysis/mverse", build_vignettes = TRUE)
+devtools::install_github("mverseanalysis/mverse", head = "dev", build_vignettes = TRUE)
 ```
 
 ## Usage
