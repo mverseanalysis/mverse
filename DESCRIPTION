@@ -1,7 +1,7 @@
 Package: mverse
 Type: Package
 Title: Tidy Multiverse Analysis Made Simple
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
   person("Michael Jongho", "Moon", email = "michael.moon@mail.utoronto.ca",
   role = c("aut", "cre")),

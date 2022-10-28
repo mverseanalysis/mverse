@@ -6,14 +6,13 @@ on:
   pull_request:
     branches: [main, master]
 
-name: R-CMD-check
+name: lint
 
 jobs:
-  R-CMD-check:
+  lint:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      R_KEEP_PKG_SOURCE: yes
     steps:
       - uses: actions/checkout@v3
 
@@ -23,7 +22,11 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck
-          needs: check
+          extra-packages: any::lintr, local::.
+          needs: lint
 
-      - uses: r-lib/actions/check-r-package@v2
+      - name: Lint
+        run: lintr::lint_package()
+        shell: Rscript {0}
+        env:
+          LINTR_ERROR_ON_LINT: true
