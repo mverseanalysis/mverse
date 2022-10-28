@@ -73,38 +73,51 @@ across the multiverse in a long format.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">extract</span><span class="op">(</span><span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for mverse</span>
-<span class="fu">extract</span><span class="op">(</span>
-  <span class="va">.mverse</span>,
-  columns <span class="op">=</span> <span class="cn">NULL</span>,
-  nuni <span class="op">=</span> <span class="cn">NULL</span>,
-  frow <span class="op">=</span> <span class="cn">NULL</span>,
-  include_branch_options <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">extract</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for mverse</span></span>
+<span><span class="fu">extract</span><span class="op">(</span></span>
+<span>  <span class="va">.mverse</span>,</span>
+<span>  columns <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nuni <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  frow <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  include_branch_options <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>...</dt>
 <dd><p>Ignored.</p></dd>
+
+
 <dt>.mverse</dt>
 <dd><p>a <code>mverse</code> object.</p></dd>
+
+
 <dt>columns</dt>
 <dd><p>a character vector of column names to extract.</p></dd>
+
+
 <dt>nuni</dt>
 <dd><p>a positive integer for the number of universes to extract.</p></dd>
+
+
 <dt>frow</dt>
 <dd><p>proportion of rows to extract from each universe.</p></dd>
+
+
 <dt>include_branch_options</dt>
 <dd><p>when <code>TRUE</code> (default), include the mutate
 statements used to specified the options for each branched columns</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a tibble containing the selected columns
+    
+
+<p>a tibble containing the selected columns
   across the multiverse.</p>
     </div>
     <div id="details">
@@ -134,26 +147,26 @@ the method randomly samples rows with replacement.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Define mutate branches.</span></span>
-<span class="r-in"><span class="va">hurricane_strength</span> <span class="op">&lt;-</span> <span class="fu"><a href="mutate_branch.html">mutate_branch</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="co"># damage vs. wind speed vs.pressure</span></span>
-<span class="r-in">  <span class="va">NDAM</span>,</span>
-<span class="r-in">  <span class="va">HighestWindSpeed</span>,</span>
-<span class="r-in">  <span class="va">Minpressure_Updated_2014</span>,</span>
-<span class="r-in">  <span class="co"># Standardized versions</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">NDAM</span><span class="op">)</span>,</span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">HighestWindSpeed</span><span class="op">)</span>,</span>
-<span class="r-in">  <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">Minpressure_Updated_2014</span><span class="op">)</span>,</span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="mutate_branch.html">mutate_branch</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">alldeaths</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">alldeaths</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Create a mverse and add the branches.</span></span>
-<span class="r-in"><span class="va">mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="mverse.html">create_multiverse</a></span><span class="op">(</span><span class="va">hurricane</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="add_mutate_branch.html">add_mutate_branch</a></span><span class="op">(</span><span class="va">hurricane_strength</span>, <span class="va">y</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="execute_multiverse.html">execute_multiverse</a></span><span class="op">(</span><span class="va">mv</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Extract all branched columns from all universes</span></span>
-<span class="r-in"><span class="fu">extract</span><span class="op">(</span><span class="va">mv</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Define mutate branches.</span></span></span>
+<span class="r-in"><span><span class="va">hurricane_strength</span> <span class="op">&lt;-</span> <span class="fu"><a href="mutate_branch.html">mutate_branch</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="co"># damage vs. wind speed vs.pressure</span></span></span>
+<span class="r-in"><span>  <span class="va">NDAM</span>,</span></span>
+<span class="r-in"><span>  <span class="va">HighestWindSpeed</span>,</span></span>
+<span class="r-in"><span>  <span class="va">Minpressure_Updated_2014</span>,</span></span>
+<span class="r-in"><span>  <span class="co"># Standardized versions</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">NDAM</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">HighestWindSpeed</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">Minpressure_Updated_2014</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="mutate_branch.html">mutate_branch</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">alldeaths</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">alldeaths</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Create a mverse and add the branches.</span></span></span>
+<span class="r-in"><span><span class="va">mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="mverse.html">create_multiverse</a></span><span class="op">(</span><span class="va">hurricane</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="add_mutate_branch.html">add_mutate_branch</a></span><span class="op">(</span><span class="va">hurricane_strength</span>, <span class="va">y</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="execute_multiverse.html">execute_multiverse</a></span><span class="op">(</span><span class="va">mv</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Extract all branched columns from all universes</span></span></span>
+<span class="r-in"><span><span class="fu">extract</span><span class="op">(</span><span class="va">mv</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,128 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    universe hurricane_strength[,1]     y hurricane_strength_branch y_branch </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span>
@@ -168,9 +181,9 @@ the method randomly samples rows with replacement.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 1                          <span style="text-decoration: underline;">2</span>030     0 NDAM                      alldeaths</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 1                         <span style="text-decoration: underline;">14</span>730   200 NDAM                      alldeaths</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 1,118 more rows</span></span>
-<span class="r-in"><span class="co"># Specify the columns to extract from each universe using columns</span></span>
-<span class="r-in"><span class="co"># You can select both branched and non-branched columns</span></span>
-<span class="r-in"><span class="fu">extract</span><span class="op">(</span><span class="va">mv</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hurricane_strength"</span>, <span class="st">"NDAM"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># Specify the columns to extract from each universe using columns</span></span></span>
+<span class="r-in"><span><span class="co"># You can select both branched and non-branched columns</span></span></span>
+<span class="r-in"><span><span class="fu">extract</span><span class="op">(</span><span class="va">mv</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hurricane_strength"</span>, <span class="st">"NDAM"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,128 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    universe hurricane_strength[,1]  NDAM hurricane_strength_branch</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                    </span>
@@ -185,8 +198,8 @@ the method randomly samples rows with replacement.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 1                          <span style="text-decoration: underline;">2</span>030  <span style="text-decoration: underline;">2</span>030 NDAM                     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 1                         <span style="text-decoration: underline;">14</span>730 <span style="text-decoration: underline;">14</span>730 NDAM                     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 1,118 more rows</span></span>
-<span class="r-in"><span class="co"># Specify the universe to extract from using universe</span></span>
-<span class="r-in"><span class="fu">extract</span><span class="op">(</span><span class="va">mv</span>, universe <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># Specify the universe to extract from using universe</span></span></span>
+<span class="r-in"><span><span class="fu">extract</span><span class="op">(</span><span class="va">mv</span>, universe <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,128 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    universe hurricane_strength[,1]     y hurricane_strength_branch y_branch </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span>
@@ -201,39 +214,39 @@ the method randomly samples rows with replacement.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 1                          <span style="text-decoration: underline;">2</span>030     0 NDAM                      alldeaths</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 1                         <span style="text-decoration: underline;">14</span>730   200 NDAM                      alldeaths</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 1,118 more rows</span></span>
-<span class="r-in"><span class="co"># Specify the number of universes to extract from using nuni</span></span>
-<span class="r-in"><span class="co"># The universes are randomly selected</span></span>
-<span class="r-in"><span class="fu">extract</span><span class="op">(</span><span class="va">mv</span>, nuni <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># Specify the number of universes to extract from using nuni</span></span></span>
+<span class="r-in"><span><span class="co"># The universes are randomly selected</span></span></span>
+<span class="r-in"><span><span class="fu">extract</span><span class="op">(</span><span class="va">mv</span>, nuni <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 282 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    universe hurricane_strength[,1]     y hurricane_strength_branch y_branch     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 8                        -<span style="color: #BB0000;">0.439</span> 1.10  scale(NDAM)               log(alldeath…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 8                        -<span style="color: #BB0000;">0.148</span> 1.61  scale(NDAM)               log(alldeath…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 8                        -<span style="color: #BB0000;">0.550</span> 1.39  scale(NDAM)               log(alldeath…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 8                        -<span style="color: #BB0000;">0.558</span> 0.693 scale(NDAM)               log(alldeath…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 8                        -<span style="color: #BB0000;">0.561</span> 0     scale(NDAM)               log(alldeath…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 8                         0.932 4.11  scale(NDAM)               log(alldeath…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 8                        -<span style="color: #BB0000;">0.312</span> 3.04  scale(NDAM)               log(alldeath…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 8                         1.31  3.04  scale(NDAM)               log(alldeath…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 8                        -<span style="color: #BB0000;">0.405</span> 0     scale(NDAM)               log(alldeath…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 8                         0.577 5.30  scale(NDAM)               log(alldeath…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    universe hurricane_strength[,1]     y hurricane_strength_branch y_branch </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 7                        -<span style="color: #BB0000;">0.439</span>     2 scale(NDAM)               alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 7                        -<span style="color: #BB0000;">0.148</span>     4 scale(NDAM)               alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 7                        -<span style="color: #BB0000;">0.550</span>     3 scale(NDAM)               alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 7                        -<span style="color: #BB0000;">0.558</span>     1 scale(NDAM)               alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 7                        -<span style="color: #BB0000;">0.561</span>     0 scale(NDAM)               alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 7                         0.932    60 scale(NDAM)               alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 7                        -<span style="color: #BB0000;">0.312</span>    20 scale(NDAM)               alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 7                         1.31     20 scale(NDAM)               alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 7                        -<span style="color: #BB0000;">0.405</span>     0 scale(NDAM)               alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 7                         0.577   200 scale(NDAM)               alldeaths</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 272 more rows</span></span>
-<span class="r-in"><span class="co"># Specify the proportion of data to extract from each universe using</span></span>
-<span class="r-in"><span class="co"># frow. The rows are randomly selected</span></span>
-<span class="r-in"><span class="fu">extract</span><span class="op">(</span><span class="va">mv</span>, frow <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># Specify the proportion of data to extract from each universe using</span></span></span>
+<span class="r-in"><span><span class="co"># frow. The rows are randomly selected</span></span></span>
+<span class="r-in"><span><span class="fu">extract</span><span class="op">(</span><span class="va">mv</span>, frow <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 792 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    universe hurricane_strength[,1]     y hurricane_strength_branch y_branch </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 1                          <span style="text-decoration: underline;">4</span>980    51 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 1                            <span style="color: #BB0000;">NA</span>  <span style="text-decoration: underline;">1</span>833 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 1                         <span style="text-decoration: underline;">20</span>020    21 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 1                          <span style="text-decoration: underline;">3</span>620    15 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 1                         <span style="text-decoration: underline;">14</span>730   200 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 1                          <span style="text-decoration: underline;">1</span>540    15 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 1                         <span style="text-decoration: underline;">66</span>730    62 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 1                          <span style="text-decoration: underline;">6</span>450     3 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 1                            94     0 NDAM                      alldeaths</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 1                           730     6 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 1                          <span style="text-decoration: underline;">2</span>030     0 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 1                          <span style="text-decoration: underline;">1</span>590     2 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 1                          <span style="text-decoration: underline;">1</span>110     1 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 1                           350     1 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 1                         <span style="text-decoration: underline;">24</span>000     5 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 1                            <span style="color: #BB0000;">NA</span>   416 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 1                         <span style="text-decoration: underline;">23</span>040   256 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 1                          <span style="text-decoration: underline;">4</span>180     4 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 1                          <span style="text-decoration: underline;">8</span>260    26 NDAM                      alldeaths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 1                            58     1 NDAM                      alldeaths</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 782 more rows</span></span>
 </code></pre></div>
     </div>
@@ -249,7 +262,7 @@ the method randomly samples rows with replacement.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

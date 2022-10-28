@@ -1,11 +1,11 @@
 pandoc: 2.7.3
-pkgdown: 2.0.3
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   mverse_gettingstarted: mverse_gettingstarted.html
   mverse_intro_glmmodelling: mverse_intro_glmmodelling.html
   mverse_intro_regressionmodelling: mverse_intro_regressionmodelling.html
-last_built: 2022-05-20T13:50Z
+last_built: 2022-10-28T15:33Z
 urls:
   reference: https://mverseanalysis.github.io/mverse/reference
   article: https://mverseanalysis.github.io/mverse/articles

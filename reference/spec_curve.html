@@ -83,64 +83,64 @@ in the summary table.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">spec_curve</span><span class="op">(</span><span class="va">.object</span>, <span class="va">var</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for lm_mverse</span>
-<span class="fu">spec_curve</span><span class="op">(</span>
-  <span class="va">.object</span>,
-  <span class="va">var</span>,
-  conf.int <span class="op">=</span> <span class="cn">TRUE</span>,
-  conf.level <span class="op">=</span> <span class="fl">0.95</span>,
-  option <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">multiverse</span><span class="fu">::</span><span class="fu"><a href="http://mucollective.github.io/multiverse/reference/accessors.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">.object</span><span class="op">)</span><span class="op">)</span>,
-  universe_order <span class="op">=</span> <span class="cn">FALSE</span>,
-  color_order <span class="op">=</span> <span class="cn">FALSE</span>,
-  color <span class="op">=</span> <span class="cn">NULL</span>,
-  branch_order <span class="op">=</span> <span class="cn">NULL</span>,
-  point_size <span class="op">=</span> <span class="fl">0.25</span>,
-  grid_size <span class="op">=</span> <span class="fl">2</span>,
-  point_alpha <span class="op">=</span> <span class="fl">1</span>,
-  brewer_palette <span class="op">=</span> <span class="st">"Set2"</span>,
-  yaxis_text_size <span class="op">=</span> <span class="fl">8</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for glm_mverse</span>
-<span class="fu">spec_curve</span><span class="op">(</span>
-  <span class="va">.object</span>,
-  <span class="va">var</span>,
-  conf.int <span class="op">=</span> <span class="cn">TRUE</span>,
-  conf.level <span class="op">=</span> <span class="fl">0.95</span>,
-  option <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">multiverse</span><span class="fu">::</span><span class="fu"><a href="http://mucollective.github.io/multiverse/reference/accessors.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">.object</span><span class="op">)</span><span class="op">)</span>,
-  universe_order <span class="op">=</span> <span class="cn">FALSE</span>,
-  color_order <span class="op">=</span> <span class="cn">FALSE</span>,
-  color <span class="op">=</span> <span class="cn">NULL</span>,
-  branch_order <span class="op">=</span> <span class="cn">NULL</span>,
-  point_size <span class="op">=</span> <span class="fl">0.25</span>,
-  grid_size <span class="op">=</span> <span class="fl">2</span>,
-  point_alpha <span class="op">=</span> <span class="fl">1</span>,
-  brewer_palette <span class="op">=</span> <span class="st">"Set2"</span>,
-  yaxis_text_size <span class="op">=</span> <span class="fl">8</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for glm.nb_mverse</span>
-<span class="fu">spec_curve</span><span class="op">(</span>
-  <span class="va">.object</span>,
-  <span class="va">var</span>,
-  conf.int <span class="op">=</span> <span class="cn">TRUE</span>,
-  conf.level <span class="op">=</span> <span class="fl">0.95</span>,
-  option <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">multiverse</span><span class="fu">::</span><span class="fu"><a href="http://mucollective.github.io/multiverse/reference/accessors.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">.object</span><span class="op">)</span><span class="op">)</span>,
-  universe_order <span class="op">=</span> <span class="cn">FALSE</span>,
-  color_order <span class="op">=</span> <span class="cn">FALSE</span>,
-  color <span class="op">=</span> <span class="cn">NULL</span>,
-  branch_order <span class="op">=</span> <span class="cn">NULL</span>,
-  point_size <span class="op">=</span> <span class="fl">0.25</span>,
-  grid_size <span class="op">=</span> <span class="fl">2</span>,
-  point_alpha <span class="op">=</span> <span class="fl">1</span>,
-  brewer_palette <span class="op">=</span> <span class="st">"Set2"</span>,
-  yaxis_text_size <span class="op">=</span> <span class="fl">8</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">spec_curve</span><span class="op">(</span><span class="va">.object</span>, <span class="va">var</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for lm_mverse</span></span>
+<span><span class="fu">spec_curve</span><span class="op">(</span></span>
+<span>  <span class="va">.object</span>,</span>
+<span>  <span class="va">var</span>,</span>
+<span>  conf.int <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  option <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">multiverse</span><span class="fu">::</span><span class="fu"><a href="http://mucollective.github.io/multiverse/reference/accessors.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">.object</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  universe_order <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  color_order <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  color <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  branch_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  point_size <span class="op">=</span> <span class="fl">0.25</span>,</span>
+<span>  grid_size <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  point_alpha <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  brewer_palette <span class="op">=</span> <span class="st">"Set2"</span>,</span>
+<span>  yaxis_text_size <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for glm_mverse</span></span>
+<span><span class="fu">spec_curve</span><span class="op">(</span></span>
+<span>  <span class="va">.object</span>,</span>
+<span>  <span class="va">var</span>,</span>
+<span>  conf.int <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  option <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">multiverse</span><span class="fu">::</span><span class="fu"><a href="http://mucollective.github.io/multiverse/reference/accessors.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">.object</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  universe_order <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  color_order <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  color <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  branch_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  point_size <span class="op">=</span> <span class="fl">0.25</span>,</span>
+<span>  grid_size <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  point_alpha <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  brewer_palette <span class="op">=</span> <span class="st">"Set2"</span>,</span>
+<span>  yaxis_text_size <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for glm.nb_mverse</span></span>
+<span><span class="fu">spec_curve</span><span class="op">(</span></span>
+<span>  <span class="va">.object</span>,</span>
+<span>  <span class="va">var</span>,</span>
+<span>  conf.int <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  option <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">multiverse</span><span class="fu">::</span><span class="fu"><a href="http://mucollective.github.io/multiverse/reference/accessors.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">.object</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  universe_order <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  color_order <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  color <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  branch_order <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  point_size <span class="op">=</span> <span class="fl">0.25</span>,</span>
+<span>  grid_size <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  point_alpha <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  brewer_palette <span class="op">=</span> <span class="st">"Set2"</span>,</span>
+<span>  yaxis_text_size <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="source">
@@ -153,112 +153,143 @@ in the summary table.</p>
     <h2>Arguments</h2>
     <dl><dt>.object</dt>
 <dd><p>a <code>glm.nb_mverse</code> object.</p></dd>
+
+
 <dt>var</dt>
 <dd><p>name for the variable to show.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>ignored.</p></dd>
+
+
 <dt>conf.int</dt>
 <dd><p>when <code>TRUE</code> (default), the estimate output
 includes the confidence intervals.</p></dd>
+
+
 <dt>conf.level</dt>
 <dd><p>the confidence level of the confidence interval
 returned using <code>conf.int = TRUE</code>. Default value is 0.95.</p></dd>
+
+
 <dt>option</dt>
 <dd><p>a vector of branches to show the options included.</p></dd>
+
+
 <dt>universe_order</dt>
 <dd><p>when <code>TRUE</code>, order the universes according to
 the order in the summary table.</p></dd>
+
+
 <dt>color_order</dt>
 <dd><p>when <code>TRUE</code>, the estimated value will be ordered
 according to the color.</p></dd>
+
+
 <dt>color</dt>
 <dd><p>an expression to indicate how colors are assigned to markers.
 By default, colors are assigned based on 'p.value &lt;= 0.05'.</p></dd>
+
+
 <dt>branch_order</dt>
 <dd><p>name for the branch to order.</p></dd>
+
+
 <dt>point_size</dt>
 <dd><p>size of points on the top plot.</p></dd>
+
+
 <dt>grid_size</dt>
 <dd><p>size of points on the bottom plot.</p></dd>
+
+
 <dt>point_alpha</dt>
 <dd><p>alpha level of points and point ranges.</p></dd>
+
+
 <dt>brewer_palette</dt>
 <dd><p>name of colorbrewer palette for the plot.</p></dd>
+
+
 <dt>yaxis_text_size</dt>
 <dd><p>text size of y-axis label</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a specification curve plot for the estimates</p>
+    
+
+<p>a specification curve plot for the estimates</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Display a specification curve for \code{lm} models</span></span>
-<span class="r-in"><span class="co"># fitted across the multiverse.</span></span>
-<span class="r-in"><span class="va">femininity</span> <span class="op">&lt;-</span> <span class="fu"><a href="mutate_branch.html">mutate_branch</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">MasFem</span> <span class="op">&gt;</span> <span class="fl">6</span>, <span class="va">MasFem</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">MasFem</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="formula_branch.html">formula_branch</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">alldeaths</span> <span class="op">~</span> <span class="va">femininity</span>,</span>
-<span class="r-in">  <span class="va">alldeaths</span> <span class="op">~</span> <span class="va">femininity</span> <span class="op">+</span> <span class="va">HighestWindSpeed</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="mverse.html">mverse</a></span><span class="op">(</span><span class="va">hurricane</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="add_mutate_branch.html">add_mutate_branch</a></span><span class="op">(</span><span class="va">femininity</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="add_formula_branch.html">add_formula_branch</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="lm_mverse.html">lm_mverse</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">spec_curve</span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"femininityTRUE"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Display a specification curve for \code{lm} models</span></span></span>
+<span class="r-in"><span><span class="co"># fitted across the multiverse.</span></span></span>
+<span class="r-in"><span><span class="va">femininity</span> <span class="op">&lt;-</span> <span class="fu"><a href="mutate_branch.html">mutate_branch</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">MasFem</span> <span class="op">&gt;</span> <span class="fl">6</span>, <span class="va">MasFem</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">MasFem</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="formula_branch.html">formula_branch</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">alldeaths</span> <span class="op">~</span> <span class="va">femininity</span>,</span></span>
+<span class="r-in"><span>  <span class="va">alldeaths</span> <span class="op">~</span> <span class="va">femininity</span> <span class="op">+</span> <span class="va">HighestWindSpeed</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="mverse.html">mverse</a></span><span class="op">(</span><span class="va">hurricane</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="add_mutate_branch.html">add_mutate_branch</a></span><span class="op">(</span><span class="va">femininity</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="add_formula_branch.html">add_formula_branch</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="lm_mverse.html">lm_mverse</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">spec_curve</span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"femininityTRUE"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="spec_curve-1.png" alt="" width="1050" height="649"></span>
-<span class="r-in"><span class="co"># plot based on 90% confidence interval</span></span>
-<span class="r-in"><span class="fu">spec_curve</span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"femininityTRUE"</span>, color <span class="op">=</span> <span class="va">p.value</span> <span class="op">&lt;</span> <span class="fl">.1</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># plot based on 90% confidence interval</span></span></span>
+<span class="r-in"><span><span class="fu">spec_curve</span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"femininityTRUE"</span>, color <span class="op">=</span> <span class="va">p.value</span> <span class="op">&lt;</span> <span class="fl">.1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="spec_curve-2.png" alt="" width="1050" height="649"></span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Display a specification curve for \code{glm} models</span></span>
-<span class="r-in"><span class="co"># fitted across the multiverse.</span></span>
-<span class="r-in"><span class="va">femininity</span> <span class="op">&lt;-</span> <span class="fu"><a href="mutate_branch.html">mutate_branch</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">MasFem</span> <span class="op">&gt;</span> <span class="fl">6</span>, <span class="va">MasFem</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">MasFem</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="formula_branch.html">formula_branch</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">alldeaths</span> <span class="op">~</span> <span class="va">femininity</span>,</span>
-<span class="r-in">  <span class="va">alldeaths</span> <span class="op">~</span> <span class="va">femininity</span> <span class="op">+</span> <span class="va">HighestWindSpeed</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">fam</span> <span class="op">&lt;-</span> <span class="fu"><a href="family_branch.html">family_branch</a></span><span class="op">(</span><span class="va">gaussian</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="mverse.html">mverse</a></span><span class="op">(</span><span class="va">hurricane</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="add_mutate_branch.html">add_mutate_branch</a></span><span class="op">(</span><span class="va">femininity</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="add_formula_branch.html">add_formula_branch</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="add_family_branch.html">add_family_branch</a></span><span class="op">(</span><span class="va">fam</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="glm_mverse.html">glm_mverse</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">spec_curve</span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"femininityTRUE"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Display a specification curve for \code{glm} models</span></span></span>
+<span class="r-in"><span><span class="co"># fitted across the multiverse.</span></span></span>
+<span class="r-in"><span><span class="va">femininity</span> <span class="op">&lt;-</span> <span class="fu"><a href="mutate_branch.html">mutate_branch</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">MasFem</span> <span class="op">&gt;</span> <span class="fl">6</span>, <span class="va">MasFem</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">MasFem</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="formula_branch.html">formula_branch</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">alldeaths</span> <span class="op">~</span> <span class="va">femininity</span>,</span></span>
+<span class="r-in"><span>  <span class="va">alldeaths</span> <span class="op">~</span> <span class="va">femininity</span> <span class="op">+</span> <span class="va">HighestWindSpeed</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fam</span> <span class="op">&lt;-</span> <span class="fu"><a href="family_branch.html">family_branch</a></span><span class="op">(</span><span class="va">gaussian</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="mverse.html">mverse</a></span><span class="op">(</span><span class="va">hurricane</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="add_mutate_branch.html">add_mutate_branch</a></span><span class="op">(</span><span class="va">femininity</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="add_formula_branch.html">add_formula_branch</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="add_family_branch.html">add_family_branch</a></span><span class="op">(</span><span class="va">fam</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="glm_mverse.html">glm_mverse</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">spec_curve</span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"femininityTRUE"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="spec_curve-3.png" alt="" width="1050" height="649"></span>
-<span class="r-in"><span class="co"># plot based on 90% confidence interval</span></span>
-<span class="r-in"><span class="fu">spec_curve</span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"femininityTRUE"</span>, color <span class="op">=</span> <span class="va">p.value</span> <span class="op">&lt;</span> <span class="fl">.1</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># plot based on 90% confidence interval</span></span></span>
+<span class="r-in"><span><span class="fu">spec_curve</span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"femininityTRUE"</span>, color <span class="op">=</span> <span class="va">p.value</span> <span class="op">&lt;</span> <span class="fl">.1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="spec_curve-4.png" alt="" width="1050" height="649"></span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Display a specification curve for \code{glm.nb} models</span></span>
-<span class="r-in"><span class="co"># fitted across the multiverse.</span></span>
-<span class="r-in"><span class="va">femininity</span> <span class="op">&lt;-</span> <span class="fu"><a href="mutate_branch.html">mutate_branch</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">MasFem</span> <span class="op">&gt;</span> <span class="fl">6</span>, <span class="va">MasFem</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">MasFem</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="formula_branch.html">formula_branch</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">alldeaths</span> <span class="op">~</span> <span class="va">femininity</span>,</span>
-<span class="r-in">  <span class="va">alldeaths</span> <span class="op">~</span> <span class="va">femininity</span> <span class="op">+</span> <span class="va">HighestWindSpeed</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="mverse.html">mverse</a></span><span class="op">(</span><span class="va">hurricane</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="add_mutate_branch.html">add_mutate_branch</a></span><span class="op">(</span><span class="va">femininity</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="add_formula_branch.html">add_formula_branch</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="glm.nb_mverse.html">glm.nb_mverse</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">spec_curve</span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"femininityTRUE"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Display a specification curve for \code{glm.nb} models</span></span></span>
+<span class="r-in"><span><span class="co"># fitted across the multiverse.</span></span></span>
+<span class="r-in"><span><span class="va">femininity</span> <span class="op">&lt;-</span> <span class="fu"><a href="mutate_branch.html">mutate_branch</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">MasFem</span> <span class="op">&gt;</span> <span class="fl">6</span>, <span class="va">MasFem</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">MasFem</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="formula_branch.html">formula_branch</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">alldeaths</span> <span class="op">~</span> <span class="va">femininity</span>,</span></span>
+<span class="r-in"><span>  <span class="va">alldeaths</span> <span class="op">~</span> <span class="va">femininity</span> <span class="op">+</span> <span class="va">HighestWindSpeed</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="mverse.html">mverse</a></span><span class="op">(</span><span class="va">hurricane</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="add_mutate_branch.html">add_mutate_branch</a></span><span class="op">(</span><span class="va">femininity</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="add_formula_branch.html">add_formula_branch</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="glm.nb_mverse.html">glm.nb_mverse</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">spec_curve</span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"femininityTRUE"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="spec_curve-5.png" alt="" width="1050" height="649"></span>
-<span class="r-in"><span class="co"># plot based on 90% confidence interval</span></span>
-<span class="r-in"><span class="fu">spec_curve</span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"femininityTRUE"</span>, color <span class="op">=</span> <span class="va">p.value</span> <span class="op">&lt;</span> <span class="fl">.1</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># plot based on 90% confidence interval</span></span></span>
+<span class="r-in"><span><span class="fu">spec_curve</span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"femininityTRUE"</span>, color <span class="op">=</span> <span class="va">p.value</span> <span class="op">&lt;</span> <span class="fl">.1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="spec_curve-6.png" alt="" width="1050" height="649"></span>
-<span class="r-in"><span class="co"># }</span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -273,7 +304,7 @@ By default, colors are assigned based on 'p.value &lt;= 0.05'.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

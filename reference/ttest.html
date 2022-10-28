@@ -77,63 +77,84 @@ performs t.test based on the formula branches.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ttest_mverse</span><span class="op">(</span>
-  <span class="va">.mverse</span>,
-  x <span class="op">=</span> <span class="cn">NULL</span>,
-  y <span class="op">=</span> <span class="cn">NULL</span>,
-  alternative <span class="op">=</span> <span class="st">"two.sided"</span>,
-  mu <span class="op">=</span> <span class="fl">0</span>,
-  paired <span class="op">=</span> <span class="cn">FALSE</span>,
-  var.equal <span class="op">=</span> <span class="cn">FALSE</span>,
-  conf.level <span class="op">=</span> <span class="fl">0.95</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ttest_mverse</span><span class="op">(</span></span>
+<span>  <span class="va">.mverse</span>,</span>
+<span>  x <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  y <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  alternative <span class="op">=</span> <span class="st">"two.sided"</span>,</span>
+<span>  mu <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  paired <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  var.equal <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  conf.level <span class="op">=</span> <span class="fl">0.95</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>.mverse</dt>
 <dd><p>a <code>mverse</code> object.</p></dd>
+
+
 <dt>x</dt>
 <dd><p>(optional) column name of data within mverse object</p></dd>
+
+
 <dt>y</dt>
 <dd><p>(optional) column name of data within mverse object</p></dd>
+
+
 <dt>alternative</dt>
 <dd><p>a character string specifying the alternative hypothesis,
 must be one of "two.sided" (default), "greater" or "less". You can
 specify just the initial letter.</p></dd>
+
+
 <dt>mu</dt>
 <dd><p>a number indicating the true value of the mean (or difference
 in means if you are performing a two sample test).</p></dd>
+
+
 <dt>paired</dt>
 <dd><p>a logical indicating whether you want a paired t-test.</p></dd>
+
+
 <dt>var.equal</dt>
 <dd><p>a logical variable indicating whether to treat the two
 variances as being equal.</p></dd>
+
+
 <dt>conf.level</dt>
 <dd><p>confidence level of the interval.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>ttest_mverse</code> object.</p>
+    
+
+<p>A <code>ttest_mverse</code> object.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Performing a unpaired two sample t-test.</span></span>
-<span class="r-in"><span class="va">mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="mverse.html">mverse</a></span><span class="op">(</span><span class="va">soccer</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="mutate_branch.html">mutate_branch</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="op">(</span><span class="op">(</span><span class="va">rater1</span> <span class="op">+</span> <span class="va">rater2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">rater1</span> <span class="op">+</span> <span class="va">rater2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span>,</span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">rater1</span> <span class="op">&gt;</span> <span class="va">rater2</span>, <span class="va">rater1</span>, <span class="va">rater2</span><span class="op">)</span> <span class="op">&gt;</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">rater1</span> <span class="op">&gt;</span> <span class="va">rater2</span>, <span class="va">rater1</span>, <span class="va">rater2</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="mutate_branch.html">mutate_branch</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">redCards</span>, <span class="va">yellowCards</span>, <span class="va">yellowReds</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">two_sample_form</span> <span class="op">&lt;-</span> <span class="fu"><a href="formula_branch.html">formula_branch</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">mv</span> <span class="op">&lt;-</span> <span class="va">mv</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="add_mutate_branch.html">add_mutate_branch</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="add_formula_branch.html">add_formula_branch</a></span><span class="op">(</span><span class="va">two_sample_form</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">ttest_mverse</span><span class="op">(</span><span class="va">mv</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Performing a unpaired two sample t-test.</span></span></span>
+<span class="r-in"><span><span class="va">mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="mverse.html">mverse</a></span><span class="op">(</span><span class="va">soccer</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="mutate_branch.html">mutate_branch</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="op">(</span><span class="op">(</span><span class="va">rater1</span> <span class="op">+</span> <span class="va">rater2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">rater1</span> <span class="op">+</span> <span class="va">rater2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">rater1</span> <span class="op">&gt;</span> <span class="va">rater2</span>, <span class="va">rater1</span>, <span class="va">rater2</span><span class="op">)</span> <span class="op">&gt;</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">rater1</span> <span class="op">&gt;</span> <span class="va">rater2</span>, <span class="va">rater1</span>, <span class="va">rater2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="mutate_branch.html">mutate_branch</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">redCards</span>, <span class="va">yellowCards</span>, <span class="va">yellowReds</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">two_sample_form</span> <span class="op">&lt;-</span> <span class="fu"><a href="formula_branch.html">formula_branch</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mv</span> <span class="op">&lt;-</span> <span class="va">mv</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="add_mutate_branch.html">add_mutate_branch</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="add_formula_branch.html">add_formula_branch</a></span><span class="op">(</span><span class="va">two_sample_form</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">ttest_mverse</span><span class="op">(</span><span class="va">mv</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>error in default universe</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Error in t.test.formula(formulae, data = data, alternative = "two.sided",  : </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   grouping factor must have exactly 2 levels</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> pkgdown::deploy_to_branch -&gt; build_site_github_pages -&gt; build_site -&gt; build_site_local -&gt; build_reference -&gt; purrr::map -&gt; .f -&gt; withCallingHandlers -&gt; data_reference_topic -&gt; run_examples -&gt; highlight_examples -&gt; downlit::evaluate_and_highlight -&gt; evaluate::evaluate -&gt; evaluate_call -&gt; timing_fn -&gt; handle -&gt; try - f, silent = TRUE) -&gt; withCallingHandlers -&gt; withVisible -&gt; eval_with_user_handlers -&gt; eval -&gt; eval -&gt; ttest_mverse -&gt; multiverse::inside -&gt; execute_universe -&gt; mapply -&gt;  -&gt; execute_code_from_universe -&gt; tryStack -&gt; lapply -&gt; FUN -&gt; FUN -&gt; stats::t.test -&gt; t.test.formula -&gt; stop -&gt; t.test.formula(formulae, data = data, alternative = "two.sided", </span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>error in default universe</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Error in t.test.formula(formulae, data = data, alternative = "two.sided",  : </span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   grouping factor must have exactly 2 levels</span>
@@ -142,15 +163,76 @@ variances as being equal.</p></dd>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Error in t(c(htest$statistic, htest$p.value, htest$conf.int, htest$estimate)) : </span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   object 'htest' not found</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> pkgdown::deploy_to_branch -&gt; build_site_github_pages -&gt; build_site -&gt; build_site_local -&gt; build_reference -&gt; purrr::map -&gt; .f -&gt; withCallingHandlers -&gt; data_reference_topic -&gt; run_examples -&gt; highlight_examples -&gt; downlit::evaluate_and_highlight -&gt; evaluate::evaluate -&gt; evaluate_call -&gt; timing_fn -&gt; handle -&gt; try - f, silent = TRUE) -&gt; withCallingHandlers -&gt; withVisible -&gt; eval_with_user_handlers -&gt; eval -&gt; eval -&gt; ttest_mverse -&gt; multiverse::inside -&gt; execute_universe -&gt; mapply -&gt;  -&gt; execute_code_from_universe -&gt; tryStack -&gt; lapply -&gt; FUN -&gt; FUN -&gt; as.data.frame -&gt; dplyr::rename -&gt; as.data.frame -&gt; t -&gt; t(c(htest$statistic, htest$p.value, htest$conf.int, htest$estimate))</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>error in universe 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in t.test.formula(formulae, data = data, alternative = "two.sided",  : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   grouping factor must have exactly 2 levels</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  pkgdown::deploy_to_branch -&gt; build_site_github_pages -&gt; build_site -&gt; build_site_local -&gt; build_reference -&gt; purrr::map -&gt; .f -&gt; withCallingHandlers -&gt; data_reference_topic -&gt; run_examples -&gt; highlight_examples -&gt; downlit::evaluate_and_highlight -&gt; evaluate::evaluate -&gt; evaluate_call -&gt; timing_fn -&gt; handle -&gt; try - f, silent = TRUE) -&gt; withCallingHandlers -&gt; withVisible -&gt; eval_with_user_handlers -&gt; eval -&gt; eval -&gt; ttest_mverse -&gt; execute_multiverse -&gt; execute_multiverse.mverse -&gt; multiverse::execute_multiverse -&gt; mapply -&gt;  -&gt; app -&gt; FUN -&gt; tryStack -&gt; lapply -&gt; FUN -&gt; FUN -&gt; stats::t.test -&gt; t.test.formula -&gt; stop -&gt; t.test.formula(formulae, data = data, alternative = "two.sided",  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>error in universe 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in t.test.formula(formulae, data = data, alternative = "two.sided",  : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   grouping factor must have exactly 2 levels</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  pkgdown::deploy_to_branch -&gt; build_site_github_pages -&gt; build_site -&gt; build_site_local -&gt; build_reference -&gt; purrr::map -&gt; .f -&gt; withCallingHandlers -&gt; data_reference_topic -&gt; run_examples -&gt; highlight_examples -&gt; downlit::evaluate_and_highlight -&gt; evaluate::evaluate -&gt; evaluate_call -&gt; timing_fn -&gt; handle -&gt; try - f, silent = TRUE) -&gt; withCallingHandlers -&gt; withVisible -&gt; eval_with_user_handlers -&gt; eval -&gt; eval -&gt; ttest_mverse -&gt; execute_multiverse -&gt; execute_multiverse.mverse -&gt; multiverse::execute_multiverse -&gt; mapply -&gt;  -&gt; app -&gt; FUN -&gt; tryStack -&gt; lapply -&gt; FUN -&gt; FUN -&gt; stats::t.test -&gt; t.test.formula -&gt; stop -&gt; t.test.formula(formulae, data = data, alternative = "two.sided",  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>error in universe 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in t.test.formula(formulae, data = data, alternative = "two.sided",  : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   grouping factor must have exactly 2 levels</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  pkgdown::deploy_to_branch -&gt; build_site_github_pages -&gt; build_site -&gt; build_site_local -&gt; build_reference -&gt; purrr::map -&gt; .f -&gt; withCallingHandlers -&gt; data_reference_topic -&gt; run_examples -&gt; highlight_examples -&gt; downlit::evaluate_and_highlight -&gt; evaluate::evaluate -&gt; evaluate_call -&gt; timing_fn -&gt; handle -&gt; try - f, silent = TRUE) -&gt; withCallingHandlers -&gt; withVisible -&gt; eval_with_user_handlers -&gt; eval -&gt; eval -&gt; ttest_mverse -&gt; execute_multiverse -&gt; execute_multiverse.mverse -&gt; multiverse::execute_multiverse -&gt; mapply -&gt;  -&gt; app -&gt; FUN -&gt; tryStack -&gt; lapply -&gt; FUN -&gt; FUN -&gt; stats::t.test -&gt; t.test.formula -&gt; stop -&gt; t.test.formula(formulae, data = data, alternative = "two.sided",  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>error in universe 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in t.test.formula(formulae, data = data, alternative = "two.sided",  : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   grouping factor must have exactly 2 levels</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  pkgdown::deploy_to_branch -&gt; build_site_github_pages -&gt; build_site -&gt; build_site_local -&gt; build_reference -&gt; purrr::map -&gt; .f -&gt; withCallingHandlers -&gt; data_reference_topic -&gt; run_examples -&gt; highlight_examples -&gt; downlit::evaluate_and_highlight -&gt; evaluate::evaluate -&gt; evaluate_call -&gt; timing_fn -&gt; handle -&gt; try - f, silent = TRUE) -&gt; withCallingHandlers -&gt; withVisible -&gt; eval_with_user_handlers -&gt; eval -&gt; eval -&gt; ttest_mverse -&gt; execute_multiverse -&gt; execute_multiverse.mverse -&gt; multiverse::execute_multiverse -&gt; mapply -&gt;  -&gt; app -&gt; FUN -&gt; tryStack -&gt; lapply -&gt; FUN -&gt; FUN -&gt; stats::t.test -&gt; t.test.formula -&gt; stop -&gt; t.test.formula(formulae, data = data, alternative = "two.sided",  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>error in universe 5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in t.test.formula(formulae, data = data, alternative = "two.sided",  : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   grouping factor must have exactly 2 levels</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  pkgdown::deploy_to_branch -&gt; build_site_github_pages -&gt; build_site -&gt; build_site_local -&gt; build_reference -&gt; purrr::map -&gt; .f -&gt; withCallingHandlers -&gt; data_reference_topic -&gt; run_examples -&gt; highlight_examples -&gt; downlit::evaluate_and_highlight -&gt; evaluate::evaluate -&gt; evaluate_call -&gt; timing_fn -&gt; handle -&gt; try - f, silent = TRUE) -&gt; withCallingHandlers -&gt; withVisible -&gt; eval_with_user_handlers -&gt; eval -&gt; eval -&gt; ttest_mverse -&gt; execute_multiverse -&gt; execute_multiverse.mverse -&gt; multiverse::execute_multiverse -&gt; mapply -&gt;  -&gt; app -&gt; FUN -&gt; tryStack -&gt; lapply -&gt; FUN -&gt; FUN -&gt; stats::t.test -&gt; t.test.formula -&gt; stop -&gt; t.test.formula(formulae, data = data, alternative = "two.sided",  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>error in universe 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in t.test.formula(formulae, data = data, alternative = "two.sided",  : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   grouping factor must have exactly 2 levels</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  pkgdown::deploy_to_branch -&gt; build_site_github_pages -&gt; build_site -&gt; build_site_local -&gt; build_reference -&gt; purrr::map -&gt; .f -&gt; withCallingHandlers -&gt; data_reference_topic -&gt; run_examples -&gt; highlight_examples -&gt; downlit::evaluate_and_highlight -&gt; evaluate::evaluate -&gt; evaluate_call -&gt; timing_fn -&gt; handle -&gt; try - f, silent = TRUE) -&gt; withCallingHandlers -&gt; withVisible -&gt; eval_with_user_handlers -&gt; eval -&gt; eval -&gt; ttest_mverse -&gt; execute_multiverse -&gt; execute_multiverse.mverse -&gt; multiverse::execute_multiverse -&gt; mapply -&gt;  -&gt; app -&gt; FUN -&gt; tryStack -&gt; lapply -&gt; FUN -&gt; FUN -&gt; stats::t.test -&gt; t.test.formula -&gt; stop -&gt; t.test.formula(formulae, data = data, alternative = "two.sided",  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>error in universe 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in t(c(htest$statistic, htest$p.value, htest$conf.int, htest$estimate)) : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   object 'htest' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  pkgdown::deploy_to_branch -&gt; build_site_github_pages -&gt; build_site -&gt; build_site_local -&gt; build_reference -&gt; purrr::map -&gt; .f -&gt; withCallingHandlers -&gt; data_reference_topic -&gt; run_examples -&gt; highlight_examples -&gt; downlit::evaluate_and_highlight -&gt; evaluate::evaluate -&gt; evaluate_call -&gt; timing_fn -&gt; handle -&gt; try - f, silent = TRUE) -&gt; withCallingHandlers -&gt; withVisible -&gt; eval_with_user_handlers -&gt; eval -&gt; eval -&gt; ttest_mverse -&gt; execute_multiverse -&gt; execute_multiverse.mverse -&gt; multiverse::execute_multiverse -&gt; mapply -&gt;  -&gt; app -&gt; FUN -&gt; tryStack -&gt; lapply -&gt; FUN -&gt; FUN -&gt; as.data.frame -&gt; dplyr::rename -&gt; as.data.frame -&gt; t -&gt; t(c(htest$statistic, htest$p.value, htest$conf.int, htest$estimate)) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>error in universe 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in t(c(htest$statistic, htest$p.value, htest$conf.int, htest$estimate)) : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   object 'htest' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  pkgdown::deploy_to_branch -&gt; build_site_github_pages -&gt; build_site -&gt; build_site_local -&gt; build_reference -&gt; purrr::map -&gt; .f -&gt; withCallingHandlers -&gt; data_reference_topic -&gt; run_examples -&gt; highlight_examples -&gt; downlit::evaluate_and_highlight -&gt; evaluate::evaluate -&gt; evaluate_call -&gt; timing_fn -&gt; handle -&gt; try - f, silent = TRUE) -&gt; withCallingHandlers -&gt; withVisible -&gt; eval_with_user_handlers -&gt; eval -&gt; eval -&gt; ttest_mverse -&gt; execute_multiverse -&gt; execute_multiverse.mverse -&gt; multiverse::execute_multiverse -&gt; mapply -&gt;  -&gt; app -&gt; FUN -&gt; tryStack -&gt; lapply -&gt; FUN -&gt; FUN -&gt; as.data.frame -&gt; dplyr::rename -&gt; as.data.frame -&gt; t -&gt; t(c(htest$statistic, htest$p.value, htest$conf.int, htest$estimate)) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>error in universe 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in t(c(htest$statistic, htest$p.value, htest$conf.int, htest$estimate)) : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   object 'htest' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  pkgdown::deploy_to_branch -&gt; build_site_github_pages -&gt; build_site -&gt; build_site_local -&gt; build_reference -&gt; purrr::map -&gt; .f -&gt; withCallingHandlers -&gt; data_reference_topic -&gt; run_examples -&gt; highlight_examples -&gt; downlit::evaluate_and_highlight -&gt; evaluate::evaluate -&gt; evaluate_call -&gt; timing_fn -&gt; handle -&gt; try - f, silent = TRUE) -&gt; withCallingHandlers -&gt; withVisible -&gt; eval_with_user_handlers -&gt; eval -&gt; eval -&gt; ttest_mverse -&gt; execute_multiverse -&gt; execute_multiverse.mverse -&gt; multiverse::execute_multiverse -&gt; mapply -&gt;  -&gt; app -&gt; FUN -&gt; tryStack -&gt; lapply -&gt; FUN -&gt; FUN -&gt; as.data.frame -&gt; dplyr::rename -&gt; as.data.frame -&gt; t -&gt; t(c(htest$statistic, htest$p.value, htest$conf.int, htest$estimate)) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>error in universe 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in t(c(htest$statistic, htest$p.value, htest$conf.int, htest$estimate)) : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   object 'htest' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  pkgdown::deploy_to_branch -&gt; build_site_github_pages -&gt; build_site -&gt; build_site_local -&gt; build_reference -&gt; purrr::map -&gt; .f -&gt; withCallingHandlers -&gt; data_reference_topic -&gt; run_examples -&gt; highlight_examples -&gt; downlit::evaluate_and_highlight -&gt; evaluate::evaluate -&gt; evaluate_call -&gt; timing_fn -&gt; handle -&gt; try - f, silent = TRUE) -&gt; withCallingHandlers -&gt; withVisible -&gt; eval_with_user_handlers -&gt; eval -&gt; eval -&gt; ttest_mverse -&gt; execute_multiverse -&gt; execute_multiverse.mverse -&gt; multiverse::execute_multiverse -&gt; mapply -&gt;  -&gt; app -&gt; FUN -&gt; tryStack -&gt; lapply -&gt; FUN -&gt; FUN -&gt; as.data.frame -&gt; dplyr::rename -&gt; as.data.frame -&gt; t -&gt; t(c(htest$statistic, htest$p.value, htest$conf.int, htest$estimate)) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>error in universe 5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in t(c(htest$statistic, htest$p.value, htest$conf.int, htest$estimate)) : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   object 'htest' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  pkgdown::deploy_to_branch -&gt; build_site_github_pages -&gt; build_site -&gt; build_site_local -&gt; build_reference -&gt; purrr::map -&gt; .f -&gt; withCallingHandlers -&gt; data_reference_topic -&gt; run_examples -&gt; highlight_examples -&gt; downlit::evaluate_and_highlight -&gt; evaluate::evaluate -&gt; evaluate_call -&gt; timing_fn -&gt; handle -&gt; try - f, silent = TRUE) -&gt; withCallingHandlers -&gt; withVisible -&gt; eval_with_user_handlers -&gt; eval -&gt; eval -&gt; ttest_mverse -&gt; execute_multiverse -&gt; execute_multiverse.mverse -&gt; multiverse::execute_multiverse -&gt; mapply -&gt;  -&gt; app -&gt; FUN -&gt; tryStack -&gt; lapply -&gt; FUN -&gt; FUN -&gt; as.data.frame -&gt; dplyr::rename -&gt; as.data.frame -&gt; t -&gt; t(c(htest$statistic, htest$p.value, htest$conf.int, htest$estimate)) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>error in universe 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in t(c(htest$statistic, htest$p.value, htest$conf.int, htest$estimate)) : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   object 'htest' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  pkgdown::deploy_to_branch -&gt; build_site_github_pages -&gt; build_site -&gt; build_site_local -&gt; build_reference -&gt; purrr::map -&gt; .f -&gt; withCallingHandlers -&gt; data_reference_topic -&gt; run_examples -&gt; highlight_examples -&gt; downlit::evaluate_and_highlight -&gt; evaluate::evaluate -&gt; evaluate_call -&gt; timing_fn -&gt; handle -&gt; try - f, silent = TRUE) -&gt; withCallingHandlers -&gt; withVisible -&gt; eval_with_user_handlers -&gt; eval -&gt; eval -&gt; ttest_mverse -&gt; execute_multiverse -&gt; execute_multiverse.mverse -&gt; multiverse::execute_multiverse -&gt; mapply -&gt;  -&gt; app -&gt; FUN -&gt; tryStack -&gt; lapply -&gt; FUN -&gt; FUN -&gt; as.data.frame -&gt; dplyr::rename -&gt; as.data.frame -&gt; t -&gt; t(c(htest$statistic, htest$p.value, htest$conf.int, htest$estimate)) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   universe x_branch                              y_branch two_sample_form… out  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                                 <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1        <span style="color: #949494;">"</span>((rater1 + rater2)/2) &gt; mean((rater… redCards y ~ x            <span style="color: #BB0000;">NA</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2        <span style="color: #949494;">"</span>((rater1 + rater2)/2) &gt; mean((rater… yellowC… y ~ x            <span style="color: #BB0000;">NA</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 3        <span style="color: #949494;">"</span>((rater1 + rater2)/2) &gt; mean((rater… yellowR… y ~ x            <span style="color: #BB0000;">NA</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 4        <span style="color: #949494;">"</span>ifelse(rater1 &gt; rater2, rater1, rat… redCards y ~ x            <span style="color: #BB0000;">NA</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 5        <span style="color: #949494;">"</span>ifelse(rater1 &gt; rater2, rater1, rat… yellowC… y ~ x            <span style="color: #BB0000;">NA</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 6        <span style="color: #949494;">"</span>ifelse(rater1 &gt; rater2, rater1, rat… yellowR… y ~ x            <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   universe x_branch                                        y_bra…¹ two_s…² out  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                                           <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1        <span style="color: #949494;">"</span>((rater1 + rater2)/2) &gt; mean((rater1 + rater2… redCar… y ~ x   <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2        <span style="color: #949494;">"</span>((rater1 + rater2)/2) &gt; mean((rater1 + rater2… yellow… y ~ x   <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 3        <span style="color: #949494;">"</span>((rater1 + rater2)/2) &gt; mean((rater1 + rater2… yellow… y ~ x   <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 4        <span style="color: #949494;">"</span>ifelse(rater1 &gt; rater2, rater1, rater2) &gt; mea… redCar… y ~ x   <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 5        <span style="color: #949494;">"</span>ifelse(rater1 &gt; rater2, rater1, rater2) &gt; mea… yellow… y ~ x   <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 6        <span style="color: #949494;">"</span>ifelse(rater1 &gt; rater2, rater1, rater2) &gt; mea… yellow… y ~ x   <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with abbreviated variable names ¹​y_branch, ²​two_sample_form_branch</span></span>
 </code></pre></div>
     </div>
   </div>
@@ -165,7 +247,7 @@ variances as being equal.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
