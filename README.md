@@ -28,7 +28,7 @@ You can install the development version from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("mverseanalysis/mverse", head = "dev", build_vignettes = TRUE)
+devtools::install_github("mverseanalysis/mverse", build_vignettes = TRUE)
 ```
 
 ## Usage
