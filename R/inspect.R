@@ -490,12 +490,21 @@ BIC <- function(object, ...) {
 #' add_branch_condition(mv, match_poisson)
 #' add_branch_condition(mv, match_log_lin)
 #' multiverse_tree(mv)
+#' # You can adjust colour scale of the edges
+#' # using a ggraph::scale_edge_colour*() function.
+#' multiverse_tree(mv) +
+#'   ggraph::scale_edge_colour_viridis(
+#'     discrete = TRUE,
+#'     labels = c("Distribution", "Model", "Strength",
+#'                "Femininity", "Outliers", "y")
+#'   )
 #' # Display a multiverse tree for a subset of branches
 #' # with label for each option.
 #' multiverse_tree(mv, branches = c("y", "distribution"), label = TRUE)
 #' # adjusting size and orientation of the labels
 #' multiverse_tree(mv, branches = c("y", "distribution"),
 #'   label = TRUE, label_size = 4, label_angle = 45)
+#' #
 #' }
 #' @param .mverse A \code{mverse} object.
 #' @param label A logical. Display options as labels when TRUE.
@@ -531,7 +540,7 @@ multiverse_tree <- function(.mverse, label = FALSE,
     })]
   }
   brs_name <- paste0(brs, "_branch")
-  combs <- summary(.mverse)[brs_name] %>%
+  combs <- summary(.mverse, conf.int = FALSE)[brs_name] %>%
     dplyr::mutate(dplyr::across(.fns = as.character))
   edges_list <-
     list(data.frame(
@@ -561,13 +570,7 @@ multiverse_tree <- function(.mverse, label = FALSE,
     coord_flip() +
     scale_y_reverse(expand = c(0.1, 0.1)) +
     scale_x_continuous(expand = c(0.1, 0.1)) +
-    scale_edge_color_manual(
-      name = NULL,
-      values = grDevices::hcl(
-        h = seq(0, 360, length.out = length(brs) + 1), l = 50
-      ),
-      limits = brs
-    ) +
+    labs(edge_colour = NULL) +
     theme(legend.position = "top")
   if (label) {
     plt <- plt +

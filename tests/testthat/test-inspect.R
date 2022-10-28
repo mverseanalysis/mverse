@@ -253,3 +253,40 @@ test_that("multiverse_tree() draws a graph with correct data.", {
     c("Data", "x", "y", "x_x + y", "x_x - y", "y_x + y", "y_x - y")
   )
 })
+
+test_that("multiverse_tree() runs after fitting a lm model." , {
+  mydf <- data.frame(x = sample.int(25), y = sample.int(25), u = sample.int(25))
+  w <- mutate_branch(x + y + u, x - y + u)
+  z <- mutate_branch(x + y < mean(w), x + y > mean(w))
+  frml <- formula_branch(w ~ 0 + x + y)
+  mv <- mverse(mydf) %>%
+    add_mutate_branch(w) %>%
+    add_formula_branch(frml)
+  mtree <- multiverse_tree(mv)
+  mv <- mv %>%
+    lm_mverse()
+  mtree_lm <- multiverse_tree(mv)
+  expect_true(ggplot2::is.ggplot(mtree))
+  expect_equal(mtree$data$.ggraph.index, mtree_lm$data$.ggraph.index)
+  expect_equal(mtree$data$.ggraph.orig_index, mtree_lm$data$.ggraph.orig_index)
+})
+
+test_that("multiverse_tree() runs after fitting a glm model." , {
+  mydf <- data.frame(x = rnorm(100), y = sample.int(100) - 50)
+  p1 <- mutate_branch(1 / (1 + exp(-(x + y / 100))))
+  p2 <- mutate_branch(1 / (1 + exp(-(x - y / 100))))
+  z <- mutate_branch(rbinom(100, 1, p1), rbinom(100, 1, p2))
+  frml <- formula_branch(z ~ x + y)
+  fml <- family_branch(binomial)
+  mv <- mverse(mydf) %>%
+    add_mutate_branch(p1, p2, z) %>%
+    add_formula_branch(frml) %>%
+    add_family_branch(fml)
+  mtree <- multiverse_tree(mv)
+  mv <- mv %>%
+    glm_mverse()
+  mtree_glm <- multiverse_tree(mv)
+  expect_true(ggplot2::is.ggplot(mtree))
+  expect_equal(mtree$data$.ggraph.index, mtree_glm$data$.ggraph.index)
+  expect_equal(mtree$data$.ggraph.orig_index, mtree_glm$data$.ggraph.orig_index)
+})

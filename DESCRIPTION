@@ -56,6 +56,6 @@ Suggests:
   knitr,
   rmarkdown,
   kableExtra
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 VignetteBuilder: knitr
 URL: https://github.com/mverseanalysis/mverse/, https://mverseanalysis.github.io/mverse/

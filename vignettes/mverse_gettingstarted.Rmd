@@ -203,6 +203,10 @@ mv <- execute_multiverse(mv)
 
 `extract` to add the column to `df_transformed` that labels transformations.
 
+```{r echo=FALSE}
+extract <- mverse::extract
+```
+
 ```{r}
 df_transformed <- extract(mv)
 
