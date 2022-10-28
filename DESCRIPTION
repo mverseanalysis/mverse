@@ -41,7 +41,6 @@ Imports:
   stringr,
   stats,
   broom,
-  grDevices,
   igraph,
   ggraph,
   ggplot2,

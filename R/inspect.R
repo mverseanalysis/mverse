@@ -492,19 +492,17 @@ BIC <- function(object, ...) {
 #' multiverse_tree(mv)
 #' # You can adjust colour scale of the edges
 #' # using a ggraph::scale_edge_colour*() function.
-#' multiverse_tree(mv) +
-#'   ggraph::scale_edge_colour_viridis(
-#'     discrete = TRUE,
-#'     labels = c("Distribution", "Model", "Strength",
-#'                "Femininity", "Outliers", "y")
-#'   )
+#' multiverse_tree(mv) + ggraph::scale_edge_colour_viridis(
+#'   discrete = TRUE,
+#'   labels = c("Distribution", "Model", "Strength",
+#'              "Femininity", "Outliers", "y")
+#' )
 #' # Display a multiverse tree for a subset of branches
 #' # with label for each option.
 #' multiverse_tree(mv, branches = c("y", "distribution"), label = TRUE)
 #' # adjusting size and orientation of the labels
 #' multiverse_tree(mv, branches = c("y", "distribution"),
 #'   label = TRUE, label_size = 4, label_angle = 45)
-#' #
 #' }
 #' @param .mverse A \code{mverse} object.
 #' @param label A logical. Display options as labels when TRUE.
