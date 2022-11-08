@@ -468,7 +468,7 @@ BIC <- function(object, ...) {
 #' zooming into a subset of branches using \code{branches} parameter.
 #'
 #' @examples
-#' \donttest{
+#' {
 #' # Display a multiverse tree with multiple branches.
 #' outliers <- filter_branch(!Name %in% c("Katrina", "Audrey"), TRUE)
 #' femininity <- mutate_branch(MasFem, Gender_MF)

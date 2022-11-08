@@ -81,7 +81,7 @@ extract.mverse <- function(.mverse, columns = NULL,
                            include_branch_options = TRUE, ...) {
   stopifnot(inherits(.mverse, "mverse"))
   data <- NULL # suppress R CMD check note
-  mtable <- summary(.mverse)
+  mtable <- summary.mverse(.mverse)
   branched_columns <- unlist(
     sapply(
       c(
