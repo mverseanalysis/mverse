@@ -6,7 +6,7 @@
 \usage{
 multiverse_tree(
   .mverse,
-  label = FALSE,
+  label = "none",
   branches = NULL,
   label_size = NULL,
   label_angle = 0
@@ -15,7 +15,8 @@ multiverse_tree(
 \arguments{
 \item{.mverse}{A \code{mverse} object.}
 
-\item{label}{A logical. Display options as labels when TRUE.}
+\item{label}{Display the branch option name when "name" or the definition
+when "code". No label is displayed when "none" (default).}
 
 \item{branches}{A character vector. Display a subset of branches
 when specified. Display all when NULL.}
@@ -64,10 +65,12 @@ multiverse_tree(mv) + ggraph::scale_edge_colour_viridis(
              "Femininity", "Outliers", "y")
 )
 # Display a multiverse tree for a subset of branches
-# with label for each option.
-multiverse_tree(mv, branches = c("y", "distribution"), label = TRUE)
+# with name label for each option.
+multiverse_tree(mv, branches = c("y", "distribution"), label = "name")
+# with code label for each option.
+multiverse_tree(mv, branches = c("y", "distribution"), label = "code")
 # adjusting size and orientation of the labels
 multiverse_tree(mv, branches = c("y", "distribution"),
-  label = TRUE, label_size = 4, label_angle = 45)
+  label = "name", label_size = 4, label_angle = 45)
 }
 }

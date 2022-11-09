@@ -38,8 +38,9 @@ a multiverse table as a tibble.
 \description{
 This method returns the multiverse table
 displaying all universes defined by the multiverse.
-Each row corresponds to a universe and each column
-represents a branch.
+Each row corresponds to a universe and the columns
+include universe number, branch option name, and
+branch option definition.
 }
 \details{
 When you pass a \code{mverse} objected fitted with model,
@@ -61,7 +62,6 @@ summary(mv)
 ## Displaying after adding a a filter branch.
 hurricane_outliers <- filter_branch(
   !Name \%in\% c("Katrina", "Audrey", "Andrew"),
-  !Name \%in\% c("Katrina"),
   !Name \%in\% c("Katrina"),
   TRUE # include all
 )

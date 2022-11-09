@@ -12,22 +12,36 @@ test_that("summary() prints the multiverse table for a mverse object.", {
       mutate_branch(x + y, x - y, x * y, name = "m2")
     ) %>%
     add_filter_branch(
-      filter_branch(x > 0, x < 0, x == 0, name = "f1"),
+      filter_branch(x < 0, x > 0, x == 0, name = "f1"),
       filter_branch(x > 0, x < 0, x == 0, name = "f2")
     )
   mtable <- summary(mv)
   mtable_expected <- tibble::tibble(
     universe = factor(1:(3^4)),
-    m1_branch = factor(rep(c("x + y", "x - y", "x * y"), each = 3^3)),
-    m2_branch = factor(rep(rep(c("x + y", "x - y", "x * y"), each = 3^2), 3)),
-    f1_branch = factor(rep(rep(c("x > 0", "x < 0", "x == 0"), each = 3), 3^2)),
-    f2_branch = factor(rep(c("x > 0", "x < 0", "x == 0"), 3^3))
+    m1_branch = factor(rep(c("m1_1", "m1_2", "m1_3"), each = 3^3)),
+    m2_branch = factor(rep(rep(c("m2_1", "m2_2", "m2_3"), each = 3^2), 3)),
+    f1_branch = factor(rep(rep(c("f1_1", "f1_2", "f1_3"), each = 3), 3^2)),
+    f2_branch = factor(rep(c("f2_1", "f2_2", "f2_3"), 3^3)),
+    m1_branch_code = factor(
+      rep(c("x + y", "x - y", "x * y"), each = 3^3),
+      levels = c("x + y", "x - y", "x * y")),
+    m2_branch_code = factor(
+      rep(rep(c("x + y", "x - y", "x * y"), each = 3^2), 3),
+      levels = c("x + y", "x - y", "x * y")),
+    f1_branch_code = factor(
+      rep(rep(c("x < 0", "x > 0", "x == 0"), each = 3), 3^2),
+      levels = c("x < 0", "x > 0", "x == 0")),
+    f2_branch_code = factor(
+      rep(c("x > 0", "x < 0", "x == 0"), 3^3),
+      levels = c("x > 0", "x < 0", "x == 0"))
   )
   expect_equal(nrow(mtable), 3^4)
-  expect_equal(ncol(mtable), 5)
+  expect_equal(ncol(mtable), 9)
   expect_equal(
     names(mtable),
-    c("universe", "m1_branch", "m2_branch", "f1_branch", "f2_branch")
+    c("universe", c(
+      "m1_branch", "m2_branch", "f1_branch", "f2_branch",
+      "m1_branch_code", "m2_branch_code", "f1_branch_code", "f2_branch_code"))
   )
   expect_identical(mtable, mtable_expected)
 })
@@ -94,7 +108,8 @@ test_that("summary.lm_mverse() outputs coefficient estimates with 95% confidence
     lm(y ~ ., data = mydf) %>% broom::tidy(conf.int = TRUE),
     lm(y ~ x1 * x2, data = mydf) %>% broom::tidy(conf.int = TRUE)
   ))
-  smverse <- summary(mv) %>% dplyr::select(-c(universe, model_spec_branch))
+  smverse <- summary(mv) %>%
+    dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
   expect_identical(smverse, smanu)
 })
 
@@ -115,7 +130,8 @@ test_that("summary.lm_mverse(., conf.int = FALSE) outputs coefficient estimates 
     lm(y ~ ., data = mydf) %>% broom::tidy(),
     lm(y ~ x1 * x2, data = mydf) %>% broom::tidy()
   ))
-  smverse <- summary(mv, conf.int = FALSE) %>% dplyr::select(-c(universe, model_spec_branch))
+  smverse <- summary(mv, conf.int = FALSE) %>%
+    dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
   expect_identical(smverse, smanu)
 })
 
@@ -137,7 +153,7 @@ test_that("summary.lm_mverse(output = 'df') outputs degrees of freedom.", {
       dplyr::rename(p = V1, n.minus.p = V2, p.star = V3)
   ))
   smverse2 <- summary(mv, output = "df") %>%
-    dplyr::select(-c(universe, model_spec_branch))
+    dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
   expect_identical(smverse2, smanu)
 })
 
@@ -168,9 +184,9 @@ test_that("summary.lm_mverse(output = 'r') outputs R squared values.", {
       dplyr::rename(r.squared = V1, adj.r.squared = V2)
   ))
   smverse <- summary(mv, output = "r") %>%
-    dplyr::select(-c(universe, model_spec_branch))
+    dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
   smverse2 <- summary(mv, output = "r.squared") %>%
-    dplyr::select(-c(universe, model_spec_branch))
+    dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
   expect_identical(smverse, smanu)
   expect_identical(smverse2, smanu)
 })
@@ -192,9 +208,9 @@ test_that("summary.lm_mverse(output = 'f') outputs F statistics.", {
       dplyr::rename(fstatistic = value, numdf.f = numdf, dendf.f = dendf)
   ))
   smverse <- summary(mv, output = "f") %>%
-    dplyr::select(-c(universe, model_spec_branch))
+    dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
   smverse2 <- summary(mv, output = "fstatistic") %>%
-    dplyr::select(-c(universe, model_spec_branch))
+    dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
   expect_identical(smverse, smanu)
   expect_identical(smverse2, smanu)
 })
@@ -247,9 +263,21 @@ test_that("multiverse_tree() draws a graph with correct data.", {
   mv <- mverse(mydf) %>%
     add_mutate_branch(z, w)
   mtree <- multiverse_tree(mv)
+  mtree_name <- multiverse_tree(mv, label = "name")
+  mtree_code <- multiverse_tree(mv, label = "code")
   expect_equal(nrow(mtree$data), 7)
+  expect_equal(nrow(mtree_name$data), 7)
+  expect_equal(nrow(mtree_code$data), 7)
   expect_equal(
     mtree$data$name,
+    c("Data", "z_1", "z_2", "z_1_w_1", "z_1_w_2", "z_2_w_1", "z_2_w_2")
+  )
+  expect_equal(
+    mtree_name$data$name,
+    c("Data", "z_1", "z_2", "z_1_w_1", "z_1_w_2", "z_2_w_1", "z_2_w_2")
+  )
+  expect_equal(
+    mtree_code$data$name,
     c("Data", "x", "y", "x_x + y", "x_x - y", "y_x + y", "y_x - y")
   )
 })

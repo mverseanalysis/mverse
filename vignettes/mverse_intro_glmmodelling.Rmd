@@ -207,7 +207,7 @@ Now, we have $12 \times 2 = 24$ different combinations.
 `multiverse_tree` can be used to view `hurricane_mv`.  The tree below shows that `alldeaths` is modelled using both Gaussian and Poisson distributions.
 
 ```{r}
-multiverse_tree(hurricane_mv, label = TRUE, branches = c("models", "distributions"))
+multiverse_tree(hurricane_mv, label = "code", branches = c("models", "distributions"))
 ```
 
 
@@ -264,7 +264,7 @@ hurricane_mv <- hurricane_mv %>%
 Using `multiverse_tree()` to display the multiverse tree of `dep_var` and `distributions` shows that `log(alldeaths + 1)` and `alldeaths` will be modelled as both Gaussian and Poisson.
 
 ```{r}
-multiverse_tree(hurricane_mv, label = TRUE, c("dep_var", "distributions"))
+multiverse_tree(hurricane_mv, label = "code", c("dep_var", "distributions"))
 ```
 
 In order to specify that `hurricane_mv` should only contain analyses where `log(alldeaths + 1)` is modelled using a Gaussian and `alldeaths` modelled using Poisson we can use `branch_condition()` and `add_branch_condition()` to add it to `hurricane_mv`.
@@ -281,7 +281,7 @@ hurricane_mv <- add_branch_condition(hurricane_mv, match_poisson, match_log_lin)
 The multiverse tree shows that `log(alldeaths + 1)` will _only_ be modelled as Gaussian and `alldeaths` will _only_ be modelled as Poisson.
 
 ```{r}
-multiverse_tree(hurricane_mv, label = TRUE, c("dep_var", "distributions"))
+multiverse_tree(hurricane_mv, label = "code", c("dep_var", "distributions"))
 ```
 
 ```{r}

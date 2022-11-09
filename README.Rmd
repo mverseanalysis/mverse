@@ -150,15 +150,15 @@ mv <- create_multiverse(hurricane) %>%
   add_filter_branch(outliers) %>%
   add_mutate_branch(strength) 
 combs <- summary(mv) %>%
-  dplyr::select(outliers_branch, strength_branch)
+  dplyr::select(outliers_branch_code, strength_branch_code)
 edges <- rbind(
   combs %>%
     dplyr::mutate(from = "Data",
-           to = outliers_branch) %>%
+           to = outliers_branch_code) %>%
     dplyr::distinct(from, to),
   combs %>%
-    dplyr::mutate(from = outliers_branch,
-           to = strength_branch) %>%
+    dplyr::mutate(from = outliers_branch_code,
+           to = strength_branch_code) %>%
     dplyr::distinct(from, to)) %>%
   dplyr::mutate(
     branch =  factor(c(

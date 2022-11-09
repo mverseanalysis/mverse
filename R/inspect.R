@@ -4,23 +4,22 @@ display_branch_opts <- function(mtable, .mverse) {
     c(
       attr(.mverse, "branches_list"),
       attr(.mverse, "branches_conditioned_list")
-    ),
-    function(vb) {
-      opts <- character(length(vb$opts))
-      for (i in seq_len(length(vb$opts))) {
-        opts[i] <- rlang::quo_text(vb$opts[[i]])
-      }
-      out <- list(opts)
-      names(out) <- vb$name
+    ), function(b) {
+      out <- list(
+        sapply(b$opts, rlang::quo_text)
+      )
+      names(out) <- b$name
       out
     }
   )
+
   for (nm in names(branches)) {
     replace_this <- paste(nm, seq_len(length(branches[[nm]])), sep = "_")
     brnch <- paste(nm, "branch", sep = "_")
-    mtable[[brnch]] <- mtable[[brnch]] %>%
+    mtable[[paste0(brnch, "_code")]] <- mtable[[brnch]] %>%
       dplyr::recode(!!!stats::setNames(branches[[nm]], replace_this)) %>%
-      factor()
+      factor(levels = branches[[nm]])
+    mtable[[brnch]] <- factor(mtable[[brnch]])
   }
   mtable
 }
@@ -29,8 +28,9 @@ display_branch_opts <- function(mtable, .mverse) {
 #'
 #' This method returns the multiverse table
 #' displaying all universes defined by the multiverse.
-#' Each row corresponds to a universe and each column
-#' represents a branch.
+#' Each row corresponds to a universe and the columns
+#' include universe number, branch option name, and
+#' branch option definition.
 #'
 #' When you pass a \code{mverse} objected fitted with model,
 #' the summary table includes results of the fitted models
@@ -55,7 +55,6 @@ display_branch_opts <- function(mtable, .mverse) {
 #' ## Displaying after adding a a filter branch.
 #' hurricane_outliers <- filter_branch(
 #'   !Name %in% c("Katrina", "Audrey", "Andrew"),
-#'   !Name %in% c("Katrina"),
 #'   !Name %in% c("Katrina"),
 #'   TRUE # include all
 #' )
@@ -498,14 +497,17 @@ BIC <- function(object, ...) {
 #'              "Femininity", "Outliers", "y")
 #' )
 #' # Display a multiverse tree for a subset of branches
-#' # with label for each option.
-#' multiverse_tree(mv, branches = c("y", "distribution"), label = TRUE)
+#' # with name label for each option.
+#' multiverse_tree(mv, branches = c("y", "distribution"), label = "name")
+#' # with code label for each option.
+#' multiverse_tree(mv, branches = c("y", "distribution"), label = "code")
 #' # adjusting size and orientation of the labels
 #' multiverse_tree(mv, branches = c("y", "distribution"),
-#'   label = TRUE, label_size = 4, label_angle = 45)
+#'   label = "name", label_size = 4, label_angle = 45)
 #' }
 #' @param .mverse A \code{mverse} object.
-#' @param label A logical. Display options as labels when TRUE.
+#' @param label Display the branch option name when "name" or the definition
+#'   when "code". No label is displayed when "none" (default).
 #' @param branches A character vector. Display a subset of branches
 #'   when specified. Display all when NULL.
 #' @param label_size A numeric. Set size of option labels.
@@ -515,9 +517,10 @@ BIC <- function(object, ...) {
 #' @return A \code{ggplot} object displaying the multiverse tree.
 #' @name multiverse_tree
 #' @export
-multiverse_tree <- function(.mverse, label = FALSE,
+multiverse_tree <- function(.mverse, label = "none",
                             branches = NULL, label_size = NULL,
                             label_angle = 0) {
+  stopifnot(label %in% c("none", "code", "name"))
   # sort: conditioned -> conditioned on -> others
   brs <- unique(sapply(
     c(
@@ -537,7 +540,7 @@ multiverse_tree <- function(.mverse, label = FALSE,
       x %in% branches
     })]
   }
-  brs_name <- paste0(brs, "_branch")
+  brs_name <- paste0(brs, ifelse(label == "code", "_branch_code", "_branch"))
   combs <- summary(.mverse, conf.int = FALSE)[brs_name] %>%
     dplyr::mutate(dplyr::across(.fns = as.character))
   edges_list <-
@@ -570,7 +573,7 @@ multiverse_tree <- function(.mverse, label = FALSE,
     scale_x_continuous(expand = c(0.1, 0.1)) +
     labs(edge_colour = NULL) +
     theme(legend.position = "top")
-  if (label) {
+  if (label %in% c("code", "name")) {
     plt <- plt +
       geom_node_text(
         aes(label = v_labels),
