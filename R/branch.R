@@ -25,14 +25,14 @@ parse.branch <- function(br) {
   has_cond <- "conds" %in% names(br)
   body_str <- paste0(
     mapply(
-      function(i, x) {
+      function(i, x, z) {
         paste0(
-          "'", br$name, "_", i, "'",
+          "'", ifelse(nchar(z) > 0, z, paste0(br$name, "_", i)), "'",
           ifelse(has_cond, br$conds[i], ""),
           "~", rlang::quo_text(x)
         )
       },
-      seq_len(length(br$opts)), br$opts
+      seq_len(length(br$opts)), br$opts, br$opts_names
     ),
     collapse = ","
   )
@@ -49,14 +49,14 @@ parse.formula_branch <- function(br) {
   has_cond <- "conds" %in% names(br)
   body_str <- paste0(
     mapply(
-      function(i, x) {
+      function(i, x, z) {
         paste0(
-          "'", br$name, "_", i, "'",
+          "'", ifelse(nchar(z) > 0, z, paste0(br$name, "_", i)), "'",
           ifelse(has_cond, br$conds[i], ""),
           "~ formula(", rlang::quo_text(x), ")"
         )
       },
-      seq_len(length(br$opts)), br$opts
+      seq_len(length(br$opts)), br$opts, br$opts_names
     ),
     collapse = ","
   )
@@ -72,6 +72,17 @@ check_branch_name <- function(br) {
       br$name
     ))
   }
+}
+
+branch <- function(opts, opts_names, name, class) {
+  structure(
+    list(
+      opts = opts,
+      opts_names = opts_names,
+      name = name
+    ),
+    class = c(class, "branch")
+  )
 }
 
 add_branch <- function(.mverse, brs, nms) {
@@ -144,10 +155,13 @@ as_option_list <- function(x) {
   opts <- sapply(
     x$opts, function(s) stringr::str_replace(rlang::expr_text(s), "^~", "")
   )
-  if (!is.null(x$name)) {
-    opts <- stats::setNames(opts, paste0(x$name, "_", seq_len(length(opts))))
-  }
-  return(opts)
+  opts <- stats::setNames(
+    opts,
+    ifelse(nchar(x$opts_names) > 0, x$opts_names,
+           paste0(ifelse(is.null(x$name), "", x$name),
+                  "_", seq_len(length(opts))))
+    )
+  opts
 }
 
 #' Print method for \code{*_branch} objects.

@@ -2,12 +2,9 @@
 % Please edit documentation in R/formula_branch.R
 \name{add_formula_branch}
 \alias{add_formula_branch}
-\alias{add_formula_branch.mverse}
 \title{Add formula branches to a \code{mverse} object.}
 \usage{
 add_formula_branch(.mverse, ...)
-
-\method{add_formula_branch}{mverse}(.mverse, ...)
 }
 \arguments{
 \item{.mverse}{a \code{mverse} object.}

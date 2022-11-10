@@ -19,25 +19,16 @@
 #' @export
 formula_branch <- function(..., name = NULL) {
   opts <- rlang::enquos(...)
+  opts_names <- names(opts)
+  stopifnot(
+    length(unique(opts_names)) >= length(opts_names[nchar(opts_names) > 0]))
   if (!length(opts) > 0) {
     stop("Error: Provide at least one rule.")
   }
   if (!(is.character(name) | is.null(name))) {
     stop('Error: "name" must be a character object.')
   }
-  structure(
-    list(
-      opts = opts,
-      name = name
-    ),
-    class = c("formula_branch", "branch")
-  )
-}
-
-#' @rdname add_formula_branch
-#' @export
-add_formula_branch <- function(.mverse, ...) {
-  UseMethod("add_formula_branch")
+  branch(opts, opts_names, name, "formula_branch")
 }
 
 #' Add formula branches to a \code{mverse} object.
@@ -60,9 +51,10 @@ add_formula_branch <- function(.mverse, ...) {
 #'   add_formula_branch(model_specifications)
 #' @return The resulting \code{mverse} object.
 #' @name add_formula_branch
+#' @rdname add_formula_branch
 #' @family formula branch functions
 #' @export
-add_formula_branch.mverse <- function(.mverse, ...) {
+add_formula_branch <- function(.mverse, ...) {
   nms <- sapply(rlang::enquos(...), rlang::quo_name)
   brs <- list(...)
   stopifnot(all(sapply(brs, inherits, "formula_branch")))

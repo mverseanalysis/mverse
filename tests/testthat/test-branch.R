@@ -94,6 +94,26 @@ test_that("parse() creates a branching command for multiverse.", {
   ))
 })
 
+test_that("parse() handles named branched options", {
+  mbranch <- mutate_branch(
+    add = x + y, subtract = x - y, multiply = x * y, name = "m")
+  expect_equal(parse(mbranch), rlang::parse_expr(
+    'branch(m_branch, "add" ~ x + y, "subtract" ~ x - y, "multiply" ~ x * y)'
+  ))
+  fbranch <- filter_branch(x > 0, x < 0, equals = x == 0, name = "filter")
+  expect_equal(parse(fbranch), rlang::parse_expr(
+    'branch(filter_branch, "filter_1" ~ x > 0, "filter_2" ~ x < 0, "equals" ~ x == 0)'
+  ))
+  frml <- formula_branch(linear = x ~ y, x ~ z, name = "model")
+  expect_equal(parse(frml), rlang::parse_expr(
+    'branch(model_branch, "linear" ~ formula(x ~ y), "model_2" ~ formula(x ~ z))'
+  ))
+  frml <- family_branch(linear = gaussian, name = "fam")
+  expect_equal(parse(frml), rlang::parse_expr(
+    'branch(fam_branch, "linear" ~ gaussian)'
+  ))
+})
+
 test_that("parse() handles long branch options.", {
   mydf <- data.frame(col1 = c(1, 2, 3))
   mbranch <- mutate_branch(

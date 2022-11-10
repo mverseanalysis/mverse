@@ -541,7 +541,7 @@ multiverse_tree <- function(.mverse, label = "none",
     })]
   }
   brs_name <- paste0(brs, ifelse(label == "code", "_branch_code", "_branch"))
-  combs <- summary(.mverse, conf.int = FALSE)[brs_name] %>%
+  combs <- summary.mverse(.mverse, conf.int = FALSE)[brs_name] %>%
     dplyr::mutate(dplyr::across(.fns = as.character))
   edges_list <-
     list(data.frame(

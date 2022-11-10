@@ -16,26 +16,18 @@
 #' @export
 family_branch <- function(..., name = NULL) {
   opts <- rlang::enquos(...)
+  opts_names <- names(opts)
+  stopifnot(
+    length(unique(opts_names)) >= length(opts_names[nchar(opts_names) > 0]))
   if (!length(opts) > 0) {
     stop("Error: Provide at least one rule.")
   }
   if (!(is.character(name) | is.null(name))) {
     stop('Error: "name" must be a character object.')
   }
-  structure(
-    list(
-      opts = opts,
-      name = name
-    ),
-    class = c("family_branch", "branch")
-  )
+  branch(opts, opts_names, name, "family_branch")
 }
 
-#' @rdname add_family_branch
-#' @export
-add_family_branch <- function(.mverse, ...) {
-  UseMethod("add_family_branch")
-}
 
 #' Add family branches to a \code{mverse} object.
 #'
@@ -56,9 +48,10 @@ add_family_branch <- function(.mverse, ...) {
 #'   add_family_branch(model_distributions)
 #' @return The resulting \code{mverse} object.
 #' @name add_family_branch
+#' @rdname add_family_branch
 #' @family family branch functions
 #' @export
-add_family_branch.mverse <- function(.mverse, ...) {
+add_family_branch <- function(.mverse, ...) {
   nms <- sapply(rlang::enquos(...), rlang::quo_name)
   brs <- list(...)
   stopifnot(all(sapply(brs, inherits, "family_branch")))

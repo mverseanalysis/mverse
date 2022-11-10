@@ -63,3 +63,14 @@ test_that("add_branch_condition() stops double conditioning.", {
     "Option x is already conditioned."
   )
 })
+
+test_that("add_branch_condition() works with named branch options.", {
+  z <- mutate_branch(x = x, y, name = "z")
+  w <- mutate_branch(x + y, subtract = x - y, name = "w")
+  cond <- branch_condition(x, x - y)
+  mv <- mverse(mydf) %>%
+    add_mutate_branch(z, w) %>%
+    add_branch_condition(cond)
+  expect_match(
+    attr(mv, "branches_conditioned_list")[[1]]$conds['x'], "subtract")
+})

@@ -2,12 +2,9 @@
 % Please edit documentation in R/family_branch.R
 \name{add_family_branch}
 \alias{add_family_branch}
-\alias{add_family_branch.mverse}
 \title{Add family branches to a \code{mverse} object.}
 \usage{
 add_family_branch(.mverse, ...)
-
-\method{add_family_branch}{mverse}(.mverse, ...)
 }
 \arguments{
 \item{.mverse}{a \code{mverse} object.}

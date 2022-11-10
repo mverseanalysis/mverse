@@ -24,25 +24,16 @@
 #' @export
 mutate_branch <- function(..., name = NULL) {
   opts <- rlang::enquos(...)
+  opts_names <- names(opts)
+  stopifnot(
+    length(unique(opts_names)) >= length(opts_names[nchar(opts_names) > 0]))
   if (!length(opts) > 0) {
     stop("Error: Provide at least one rule.")
   }
   if (!(is.character(name) | is.null(name))) {
     stop('Error: "name" must be a character object.')
   }
-  structure(
-    list(
-      opts = opts,
-      name = name
-    ),
-    class = c("mutate_branch", "branch")
-  )
-}
-
-#' @rdname add_mutate_branch
-#' @export
-add_mutate_branch <- function(.mverse, ...) {
-  UseMethod("add_mutate_branch")
+  branch(opts, opts_names, name, "mutate_branch")
 }
 
 #' Add mutate branches to a \code{mverse} object.
@@ -78,9 +69,10 @@ add_mutate_branch <- function(.mverse, ...) {
 #'   add_mutate_branch(hurricane_strength, y)
 #' @return The resulting \code{mverse} object.
 #' @name add_mutate_branch
+#' @rdname add_mutate_branch
 #' @family mutate branch functions
 #' @export
-add_mutate_branch.mverse <- function(.mverse, ...) {
+add_mutate_branch <- function(.mverse, ...) {
   nms <- sapply(rlang::enquos(...), rlang::quo_name)
   brs <- list(...)
   stopifnot(all(sapply(brs, inherits, "mutate_branch")))

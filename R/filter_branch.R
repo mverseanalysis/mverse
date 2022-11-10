@@ -19,26 +19,18 @@
 #' @export
 filter_branch <- function(..., name = NULL) {
   opts <- rlang::enquos(...)
+  opts_names <- names(opts)
+  stopifnot(
+    length(unique(opts_names)) >= length(opts_names[nchar(opts_names) > 0]))
   if (!length(opts) > 0) {
     stop("Error: Provide at least one rule.")
   }
   if (!(is.character(name) | is.null(name))) {
     stop('Error: "name" must be a character object.')
   }
-  structure(
-    list(
-      opts = opts,
-      name = name
-    ),
-    class = c("filter_branch", "branch")
-  )
+  branch(opts, opts_names, name, "filter_branch")
 }
 
-#' @rdname add_filter_branch
-#' @export
-add_filter_branch <- function(.mverse, ...) {
-  UseMethod("add_filter_branch")
-}
 
 #' Add filter branches to a \code{mverse} object.
 #'
@@ -62,9 +54,10 @@ add_filter_branch <- function(.mverse, ...) {
 #'   add_filter_branch(hurricane_outliers)
 #' @return The resulting \code{mverse} object.
 #' @name add_filter_branch
+#' @rdname add_filter_branch
 #' @family filter branch functions
 #' @export
-add_filter_branch.mverse <- function(.mverse, ...) {
+add_filter_branch <- function(.mverse, ...) {
   nms <- sapply(rlang::enquos(...), rlang::quo_name)
   brs <- list(...)
   stopifnot(all(sapply(brs, inherits, "filter_branch")))
