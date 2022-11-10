@@ -158,9 +158,12 @@ as_option_list <- function(x) {
   opts <- stats::setNames(
     opts,
     ifelse(nchar(x$opts_names) > 0, x$opts_names,
-           paste0(ifelse(is.null(x$name), "", x$name),
-                  "_", seq_len(length(opts))))
+      paste0(
+        ifelse(is.null(x$name), "", x$name),
+        "_", seq_len(length(opts))
+      )
     )
+  )
   opts
 }
 
