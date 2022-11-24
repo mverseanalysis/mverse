@@ -1,5 +1,3 @@
-context("Branch Conditioning")
-
 mydf <- data.frame(x = c(1, 2, 3), y = c(4, 5, 6))
 
 test_that("branch_condition() stores x and y options without evaluating the expressions.", {

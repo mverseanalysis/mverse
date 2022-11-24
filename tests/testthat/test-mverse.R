@@ -1,5 +1,3 @@
-context("Initialize mverse")
-
 test_that("Instantiation works with a data frame (mverse).", {
   mydf <- data.frame(col1 = c(1, 2, 3))
   mv <- mverse(mydf)

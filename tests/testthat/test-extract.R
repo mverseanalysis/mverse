@@ -1,5 +1,3 @@
-context("Extract Variables from Multiverse")
-
 test_that("extract() extracts values of branched variables from multiverse data.", {
   mydf <- data.frame(
     x = c(-1, 0, 1),

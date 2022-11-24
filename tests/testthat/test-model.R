@@ -1,5 +1,3 @@
-context("Fit Model Branches")
-
 test_that("lm_mverse() fits a lm model.", {
   n <- 10
   mydf <- data.frame(x1 = 1:n, x2 = sample(1:n)) %>%

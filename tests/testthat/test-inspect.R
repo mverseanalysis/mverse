@@ -1,5 +1,3 @@
-context("Inspect Multiverse")
-
 test_that("summary() prints the multiverse table for a mverse object.", {
   mydf <- data.frame(
     x = c(1, 2, 3),
@@ -242,7 +240,7 @@ test_that("multiverse_tree() outputs a ggplot object.", {
   mv <- mverse(mydf) %>%
     add_mutate_branch(z, w)
   mtree <- multiverse_tree(mv)
-  expect_is(mtree, "ggplot")
+  expect_s3_class(mtree, "ggplot")
 })
 
 test_that("multiverse_tree() draws a graph with nodes and edges.", {
@@ -252,8 +250,8 @@ test_that("multiverse_tree() draws a graph with nodes and edges.", {
   mv <- mverse(mydf) %>%
     add_mutate_branch(z, w)
   mtree <- multiverse_tree(mv)
-  expect_is(mtree$layers[[1]]$geom, "GeomEdgePath")
-  expect_is(mtree$layers[[2]]$geom, "GeomPoint")
+  expect_s3_class(mtree$layers[[1]]$geom, "GeomEdgePath")
+  expect_s3_class(mtree$layers[[2]]$geom, "GeomPoint")
 })
 
 test_that("multiverse_tree() draws a graph with correct data.", {

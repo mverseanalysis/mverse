@@ -1,5 +1,3 @@
-context("Branch Definition")
-
 test_that("Branches require at least one rule.", {
   expect_error(
     mutate_branch(),
