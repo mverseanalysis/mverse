@@ -4,9 +4,9 @@
 # mverse
 
 <!-- badges: start -->
-<!-- [![Codecov test coverage](https://codecov.io/gh/mverseanalysis/mverse/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mverseanalysis/mverse?branch=master) -->
 
 [![R-CMD-check](https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml)
+[![codecove](https://codecov.io/gh/mverseanalysis/mverse/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mverseanalysis/mverse?branch=master)
 <!-- badges: end -->
 
 *mverse* is an extension to multiverse package (Sarma et al. 2021) which
@@ -41,6 +41,10 @@ create 6 universes as described in Figure 1. A filter *branch* with 2
 multiverse and inspect a coefficient estimate. See
 `vignette("hurricane")` for a detailed analysis as well as the
 terminologies used.
+
+    #> Warning: Using alpha for a discrete variable is not advised.
+    #> Warning: Using the `size` aesthetic in this geom was deprecated in ggplot2 3.4.0.
+    #> ℹ Please use `linewidth` in the `default_aes` field and elsewhere instead.
 
 <img src="man/figures/README-tree-1.png" width="100%" />
 
@@ -143,7 +147,6 @@ res
 #> #   model_branch_code <fct>, distribution_branch_code <fct>, and abbreviated
 #> #   variable names ¹​outliers_branch, ²​strength_branch, ³​model_branch,
 #> #   ⁴​distribution_branch, ⁵​std.error, ⁶​statistic
-#> # ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names
 ```
 
 The resulting data is a `tibble` object and we can use regular
