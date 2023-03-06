@@ -69,7 +69,7 @@ summary.mverse <- function(object, ...) {
   mtable <- multiverse::extract_variables(object) %>%
     dplyr::mutate(universe = factor(.data$.universe)) %>%
     dplyr::select(-tidyselect::starts_with(".")) %>%
-    dplyr::select(.data$universe, tidyselect::everything())
+    dplyr::select(tidyselect::all_of("universe"), tidyselect::everything())
   display_branch_opts(mtable, object)
 }
 
@@ -140,9 +140,9 @@ summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
       if (summary(model)$df[1] > 0) {
         out <- as.data.frame(t(summary(model)$df)) %>%
           dplyr::rename(
-            p = .data$V1,
-            n.minus.p = .data$V2,
-            p.star = .data$V3
+            p = "V1",
+            n.minus.p = "V2",
+            p.star = "V3"
           )
       } else {
         out <- data.frame(
@@ -158,7 +158,7 @@ summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
         out <- as.data.frame(
           t(c(summary(model)$r.squared, summary(model)$adj.r.squared))
         ) %>%
-          dplyr::rename(r.squared = .data$V1, adj.r.squared = .data$V2)
+          dplyr::rename(r.squared = "V1", adj.r.squared = "V2")
       } else {
         out <- data.frame(r.squared = NA, adj.r.squared = NA)
       }
@@ -168,9 +168,9 @@ summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
       if (summary(model)$df[1] > 1) {
         out <- as.data.frame(t(summary(model)$fstatistic)) %>%
           dplyr::rename(
-            fstatistic = .data$value,
-            numdf.f = .data$numdf,
-            dendf.f = .data$dendf
+            fstatistic = "value",
+            numdf.f = "numdf",
+            dendf.f = "dendf"
           )
       } else {
         out <- data.frame(fstatistic = NA, numdf.f = NA, dendf.f = NA)
@@ -184,7 +184,7 @@ summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     tidyr::unnest(out) %>%
     dplyr::mutate(universe = factor(.data$.universe)) %>%
     dplyr::select(-tidyselect::starts_with(".")) %>%
-    dplyr::select(.data$universe, tidyselect::everything())
+    dplyr::select(tidyselect::all_of("universe"), tidyselect::everything())
   display_branch_opts(mtable, object)
 }
 
@@ -256,7 +256,7 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
         out <- as.data.frame(
           t(c(summary(model)$df.residual, summary(model)$df.null))
         ) %>%
-          dplyr::rename(df.residual = .data$V1, df.null = .data$V2)
+          dplyr::rename(df.residual = "V1", df.null = "V2")
       } else {
         out <- data.frame(df.residual = NA, df.null = NA)
       }
@@ -267,7 +267,7 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
         out <- as.data.frame(
           t(c(summary(model)$deviance, summary(model)$null.deviance))
         ) %>%
-          dplyr::rename(deviance = .data$V1, null.deviance = .data$V2)
+          dplyr::rename(deviance = "V1", null.deviance = "V2")
       } else {
         out <- data.frame(deviance = NA, null.deviance = NA)
       }
@@ -276,7 +276,7 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     multiverse::inside(object, {
       if (summary(model)$df[1] > 0) {
         out <- as.data.frame(t(c(stats::AIC(model), stats::BIC(model)))) %>%
-          dplyr::rename(AIC = .data$V1, BIC = .data$V2)
+          dplyr::rename(AIC = "V1", BIC = "V2")
       } else {
         out <- data.frame(AIC = NA, BIC = NA)
       }
@@ -289,7 +289,7 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     tidyr::unnest(out) %>%
     dplyr::mutate(universe = factor(.data$.universe)) %>%
     dplyr::select(-tidyselect::starts_with(".")) %>%
-    dplyr::select(.data$universe, tidyselect::everything())
+    dplyr::select(tidyselect::all_of("universe"), tidyselect::everything())
   display_branch_opts(mtable, object)
 }
 
@@ -364,8 +364,8 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
             summary(model)$df.residual, summary(model)$df.null
           ))) %>%
           dplyr::rename(
-            df.residual = .data$V1,
-            df.null = .data$V2
+            df.residual = "V1",
+            df.null = "V2"
           )
       } else {
         out <- data.frame(
@@ -382,8 +382,8 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
             summary(model)$deviance, summary(model)$null.deviance
           ))) %>%
           dplyr::rename(
-            deviance = .data$V1,
-            null.deviance = .data$V2
+            deviance = "V1",
+            null.deviance = "V2"
           )
       } else {
         out <- data.frame(
@@ -398,8 +398,8 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
         out <-
           as.data.frame(t(c(stats::AIC(model), stats::BIC(model)))) %>%
           dplyr::rename(
-            AIC = .data$V1,
-            BIC = .data$V2
+            AIC = "V1",
+            BIC = "V2"
           )
       } else {
         out <- data.frame(
@@ -416,7 +416,7 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     tidyr::unnest(out) %>%
     dplyr::mutate(universe = factor(.data$.universe)) %>%
     dplyr::select(-tidyselect::starts_with(".")) %>%
-    dplyr::select(.data$universe, tidyselect::everything())
+    dplyr::select(tidyselect::all_of("universe"), tidyselect::everything())
   display_branch_opts(mtable, object)
 }
 
@@ -513,7 +513,6 @@ BIC <- function(object, ...) {
 #' @param label_size A numeric. Set size of option labels.
 #' @param label_angle A numeric. Rotate option labels.
 #' @import igraph ggraph ggplot2
-#' @importFrom rlang .data
 #' @return A \code{ggplot} object displaying the multiverse tree.
 #' @name multiverse_tree
 #' @export
@@ -542,7 +541,7 @@ multiverse_tree <- function(.mverse, label = "none",
   }
   brs_name <- paste0(brs, ifelse(label == "code", "_branch_code", "_branch"))
   combs <- summary.mverse(.mverse, conf.int = FALSE)[brs_name] %>%
-    dplyr::mutate(dplyr::across(.fns = as.character))
+    dplyr::mutate(dplyr::across(.cols = tidyselect::everything(), .fns = as.character))
   edges_list <-
     list(data.frame(
       from = "Data",
@@ -553,12 +552,12 @@ multiverse_tree <- function(.mverse, label = "none",
   for (i in seq_len(length(brs_name))) {
     pairs <- combs[, 1:i] %>%
       dplyr::distinct_all() %>%
-      tidyr::unite("to", 1:i, remove = FALSE) %>%
-      tidyr::unite("from", 2:i, remove = FALSE) %>%
+      tidyr::unite("to", tidyselect::all_of(1:i), remove = FALSE) %>%
+      tidyr::unite("from", tidyselect::all_of(2:i), remove = FALSE) %>%
       dplyr::mutate(branch = brs[i])
     if (i > 1) {
       edges_list[[length(edges_list) + 1]] <- pairs %>%
-        dplyr::select(.data$from, .data$to, .data$branch) %>%
+        dplyr::select(tidyselect::all_of(c("from", "to", "branch"))) %>%
         dplyr::distinct_all()
     }
     v_labels <- c(v_labels, pairs %>% dplyr::pull(i + 2))
@@ -566,7 +565,7 @@ multiverse_tree <- function(.mverse, label = "none",
   edges <- do.call(rbind, edges_list)
   g <- graph_from_data_frame(edges)
   plt <- ggraph(g, layout = "dendrogram", circular = FALSE) +
-    geom_edge_link(aes(color = .data$branch)) +
+    geom_edge_link(aes(color = "branch")) +
     theme_void() +
     coord_flip() +
     scale_y_reverse(expand = c(0.1, 0.1)) +

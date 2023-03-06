@@ -59,8 +59,6 @@ test_that("*_brach() defines branches with multiple options.", {
   expect_equal(length(fbranch$opts), 3)
 })
 
-context("Branch Naming and Parsing")
-
 test_that("name() extracts the name of a branch.", {
   mbranch <- mutate_branch(x + y, x - y, x * y, name = "mutate")
   expect_equal(name(mbranch), "mutate")
@@ -141,8 +139,6 @@ test_that("parse() handles long branch options.", {
     )
   ))
 })
-
-context("Branch Add and Remove")
 
 test_that("add_*_branch() adds a branch.", {
   mydf <- data.frame(

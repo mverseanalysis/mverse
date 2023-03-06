@@ -46,15 +46,14 @@ Imports:
   ggplot2,
   cowplot
 Suggests:
-    tidyverse,
-    scales,
-    MASS,
-    testthat (>= 3.0.0),
-    pkgdown (>= 1.5.1),
-    covr,
-    knitr,
-    rmarkdown,
-    kableExtra
+  scales,
+  MASS,
+  testthat (>= 3.0.0),
+  pkgdown (>= 1.5.1),
+  covr,
+  knitr,
+  rmarkdown,
+  kableExtra
 RoxygenNote: 7.2.2
 VignetteBuilder: knitr
 URL: https://github.com/mverseanalysis/mverse/, https://mverseanalysis.github.io/mverse/

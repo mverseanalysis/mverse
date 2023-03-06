@@ -60,7 +60,6 @@ spec_curve <- function(.object, var, ...) {
 #' # plot based on 90% confidence interval
 #' spec_curve(mv, var = "femininityTRUE", color = p.value < .1)
 #' }
-#' @importFrom rlang .data
 #' @export
 spec_curve.lm_mverse <- function(.object, var , conf.int = TRUE,
                               conf.level = 0.95,
@@ -117,7 +116,6 @@ spec_curve.lm_mverse <- function(.object, var , conf.int = TRUE,
 #' # plot based on 90% confidence interval
 #' spec_curve(mv, var = "femininityTRUE", color = p.value < .1)
 #' }
-#' @importFrom rlang .data
 #' @export
 spec_curve.glm_mverse <- function(.object, var , conf.int = TRUE,
                                  conf.level = 0.95,
@@ -172,7 +170,6 @@ spec_curve.glm_mverse <- function(.object, var , conf.int = TRUE,
 #' spec_curve(mv, var = "femininityTRUE", color = p.value < .1)
 #' }
 #' @rdname spec_curve
-#' @importFrom rlang .data
 #' @export
 spec_curve.glm.nb_mverse <- function(.object, var , conf.int = TRUE,
                                  conf.level = 0.95,
@@ -217,7 +214,7 @@ get_spec_curve_table <- function(.object, var, conf.int, conf.level,
     conf.level = !!rlang::enexpr(conf.level)
   ) %>%
     dplyr::filter(.data$term == var) %>%
-    dplyr::arrange(.data$universe)
+    dplyr::arrange("universe")
   if (rlang::quo_is_null(color)) {
     spec_curve_table <- dplyr::mutate(
       spec_curve_table, color_group = .data$p.value <= 0.05
@@ -316,7 +313,7 @@ plot_spec_curve_grid <- function(spec_curve_table, parameters, option,
       strip.background = element_rect(fill = NA, colour = NA),
       panel.background = element_rect(fill = "white", colour = NA),
       panel.grid = element_line(colour = "grey92"),
-      panel.grid.minor = element_line(size = rel(0.5)),
+      panel.grid.minor = element_line(linewidth = rel(0.5)),
       panel.spacing.x = unit(0.15, "cm"),
       panel.spacing.y = unit(1.25, "lines"),
       strip.text.y = element_text(angle = 0, face = "bold", size = 8),

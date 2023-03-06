@@ -98,10 +98,10 @@ ttest_mverse <-
           )
         )) %>%
         dplyr::rename(
-          statistic = .data$t,
-          p.value = .data$V2,
-          conf.lower = .data$V3,
-          conf.upper = .data$V4
+          statistic = t,
+          p.value = "V2",
+          conf.lower = "V3",
+          conf.upper = "V4"
         )
     })
     execute_multiverse(.mverse)
@@ -109,6 +109,6 @@ ttest_mverse <-
       tidyr::unnest(out) %>%
       dplyr::mutate(universe = factor(.data$.universe)) %>%
       dplyr::select(-dplyr::starts_with(".")) %>%
-      dplyr::select(.data$universe, dplyr::everything())
+      dplyr::select("universe", dplyr::everything())
     display_branch_opts(mtable, .mverse)
   }
