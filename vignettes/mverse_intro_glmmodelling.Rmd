@@ -80,8 +80,9 @@ The typical workflow of a multiverse analysis with `mverse` is
 
 
 ```{r load_package, warning=FALSE, message=FALSE}
-library(tidyverse)
 library(mverse)
+library(dplyr)
+library(ggplot2)
 ```
 
 
@@ -109,7 +110,7 @@ The distribution of `alldeaths` is shown below.
 
 
 ```{r}
-hurricane %>% 
+hurricane |> 
   ggplot(aes(alldeaths)) + 
   geom_histogram(bins = 25) + 
   stat_bin(aes(label = ..count..), bins = 25, geom = "text", vjust = -.7, size = 2)
@@ -118,10 +119,10 @@ hurricane %>%
 It looks like there are a few outliers.  Let's find out the names of these hurricanes.
 
 ```{r}
-hurricane %>% 
-  filter(alldeaths > median(alldeaths)) %>% 
-  arrange(desc(alldeaths)) %>% 
-  select(Name, alldeaths) %>% 
+hurricane |> 
+  filter(alldeaths > median(alldeaths)) |> 
+  arrange(desc(alldeaths)) |> 
+  select(Name, alldeaths) |> 
   head()
 ```
 
@@ -137,7 +138,7 @@ death_outliers <- filter_branch(obs_all = TRUE,
 Now, let's add this branch to `hurricane_mv`.
 
 ```{r}
-hurricane_mv <- hurricane_mv %>% add_filter_branch(death_outliers)
+hurricane_mv <- hurricane_mv |> add_filter_branch(death_outliers)
 
 summary(hurricane_mv)
 ```
@@ -163,7 +164,7 @@ damage <- mutate_branch(damage_orig = NDAM,
 Now, let's add these branches to `hurricane_mv`.
 
 ```{r}
-hurricane_mv <- hurricane_mv %>% add_mutate_branch(femininity, damage)
+hurricane_mv <- hurricane_mv |> add_mutate_branch(femininity, damage)
 
 summary(hurricane_mv)
 ```
@@ -183,7 +184,7 @@ We can add it to `hurricane_mv` with `add_formula_branch()`.
 ```{r}
 models <- formula_branch(alldeaths ~ damage + femininity)
 
-hurricane_mv <- hurricane_mv %>% add_formula_branch(models)
+hurricane_mv <- hurricane_mv |> add_formula_branch(models)
 
 summary(hurricane_mv)
 ```
@@ -197,7 +198,7 @@ distributions <- family_branch(poisson, gaussian)
 Adding this branch to `hurricane_mv` with `add_family_branch()`.
 
 ```{r}
-hurricane_mv <- hurricane_mv %>% add_family_branch(distributions)
+hurricane_mv <- hurricane_mv |> add_family_branch(distributions)
 
 summary(hurricane_mv)
 ```
@@ -231,9 +232,9 @@ spec_curve(hurricane_mv, var = "femininity", color_order = TRUE)
 The assumption that `alldeaths` follows a Normal distribution is tenuous, but transforming the `alldeaths` using $t(x)=\log(x+1)$ could result in a dependent variable that is closer to a Normal distribution.
 
 ```{r}
-hurricane %>% ggplot(aes(sample = alldeaths)) + stat_qq() + stat_qq_line()
+hurricane |> ggplot(aes(sample = alldeaths)) + stat_qq() + stat_qq_line()
 
-hurricane %>% mutate(logd = log(alldeaths+1)) %>% ggplot(aes(sample = logd)) + stat_qq() + stat_qq_line()
+hurricane |> mutate(logd = log(alldeaths+1)) |> ggplot(aes(sample = logd)) + stat_qq() + stat_qq_line()
 ```
 
 
@@ -254,9 +255,9 @@ models <- formula_branch(dep_var ~ damage + femininity)
 
 distributions <- family_branch(poisson, gaussian)
 
-hurricane_mv <- hurricane_mv %>% 
-  add_mutate_branch(dep_var, femininity, damage) %>%
-  add_formula_branch(models) %>% 
+hurricane_mv <- hurricane_mv |> 
+  add_mutate_branch(dep_var, femininity, damage) |>
+  add_formula_branch(models) |> 
   add_family_branch(distributions)
 
 ```
@@ -314,8 +315,8 @@ damage <- mutate_branch(damage_orig = NDAM,
 
 models <- formula_branch(alldeaths ~ damage + femininity)
 
-hurricane_nb_mv <- hurricane_nb_mv %>% 
-  add_mutate_branch(femininity, damage) %>%
+hurricane_nb_mv <- hurricane_nb_mv |> 
+  add_mutate_branch(femininity, damage) |>
   add_formula_branch(models) 
 ```
 

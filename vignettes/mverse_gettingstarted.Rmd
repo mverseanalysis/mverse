@@ -158,8 +158,10 @@ knitr::opts_chunk$set(
 Suppose that we have a column `col1` that we wish to transform in three different ways and compute the five number summary of the column after the transformations.
 
 ```{r}
-library(tidyverse)
 library(mverse)
+library(tibble)
+library(dplyr)
+library(ggplot2)
 
 set.seed(6)
 
@@ -189,7 +191,7 @@ transformation_branch <- mutate_branch(col1 = col1,
 ### Step 3: `add_mutate_branch` to `mv`
 
 ```{r}
-mv <- mv %>% add_mutate_branch(transformation_branch)
+mv <- mv |> add_mutate_branch(transformation_branch)
 ```
 
 
@@ -210,22 +212,22 @@ extract <- mverse::extract
 ```{r}
 df_transformed <- extract(mv)
 
-df_transformed %>% head()
+df_transformed |> head()
 ```
 
 
 ### Step 5: use `tidyverse` to compute the summary and plot the distribution of each transformation (universe)
 
 ```{r}
-df_transformed %>% 
-  group_by(transformation_branch_branch) %>% 
+df_transformed |> 
+  group_by(transformation_branch_branch) |> 
   summarise(n = n(), 
             mean = mean(transformation_branch), 
             sd = sd(transformation_branch),
             median = median(transformation_branch),
             IQR = IQR(transformation_branch))
 
-df_transformed %>% 
+df_transformed |> 
   ggplot(aes(x = transformation_branch)) + geom_histogram(bins = 3) +
   facet_wrap(vars(transformation_branch_branch))
 ```
@@ -252,7 +254,7 @@ formulas <- formula_branch(col2 ~ col1,
 ### Step 3: `add_formula_branch` to multiverse of data frame
 
 ```{r}
-mv1 <- mv1 %>% add_formula_branch(formulas)
+mv1 <- mv1 |> add_formula_branch(formulas)
 ```
 
 ### Step 3: `lm_mverse` to compute linear regression models across the multiverse
@@ -281,9 +283,9 @@ mod3 <- formula(col2 ~ abs(col1))
 
 models <- list(mod1, mod2, mod3)
 
-models %>% 
-  map(lm, data = df) %>% 
-  map(broom::tidy) %>% 
+models |> 
+  purrr::map(lm, data = df) |> 
+  purrr::map(broom::tidy) |> 
   bind_rows()
 ```
 
@@ -385,7 +387,7 @@ skin_tone <- mutate_branch(
 Then add the newly defined mutate branch to the `mv` object using `add_mutate_branch()`. 
 
 ```{r add_vb}
-soccer_bias_mv <- soccer_bias_mv %>% add_mutate_branch(skin_tone)
+soccer_bias_mv <- soccer_bias_mv |> add_mutate_branch(skin_tone)
 ```
 
 Adding a branch to a `mverse` object multiplies the number of environments defined inside the object so that the environments capture all unique analysis paths. Without any branches, a `mverse` object has a single environment. We call these environments _universes_. For example, adding the `skin_tone` mutate branch to `mv` results in $1 \times 5 = 5$  universes inside `mv`. In each universe, the analysis dataset now has a new column named `skin_tone` -  the name of the mutate branch object. 
@@ -413,16 +415,16 @@ branched <- mverse::extract(soccer_bias_mv)
 `branched` is a dataset with `skin_tone` values. If we want to extract the `skin_tone` values that were computed using the average of the two raters then we can filter `branched` by `skin_tone_branch` values equal to `(rater1 + rater2)/2`.  Alternatively, we could filter by `universe == 1`.
 
 ```{r head_skin_tone}
-branched %>% 
-  filter(skin_tone_branch == "(rater1 + rater2)/2" ) %>% 
+branched |> 
+  filter(skin_tone_branch == "(rater1 + rater2)/2" ) |> 
   head()
 ```
 
 The distribution of each method for calculating skin tone can be computed by grouping the levels of `skin_tone_branch`.
 
 ```{r}
-branched %>% 
-  group_by(skin_tone_branch) %>% 
+branched |> 
+  group_by(skin_tone_branch) |> 
   summarise(n = n(), mean = mean(skin_tone), 
             sd = sd(skin_tone), median = median(skin_tone), IQR = IQR(skin_tone))
 ```
@@ -437,9 +439,9 @@ frac <- extract(soccer_bias_mv, frow =  0.05)
 So, each universe is a 20% of the random sample.
 
 ```{r}
-frac %>%
-  group_by(universe) %>%
-  tally() %>%
+frac |>
+  group_by(universe) |>
+  tally() |>
   mutate(percent = (n / sum(n)) * 100)
 ```
 
@@ -447,7 +449,7 @@ frac %>%
 Finally, we can construct plots to compare the distributions of `skin_tone` in different universes. For example, you can overlay density lines on a single plot.
 
 ```{r compare_universe, warning=FALSE}
-branched %>%
+branched |>
   ggplot(mapping = aes(x = skin_tone, color = universe)) +
   geom_density(alpha = 0.2) +
   labs(title = 'Density of player skin tones for each option.',
@@ -462,7 +464,7 @@ branched %>%
 Another option is the use `ggplot`'s `facet_grid` function to generate multiple plots in a grid. `facet_wrap(. ~ universe)` generates individual plots for each universe.
 
 ```{r compare_universe_hist, warning=FALSE}
-branched %>%
+branched |>
   ggplot(mapping = aes(x = skin_tone)) +
   geom_histogram(position = 'dodge', bins = 21) +
   labs(title = 'Histogram of player skin tones for each option.',
