@@ -46,6 +46,8 @@ Imports:
   ggplot2,
   cowplot
 Suggests:
+  tibble,
+  purrr,
   scales,
   MASS,
   testthat (>= 3.0.0),
