@@ -1,27 +1,25 @@
 display_branch_opts <- function(mtable, .mverse) {
-  # extract all branches
-  branches <- sapply(
-    c(
-      attr(.mverse, "branches_list"),
-      attr(.mverse, "branches_conditioned_list")
-    ), function(b) {
-      out <- list(
-        sapply(b$opts, rlang::quo_text)
-      )
-      names(out) <- b$name
-      out
-    }
+  branches <- c(
+    attr(.mverse, "branches_list"),
+    attr(.mverse, "branches_conditioned_list")
   )
-
-  for (nm in names(branches)) {
-    replace_this <- paste(nm, seq_len(length(branches[[nm]])), sep = "_")
-    brnch <- paste(nm, "branch", sep = "_")
-    mtable[[paste0(brnch, "_code")]] <- mtable[[brnch]] %>%
-      dplyr::recode(!!!stats::setNames(branches[[nm]], replace_this)) %>%
-      factor(levels = branches[[nm]])
-    mtable[[brnch]] <- factor(mtable[[brnch]])
+  for (br in branches) {
+    nm <- paste0(br$name, "_branch")
+    cs <- sapply(br$opts, rlang::quo_text)
+    mtable[[paste0(nm, "_code")]] <- factor(
+      sapply(
+        mtable[[nm]],
+        function(x) unname(cs)[names(cs) == x],
+        USE.NAMES = FALSE
+      ),
+      levels = cs
+    )
+    mtable[[nm]] <- factor(mtable[[nm]], levels = names(cs))
   }
-  mtable
+  mtable %>%
+    dplyr::mutate(universe = factor(.data$.universe)) %>%
+    dplyr::select(-tidyselect::starts_with(".")) %>%
+    dplyr::select(tidyselect::all_of("universe"), tidyselect::everything())
 }
 
 #' Display the multiverse table with results.
@@ -66,10 +64,7 @@ display_branch_opts <- function(mtable, .mverse) {
 #' @importFrom rlang .data
 #' @export
 summary.mverse <- function(object, ...) {
-  mtable <- multiverse::extract_variables(object) %>%
-    dplyr::mutate(universe = factor(.data$.universe)) %>%
-    dplyr::select(-tidyselect::starts_with(".")) %>%
-    dplyr::select(tidyselect::all_of("universe"), tidyselect::everything())
+  mtable <- multiverse::extract_variables(object)
   display_branch_opts(mtable, object)
 }
 
@@ -115,12 +110,11 @@ summary.mverse <- function(object, ...) {
 #' @export
 summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
                               output = "estimates", ...) {
-  model <- NULL # suppress R CMD Check Note
   if (output %in% c("estimates", "e")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
+      if (summary(.model_mverse)$df[1] > 0) {
         out <- broom::tidy(
-          model, !!rlang::enexpr(conf.int), !!rlang::enexpr(conf.level)
+          .model_mverse, !!rlang::enexpr(conf.int), !!rlang::enexpr(conf.level)
         )
       } else {
         out <- data.frame(
@@ -137,8 +131,8 @@ summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     })
   } else if (output == "df") {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
-        out <- as.data.frame(t(summary(model)$df)) %>%
+      if (summary(.model_mverse)$df[1] > 0) {
+        out <- as.data.frame(t(summary(.model_mverse)$df)) %>%
           dplyr::rename(
             p = "V1",
             n.minus.p = "V2",
@@ -154,9 +148,9 @@ summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     })
   } else if (output %in% c("r.squared", "r")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
+      if (summary(.model_mverse)$df[1] > 0) {
         out <- as.data.frame(
-          t(c(summary(model)$r.squared, summary(model)$adj.r.squared))
+          t(c(summary(.model_mverse)$r.squared, summary(.model_mverse)$adj.r.squared))
         ) %>%
           dplyr::rename(r.squared = "V1", adj.r.squared = "V2")
       } else {
@@ -165,8 +159,8 @@ summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     })
   } else if (output %in% c("fstatistic", "f")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 1) {
-        out <- as.data.frame(t(summary(model)$fstatistic)) %>%
+      if (summary(.model_mverse)$df[1] > 1) {
+        out <- as.data.frame(t(summary(.model_mverse)$fstatistic)) %>%
           dplyr::rename(
             fstatistic = "value",
             numdf.f = "numdf",
@@ -180,11 +174,7 @@ summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     stop("Invalid output argument.")
   }
   execute_multiverse(object)
-  mtable <- multiverse::extract_variables(object, out) %>%
-    tidyr::unnest(out) %>%
-    dplyr::mutate(universe = factor(.data$.universe)) %>%
-    dplyr::select(-tidyselect::starts_with(".")) %>%
-    dplyr::select(tidyselect::all_of("universe"), tidyselect::everything())
+  mtable <- multiverse::extract_variables(object, out) %>% tidyr::unnest(out) 
   display_branch_opts(mtable, object)
 }
 
@@ -230,12 +220,11 @@ summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
 #' @export
 summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
                                output = "estimates", ...) {
-  model <- NULL # suppress R CMD Check Note
   if (output %in% c("estimates", "e")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
+      if (summary(.model_mverse)$df[1] > 0) {
         out <- broom::tidy(
-          model, !!rlang::enexpr(conf.int), !!rlang::enexpr(conf.level)
+          .model_mverse, !!rlang::enexpr(conf.int), !!rlang::enexpr(conf.level)
         )
       } else {
         out <- data.frame(
@@ -246,15 +235,16 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
           p.value = NA
         )
         if (!!rlang::enexpr(conf.int)) {
-          out <- out %>% dplyr::mutate(conf.low = NA, conf.high = NA)
+          out$conf.low <- NA
+          out$conf.hight <- NA
         }
       }
     })
   } else if (output == "df") {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
+      if (summary(.model_mverse)$df[1] > 0) {
         out <- as.data.frame(
-          t(c(summary(model)$df.residual, summary(model)$df.null))
+          t(c(summary(.model_mverse)$df.residual, summary(.model_mverse)$df.null))
         ) %>%
           dplyr::rename(df.residual = "V1", df.null = "V2")
       } else {
@@ -263,9 +253,9 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     })
   } else if (output %in% c("de", "deviance")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
+      if (summary(.model_mverse)$df[1] > 0) {
         out <- as.data.frame(
-          t(c(summary(model)$deviance, summary(model)$null.deviance))
+          t(c(summary(.model_mverse)$deviance, summary(.model_mverse)$null.deviance))
         ) %>%
           dplyr::rename(deviance = "V1", null.deviance = "V2")
       } else {
@@ -274,8 +264,8 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     })
   } else if (tolower(output) %in% c("aic", "bic")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
-        out <- as.data.frame(t(c(stats::AIC(model), stats::BIC(model)))) %>%
+      if (summary(.model_mverse)$df[1] > 0) {
+        out <- as.data.frame(t(c(stats::AIC(.model_mverse), stats::BIC(.model_mverse)))) %>%
           dplyr::rename(AIC = "V1", BIC = "V2")
       } else {
         out <- data.frame(AIC = NA, BIC = NA)
@@ -285,11 +275,7 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     stop("Invalid output argument.")
   }
   execute_multiverse(object)
-  mtable <- multiverse::extract_variables(object, out) %>%
-    tidyr::unnest(out) %>%
-    dplyr::mutate(universe = factor(.data$.universe)) %>%
-    dplyr::select(-tidyselect::starts_with(".")) %>%
-    dplyr::select(tidyselect::all_of("universe"), tidyselect::everything())
+  mtable <- multiverse::extract_variables(object, out) %>% tidyr::unnest(out) 
   display_branch_opts(mtable, object)
 }
 
@@ -332,13 +318,12 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
 #' @export
 summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
                                   output = "estimates", ...) {
-  model <- NULL # suppress R CMD Check Note
   if (output %in% c("estimates", "e")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
+      if (summary(.model_mverse)$df[1] > 0) {
         out <-
           broom::tidy(
-            model,
+            .model_mverse,
             !!rlang::enexpr(conf.int),
             !!rlang::enexpr(conf.level)
           )
@@ -358,10 +343,10 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     })
   } else if (output == "df") {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
+      if (summary(.model_mverse)$df[1] > 0) {
         out <-
           as.data.frame(t(c(
-            summary(model)$df.residual, summary(model)$df.null
+            summary(.model_mverse)$df.residual, summary(.model_mverse)$df.null
           ))) %>%
           dplyr::rename(
             df.residual = "V1",
@@ -376,10 +361,10 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     })
   } else if (output %in% c("de", "deviance")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
+      if (summary(.model_mverse)$df[1] > 0) {
         out <-
           as.data.frame(t(c(
-            summary(model)$deviance, summary(model)$null.deviance
+            summary(.model_mverse)$deviance, summary(.model_mverse)$null.deviance
           ))) %>%
           dplyr::rename(
             deviance = "V1",
@@ -394,9 +379,9 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     })
   } else if (tolower(output) %in% c("aic", "bic")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
+      if (summary(.model_mverse)$df[1] > 0) {
         out <-
-          as.data.frame(t(c(stats::AIC(model), stats::BIC(model)))) %>%
+          as.data.frame(t(c(stats::AIC(.model_mverse), stats::BIC(.model_mverse)))) %>%
           dplyr::rename(
             AIC = "V1",
             BIC = "V2"
@@ -412,11 +397,7 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     stop("Invalid output argument.")
   }
   execute_multiverse(object)
-  mtable <- multiverse::extract_variables(object, out) %>%
-    tidyr::unnest(out) %>%
-    dplyr::mutate(universe = factor(.data$.universe)) %>%
-    dplyr::select(-tidyselect::starts_with(".")) %>%
-    dplyr::select(tidyselect::all_of("universe"), tidyselect::everything())
+  mtable <- multiverse::extract_variables(object, out) %>% tidyr::unnest(out) 
   display_branch_opts(mtable, object)
 }
 

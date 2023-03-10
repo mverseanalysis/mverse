@@ -80,7 +80,6 @@ extract.mverse <- function(.mverse, columns = NULL,
                            nuni = NULL, frow = NULL,
                            include_branch_options = TRUE, ...) {
   stopifnot(inherits(.mverse, "mverse"))
-  data <- NULL # suppress R CMD check note
   mtable <- summary.mverse(.mverse)
   branched_columns <- unlist(
     sapply(
@@ -112,7 +111,7 @@ extract.mverse <- function(.mverse, columns = NULL,
   stopifnot(length(universe) > 0)
   extracted <- lapply(
     universe, function(x) {
-      ex <- multiverse::extract_variable_from_universe(.mverse, x, data)
+      ex <- multiverse::extract_variable_from_universe(.mverse, x, .data_mverse)
       if (!is.null(frow)) {
         stopifnot("frow must be a positive value." = frow > 0)
         ex <- dplyr::sample_frac(ex,

@@ -37,8 +37,6 @@
 #' @export
 lm_mverse <- function(.mverse) {
   stopifnot(inherits(.mverse, "mverse"))
-  formulae <- NULL
-  data <- NULL # suppress R CMD Check Note
   # check whether there is a formula branch (should be only 1)
   brs <- c(
     attr(.mverse, "branches_conditioned_list"), attr(.mverse, "branches_list")
@@ -50,7 +48,9 @@ lm_mverse <- function(.mverse) {
     stop("Exactly one formula branch is required.")
   }
   # fit lm
-  multiverse::inside(.mverse, model <- stats::lm(formulae, data = data))
+  multiverse::inside(
+    .mverse, .model_mverse <- stats::lm(.formula_mverse, data = .data_mverse)
+  )
   attr(.mverse, "class") <- unique(c("lm_mverse", class(.mverse)))
   execute_multiverse(.mverse)
   invisible(.mverse)
@@ -100,9 +100,6 @@ lm_mverse <- function(.mverse) {
 #' @export
 glm_mverse <- function(.mverse) {
   stopifnot(inherits(.mverse, "mverse"))
-  formulae <- NULL
-  data <- NULL
-  family <- NULL # suppress R CMD Check Note
   # check whether there is a formula branch (should be only 1)
   brs <- c(
     attr(.mverse, "branches_conditioned_list"), attr(.mverse, "branches_list")
@@ -115,7 +112,9 @@ glm_mverse <- function(.mverse) {
   }
   # fit glm
   multiverse::inside(
-    .mverse, model <- stats::glm(formulae, data = data, family = family)
+    .mverse, .model_mverse <- stats::glm(
+      .formula_mverse, data = .data_mverse, family = .family_mverse
+    )
   )
   attr(.mverse, "class") <- unique(c("glm_mverse", class(.mverse)))
   execute_multiverse(.mverse)
@@ -159,8 +158,6 @@ glm_mverse <- function(.mverse) {
 #' @export
 glm.nb_mverse <- function(.mverse) {
   stopifnot(inherits(.mverse, "mverse"))
-  formulae <- NULL
-  data <- NULL # suppress R CMD Check Note
   # check whether there is a formula branch (should be only 1)
   brs <- c(attr(.mverse, "branches_conditioned_list"), attr(.mverse, "branches_list"))
   if (length(brs) == 0) {
@@ -171,7 +168,7 @@ glm.nb_mverse <- function(.mverse) {
   }
   # fit glm
   multiverse::inside(
-    .mverse, model <- MASS::glm.nb(formulae, data = data)
+    .mverse, .model_mverse <- MASS::glm.nb(.formula_mverse, data = .data_mverse)
   )
   attr(.mverse, "class") <- unique(c("glm.nb_mverse", class(.mverse)))
   execute_multiverse(.mverse)

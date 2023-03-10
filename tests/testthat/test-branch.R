@@ -116,9 +116,8 @@ test_that("parse() handles long branch options.", {
     dplyr::if_else(col1 > 1, "a", dplyr::if_else(col1 == 1, "b", "c"))
   )
   mv <- mverse(mydf) %>%
-    add_mutate_branch(mbranch)
-  execute_multiverse(mv)
-  multiverse::code(mv)[[3]]
+    add_mutate_branch(mbranch) %>%
+    execute_multiverse()
   expect_true(any(
     stringr::str_detect(
       sapply(multiverse::code(mv), as.character),

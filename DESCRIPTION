@@ -29,13 +29,15 @@ Description: Extends 'multiverse' package
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
+Remotes: const-ae/ggupset
 Depends:
   R (>= 3.6),
   multiverse
 Imports:
+  Rdpack,
   magrittr (>= 1.5),
   rlang,
-  dplyr,
+  dplyr (>= 1.1),
   tidyr,
   tidyselect,
   stringr,
@@ -44,7 +46,7 @@ Imports:
   igraph,
   ggraph,
   ggplot2,
-  cowplot
+  ggupset
 Suggests:
   tibble,
   purrr,
@@ -57,6 +59,7 @@ Suggests:
   rmarkdown,
   kableExtra
 RoxygenNote: 7.2.2
+RdMacros: Rdpack
 VignetteBuilder: knitr
 URL: https://github.com/mverseanalysis/mverse/, https://mverseanalysis.github.io/mverse/
 Config/testthat/edition: 3

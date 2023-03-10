@@ -260,7 +260,7 @@ res
 The resulting data is a `tibble` object and we can use regular `tidyverse` grammar to manipulate the data. In the code below, we specifically focus on the estimated coefficient for `MasFem` and its confidence intervals.
 
 ```{r echo=TRUE, message=FALSE}
-library(tidyverse)
+library(dplyr)
 res %>%
   filter(term == "MasFem") %>%
   select(outliers_branch, strength_branch, term, estimate, conf.low, conf.high)
@@ -268,10 +268,12 @@ res %>%
 
 ### Plot a Specification Curve
 
-We can also inspect the result graphically using `spec_curve()`. The method builds a specification curve [@speccurve] for a term in the regression model specified by `var`. The method also allows multiple ways of sorting the estimates. See `?spec_curve` for details.
+We can also inspect the result graphically using `spec_curve()`. The method builds a specification curve     [@speccurve] for a term in the regression model specified by `var`. The method also allows multiple ways of sorting the estimates. See `?spec_curve` for details.
 
-```{r echo=TRUE, dpi=144}
-spec_curve(mv, var = "MasFem")
+```{r echo=TRUE, dpi=144, fig.asp=1.5}
+spec_summary(mv, var = "MasFem") %>% 
+  spec_curve(spec_matrix_spacing = 4) +
+  labs(colour = "Significant at 0.05")
 ```
 
 ## References

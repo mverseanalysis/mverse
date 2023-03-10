@@ -16,16 +16,7 @@
 #' @export
 family_branch <- function(..., name = NULL) {
   opts <- rlang::enquos(...)
-  opts_names <- names(opts)
-  stopifnot(
-    length(unique(opts_names)) >= length(opts_names[nchar(opts_names) > 0]))
-  if (!length(opts) > 0) {
-    stop("Error: Provide at least one rule.")
-  }
-  if (!(is.character(name) | is.null(name))) {
-    stop('Error: "name" must be a character object.')
-  }
-  branch(opts, opts_names, name, "family_branch")
+  branch(opts, names(opts), name, "family_branch")
 }
 
 

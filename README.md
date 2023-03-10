@@ -155,7 +155,7 @@ specifically focus on the estimated coefficient for `MasFem` and its
 confidence intervals.
 
 ``` r
-library(tidyverse)
+library(dplyr)
 res %>%
   filter(term == "MasFem") %>%
   select(outliers_branch, strength_branch, term, estimate, conf.low, conf.high)
@@ -179,7 +179,9 @@ also allows multiple ways of sorting the estimates. See `?spec_curve`
 for details.
 
 ``` r
-spec_curve(mv, var = "MasFem")
+spec_summary(mv, var = "MasFem") %>% 
+  spec_curve(spec_matrix_spacing = 4) +
+  labs(colour = "Significant at 0.05")
 ```
 
 <img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />

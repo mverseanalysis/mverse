@@ -47,15 +47,13 @@ ttest_mverse <-
            var.equal = FALSE,
            conf.level = 0.95) {
     stopifnot(inherits(.mverse, "mverse"))
-    data <- NULL
-    formulae <- NULL # suppress R CMD Check Note
     x <- rlang::enquo(x)
     y <- rlang::enquo(y)
     if (rlang::quo_is_null(x)) {
       multiverse::inside(.mverse, {
         htest <- stats::t.test(
-          formulae,
-          data = data,
+          .formula_mverse,
+          data = .data_mverse,
           alternative = !!rlang::enexpr(alternative),
           mu = !!rlang::enexpr(mu),
           paried = !!rlang::enexpr(paired),
@@ -66,7 +64,7 @@ ttest_mverse <-
     } else if (rlang::quo_is_null(y)) {
       multiverse::inside(.mverse, {
         htest <- stats::t.test(
-          x = data %>% dplyr::pull(!!rlang::get_expr(x)),
+          x = .data_mverse %>% dplyr::pull(!!rlang::get_expr(x)),
           alternative = !!rlang::enexpr(alternative),
           mu = !!rlang::enexpr(mu),
           paried = !!rlang::enexpr(paired),
@@ -77,8 +75,8 @@ ttest_mverse <-
     } else {
       multiverse::inside(.mverse, {
         htest <- stats::t.test(
-          x = data %>% dplyr::pull(!!rlang::get_expr(x)),
-          y = data %>% dplyr::pull(!!rlang::get_expr(y)),
+          x = .data_mverse %>% dplyr::pull(!!rlang::get_expr(x)),
+          y = .data_mverse %>% dplyr::pull(!!rlang::get_expr(y)),
           alternative = !!rlang::enexpr(alternative),
           mu = !!rlang::enexpr(mu),
           paried = !!rlang::enexpr(paired),
@@ -106,9 +104,6 @@ ttest_mverse <-
     })
     execute_multiverse(.mverse)
     mtable <- multiverse::extract_variables(.mverse, out) %>%
-      tidyr::unnest(out) %>%
-      dplyr::mutate(universe = factor(.data$.universe)) %>%
-      dplyr::select(-dplyr::starts_with(".")) %>%
-      dplyr::select("universe", dplyr::everything())
+      tidyr::unnest(out) 
     display_branch_opts(mtable, .mverse)
   }

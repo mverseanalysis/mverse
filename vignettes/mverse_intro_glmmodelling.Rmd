@@ -113,7 +113,10 @@ The distribution of `alldeaths` is shown below.
 hurricane |> 
   ggplot(aes(alldeaths)) + 
   geom_histogram(bins = 25) + 
-  stat_bin(aes(label = ..count..), bins = 25, geom = "text", vjust = -.7, size = 2)
+  stat_bin(
+    aes(label = after_stat(count)), bins = 25, 
+    geom = "text", vjust = -.7, size = 2
+  )
 ```
 
 It looks like there are a few outliers.  Let's find out the names of these hurricanes.
@@ -130,9 +133,9 @@ hurricane |>
 `filter_branch()` can be used to exclude outliers. Excluding hurricane `Katrina` or `Audrey` removes the hurricanes with the most deaths.
 
 ```{r filter_branch}
-death_outliers <- filter_branch(obs_all = TRUE, 
-                                obs_noKat = Name != 'Katrina',
-                                obs_noKatAud = !(Name %in% c('Katrina', 'Audrey')))
+death_outliers <- filter_branch(none = TRUE, 
+                                Katrina = Name != 'Katrina',
+                                KatrinaAudrey = !(Name %in% c('Katrina', 'Audrey')))
 ```
 
 Now, let's add this branch to `hurricane_mv`.
@@ -149,15 +152,15 @@ summary(hurricane_mv)
 Consider two different definitions of femininity: `Gender_MF` is a binary classification of gender, and `MasFem` is a continuous rating of Femininity.
 
 ```{r mutate_branch}
-femininity <- mutate_branch(binary_gender = Gender_MF, 
-                            cts_gender = MasFem)
+femininity <- mutate_branch(binary = Gender_MF, 
+                            continuous = MasFem)
 ```
 
 Consider normalized damage (`NDAM`) and the log of `NDAM`.
 
 ```{r}
-damage <- mutate_branch(damage_orig = NDAM, 
-                        damage_log = log(NDAM))
+damage <- mutate_branch(original = NDAM, 
+                        log = log(NDAM))
 ```
 
 
@@ -208,7 +211,8 @@ Now, we have $12 \times 2 = 24$ different combinations.
 `multiverse_tree` can be used to view `hurricane_mv`.  The tree below shows that `alldeaths` is modelled using both Gaussian and Poisson distributions.
 
 ```{r}
-multiverse_tree(hurricane_mv, label = "code", branches = c("models", "distributions"))
+multiverse_tree(hurricane_mv, label = "code", label_size = 4,
+                branches = c("models", "distributions"))
 ```
 
 
@@ -224,7 +228,10 @@ Each model has three rows, each corresponding to a summary of a model coefficien
 The specification curve for the coefficient of `femininity` is shown below.
 
 ```{r, fig.height=8}
-spec_curve(hurricane_mv, var = "femininity", color_order = TRUE)
+spec_summary(hurricane_mv, var = "femininity") |> 
+  spec_curve(label = "code", spec_matrix_spacing = 4) +
+  labs(colour = "Significant at 0.05") +
+  theme(legend.position = "top")
 ```
 
 ## Condition Branches 
@@ -293,8 +300,11 @@ summary(hurricane_mv)
 
 A summary of the 24 models on the `femininity` coefficients is shown in the specification curve.
 
-```{r}
-spec_curve(hurricane_mv, var = "femininity", color_order = TRUE)
+```{r fig.height=8}
+spec_summary(hurricane_mv, var = "femininity") |> 
+  spec_curve(label = "code", spec_matrix_spacing = 4) +
+  labs(colour = "Significant at 0.05") +
+  theme(legend.position = "top")
 ```
 
 ## Negative Binomial Regression
@@ -336,6 +346,9 @@ summary(hurricane_nb_mv)
 
 Finally, we can plot the specification curve. 
 
-```{r}
-spec_curve(hurricane_nb_mv, var = "femininity", color_order = TRUE)
+```{r fig.height=8}
+spec_summary(hurricane_nb_mv, var = "femininity") |> 
+  spec_curve(label = "code", spec_matrix_spacing = 4) +
+  labs(colour = "Significant at 0.05") +
+  theme(legend.position = "top")
 ```
