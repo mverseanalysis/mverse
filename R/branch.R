@@ -4,7 +4,9 @@ name <- function(br, name = NULL) {
 
 name.branch <- function(br, name = NULL) {
   stopifnot(inherits(br, "branch"))
-  if (is.null(name)) return(br$name)
+  if (is.null(name)) {
+    return(br$name)
+  }
   stopifnot(is.character(name))
   br$name <- name
   br$opts <- stats::setNames(
@@ -84,7 +86,8 @@ check_branch_name <- function(br) {
 
 branch <- function(opts, opts_names, name, class) {
   stopifnot(
-    length(unique(opts_names)) >= length(opts_names[nchar(opts_names) > 0]))
+    length(unique(opts_names)) >= length(opts_names[nchar(opts_names) > 0])
+  )
   if (!length(opts) > 0) {
     stop("Error: Provide at least one rule.")
   }
@@ -125,8 +128,9 @@ add_branch <- function(.mverse, brs, nms) {
   # replce old and add new
   attr(.mverse, "branches_list") <- attr(.mverse, "branches_list")[
     !sapply(
-      attr(.mverse, "branches_list"),function(x) x$name
-    ) %in% sapply(brs, function(x) x$name)]
+      attr(.mverse, "branches_list"), function(x) x$name
+    ) %in% sapply(brs, function(x) x$name)
+  ]
   attr(.mverse, "branches_list") <- append(
     attr(.mverse, "branches_list"), brs
   )
