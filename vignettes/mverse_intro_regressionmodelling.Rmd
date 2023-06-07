@@ -42,6 +42,7 @@ knitr::opts_chunk$set(
 )
 Sys.setenv(LANG="en")
 ```
+
 This vignette describes the workflow of linear regression modeling in the multiverse with the following functions:
 
  * `formula_branch()`, `add_formula_branch`: create branches for regression formulas and add them to a `mverse` object.
@@ -51,14 +52,13 @@ This vignette describes the workflow of linear regression modeling in the multiv
 
 
 ```{r load, warning=FALSE, message=FALSE}
-library(tidyverse)
 library(mverse)
 ```
 
 We will use the Boston housing dataset {@boston} as an example. This dataset has 506 observations on 14 variables. This dataset is extensively used in regression analyses and algorithm benchmarks. The objective is to predict the median value of a home (`medv`) with the feature variables.
 
 ```{r}
-glimpse(MASS::Boston) # using kable for displaying data in html
+dplyr::glimpse(MASS::Boston) # using kable for displaying data in html
 ```
 
 
@@ -85,7 +85,7 @@ formulas <- formula_branch(medv ~ log(lstat) * rm,
 Add the models to the multiverse `mv`.
 
 ```{r}
-mv <- mv %>% add_formula_branch(formulas)
+mv <- mv |> add_formula_branch(formulas)
 ```
 
 Fit `lm()` across `mv` using `lm_mverse()`.
@@ -124,7 +124,9 @@ summary(mv, output = "r")
 
 Finally, we can display how the effect of number of rooms in a dwelling `log(lstat)` using `spec_curve`.  
 
-```{r}
-spec_curve(mv, var = "log(lstat)") 
+```{r fig.height=5}
+spec_summary(mv, var = "log(lstat)") |>
+  spec_curve(label = "code") +
+  ggplot2::labs("Significant at 0.05")
 ```
 

@@ -80,8 +80,9 @@ The typical workflow of a multiverse analysis with `mverse` is
 
 
 ```{r load_package, warning=FALSE, message=FALSE}
-library(tidyverse)
 library(mverse)
+library(dplyr)
+library(ggplot2)
 ```
 
 
@@ -109,19 +110,22 @@ The distribution of `alldeaths` is shown below.
 
 
 ```{r}
-hurricane %>% 
+hurricane |> 
   ggplot(aes(alldeaths)) + 
   geom_histogram(bins = 25) + 
-  stat_bin(aes(label = ..count..), bins = 25, geom = "text", vjust = -.7, size = 2)
+  stat_bin(
+    aes(label = after_stat(count)), bins = 25, 
+    geom = "text", vjust = -.7, size = 2
+  )
 ```
 
 It looks like there are a few outliers.  Let's find out the names of these hurricanes.
 
 ```{r}
-hurricane %>% 
-  filter(alldeaths > median(alldeaths)) %>% 
-  arrange(desc(alldeaths)) %>% 
-  select(Name, alldeaths) %>% 
+hurricane |> 
+  filter(alldeaths > median(alldeaths)) |> 
+  arrange(desc(alldeaths)) |> 
+  select(Name, alldeaths) |> 
   head()
 ```
 
@@ -129,15 +133,15 @@ hurricane %>%
 `filter_branch()` can be used to exclude outliers. Excluding hurricane `Katrina` or `Audrey` removes the hurricanes with the most deaths.
 
 ```{r filter_branch}
-death_outliers <- filter_branch(obs_all = TRUE, 
-                                obs_noKat = Name != 'Katrina',
-                                obs_noKatAud = !(Name %in% c('Katrina', 'Audrey')))
+death_outliers <- filter_branch(none = TRUE, 
+                                Katrina = Name != 'Katrina',
+                                KatrinaAudrey = !(Name %in% c('Katrina', 'Audrey')))
 ```
 
 Now, let's add this branch to `hurricane_mv`.
 
 ```{r}
-hurricane_mv <- hurricane_mv %>% add_filter_branch(death_outliers)
+hurricane_mv <- hurricane_mv |> add_filter_branch(death_outliers)
 
 summary(hurricane_mv)
 ```
@@ -148,22 +152,22 @@ summary(hurricane_mv)
 Consider two different definitions of femininity: `Gender_MF` is a binary classification of gender, and `MasFem` is a continuous rating of Femininity.
 
 ```{r mutate_branch}
-femininity <- mutate_branch(binary_gender = Gender_MF, 
-                            cts_gender = MasFem)
+femininity <- mutate_branch(binary = Gender_MF, 
+                            continuous = MasFem)
 ```
 
 Consider normalized damage (`NDAM`) and the log of `NDAM`.
 
 ```{r}
-damage <- mutate_branch(damage_orig = NDAM, 
-                        damage_log = log(NDAM))
+damage <- mutate_branch(original = NDAM, 
+                        log = log(NDAM))
 ```
 
 
 Now, let's add these branches to `hurricane_mv`.
 
 ```{r}
-hurricane_mv <- hurricane_mv %>% add_mutate_branch(femininity, damage)
+hurricane_mv <- hurricane_mv |> add_mutate_branch(femininity, damage)
 
 summary(hurricane_mv)
 ```
@@ -183,7 +187,7 @@ We can add it to `hurricane_mv` with `add_formula_branch()`.
 ```{r}
 models <- formula_branch(alldeaths ~ damage + femininity)
 
-hurricane_mv <- hurricane_mv %>% add_formula_branch(models)
+hurricane_mv <- hurricane_mv |> add_formula_branch(models)
 
 summary(hurricane_mv)
 ```
@@ -197,7 +201,7 @@ distributions <- family_branch(poisson, gaussian)
 Adding this branch to `hurricane_mv` with `add_family_branch()`.
 
 ```{r}
-hurricane_mv <- hurricane_mv %>% add_family_branch(distributions)
+hurricane_mv <- hurricane_mv |> add_family_branch(distributions)
 
 summary(hurricane_mv)
 ```
@@ -207,7 +211,8 @@ Now, we have $12 \times 2 = 24$ different combinations.
 `multiverse_tree` can be used to view `hurricane_mv`.  The tree below shows that `alldeaths` is modelled using both Gaussian and Poisson distributions.
 
 ```{r}
-multiverse_tree(hurricane_mv, label = TRUE, branches = c("models", "distributions"))
+multiverse_tree(hurricane_mv, label = "code", label_size = 4,
+                branches = c("models", "distributions"))
 ```
 
 
@@ -223,7 +228,10 @@ Each model has three rows, each corresponding to a summary of a model coefficien
 The specification curve for the coefficient of `femininity` is shown below.
 
 ```{r, fig.height=8}
-spec_curve(hurricane_mv, var = "femininity", color_order = TRUE)
+spec_summary(hurricane_mv, var = "femininity") |> 
+  spec_curve(label = "code", spec_matrix_spacing = 4) +
+  labs(colour = "Significant at 0.05") +
+  theme(legend.position = "top")
 ```
 
 ## Condition Branches 
@@ -231,9 +239,9 @@ spec_curve(hurricane_mv, var = "femininity", color_order = TRUE)
 The assumption that `alldeaths` follows a Normal distribution is tenuous, but transforming the `alldeaths` using $t(x)=\log(x+1)$ could result in a dependent variable that is closer to a Normal distribution.
 
 ```{r}
-hurricane %>% ggplot(aes(sample = alldeaths)) + stat_qq() + stat_qq_line()
+hurricane |> ggplot(aes(sample = alldeaths)) + stat_qq() + stat_qq_line()
 
-hurricane %>% mutate(logd = log(alldeaths+1)) %>% ggplot(aes(sample = logd)) + stat_qq() + stat_qq_line()
+hurricane |> mutate(logd = log(alldeaths+1)) |> ggplot(aes(sample = logd)) + stat_qq() + stat_qq_line()
 ```
 
 
@@ -254,9 +262,9 @@ models <- formula_branch(dep_var ~ damage + femininity)
 
 distributions <- family_branch(poisson, gaussian)
 
-hurricane_mv <- hurricane_mv %>% 
-  add_mutate_branch(dep_var, femininity, damage) %>%
-  add_formula_branch(models) %>% 
+hurricane_mv <- hurricane_mv |> 
+  add_mutate_branch(dep_var, femininity, damage) |>
+  add_formula_branch(models) |> 
   add_family_branch(distributions)
 
 ```
@@ -264,7 +272,7 @@ hurricane_mv <- hurricane_mv %>%
 Using `multiverse_tree()` to display the multiverse tree of `dep_var` and `distributions` shows that `log(alldeaths + 1)` and `alldeaths` will be modelled as both Gaussian and Poisson.
 
 ```{r}
-multiverse_tree(hurricane_mv, label = TRUE, c("dep_var", "distributions"))
+multiverse_tree(hurricane_mv, label = "code", c("dep_var", "distributions"))
 ```
 
 In order to specify that `hurricane_mv` should only contain analyses where `log(alldeaths + 1)` is modelled using a Gaussian and `alldeaths` modelled using Poisson we can use `branch_condition()` and `add_branch_condition()` to add it to `hurricane_mv`.
@@ -281,7 +289,7 @@ hurricane_mv <- add_branch_condition(hurricane_mv, match_poisson, match_log_lin)
 The multiverse tree shows that `log(alldeaths + 1)` will _only_ be modelled as Gaussian and `alldeaths` will _only_ be modelled as Poisson.
 
 ```{r}
-multiverse_tree(hurricane_mv, label = TRUE, c("dep_var", "distributions"))
+multiverse_tree(hurricane_mv, label = "code", c("dep_var", "distributions"))
 ```
 
 ```{r}
@@ -292,8 +300,11 @@ summary(hurricane_mv)
 
 A summary of the 24 models on the `femininity` coefficients is shown in the specification curve.
 
-```{r}
-spec_curve(hurricane_mv, var = "femininity", color_order = TRUE)
+```{r fig.height=8}
+spec_summary(hurricane_mv, var = "femininity") |> 
+  spec_curve(label = "code", spec_matrix_spacing = 4) +
+  labs(colour = "Significant at 0.05") +
+  theme(legend.position = "top")
 ```
 
 ## Negative Binomial Regression
@@ -314,8 +325,8 @@ damage <- mutate_branch(damage_orig = NDAM,
 
 models <- formula_branch(alldeaths ~ damage + femininity)
 
-hurricane_nb_mv <- hurricane_nb_mv %>% 
-  add_mutate_branch(femininity, damage) %>%
+hurricane_nb_mv <- hurricane_nb_mv |> 
+  add_mutate_branch(femininity, damage) |>
   add_formula_branch(models) 
 ```
 
@@ -335,6 +346,9 @@ summary(hurricane_nb_mv)
 
 Finally, we can plot the specification curve. 
 
-```{r}
-spec_curve(hurricane_nb_mv, var = "femininity", color_order = TRUE)
+```{r fig.height=8}
+spec_summary(hurricane_nb_mv, var = "femininity") |> 
+  spec_curve(label = "code", spec_matrix_spacing = 4) +
+  labs(colour = "Significant at 0.05") +
+  theme(legend.position = "top")
 ```

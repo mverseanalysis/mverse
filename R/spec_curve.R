@@ -1,325 +1,280 @@
+#' Create a specification table for a selected variable.
+#'
+#' Returns estimates for a selected variable across the multiverse along with
+#' the universe specification information in a table. The resulting table
+#' can be used for \code{spe_curve()}.
+#'
+#' @param .mverse A \code{mverse} object.
+#' @param var A character specifying the variable of interest.
+#' @param conf.int Whether the table should include confidence intervals.
+#' @param conf.level The confidence level for the confidence level and \code{is_significant}.
+#' @examples
+#' femininity <- mutate_branch(
+#'   1 * (MasFem > 6), 1 * (MasFem > mean(MasFem))
+#' )
+#' intensity <- mutate_branch(
+#'   Minpressure_Updated_2014,
+#'   Category,
+#'   NDAM,
+#'   HighestWindSpeed
+#' )
+#' model <- formula_branch(
+#'   log(alldeaths + 1) ~ femininity,
+#'   log(alldeaths + 1) ~ femininity * intensity
+#' )
+#' mv <- mverse(hurricane) %>%
+#'   add_mutate_branch(femininity) %>%
+#'   add_mutate_branch(intensity) %>%
+#'   add_formula_branch(model) %>%
+#'   lm_mverse()
+#' spec_summary(mv, "femininity")
+#' @return A \code{spec_summary} object that includes estimates and specification
+#'   acorss the multiverse for the selected term(s). A boolean column \code{is_significant}
+#'   indicates whether \code{p.value} for the universe is less than the specified
+#'   significance level (\code{1 - conf.level}).
+#' @name spec_summary
+#' @importFrom rlang .data
+#' @family specification curve analysis
+#' @export
+spec_summary <- function(.mverse, var, conf.int = TRUE, conf.level = .95) {
+  UseMethod("spec_summary")
+}
+
+#' @export
+spec_summary.mverse <- function(.mverse, var, conf.int = TRUE, conf.level = .95){
+  .spec_summary <- summary(.mverse,
+          conf.int = !!rlang::enexpr(conf.int),
+          conf.level = !!rlang::enexpr(conf.level)) %>%
+    dplyr::filter(.data$term == var) %>%
+    dplyr::select(
+      tidyselect::any_of(c(
+        "universe", "term", "estimate", "p.value", "conf.low", "conf.high"
+      )),
+      tidyselect::contains("_branch")
+    ) %>%
+    dplyr::mutate(is_significant = .data$p.value < (1 - conf.level)) 
+  attr(.spec_summary, "var") <- var
+  attr(.spec_summary, "conf.int") <- conf.int
+  attr(.spec_summary, "conf.level") <- conf.level
+  attr(.spec_summary, "class") <- c("spec_summary", class(.spec_summary))
+  .spec_summary
+}
+
+#' @export
+print.spec_summary <- function(x, ...) {
+  cat("Specification table for variable:", attr(x, "var"))
+  if (attr(x, "conf.int"))
+    cat(" at confidence intervals", attr(x, "conf.level"), "\n")
+  else
+    cat("\n")
+  attr(x, "class") <- class(x)[class(x) != "spec_summary"]
+  print(x)
+}
+
 #' Display a specification curve across the multiverse.
 #'
-#' \code{spec_curve} returns the specification curve  as
-#' proposed by Simonsohn, Simmons, and Nelson
-#' (2020) <doi:10.1038/s41562-020-0912-z>.
-#' \code{spec_curve} are available for \code{mverse} objects fitted with
-#' \code{lm_mverse()}, \code{glm_mverse()}, and \code{glm.nb_mverse()}.
-#' Notice that the order of universes may not correspond to the order
+#' Returns a \code{ggplot} object that displays
+#' the specification curve  as proposed by \insertCite{speccurvessn}{mverse}.
+#' Note that the order of universes may not correspond to the order
 #' in the summary table.
 #'
-#' @param .object a \code{glm.nb_mverse} object.
-#' @param var name for the variable to show.
-#' @param conf.int when \code{TRUE} (default), the estimate output
-#'   includes the confidence intervals.
-#' @param conf.level the confidence level of the confidence interval
-#'   returned using \code{conf.int = TRUE}. Default value is 0.95.
-#' @param option a vector of branches to show the options included.
-#' @param universe_order when \code{TRUE}, order the universes according to
-#'   the order in the summary table.
-#' @param color_order when \code{TRUE}, the estimated value will be ordered
-#'   according to the color.
-#' @param color an expression to indicate how colors are assigned to markers.
-#'   By default, colors are assigned based on 'p.value <= 0.05'.
-#' @param branch_order name for the branch to order.
-#' @param point_size size of points on the top plot.
-#' @param grid_size size of points on the bottom plot.
-#' @param point_alpha alpha level of points and point ranges.
-#' @param brewer_palette name of colorbrewer palette for the plot.
-#' @param yaxis_text_size text size of y-axis label
-#' @param ... ignored.
-#' @return a specification curve plot for the estimates
-#' @source
-#' Uri Simonsohn, Joseph P. Simmons, and Leif D. Nelson. (2020).
-#' “Specification curve analysis” \emph{Nature Human Behaviour},
-#' 4, 1208–14. \doi{10.1038/s41562-020-0912-z}
+#' @param .spec_summary A specification table created using \code{spec_summary()}.
+#' @param label If "name", uses the branch option names. If "code", display
+#'   the codes used to define the branch options.
+#' @param order_by A character vector by which the curve is sorted.
+#' @param colour_by The name of the variable to colour the curve. 
+#' @param palette_common A character vector of colours to match the values of
+#'   the varible \code{colour_by} in the specification curve and the specification 
+#'   matrix. The palette must contain more colours than the number of unique values
+#'   of \code{colour_by} variable.
+#' @param pointsize Size of the points in the specification curve and 
+#'   the specification matrix.
+#' @param linewidth Width of confidence interval lines.
+#' @param spec_matrix_spacing A numeric for adjusting the specification matrix
+#'   spacing passed to \code{combmatrix.label.extra_spacing} 
+#'   in \code{ggupset::theme_combmatrix()}.
+#' @param theme_common A \code{ggplot} theme to be used for both the specification
+#'   curve and the specification matrix.
+#' @param sep A string used internally to create the spcification matrix. The string
+#'   must be distinct from all branch names, option names, and option codes. Use a
+#'   different value if any of them contains the default value.
+#' @importFrom Rdpack reprompt
+#' @return a \code{ggplot} object with the specification curve plot for
+#'   the estimates passed in the \code{spec_summary()}.
+#' @examples
+#' femininity <- mutate_branch(
+#'   1 * (MasFem > 6), 1 * (MasFem > mean(MasFem))
+#' )
+#' y <- mutate_branch(log(alldeaths + 1), alldeaths)
+#' intensity <- mutate_branch(
+#'   Minpressure_Updated_2014,
+#'   Category,
+#'   NDAM,
+#'   HighestWindSpeed
+#' )
+#' model <- formula_branch(
+#'   y ~ femininity,
+#'   y ~ femininity * intensity
+#' )
+#' family <- family_branch(
+#'   gaussian, poisson
+#' )
+#' match_poisson <- branch_condition(alldeaths, poisson)
+#' match_gaussian <- branch_condition(log(alldeaths + 1), gaussian)
+#' stable <- mverse(hurricane) %>%
+#'   add_mutate_branch(y, femininity, intensity) %>%
+#'   add_formula_branch(model) %>%
+#'   add_family_branch(family) %>%
+#'   add_branch_condition(match_poisson, match_gaussian) %>%
+#'   glm_mverse() %>%
+#'   spec_summary("femininity")
+#' # default behaviour
+#' spec_curve(stable)
+#' # coloring and sorting based on other variable
+#' stable %>%
+#'   dplyr::mutate(colour_by = y_branch) %>%
+#'   spec_curve(order_by = c("estimate", "colour_by"), colour_by = "colour_by")
+#' # Because the output is a \code{ggplot} object, you can
+#' # further modify the asethetics of the specification curve 
+#' # using \code{ggplot2::theme()} and the specication matrix
+#' # using \code{ggupset::theme_combmatrix()}
+#' spec_curve(stable) +
+#'   ggplot2::labs(y = "Estimates", colour = "Significant at 0.05 level",
+#'                 title = "Specification curve of femininity") +
+#'   ggplot2::theme(legend.position = "bottom") +
+#'   ggupset::theme_combmatrix(
+#'     combmatrix.label.width = ggplot2::unit(c(25, 100, 0, 0), "pt")
+#'   )
+#' @references
+#' \insertAllCited{}
 #' @name spec_curve
+#' @family specification curve analysis
 #' @export
-spec_curve <- function(.object, var, ...) {
+spec_curve <- function(
+    .spec_summary, label = "name",
+    order_by = c("estimate", "is_significant"),
+    colour_by = "is_significant", palette_common = NULL,
+    pointsize = 2, linewidth = .5, spec_matrix_spacing = 10,
+    theme_common = ggplot2::theme_minimal(),
+    sep = "---"
+) {
   UseMethod("spec_curve")
 }
 
-#' @rdname spec_curve
-#' @examples
-#' \donttest{
-#'
-#' # Display a specification curve for \code{lm} models
-#' # fitted across the multiverse.
-#' femininity <- mutate_branch(
-#'   MasFem > 6, MasFem > mean(MasFem)
-#' )
-#' model <- formula_branch(
-#'   alldeaths ~ femininity,
-#'   alldeaths ~ femininity + HighestWindSpeed
-#' )
-#' mv <- mverse(hurricane) %>%
-#'   add_mutate_branch(femininity) %>%
-#'   add_formula_branch(model) %>%
-#'   lm_mverse()
-#' spec_curve(mv, var = "femininityTRUE")
-#' # plot based on 90% confidence interval
-#' spec_curve(mv, var = "femininityTRUE", color = p.value < .1)
-#' }
-#' @importFrom rlang .data
-#' @export
-spec_curve.lm_mverse <- function(.object, var , conf.int = TRUE,
-                              conf.level = 0.95,
-                              option = names(multiverse::parameters(.object)),
-                              universe_order = FALSE, color_order = FALSE,
-                              color = NULL, branch_order = NULL,
-                              point_size = .25, grid_size = 2,
-                              point_alpha = 1, brewer_palette = "Set2",
-                              yaxis_text_size = 8, ...) {
-  stopifnot(inherits(.object, "mverse"))
-  spec_curve_table <- get_spec_curve_table(
-    .object, var, !!rlang::enexpr(conf.int),!!rlang::enexpr(conf.level),
-    !!rlang::enexpr(branch_order), universe_order, color_order,
-    !!rlang::enexpr(color)
-  )
-
-  p1 <- plot_spec_curve_curve(
-    spec_curve_table, var, !!rlang::enexpr(conf.int),
-    option, point_size, point_alpha, brewer_palette,
-    yaxis_text_size, !!rlang::enexpr(color)
-  )
-  p2 <- plot_spec_curve_grid(
-    spec_curve_table, names(multiverse::parameters(.object)), option,
-    grid_size, brewer_palette, yaxis_text_size
-  )
-  if (universe_order) {
-    p2 <- p2 + xlab("universe number")
-  }
-  cowplot::plot_grid(
-    p1, p2, axis = "bltr", align = "v", ncol = 1, rel_heights = c(1, 2)
-  )
-}
-
-#' @rdname spec_curve
-#' @examples
-#' \donttest{
-#'
-#' # Display a specification curve for \code{glm} models
-#' # fitted across the multiverse.
-#' femininity <- mutate_branch(
-#'   MasFem > 6, MasFem > mean(MasFem)
-#' )
-#' model <- formula_branch(
-#'   alldeaths ~ femininity,
-#'   alldeaths ~ femininity + HighestWindSpeed
-#' )
-#' fam <- family_branch(gaussian)
-#' mv <- mverse(hurricane) %>%
-#'   add_mutate_branch(femininity) %>%
-#'   add_formula_branch(model) %>%
-#'   add_family_branch(fam) %>%
-#'   glm_mverse()
-#' spec_curve(mv, var = "femininityTRUE")
-#' # plot based on 90% confidence interval
-#' spec_curve(mv, var = "femininityTRUE", color = p.value < .1)
-#' }
-#' @importFrom rlang .data
-#' @export
-spec_curve.glm_mverse <- function(.object, var , conf.int = TRUE,
-                                 conf.level = 0.95,
-                                 option = names(multiverse::parameters(.object)),
-                                 universe_order = FALSE, color_order = FALSE,
-                                 color = NULL, branch_order = NULL,
-                                 point_size = .25, grid_size = 2,
-                                 point_alpha = 1, brewer_palette = "Set2",
-                                 yaxis_text_size = 8, ...) {
-  stopifnot(inherits(.object, "mverse"))
-  spec_curve_table <- get_spec_curve_table(
-    .object, var, !!rlang::enexpr(conf.int),!!rlang::enexpr(conf.level),
-    !!rlang::enexpr(branch_order), universe_order, color_order,
-    !!rlang::enexpr(color)
-  )
-
-  p1 <- plot_spec_curve_curve(
-    spec_curve_table, var, !!rlang::enexpr(conf.int),
-    option, point_size, point_alpha, brewer_palette,
-    yaxis_text_size, !!rlang::enexpr(color)
-  )
-  p2 <- plot_spec_curve_grid(
-    spec_curve_table, names(multiverse::parameters(.object)), option,
-    grid_size, brewer_palette, yaxis_text_size
-  )
-  if (universe_order) {
-    p2 <- p2 + xlab("universe number")
-  }
-  cowplot::plot_grid(
-    p1, p2, axis = "bltr", align = "v", ncol = 1, rel_heights = c(1, 2)
-  )
-}
-
-#' @examples
-#' \donttest{
-#'
-#' # Display a specification curve for \code{glm.nb} models
-#' # fitted across the multiverse.
-#' femininity <- mutate_branch(
-#'   MasFem > 6, MasFem > mean(MasFem)
-#' )
-#' model <- formula_branch(
-#'   alldeaths ~ femininity,
-#'   alldeaths ~ femininity + HighestWindSpeed
-#' )
-#' mv <- mverse(hurricane) %>%
-#'   add_mutate_branch(femininity) %>%
-#'   add_formula_branch(model) %>%
-#'   glm.nb_mverse()
-#' spec_curve(mv, var = "femininityTRUE")
-#' # plot based on 90% confidence interval
-#' spec_curve(mv, var = "femininityTRUE", color = p.value < .1)
-#' }
-#' @rdname spec_curve
-#' @importFrom rlang .data
-#' @export
-spec_curve.glm.nb_mverse <- function(.object, var , conf.int = TRUE,
-                                 conf.level = 0.95,
-                                 option = names(multiverse::parameters(.object)),
-                                 universe_order = FALSE, color_order = FALSE,
-                                 color = NULL, branch_order = NULL,
-                                 point_size = .25, grid_size = 2,
-                                 point_alpha = 1, brewer_palette = "Set2",
-                                 yaxis_text_size = 8, ...) {
-  stopifnot(inherits(.object, "mverse"))
-  spec_curve_table <- get_spec_curve_table(
-    .object, var, !!rlang::enexpr(conf.int),!!rlang::enexpr(conf.level),
-    !!rlang::enexpr(branch_order), universe_order, color_order,
-    !!rlang::enexpr(color)
-  )
-  p1 <- plot_spec_curve_curve(
-    spec_curve_table, var, !!rlang::enexpr(conf.int),
-    option, point_size, point_alpha, brewer_palette,
-    yaxis_text_size, !!rlang::enexpr(color)
-  )
-  p2 <- plot_spec_curve_grid(
-    spec_curve_table, names(multiverse::parameters(.object)), option,
-    grid_size, brewer_palette, yaxis_text_size
-  )
-  if (universe_order) {
-    p2 <- p2 + xlab("universe number")
-  }
-  cowplot::plot_grid(
-    p1, p2, axis = "bltr", align = "v", ncol = 1, rel_heights = c(1, 2)
-  )
-}
-
-#' @importFrom rlang .data
-get_spec_curve_table <- function(.object, var, conf.int, conf.level,
-                                 branch_order, universe_order,
-                                 color_order, color) {
-  branch_order <- rlang::enquo(branch_order)
-  color <- rlang::enquo(color)
-  spec_curve_table <- summary(
-    .object,
-    conf.int = !!rlang::enexpr(conf.int),
-    conf.level = !!rlang::enexpr(conf.level)
-  ) %>%
-    dplyr::filter(.data$term == var) %>%
-    dplyr::arrange(.data$universe)
-  if (rlang::quo_is_null(color)) {
-    spec_curve_table <- dplyr::mutate(
-      spec_curve_table, color_group = .data$p.value <= 0.05
-    )
-  } else{
-    spec_curve_table <- dplyr::mutate(
-      spec_curve_table, color_group = !! color
-    )
-  }
-
-  if (!universe_order) {
-    if (color_order) {
-      if (rlang::quo_is_null(branch_order)) {
-        spec_curve_table <- dplyr::arrange(
-          spec_curve_table, .data$color_group, .data$estimate
-        )
-      } else {
-        spec_curve_table <- dplyr::arrange(
-          spec_curve_table, !! branch_order, .data$color_group, .data$estimate
-        )
-      }
-    } else {
-      if (rlang::quo_is_null(branch_order)) {
-        spec_curve_table <- dplyr::arrange(spec_curve_table, .data$estimate)
-      } else {
-        spec_curve_table <- dplyr::arrange(
-          spec_curve_table, !! branch_order, .data$estimate
-        )
-      }
-    }
-  }
-  dplyr::mutate(spec_curve_table, x = seq_len(nrow(spec_curve_table)))
-}
-
 #' @import ggplot2
-#' @importFrom rlang .data
-plot_spec_curve_curve <- function(spec_curve_table, var, conf.int,
-                                  option, point_size, point_alpha,
-                                  brewer_palette, yaxis_text_size,
-                                  color) {
-  color <- rlang::enquo(color)
-  plt <- ggplot(
-    spec_curve_table,
-    aes(.data$x, .data$estimate, color = .data$color_group)) +
-    geom_point(size = point_size) +
-    labs(x = NULL, y = paste0("coefficient of \n:", var)) +
-    theme_minimal() +
-    theme(
-      axis.title.y = element_text(size = yaxis_text_size),
-      axis.ticks.x = element_blank(),
-      axis.text.x = element_blank()
-    ) +
-    scale_colour_brewer(
-      palette = brewer_palette,
-      name = ifelse(
-        rlang::quo_is_null(color),
-        "p.value <= 0.05",
-        rlang::as_label(color)
+#' @export
+spec_curve.spec_summary <- function(
+    .spec_summary, label = "name",
+    order_by = c("estimate", "is_significant"),
+    colour_by = "is_significant", palette_common = NULL,
+    pointsize = 2, linewidth = .5, spec_matrix_spacing = 10,
+    theme_common = ggplot2::theme_minimal(),
+    sep = "---"
+) {
+  stopifnot(label %in% c("name", "code"))
+  branch_end <- ifelse(label == "name", "_branch", "_branch_code")
+  n_colours <- length(unique(.spec_summary[[colour_by]]))
+  sep_internal <- "::::"
+  tmp <- .spec_summary %>%
+    tidyr::pivot_longer(tidyselect::ends_with(branch_end)) %>%
+    dplyr::mutate(
+      spec = paste0(
+        .data$name, sep_internal, .data$value, sep_internal, .data[[colour_by]]
       )
-    )
-  if (conf.int) {
-    return(
-      plt + geom_pointrange(
-        aes(ymin = .data$conf.low, ymax = .data$conf.high),
-        alpha = point_alpha, size = point_size
-      )
-    )
-  }
-  return(plt)
-}
-
-#' @import ggplot2
-#' @importFrom rlang .data
-plot_spec_curve_grid <- function(spec_curve_table, parameters, option,
-                                 grid_size, brewer_palette, yaxis_text_size) {
-  spec_curve_table %>%
-    tidyr::pivot_longer(
-      parameters,
-      names_to = "parameter_name",
-      values_to = "parameter_option"
     ) %>%
-    dplyr::filter(.data$parameter_name %in% option) %>%
-    ggplot() +
-    geom_point(
-      aes(x = .data$x, y = .data$parameter_option, color = .data$color_group),
-      size = grid_size, shape = 124
+    dplyr::select(-dplyr::all_of(c("name", "value"))) %>%
+    dplyr::group_by(dplyr::across(-tidyselect::any_of("spec"))) %>%
+    dplyr::summarise(
+      spec = paste0(.data$spec, collapse = sep),
+      .groups = "drop"
+    )
+  if (is.factor(tmp[[colour_by]])) {
+    tmp[[colour_by]] <- factor(
+      tmp[[colour_by]], sort(levels(tmp[[colour_by]])))
+  }
+  for (ord in order_by) {
+    tmp <- tmp %>% dplyr::arrange(.data[[ord]])
+  }
+  plt <- tmp %>%
+    dplyr::mutate(spec = stats::reorder(.data$spec, dplyr::row_number())) %>%
+    ggspec_curve(
+      theme_common, colour_by, palette_common, n_colours,
+      pointsize, linewidth, spec_matrix_spacing, branch_end, sep, sep_internal
+    )
+
+  if (attr(.spec_summary, "conf.int")) {
+    plt <- plt +
+      geom_segment(
+        aes(y = .data$conf.low, yend = .data$conf.high, xend = .data$spec),
+        linewidth = linewidth, show.legend = FALSE
+      )
+  }
+  if (!is.null(palette_common)) {
+    plt <- plt +
+      scale_colour_manual(values = palette_common[1:n_colours])
+  }
+  plt
+}
+
+#' @import ggplot2
+#' @import ggupset
+ggspec_curve <- function(specs, theme_common,
+                         colour_by, palette_common, n_colours,
+                         pointsize, linewidth, spec_matrix_spacing,
+                         branch_end, sep, sep_internal) {
+  ggplot(
+    specs,
+    aes(x = .data$spec, y = .data$estimate, colour = .data[[colour_by]])
     ) +
-    labs(x = NULL, y = "Branch Options") +
-    facet_grid(parameter_name ~ ., space = "free_y", scales = "free_y") +
-    scale_colour_brewer(palette = brewer_palette) +
-    theme(
-      axis.ticks.x = element_blank(),
-      axis.text.x = element_blank(),
-      axis.title.y = element_text(size = yaxis_text_size),
-      strip.placement = "outside",
-      strip.background = element_rect(fill = NA, colour = NA),
-      panel.background = element_rect(fill = "white", colour = NA),
-      panel.grid = element_line(colour = "grey92"),
-      panel.grid.minor = element_line(size = rel(0.5)),
-      panel.spacing.x = unit(0.15, "cm"),
-      panel.spacing.y = unit(1.25, "lines"),
-      strip.text.y = element_text(angle = 0, face = "bold", size = 8),
-      legend.position = "none"
+    theme_common + xlab(NULL) +
+    geom_point(size = pointsize) +
+    axis_combmatrix(
+      sep = sep,
+      override_plotting_function = function(df) {
+        df <- df[df$observed, ]
+        labs_cols <- strsplit(as.character(df$single_label), sep_internal)
+        brs <- sapply(labs_cols, "[[", 1)
+        opts <- sapply(labs_cols, "[[", 2)
+        cols <- factor(sapply(labs_cols, "[[", 3))
+        df$single_label <- factor(
+          opts,
+          levels = rev(unlist(
+            sapply(
+              unique(brs), function(x) c(paste(x, 1:2), x, rev(unique(opts[brs == x])))
+            )
+          )),
+          ordered = FALSE
+        )
+        tbl <- ggplot(df, aes(x = .data$at, y = .data$single_label, colour = cols)) +
+          labs(x = NULL, y = NULL) +
+          scale_x_continuous(
+            limits = c(0, 1), expand = c(0, 0),
+            breaks = unique(df$at)
+          ) +
+          scale_y_discrete(breaks = opts, drop = FALSE) +
+          geom_point(size = pointsize, show.legend = FALSE) +
+          annotate(
+            "text", x = 0, hjust = 1, vjust = 0, y = unique(brs),
+            label = sub(branch_end, "", unique(brs))
+          ) +
+          coord_cartesian(clip = "off") +
+          theme_common +
+          theme(
+            legend.position = "none",
+            axis.text.x = element_blank(),
+            axis.ticks = element_blank(),
+            axis.title = element_blank(),
+            panel.grid.minor = element_blank(),
+            axis.text.y = element_text(hjust = 0)
+          )
+        if (!is.null(palette_common)) {
+          tbl <- tbl +
+            scale_colour_manual(values = palette_common[1:n_colours])
+        }
+        tbl
+      }
+    ) +
+    theme_combmatrix(
+      combmatrix.label.extra_spacing = spec_matrix_spacing
     )
 }

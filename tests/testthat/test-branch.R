@@ -1,5 +1,3 @@
-context("Branch Definition")
-
 test_that("Branches require at least one rule.", {
   expect_error(
     mutate_branch(),
@@ -61,8 +59,6 @@ test_that("*_brach() defines branches with multiple options.", {
   expect_equal(length(fbranch$opts), 3)
 })
 
-context("Branch Naming and Parsing")
-
 test_that("name() extracts the name of a branch.", {
   mbranch <- mutate_branch(x + y, x - y, x * y, name = "mutate")
   expect_equal(name(mbranch), "mutate")
@@ -94,15 +90,34 @@ test_that("parse() creates a branching command for multiverse.", {
   ))
 })
 
+test_that("parse() handles named branched options", {
+  mbranch <- mutate_branch(
+    add = x + y, subtract = x - y, multiply = x * y, name = "m")
+  expect_equal(parse(mbranch), rlang::parse_expr(
+    'branch(m_branch, "add" ~ x + y, "subtract" ~ x - y, "multiply" ~ x * y)'
+  ))
+  fbranch <- filter_branch(x > 0, x < 0, equals = x == 0, name = "filter")
+  expect_equal(parse(fbranch), rlang::parse_expr(
+    'branch(filter_branch, "filter_1" ~ x > 0, "filter_2" ~ x < 0, "equals" ~ x == 0)'
+  ))
+  frml <- formula_branch(linear = x ~ y, x ~ z, name = "model")
+  expect_equal(parse(frml), rlang::parse_expr(
+    'branch(model_branch, "linear" ~ formula(x ~ y), "model_2" ~ formula(x ~ z))'
+  ))
+  frml <- family_branch(linear = gaussian, name = "fam")
+  expect_equal(parse(frml), rlang::parse_expr(
+    'branch(fam_branch, "linear" ~ gaussian)'
+  ))
+})
+
 test_that("parse() handles long branch options.", {
   mydf <- data.frame(col1 = c(1, 2, 3))
   mbranch <- mutate_branch(
     dplyr::if_else(col1 > 1, "a", dplyr::if_else(col1 == 1, "b", "c"))
   )
   mv <- mverse(mydf) %>%
-    add_mutate_branch(mbranch)
-  execute_multiverse(mv)
-  multiverse::code(mv)[[3]]
+    add_mutate_branch(mbranch) %>%
+    execute_multiverse()
   expect_true(any(
     stringr::str_detect(
       sapply(multiverse::code(mv), as.character),
@@ -123,8 +138,6 @@ test_that("parse() handles long branch options.", {
     )
   ))
 })
-
-context("Branch Add and Remove")
 
 test_that("add_*_branch() adds a branch.", {
   mydf <- data.frame(

@@ -1,36 +1,34 @@
 display_branch_opts <- function(mtable, .mverse) {
-  # extract all branches
-  branches <- sapply(
-    c(
-      attr(.mverse, "branches_list"),
-      attr(.mverse, "branches_conditioned_list")
-    ),
-    function(vb) {
-      opts <- character(length(vb$opts))
-      for (i in seq_len(length(vb$opts))) {
-        opts[i] <- rlang::quo_text(vb$opts[[i]])
-      }
-      out <- list(opts)
-      names(out) <- vb$name
-      out
-    }
+  branches <- c(
+    attr(.mverse, "branches_list"),
+    attr(.mverse, "branches_conditioned_list")
   )
-  for (nm in names(branches)) {
-    replace_this <- paste(nm, seq_len(length(branches[[nm]])), sep = "_")
-    brnch <- paste(nm, "branch", sep = "_")
-    mtable[[brnch]] <- mtable[[brnch]] %>%
-      dplyr::recode(!!!stats::setNames(branches[[nm]], replace_this)) %>%
-      factor()
+  for (br in branches) {
+    nm <- paste0(br$name, "_branch")
+    cs <- sapply(br$opts, rlang::quo_text)
+    mtable[[paste0(nm, "_code")]] <- factor(
+      sapply(
+        mtable[[nm]],
+        function(x) unname(cs)[names(cs) == x],
+        USE.NAMES = FALSE
+      ),
+      levels = cs
+    )
+    mtable[[nm]] <- factor(mtable[[nm]], levels = names(cs))
   }
-  mtable
+  mtable %>%
+    dplyr::mutate(universe = factor(.data$.universe)) %>%
+    dplyr::select(-tidyselect::starts_with(".")) %>%
+    dplyr::select(tidyselect::all_of("universe"), tidyselect::everything())
 }
 
 #' Display the multiverse table with results.
 #'
 #' This method returns the multiverse table
 #' displaying all universes defined by the multiverse.
-#' Each row corresponds to a universe and each column
-#' represents a branch.
+#' Each row corresponds to a universe and the columns
+#' include universe number, branch option name, and
+#' branch option definition.
 #'
 #' When you pass a \code{mverse} objected fitted with model,
 #' the summary table includes results of the fitted models
@@ -56,7 +54,6 @@ display_branch_opts <- function(mtable, .mverse) {
 #' hurricane_outliers <- filter_branch(
 #'   !Name %in% c("Katrina", "Audrey", "Andrew"),
 #'   !Name %in% c("Katrina"),
-#'   !Name %in% c("Katrina"),
 #'   TRUE # include all
 #' )
 #' mv <- add_filter_branch(mv, hurricane_outliers)
@@ -67,10 +64,7 @@ display_branch_opts <- function(mtable, .mverse) {
 #' @importFrom rlang .data
 #' @export
 summary.mverse <- function(object, ...) {
-  mtable <- multiverse::extract_variables(object) %>%
-    dplyr::mutate(universe = factor(.data$.universe)) %>%
-    dplyr::select(-tidyselect::starts_with(".")) %>%
-    dplyr::select(.data$universe, tidyselect::everything())
+  mtable <- multiverse::extract_variables(object)
   display_branch_opts(mtable, object)
 }
 
@@ -116,12 +110,11 @@ summary.mverse <- function(object, ...) {
 #' @export
 summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
                               output = "estimates", ...) {
-  model <- NULL # suppress R CMD Check Note
   if (output %in% c("estimates", "e")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
+      if (summary(.model_mverse)$df[1] > 0) {
         out <- broom::tidy(
-          model, !!rlang::enexpr(conf.int), !!rlang::enexpr(conf.level)
+          .model_mverse, !!rlang::enexpr(conf.int), !!rlang::enexpr(conf.level)
         )
       } else {
         out <- data.frame(
@@ -138,12 +131,12 @@ summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     })
   } else if (output == "df") {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
-        out <- as.data.frame(t(summary(model)$df)) %>%
+      if (summary(.model_mverse)$df[1] > 0) {
+        out <- as.data.frame(t(summary(.model_mverse)$df)) %>%
           dplyr::rename(
-            p = .data$V1,
-            n.minus.p = .data$V2,
-            p.star = .data$V3
+            p = "V1",
+            n.minus.p = "V2",
+            p.star = "V3"
           )
       } else {
         out <- data.frame(
@@ -155,23 +148,23 @@ summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     })
   } else if (output %in% c("r.squared", "r")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
+      if (summary(.model_mverse)$df[1] > 0) {
         out <- as.data.frame(
-          t(c(summary(model)$r.squared, summary(model)$adj.r.squared))
+          t(c(summary(.model_mverse)$r.squared, summary(.model_mverse)$adj.r.squared))
         ) %>%
-          dplyr::rename(r.squared = .data$V1, adj.r.squared = .data$V2)
+          dplyr::rename(r.squared = "V1", adj.r.squared = "V2")
       } else {
         out <- data.frame(r.squared = NA, adj.r.squared = NA)
       }
     })
   } else if (output %in% c("fstatistic", "f")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 1) {
-        out <- as.data.frame(t(summary(model)$fstatistic)) %>%
+      if (summary(.model_mverse)$df[1] > 1) {
+        out <- as.data.frame(t(summary(.model_mverse)$fstatistic)) %>%
           dplyr::rename(
-            fstatistic = .data$value,
-            numdf.f = .data$numdf,
-            dendf.f = .data$dendf
+            fstatistic = "value",
+            numdf.f = "numdf",
+            dendf.f = "dendf"
           )
       } else {
         out <- data.frame(fstatistic = NA, numdf.f = NA, dendf.f = NA)
@@ -181,11 +174,7 @@ summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     stop("Invalid output argument.")
   }
   execute_multiverse(object)
-  mtable <- multiverse::extract_variables(object, out) %>%
-    tidyr::unnest(out) %>%
-    dplyr::mutate(universe = factor(.data$.universe)) %>%
-    dplyr::select(-tidyselect::starts_with(".")) %>%
-    dplyr::select(.data$universe, tidyselect::everything())
+  mtable <- multiverse::extract_variables(object, out) %>% tidyr::unnest(out) 
   display_branch_opts(mtable, object)
 }
 
@@ -231,12 +220,11 @@ summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
 #' @export
 summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
                                output = "estimates", ...) {
-  model <- NULL # suppress R CMD Check Note
   if (output %in% c("estimates", "e")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
+      if (summary(.model_mverse)$df[1] > 0) {
         out <- broom::tidy(
-          model, !!rlang::enexpr(conf.int), !!rlang::enexpr(conf.level)
+          .model_mverse, !!rlang::enexpr(conf.int), !!rlang::enexpr(conf.level)
         )
       } else {
         out <- data.frame(
@@ -247,37 +235,38 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
           p.value = NA
         )
         if (!!rlang::enexpr(conf.int)) {
-          out <- out %>% dplyr::mutate(conf.low = NA, conf.high = NA)
+          out$conf.low <- NA
+          out$conf.hight <- NA
         }
       }
     })
   } else if (output == "df") {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
+      if (summary(.model_mverse)$df[1] > 0) {
         out <- as.data.frame(
-          t(c(summary(model)$df.residual, summary(model)$df.null))
+          t(c(summary(.model_mverse)$df.residual, summary(.model_mverse)$df.null))
         ) %>%
-          dplyr::rename(df.residual = .data$V1, df.null = .data$V2)
+          dplyr::rename(df.residual = "V1", df.null = "V2")
       } else {
         out <- data.frame(df.residual = NA, df.null = NA)
       }
     })
   } else if (output %in% c("de", "deviance")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
+      if (summary(.model_mverse)$df[1] > 0) {
         out <- as.data.frame(
-          t(c(summary(model)$deviance, summary(model)$null.deviance))
+          t(c(summary(.model_mverse)$deviance, summary(.model_mverse)$null.deviance))
         ) %>%
-          dplyr::rename(deviance = .data$V1, null.deviance = .data$V2)
+          dplyr::rename(deviance = "V1", null.deviance = "V2")
       } else {
         out <- data.frame(deviance = NA, null.deviance = NA)
       }
     })
   } else if (tolower(output) %in% c("aic", "bic")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
-        out <- as.data.frame(t(c(stats::AIC(model), stats::BIC(model)))) %>%
-          dplyr::rename(AIC = .data$V1, BIC = .data$V2)
+      if (summary(.model_mverse)$df[1] > 0) {
+        out <- as.data.frame(t(c(stats::AIC(.model_mverse), stats::BIC(.model_mverse)))) %>%
+          dplyr::rename(AIC = "V1", BIC = "V2")
       } else {
         out <- data.frame(AIC = NA, BIC = NA)
       }
@@ -286,11 +275,7 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     stop("Invalid output argument.")
   }
   execute_multiverse(object)
-  mtable <- multiverse::extract_variables(object, out) %>%
-    tidyr::unnest(out) %>%
-    dplyr::mutate(universe = factor(.data$.universe)) %>%
-    dplyr::select(-tidyselect::starts_with(".")) %>%
-    dplyr::select(.data$universe, tidyselect::everything())
+  mtable <- multiverse::extract_variables(object, out) %>% tidyr::unnest(out) 
   display_branch_opts(mtable, object)
 }
 
@@ -333,13 +318,12 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
 #' @export
 summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
                                   output = "estimates", ...) {
-  model <- NULL # suppress R CMD Check Note
   if (output %in% c("estimates", "e")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
+      if (summary(.model_mverse)$df[1] > 0) {
         out <-
           broom::tidy(
-            model,
+            .model_mverse,
             !!rlang::enexpr(conf.int),
             !!rlang::enexpr(conf.level)
           )
@@ -359,14 +343,14 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     })
   } else if (output == "df") {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
+      if (summary(.model_mverse)$df[1] > 0) {
         out <-
           as.data.frame(t(c(
-            summary(model)$df.residual, summary(model)$df.null
+            summary(.model_mverse)$df.residual, summary(.model_mverse)$df.null
           ))) %>%
           dplyr::rename(
-            df.residual = .data$V1,
-            df.null = .data$V2
+            df.residual = "V1",
+            df.null = "V2"
           )
       } else {
         out <- data.frame(
@@ -377,14 +361,14 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     })
   } else if (output %in% c("de", "deviance")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
+      if (summary(.model_mverse)$df[1] > 0) {
         out <-
           as.data.frame(t(c(
-            summary(model)$deviance, summary(model)$null.deviance
+            summary(.model_mverse)$deviance, summary(.model_mverse)$null.deviance
           ))) %>%
           dplyr::rename(
-            deviance = .data$V1,
-            null.deviance = .data$V2
+            deviance = "V1",
+            null.deviance = "V2"
           )
       } else {
         out <- data.frame(
@@ -395,12 +379,12 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     })
   } else if (tolower(output) %in% c("aic", "bic")) {
     multiverse::inside(object, {
-      if (summary(model)$df[1] > 0) {
+      if (summary(.model_mverse)$df[1] > 0) {
         out <-
-          as.data.frame(t(c(stats::AIC(model), stats::BIC(model)))) %>%
+          as.data.frame(t(c(stats::AIC(.model_mverse), stats::BIC(.model_mverse)))) %>%
           dplyr::rename(
-            AIC = .data$V1,
-            BIC = .data$V2
+            AIC = "V1",
+            BIC = "V2"
           )
       } else {
         out <- data.frame(
@@ -413,11 +397,7 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     stop("Invalid output argument.")
   }
   execute_multiverse(object)
-  mtable <- multiverse::extract_variables(object, out) %>%
-    tidyr::unnest(out) %>%
-    dplyr::mutate(universe = factor(.data$.universe)) %>%
-    dplyr::select(-tidyselect::starts_with(".")) %>%
-    dplyr::select(.data$universe, tidyselect::everything())
+  mtable <- multiverse::extract_variables(object, out) %>% tidyr::unnest(out) 
   display_branch_opts(mtable, object)
 }
 
@@ -468,7 +448,7 @@ BIC <- function(object, ...) {
 #' zooming into a subset of branches using \code{branches} parameter.
 #'
 #' @examples
-#' \donttest{
+#' {
 #' # Display a multiverse tree with multiple branches.
 #' outliers <- filter_branch(!Name %in% c("Katrina", "Audrey"), TRUE)
 #' femininity <- mutate_branch(MasFem, Gender_MF)
@@ -490,27 +470,37 @@ BIC <- function(object, ...) {
 #' add_branch_condition(mv, match_poisson)
 #' add_branch_condition(mv, match_log_lin)
 #' multiverse_tree(mv)
+#' # You can adjust colour scale of the edges
+#' # using a ggraph::scale_edge_colour*() function.
+#' multiverse_tree(mv) + ggraph::scale_edge_colour_viridis(
+#'   discrete = TRUE,
+#'   labels = c("Distribution", "Model", "Strength",
+#'              "Femininity", "Outliers", "y")
+#' )
 #' # Display a multiverse tree for a subset of branches
-#' # with label for each option.
-#' multiverse_tree(mv, branches = c("y", "distribution"), label = TRUE)
+#' # with name label for each option.
+#' multiverse_tree(mv, branches = c("y", "distribution"), label = "name")
+#' # with code label for each option.
+#' multiverse_tree(mv, branches = c("y", "distribution"), label = "code")
 #' # adjusting size and orientation of the labels
 #' multiverse_tree(mv, branches = c("y", "distribution"),
-#'   label = TRUE, label_size = 4, label_angle = 45)
+#'   label = "name", label_size = 4, label_angle = 45)
 #' }
 #' @param .mverse A \code{mverse} object.
-#' @param label A logical. Display options as labels when TRUE.
+#' @param label Display the branch option name when "name" or the definition
+#'   when "code". No label is displayed when "none" (default).
 #' @param branches A character vector. Display a subset of branches
 #'   when specified. Display all when NULL.
 #' @param label_size A numeric. Set size of option labels.
 #' @param label_angle A numeric. Rotate option labels.
 #' @import igraph ggraph ggplot2
-#' @importFrom rlang .data
 #' @return A \code{ggplot} object displaying the multiverse tree.
 #' @name multiverse_tree
 #' @export
-multiverse_tree <- function(.mverse, label = FALSE,
+multiverse_tree <- function(.mverse, label = "none",
                             branches = NULL, label_size = NULL,
                             label_angle = 0) {
+  stopifnot(label %in% c("none", "code", "name"))
   # sort: conditioned -> conditioned on -> others
   brs <- unique(sapply(
     c(
@@ -530,9 +520,9 @@ multiverse_tree <- function(.mverse, label = FALSE,
       x %in% branches
     })]
   }
-  brs_name <- paste0(brs, "_branch")
-  combs <- summary(.mverse)[brs_name] %>%
-    dplyr::mutate(dplyr::across(.fns = as.character))
+  brs_name <- paste0(brs, ifelse(label == "code", "_branch_code", "_branch"))
+  combs <- summary.mverse(.mverse, conf.int = FALSE)[brs_name] %>%
+    dplyr::mutate(dplyr::across(.cols = tidyselect::everything(), .fns = as.character))
   edges_list <-
     list(data.frame(
       from = "Data",
@@ -543,12 +533,12 @@ multiverse_tree <- function(.mverse, label = FALSE,
   for (i in seq_len(length(brs_name))) {
     pairs <- combs[, 1:i] %>%
       dplyr::distinct_all() %>%
-      tidyr::unite("to", 1:i, remove = FALSE) %>%
-      tidyr::unite("from", 2:i, remove = FALSE) %>%
+      tidyr::unite("to", tidyselect::all_of(1:i), remove = FALSE) %>%
+      tidyr::unite("from", tidyselect::all_of(2:i), remove = FALSE) %>%
       dplyr::mutate(branch = brs[i])
     if (i > 1) {
       edges_list[[length(edges_list) + 1]] <- pairs %>%
-        dplyr::select(.data$from, .data$to, .data$branch) %>%
+        dplyr::select(tidyselect::all_of(c("from", "to", "branch"))) %>%
         dplyr::distinct_all()
     }
     v_labels <- c(v_labels, pairs %>% dplyr::pull(i + 2))
@@ -556,20 +546,14 @@ multiverse_tree <- function(.mverse, label = FALSE,
   edges <- do.call(rbind, edges_list)
   g <- graph_from_data_frame(edges)
   plt <- ggraph(g, layout = "dendrogram", circular = FALSE) +
-    geom_edge_link(aes(color = .data$branch)) +
+    geom_edge_link(aes(color = "branch")) +
     theme_void() +
     coord_flip() +
     scale_y_reverse(expand = c(0.1, 0.1)) +
     scale_x_continuous(expand = c(0.1, 0.1)) +
-    scale_edge_color_manual(
-      name = NULL,
-      values = grDevices::hcl(
-        h = seq(0, 360, length.out = length(brs) + 1), l = 50
-      ),
-      limits = brs
-    ) +
+    labs(edge_colour = NULL) +
     theme(legend.position = "top")
-  if (label) {
+  if (label %in% c("code", "name")) {
     plt <- plt +
       geom_node_text(
         aes(label = v_labels),

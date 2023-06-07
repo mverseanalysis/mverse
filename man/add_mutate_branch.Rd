@@ -2,12 +2,9 @@
 % Please edit documentation in R/mutate_branch.R
 \name{add_mutate_branch}
 \alias{add_mutate_branch}
-\alias{add_mutate_branch.mverse}
 \title{Add mutate branches to a \code{mverse} object.}
 \usage{
 add_mutate_branch(.mverse, ...)
-
-\method{add_mutate_branch}{mverse}(.mverse, ...)
 }
 \arguments{
 \item{.mverse}{a \code{mverse} object.}

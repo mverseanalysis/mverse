@@ -9,6 +9,16 @@ name.branch <- function(br, name = NULL) {
   }
   stopifnot(is.character(name))
   br$name <- name
+  br$opts <- stats::setNames(
+    br$opts,
+    ifelse(grepl("^_\\d+", names(br$opts)),
+      paste0(
+        ifelse(is.null(name), "", name),
+        "_", seq_len(length(br$opts))
+      ),
+      names(br$opts)
+    )
+  )
   br
 }
 
@@ -24,15 +34,15 @@ parse.branch <- function(br) {
   # construct individual branch definitions
   has_cond <- "conds" %in% names(br)
   body_str <- paste0(
-    mapply(
-      function(i, x) {
+    sapply(
+      names(br$opts),
+      function(opt) {
         paste0(
-          "'", br$name, "_", i, "'",
-          ifelse(has_cond, br$conds[i], ""),
-          "~", rlang::quo_text(x)
+          "'", opt, "'",
+          ifelse(has_cond, br$conds[which(names(br$opts) == opt)], ""),
+          "~", rlang::quo_text(br$opts[[opt]])
         )
-      },
-      seq_len(length(br$opts)), br$opts
+      }
     ),
     collapse = ","
   )
@@ -48,15 +58,15 @@ parse.formula_branch <- function(br) {
   # construct individual formula
   has_cond <- "conds" %in% names(br)
   body_str <- paste0(
-    mapply(
-      function(i, x) {
+    sapply(
+      names(br$opts),
+      function(opt) {
         paste0(
-          "'", br$name, "_", i, "'",
-          ifelse(has_cond, br$conds[i], ""),
-          "~ formula(", rlang::quo_text(x), ")"
+          "'", opt, "'",
+          ifelse(has_cond, br$conds[which(names(br$opts) == opt)], ""),
+          "~ formula(", rlang::quo_text(br$opts[[opt]]), ")"
         )
-      },
-      seq_len(length(br$opts)), br$opts
+      }
     ),
     collapse = ","
   )
@@ -74,6 +84,34 @@ check_branch_name <- function(br) {
   }
 }
 
+branch <- function(opts, opts_names, name, class) {
+  stopifnot(
+    length(unique(opts_names)) >= length(opts_names[nchar(opts_names) > 0])
+  )
+  if (!length(opts) > 0) {
+    stop("Error: Provide at least one rule.")
+  }
+  if (!(is.character(name) | is.null(name))) {
+    stop('Error: "name" must be a character object.')
+  }
+  opts <- stats::setNames(
+    opts,
+    ifelse(nchar(names(opts)) > 0, names(opts),
+      paste0(
+        ifelse(is.null(name), "", name),
+        "_", seq_len(length(opts))
+      )
+    )
+  )
+  structure(
+    list(
+      opts = opts,
+      name = name
+    ),
+    class = c(class, "branch")
+  )
+}
+
 add_branch <- function(.mverse, brs, nms) {
   # name branch
   brs <- mapply(
@@ -87,7 +125,12 @@ add_branch <- function(.mverse, brs, nms) {
   )
   # check branch name
   sapply(brs, function(s) invisible(check_branch_name(s)))
-  # add to list
+  # replce old and add new
+  attr(.mverse, "branches_list") <- attr(.mverse, "branches_list")[
+    !sapply(
+      attr(.mverse, "branches_list"), function(x) x$name
+    ) %in% sapply(brs, function(x) x$name)
+  ]
   attr(.mverse, "branches_list") <- append(
     attr(.mverse, "branches_list"), brs
   )
@@ -102,24 +145,24 @@ code_branch <- function(.mverse, br) {
   if (inherits(br, "mutate_branch")) {
     multiverse::inside(
       .mverse,
-      data <- dplyr::mutate(
-        data, !!rlang::parse_expr(br$name) := !!parse(br)
+      .data_mverse <- dplyr::mutate(
+        .data_mverse, !!rlang::parse_expr(br$name) := !!parse(br)
       )
     )
   } else if (inherits(br, "filter_branch")) {
     multiverse::inside(
       .mverse,
-      data <- dplyr::filter(data, !!parse(br))
+      .data_mverse <- dplyr::filter(.data_mverse, !!parse(br))
     )
   } else if (inherits(br, "formula_branch")) {
     multiverse::inside(
       .mverse,
-      formulae <- stats::formula(!!parse(br))
+      .formula_mverse <- stats::formula(!!parse(br))
     )
   } else if (inherits(br, "family_branch")) {
     multiverse::inside(
       .mverse,
-      family <- !!parse(br)
+      .family_mverse <- !!parse(br)
     )
   }
   invisible()
@@ -129,8 +172,7 @@ reset_parameters <- function(.mverse) {
   attr(.mverse, "multiverse")[["code"]] <- NULL
   attr(.mverse, "multiverse")[["parameter_set"]] <- NULL
   attr(.mverse, "multiverse")[["parameters"]] <- list()
-  multiverse::inside(.mverse, orig <- attr(.mverse, "source"))
-  multiverse::inside(.mverse, data <- orig)
+  multiverse::inside(.mverse, .data_mverse <- attr(.mverse, "source"))
   for (br in attr(.mverse, "branches_list")) {
     code_branch(.mverse, br)
   }
@@ -144,10 +186,7 @@ as_option_list <- function(x) {
   opts <- sapply(
     x$opts, function(s) stringr::str_replace(rlang::expr_text(s), "^~", "")
   )
-  if (!is.null(x$name)) {
-    opts <- stats::setNames(opts, paste0(x$name, "_", seq_len(length(opts))))
-  }
-  return(opts)
+  opts
 }
 
 #' Print method for \code{*_branch} objects.

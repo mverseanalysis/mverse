@@ -1,7 +1,7 @@
 Package: mverse
 Type: Package
 Title: Tidy Multiverse Analysis Made Simple
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
   person("Michael Jongho", "Moon", email = "michael.moon@mail.utoronto.ca",
   role = c("aut", "cre")),
@@ -29,33 +29,37 @@ Description: Extends 'multiverse' package
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
+Remotes: const-ae/ggupset
 Depends:
   R (>= 3.6),
   multiverse
 Imports:
+  Rdpack,
   magrittr (>= 1.5),
   rlang,
-  dplyr,
+  dplyr (>= 1.1),
   tidyr,
   tidyselect,
   stringr,
   stats,
   broom,
-  grDevices,
   igraph,
   ggraph,
   ggplot2,
-  cowplot
+  ggupset
 Suggests:
-  tidyverse,
+  tibble,
+  purrr,
   scales,
   MASS,
-  testthat (>= 2.1.0),
+  testthat (>= 3.0.0),
   pkgdown (>= 1.5.1),
   covr,
   knitr,
   rmarkdown,
   kableExtra
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.2
+RdMacros: Rdpack
 VignetteBuilder: knitr
 URL: https://github.com/mverseanalysis/mverse/, https://mverseanalysis.github.io/mverse/
+Config/testthat/edition: 3

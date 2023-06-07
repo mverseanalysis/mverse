@@ -1,4 +1,4 @@
-#' @importFrom magrittr %>%
+#' @importFrom magrittr `%>%`
 #' @export
 magrittr::`%>%`
 
@@ -18,6 +18,10 @@ magrittr::`%>%`
 #' @import multiverse
 #' @export
 mverse <- function(data) {
+  # utils::globalVariables(
+  #   c(".data_mverse", ".formula_mverse", ".family_mverse", ".model_mverse"),
+  #   package = "mverse",
+  # )
   stopifnot(is.data.frame(data))
   .mverse <- multiverse()
   attr(.mverse, "source") <- data

@@ -5,8 +5,8 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/mverseanalysis/mverse/workflows/R-CMD-check/badge.svg)](https://github.com/mverseanalysis/mverse/actions)
-<!-- [![Codecov test coverage](https://codecov.io/gh/mverseanalysis/mverse/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mverseanalysis/mverse?branch=master) -->
+[![R-CMD-check](https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml)
+[![codecove](https://codecov.io/gh/mverseanalysis/mverse/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mverseanalysis/mverse?branch=master)
 <!-- badges: end -->
 
 *mverse* is an extension to multiverse package (Sarma et al. 2021) which
@@ -41,6 +41,10 @@ create 6 universes as described in Figure 1. A filter *branch* with 2
 multiverse and inspect a coefficient estimate. See
 `vignette("hurricane")` for a detailed analysis as well as the
 terminologies used.
+
+    #> Warning: Using alpha for a discrete variable is not advised.
+    #> Warning: Using the `size` aesthetic in this geom was deprecated in ggplot2 3.4.0.
+    #> ℹ Please use `linewidth` in the `default_aes` field and elsewhere instead.
 
 <img src="man/figures/README-tree-1.png" width="100%" />
 
@@ -125,24 +129,24 @@ multiverse.
 ``` r
 res <- summary(mv)
 res
-#> # A tibble: 24 × 12
+#> # A tibble: 24 × 16
 #>    universe outliers_br…¹ stren…² model…³ distr…⁴ term  estimate std.e…⁵ stati…⁶
 #>    <fct>    <fct>         <fct>   <fct>   <fct>   <chr>    <dbl>   <dbl>   <dbl>
-#>  1 1        "!Name %in% … NDAM    alldea… poisson (Int…  2.13e+0 8.04e-2  26.5  
-#>  2 1        "!Name %in% … NDAM    alldea… poisson stre…  3.02e-5 2.63e-6  11.5  
-#>  3 1        "!Name %in% … NDAM    alldea… poisson MasF…  6.23e-2 1.01e-2   6.19 
-#>  4 1        "!Name %in% … NDAM    alldea… poisson stre…  7.96e-7 3.20e-7   2.49 
-#>  5 2        "!Name %in% … Highes… alldea… poisson (Int… -8.59e-2 2.65e-1  -0.324
-#>  6 2        "!Name %in% … Highes… alldea… poisson stre…  2.35e-2 2.17e-3  10.8  
-#>  7 2        "!Name %in% … Highes… alldea… poisson MasF…  5.31e-2 3.20e-2   1.66 
-#>  8 2        "!Name %in% … Highes… alldea… poisson stre…  3.32e-4 2.60e-4   1.28 
-#>  9 3        "!Name %in% … Minpre… alldea… poisson (Int…  4.74e+1 3.17e+0  15.0  
-#> 10 3        "!Name %in% … Minpre… alldea… poisson stre… -4.69e-2 3.34e-3 -14.0  
-#> # … with 14 more rows, 3 more variables: p.value <dbl>, conf.low <dbl>,
-#> #   conf.high <dbl>, and abbreviated variable names ¹​outliers_branch,
-#> #   ²​strength_branch, ³​model_branch, ⁴​distribution_branch, ⁵​std.error,
-#> #   ⁶​statistic
-#> # ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names
+#>  1 1        outliers_1    streng… model_1 distri… (Int…  2.13e+0 8.04e-2  26.5  
+#>  2 1        outliers_1    streng… model_1 distri… stre…  3.02e-5 2.63e-6  11.5  
+#>  3 1        outliers_1    streng… model_1 distri… MasF…  6.23e-2 1.01e-2   6.19 
+#>  4 1        outliers_1    streng… model_1 distri… stre…  7.96e-7 3.20e-7   2.49 
+#>  5 2        outliers_1    streng… model_1 distri… (Int… -8.59e-2 2.65e-1  -0.324
+#>  6 2        outliers_1    streng… model_1 distri… stre…  2.35e-2 2.17e-3  10.8  
+#>  7 2        outliers_1    streng… model_1 distri… MasF…  5.31e-2 3.20e-2   1.66 
+#>  8 2        outliers_1    streng… model_1 distri… stre…  3.32e-4 2.60e-4   1.28 
+#>  9 3        outliers_1    streng… model_1 distri… (Int…  4.74e+1 3.17e+0  15.0  
+#> 10 3        outliers_1    streng… model_1 distri… stre… -4.69e-2 3.34e-3 -14.0  
+#> # … with 14 more rows, 7 more variables: p.value <dbl>, conf.low <dbl>,
+#> #   conf.high <dbl>, outliers_branch_code <fct>, strength_branch_code <fct>,
+#> #   model_branch_code <fct>, distribution_branch_code <fct>, and abbreviated
+#> #   variable names ¹​outliers_branch, ²​strength_branch, ³​model_branch,
+#> #   ⁴​distribution_branch, ⁵​std.error, ⁶​statistic
 ```
 
 The resulting data is a `tibble` object and we can use regular
@@ -151,20 +155,19 @@ specifically focus on the estimated coefficient for `MasFem` and its
 confidence intervals.
 
 ``` r
-library(tidyverse)
+library(dplyr)
 res %>%
   filter(term == "MasFem") %>%
   select(outliers_branch, strength_branch, term, estimate, conf.low, conf.high)
 #> # A tibble: 6 × 6
-#>   outliers_branch                         stren…¹ term  estim…² conf.low conf.…³
-#>   <fct>                                   <fct>   <chr>   <dbl>    <dbl>   <dbl>
-#> 1 "!Name %in% c(\"Katrina\")"             NDAM    MasF…  0.0623  0.0427   0.0822
-#> 2 "!Name %in% c(\"Katrina\")"             Highes… MasF…  0.0531 -0.00942  0.116 
-#> 3 "!Name %in% c(\"Katrina\")"             Minpre… MasF… -0.845  -1.59    -0.103 
-#> 4 "!Name %in% c(\"Katrina\", \"Audrey\")" NDAM    MasF…  0.0623  0.0427   0.0822
-#> 5 "!Name %in% c(\"Katrina\", \"Audrey\")" Highes… MasF…  0.0956  0.0301   0.161 
-#> 6 "!Name %in% c(\"Katrina\", \"Audrey\")" Minpre… MasF… -1.02   -1.81    -0.247 
-#> # … with abbreviated variable names ¹​strength_branch, ²​estimate, ³​conf.high
+#>   outliers_branch strength_branch term   estimate conf.low conf.high
+#>   <fct>           <fct>           <chr>     <dbl>    <dbl>     <dbl>
+#> 1 outliers_1      strength_1      MasFem   0.0623  0.0427     0.0822
+#> 2 outliers_1      strength_2      MasFem   0.0531 -0.00942    0.116 
+#> 3 outliers_1      strength_3      MasFem  -0.845  -1.59      -0.103 
+#> 4 outliers_2      strength_1      MasFem   0.0623  0.0427     0.0822
+#> 5 outliers_2      strength_2      MasFem   0.0956  0.0301     0.161 
+#> 6 outliers_2      strength_3      MasFem  -1.02   -1.81      -0.247
 ```
 
 ### Plot a Specification Curve
@@ -176,7 +179,9 @@ also allows multiple ways of sorting the estimates. See `?spec_curve`
 for details.
 
 ``` r
-spec_curve(mv, var = "MasFem")
+spec_summary(mv, var = "MasFem") %>% 
+  spec_curve(spec_matrix_spacing = 4) +
+  labs(colour = "Significant at 0.05")
 ```
 
 <img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />

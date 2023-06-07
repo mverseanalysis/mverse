@@ -2,178 +2,112 @@
 % Please edit documentation in R/spec_curve.R
 \name{spec_curve}
 \alias{spec_curve}
-\alias{spec_curve.lm_mverse}
-\alias{spec_curve.glm_mverse}
-\alias{spec_curve.glm.nb_mverse}
 \title{Display a specification curve across the multiverse.}
-\source{
-Uri Simonsohn, Joseph P. Simmons, and Leif D. Nelson. (2020).
-“Specification curve analysis” \emph{Nature Human Behaviour},
-4, 1208–14. \doi{10.1038/s41562-020-0912-z}
-}
 \usage{
-spec_curve(.object, var, ...)
-
-\method{spec_curve}{lm_mverse}(
-  .object,
-  var,
-  conf.int = TRUE,
-  conf.level = 0.95,
-  option = names(multiverse::parameters(.object)),
-  universe_order = FALSE,
-  color_order = FALSE,
-  color = NULL,
-  branch_order = NULL,
-  point_size = 0.25,
-  grid_size = 2,
-  point_alpha = 1,
-  brewer_palette = "Set2",
-  yaxis_text_size = 8,
-  ...
-)
-
-\method{spec_curve}{glm_mverse}(
-  .object,
-  var,
-  conf.int = TRUE,
-  conf.level = 0.95,
-  option = names(multiverse::parameters(.object)),
-  universe_order = FALSE,
-  color_order = FALSE,
-  color = NULL,
-  branch_order = NULL,
-  point_size = 0.25,
-  grid_size = 2,
-  point_alpha = 1,
-  brewer_palette = "Set2",
-  yaxis_text_size = 8,
-  ...
-)
-
-\method{spec_curve}{glm.nb_mverse}(
-  .object,
-  var,
-  conf.int = TRUE,
-  conf.level = 0.95,
-  option = names(multiverse::parameters(.object)),
-  universe_order = FALSE,
-  color_order = FALSE,
-  color = NULL,
-  branch_order = NULL,
-  point_size = 0.25,
-  grid_size = 2,
-  point_alpha = 1,
-  brewer_palette = "Set2",
-  yaxis_text_size = 8,
-  ...
+spec_curve(
+  .spec_summary,
+  label = "name",
+  order_by = c("estimate", "is_significant"),
+  colour_by = "is_significant",
+  palette_common = NULL,
+  pointsize = 2,
+  linewidth = 0.5,
+  spec_matrix_spacing = 10,
+  theme_common = ggplot2::theme_minimal(),
+  sep = "---"
 )
 }
 \arguments{
-\item{.object}{a \code{glm.nb_mverse} object.}
+\item{.spec_summary}{A specification table created using \code{spec_summary()}.}
 
-\item{var}{name for the variable to show.}
+\item{label}{If "name", uses the branch option names. If "code", display
+the codes used to define the branch options.}
 
-\item{...}{ignored.}
+\item{order_by}{A character vector by which the curve is sorted.}
 
-\item{conf.int}{when \code{TRUE} (default), the estimate output
-includes the confidence intervals.}
+\item{colour_by}{The name of the variable to colour the curve.}
 
-\item{conf.level}{the confidence level of the confidence interval
-returned using \code{conf.int = TRUE}. Default value is 0.95.}
+\item{palette_common}{A character vector of colours to match the values of
+the varible \code{colour_by} in the specification curve and the specification 
+matrix. The palette must contain more colours than the number of unique values
+of \code{colour_by} variable.}
 
-\item{option}{a vector of branches to show the options included.}
+\item{pointsize}{Size of the points in the specification curve and 
+the specification matrix.}
 
-\item{universe_order}{when \code{TRUE}, order the universes according to
-the order in the summary table.}
+\item{linewidth}{Width of confidence interval lines.}
 
-\item{color_order}{when \code{TRUE}, the estimated value will be ordered
-according to the color.}
+\item{spec_matrix_spacing}{A numeric for adjusting the specification matrix
+spacing passed to \code{combmatrix.label.extra_spacing} 
+in \code{ggupset::theme_combmatrix()}.}
 
-\item{color}{an expression to indicate how colors are assigned to markers.
-By default, colors are assigned based on 'p.value <= 0.05'.}
+\item{theme_common}{A \code{ggplot} theme to be used for both the specification
+curve and the specification matrix.}
 
-\item{branch_order}{name for the branch to order.}
-
-\item{point_size}{size of points on the top plot.}
-
-\item{grid_size}{size of points on the bottom plot.}
-
-\item{point_alpha}{alpha level of points and point ranges.}
-
-\item{brewer_palette}{name of colorbrewer palette for the plot.}
-
-\item{yaxis_text_size}{text size of y-axis label}
+\item{sep}{A string used internally to create the spcification matrix. The string
+must be distinct from all branch names, option names, and option codes. Use a
+different value if any of them contains the default value.}
 }
 \value{
-a specification curve plot for the estimates
+a \code{ggplot} object with the specification curve plot for
+  the estimates passed in the \code{spec_summary()}.
 }
 \description{
-\code{spec_curve} returns the specification curve  as
-proposed by Simonsohn, Simmons, and Nelson
-(2020) <doi:10.1038/s41562-020-0912-z>.
-\code{spec_curve} are available for \code{mverse} objects fitted with
-\code{lm_mverse()}, \code{glm_mverse()}, and \code{glm.nb_mverse()}.
-Notice that the order of universes may not correspond to the order
+Returns a \code{ggplot} object that displays
+the specification curve  as proposed by \insertCite{speccurvessn}{mverse}.
+Note that the order of universes may not correspond to the order
 in the summary table.
 }
 \examples{
-\donttest{
-
-# Display a specification curve for \code{lm} models
-# fitted across the multiverse.
 femininity <- mutate_branch(
-  MasFem > 6, MasFem > mean(MasFem)
+  1 * (MasFem > 6), 1 * (MasFem > mean(MasFem))
+)
+y <- mutate_branch(log(alldeaths + 1), alldeaths)
+intensity <- mutate_branch(
+  Minpressure_Updated_2014,
+  Category,
+  NDAM,
+  HighestWindSpeed
 )
 model <- formula_branch(
-  alldeaths ~ femininity,
-  alldeaths ~ femininity + HighestWindSpeed
+  y ~ femininity,
+  y ~ femininity * intensity
 )
-mv <- mverse(hurricane) \%>\%
-  add_mutate_branch(femininity) \%>\%
+family <- family_branch(
+  gaussian, poisson
+)
+match_poisson <- branch_condition(alldeaths, poisson)
+match_gaussian <- branch_condition(log(alldeaths + 1), gaussian)
+stable <- mverse(hurricane) \%>\%
+  add_mutate_branch(y, femininity, intensity) \%>\%
   add_formula_branch(model) \%>\%
-  lm_mverse()
-spec_curve(mv, var = "femininityTRUE")
-# plot based on 90\% confidence interval
-spec_curve(mv, var = "femininityTRUE", color = p.value < .1)
+  add_family_branch(family) \%>\%
+  add_branch_condition(match_poisson, match_gaussian) \%>\%
+  glm_mverse() \%>\%
+  spec_summary("femininity")
+# default behaviour
+spec_curve(stable)
+# coloring and sorting based on other variable
+stable \%>\%
+  dplyr::mutate(colour_by = y_branch) \%>\%
+  spec_curve(order_by = c("estimate", "colour_by"), colour_by = "colour_by")
+# Because the output is a \code{ggplot} object, you can
+# further modify the asethetics of the specification curve 
+# using \code{ggplot2::theme()} and the specication matrix
+# using \code{ggupset::theme_combmatrix()}
+spec_curve(stable) +
+  ggplot2::labs(y = "Estimates", colour = "Significant at 0.05 level",
+                title = "Specification curve of femininity") +
+  ggplot2::theme(legend.position = "bottom") +
+  ggupset::theme_combmatrix(
+    combmatrix.label.width = ggplot2::unit(c(25, 100, 0, 0), "pt")
+  )
 }
-\donttest{
-
-# Display a specification curve for \code{glm} models
-# fitted across the multiverse.
-femininity <- mutate_branch(
-  MasFem > 6, MasFem > mean(MasFem)
-)
-model <- formula_branch(
-  alldeaths ~ femininity,
-  alldeaths ~ femininity + HighestWindSpeed
-)
-fam <- family_branch(gaussian)
-mv <- mverse(hurricane) \%>\%
-  add_mutate_branch(femininity) \%>\%
-  add_formula_branch(model) \%>\%
-  add_family_branch(fam) \%>\%
-  glm_mverse()
-spec_curve(mv, var = "femininityTRUE")
-# plot based on 90\% confidence interval
-spec_curve(mv, var = "femininityTRUE", color = p.value < .1)
+\references{
+\insertAllCited{}
 }
-\donttest{
-
-# Display a specification curve for \code{glm.nb} models
-# fitted across the multiverse.
-femininity <- mutate_branch(
-  MasFem > 6, MasFem > mean(MasFem)
-)
-model <- formula_branch(
-  alldeaths ~ femininity,
-  alldeaths ~ femininity + HighestWindSpeed
-)
-mv <- mverse(hurricane) \%>\%
-  add_mutate_branch(femininity) \%>\%
-  add_formula_branch(model) \%>\%
-  glm.nb_mverse()
-spec_curve(mv, var = "femininityTRUE")
-# plot based on 90\% confidence interval
-spec_curve(mv, var = "femininityTRUE", color = p.value < .1)
+\seealso{
+Other specification curve analysis: 
+\code{\link{spec_summary}()}
 }
-}
+\concept{specification curve analysis}
