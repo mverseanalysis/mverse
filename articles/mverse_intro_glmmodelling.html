@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mverse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@
 
       
 
-      </header><script src="mverse_intro_glmmodelling_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>GLM Modelling with mverse</h1>
@@ -97,21 +97,28 @@
 
     
     
-<p>This vignette aims to introduce the workflow of a multiverse analysis with GLM modelling using <code>mverse</code>.</p>
-<p>The typical workflow of a multiverse analysis with <code>mverse</code> is</p>
+<p>This vignette aims to introduce the workflow of a multiverse analysis
+with GLM modelling using <code>mverse</code>.</p>
+<p>The typical workflow of a multiverse analysis with
+<code>mverse</code> is</p>
 <ol style="list-style-type: decimal">
 <li>Initialize a <code>multiverse</code> object with the dataset.</li>
-<li>Define all the different data analyses (i.e., analytical decisions) as <em>branches</em>.</li>
-<li>Add defined <em>branches</em> into the <code>multiverse</code> object.</li>
+<li>Define all the different data analyses (i.e., analytical decisions)
+as <em>branches</em>.</li>
+<li>Add defined <em>branches</em> into the <code>multiverse</code>
+object.</li>
 <li>Run models, hypothesis tests, and plots.</li>
 </ol>
 <div class="section level2">
-<h2 id="exploring-the-severity-of-feminine-named-versus-masculine-named-hurricanes">Exploring The Severity Of Feminine-named Versus Masculine-named Hurricanes<a class="anchor" aria-label="anchor" href="#exploring-the-severity-of-feminine-named-versus-masculine-named-hurricanes"></a>
+<h2 id="exploring-the-severity-of-feminine-named-versus-masculine-named-hurricanes">Exploring The Severity Of Feminine-named Versus Masculine-named
+Hurricanes<a class="anchor" aria-label="anchor" href="#exploring-the-severity-of-feminine-named-versus-masculine-named-hurricanes"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mverseanalysis/mverse/" class="external-link">mverse</a></span><span class="op">)</span></span></code></pre></div>
-<p><code>mverse</code> ships with the <code>hurricane</code> dataset used in <span class="citation">Jung et al. (2014)</span>.</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mverseanalysis/mverse/" class="external-link">mverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
+<p><code>mverse</code> ships with the <code>hurricane</code> dataset
+used in <span class="citation">Jung et al. (2014)</span>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">hurricane</span><span class="op">)</span></span>
 <span><span class="co">## Rows: 94</span></span>
@@ -130,31 +137,47 @@
 <span><span class="co">## $ HighestWindSpeed         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 120, 130, 85, 85, 85, 120, 120, 145, 120, 85,…</span></span>
 <span><span class="co">## $ MasFem_MTUrk             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 5.40625, 1.59375, 2.96875, 8.62500, 7.87500, …</span></span>
 <span><span class="co">## $ NDAM15                   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1870, 6030, 170, 65, 18, 21375, 3520, 28500, …</span></span></code></pre></div>
-<p>To start a multiverse analysis, first use <code>create_multiverse</code> to create an <code>mverse</code> object with <code>hurricane</code>. At this point the multiverse is empty.</p>
+<p>To start a multiverse analysis, first use
+<code>create_multiverse</code> to create an <code>mverse</code> object
+with <code>hurricane</code>. At this point the multiverse is empty.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hurricane_mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mverse.html">create_multiverse</a></span><span class="op">(</span><span class="va">hurricane</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="define-branches-in-the-hurricane-multiverse">Define Branches in the Hurricane Multiverse<a class="anchor" aria-label="anchor" href="#define-branches-in-the-hurricane-multiverse"></a>
 </h2>
-<p>Each branch defines a different statistical analysis by using a subset of data, transforming columns, or a statistical model. Each combination of these branches defines a “universe”, or analysis path. Branches are defined using <code>X_branch(...)</code>, where <code>...</code> are expressions that define a data wrangling or modelling option/analytic decision that you wish to explore, such as excluding certain hurricane names from an analysis, deriving new variables for analysis (mutating), or using different models. Once branches are defined we can look at the impact of the combination of these decisions.</p>
+<p>Each branch defines a different statistical analysis by using a
+subset of data, transforming columns, or a statistical model. Each
+combination of these branches defines a “universe”, or analysis path.
+Branches are defined using <code>X_branch(...)</code>, where
+<code>...</code> are expressions that define a data wrangling or
+modelling option/analytic decision that you wish to explore, such as
+excluding certain hurricane names from an analysis, deriving new
+variables for analysis (mutating), or using different models. Once
+branches are defined we can look at the impact of the combination of
+these decisions.</p>
 <div class="section level3">
 <h3 id="branches-for-data-manipulation">Branches for Data Manipulation<a class="anchor" aria-label="anchor" href="#branches-for-data-manipulation"></a>
 </h3>
-<p><code>filter_branch</code> takes logical predicates, and finds the observations where the condition is <code>TRUE</code>.</p>
+<p><code>filter_branch</code> takes logical predicates, and finds the
+observations where the condition is <code>TRUE</code>.</p>
 <p>The distribution of <code>alldeaths</code> is shown below.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">hurricane</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">hurricane</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">alldeaths</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">25</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">stat_bin</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">..count..</span><span class="op">)</span>, bins <span class="op">=</span> <span class="fl">25</span>, geom <span class="op">=</span> <span class="st">"text"</span>, vjust <span class="op">=</span> <span class="op">-</span><span class="fl">.7</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">stat_bin</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat</a></span><span class="op">(</span><span class="va">count</span><span class="op">)</span><span class="op">)</span>, bins <span class="op">=</span> <span class="fl">25</span>, </span>
+<span>    geom <span class="op">=</span> <span class="st">"text"</span>, vjust <span class="op">=</span> <span class="op">-</span><span class="fl">.7</span>, size <span class="op">=</span> <span class="fl">2</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-1-1.png" width="1008"></p>
-<p>It looks like there are a few outliers. Let’s find out the names of these hurricanes.</p>
+<p>It looks like there are a few outliers. Let’s find out the names of
+these hurricanes.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">hurricane</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">alldeaths</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">alldeaths</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">alldeaths</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Name</span>, <span class="va">alldeaths</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">hurricane</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">alldeaths</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">alldeaths</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">alldeaths</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Name</span>, <span class="va">alldeaths</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 2</span></span></span>
 <span><span class="co">##   Name    alldeaths</span></span>
@@ -165,111 +188,141 @@
 <span><span class="co">## <span style="color: #BCBCBC;">4</span> Diane         200</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">5</span> Sandy         159</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">6</span> Agnes         117</span></span></code></pre></div>
-<p><code><a href="../reference/filter_branch.html">filter_branch()</a></code> can be used to exclude outliers. Excluding hurricane <code>Katrina</code> or <code>Audrey</code> removes the hurricanes with the most deaths.</p>
+<p><code><a href="../reference/filter_branch.html">filter_branch()</a></code> can be used to exclude outliers.
+Excluding hurricane <code>Katrina</code> or <code>Audrey</code> removes
+the hurricanes with the most deaths.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">death_outliers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_branch.html">filter_branch</a></span><span class="op">(</span>obs_all <span class="op">=</span> <span class="cn">TRUE</span>, </span>
-<span>                                obs_noKat <span class="op">=</span> <span class="va">Name</span> <span class="op">!=</span> <span class="st">'Katrina'</span>,</span>
-<span>                                obs_noKatAud <span class="op">=</span> <span class="op">!</span><span class="op">(</span><span class="va">Name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Katrina'</span>, <span class="st">'Audrey'</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">death_outliers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_branch.html">filter_branch</a></span><span class="op">(</span>none <span class="op">=</span> <span class="cn">TRUE</span>, </span>
+<span>                                Katrina <span class="op">=</span> <span class="va">Name</span> <span class="op">!=</span> <span class="st">'Katrina'</span>,</span>
+<span>                                KatrinaAudrey <span class="op">=</span> <span class="op">!</span><span class="op">(</span><span class="va">Name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'Katrina'</span>, <span class="st">'Audrey'</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Now, let’s add this branch to <code>hurricane_mv</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">hurricane_mv</span> <span class="op">&lt;-</span> <span class="va">hurricane_mv</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/add_filter_branch.html">add_filter_branch</a></span><span class="op">(</span><span class="va">death_outliers</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">hurricane_mv</span> <span class="op">&lt;-</span> <span class="va">hurricane_mv</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/add_filter_branch.html">add_filter_branch</a></span><span class="op">(</span><span class="va">death_outliers</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/summary.html">summary</a></span><span class="op">(</span><span class="va">hurricane_mv</span><span class="op">)</span></span>
-<span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 2</span></span></span>
-<span><span class="co">##   universe death_outliers_branch                    </span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                                    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> 1        <span style="color: #949494;">"</span>TRUE<span style="color: #949494;">"</span>                                   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> 2        <span style="color: #949494;">"</span>Name != \"Katrina\"<span style="color: #949494;">"</span>                    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> 3        <span style="color: #949494;">"</span>!(Name %in% c(\"Katrina\", \"Audrey\"))<span style="color: #949494;">"</span></span></span></code></pre></div>
-<p><code><a href="../reference/mutate_branch.html">mutate_branch()</a></code> takes expressions that can modify data columns, and can be used to provide different definitions or transformations of a column.</p>
-<p>Consider two different definitions of femininity: <code>Gender_MF</code> is a binary classification of gender, and <code>MasFem</code> is a continuous rating of Femininity.</p>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 3</span></span></span>
+<span><span class="co">##   universe death_outliers_branch death_outliers_branch_code               </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                                    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> 1        none                  <span style="color: #949494;">"</span>TRUE<span style="color: #949494;">"</span>                                   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> 2        Katrina               <span style="color: #949494;">"</span>Name != \"Katrina\"<span style="color: #949494;">"</span>                    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> 3        KatrinaAudrey         <span style="color: #949494;">"</span>!(Name %in% c(\"Katrina\", \"Audrey\"))<span style="color: #949494;">"</span></span></span></code></pre></div>
+<p><code><a href="../reference/mutate_branch.html">mutate_branch()</a></code> takes expressions that can modify data
+columns, and can be used to provide different definitions or
+transformations of a column.</p>
+<p>Consider two different definitions of femininity:
+<code>Gender_MF</code> is a binary classification of gender, and
+<code>MasFem</code> is a continuous rating of Femininity.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">femininity</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutate_branch.html">mutate_branch</a></span><span class="op">(</span>binary_gender <span class="op">=</span> <span class="va">Gender_MF</span>, </span>
-<span>                            cts_gender <span class="op">=</span> <span class="va">MasFem</span><span class="op">)</span></span></code></pre></div>
-<p>Consider normalized damage (<code>NDAM</code>) and the log of <code>NDAM</code>.</p>
+<code class="sourceCode R"><span><span class="va">femininity</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutate_branch.html">mutate_branch</a></span><span class="op">(</span>binary <span class="op">=</span> <span class="va">Gender_MF</span>, </span>
+<span>                            continuous <span class="op">=</span> <span class="va">MasFem</span><span class="op">)</span></span></code></pre></div>
+<p>Consider normalized damage (<code>NDAM</code>) and the log of
+<code>NDAM</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">damage</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutate_branch.html">mutate_branch</a></span><span class="op">(</span>damage_orig <span class="op">=</span> <span class="va">NDAM</span>, </span>
-<span>                        damage_log <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">NDAM</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">damage</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutate_branch.html">mutate_branch</a></span><span class="op">(</span>original <span class="op">=</span> <span class="va">NDAM</span>, </span>
+<span>                        log <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">NDAM</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Now, let’s add these branches to <code>hurricane_mv</code>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">hurricane_mv</span> <span class="op">&lt;-</span> <span class="va">hurricane_mv</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/add_mutate_branch.html">add_mutate_branch</a></span><span class="op">(</span><span class="va">femininity</span>, <span class="va">damage</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">hurricane_mv</span> <span class="op">&lt;-</span> <span class="va">hurricane_mv</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/add_mutate_branch.html">add_mutate_branch</a></span><span class="op">(</span><span class="va">femininity</span>, <span class="va">damage</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/summary.html">summary</a></span><span class="op">(</span><span class="va">hurricane_mv</span><span class="op">)</span></span>
-<span><span class="co">## <span style="color: #949494;"># A tibble: 12 × 4</span></span></span>
-<span><span class="co">##    universe death_outliers_branch                     femininity_branch damage…¹</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                                     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 1        <span style="color: #949494;">"</span>TRUE<span style="color: #949494;">"</span>                                    Gender_MF         NDAM    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 2        <span style="color: #949494;">"</span>TRUE<span style="color: #949494;">"</span>                                    Gender_MF         log(NDA…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 3        <span style="color: #949494;">"</span>TRUE<span style="color: #949494;">"</span>                                    MasFem            NDAM    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 4        <span style="color: #949494;">"</span>TRUE<span style="color: #949494;">"</span>                                    MasFem            log(NDA…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 5        <span style="color: #949494;">"</span>Name != \"Katrina\"<span style="color: #949494;">"</span>                     Gender_MF         NDAM    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 6        <span style="color: #949494;">"</span>Name != \"Katrina\"<span style="color: #949494;">"</span>                     Gender_MF         log(NDA…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 7        <span style="color: #949494;">"</span>Name != \"Katrina\"<span style="color: #949494;">"</span>                     MasFem            NDAM    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 8        <span style="color: #949494;">"</span>Name != \"Katrina\"<span style="color: #949494;">"</span>                     MasFem            log(NDA…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 9        <span style="color: #949494;">"</span>!(Name %in% c(\"Katrina\", \"Audrey\"))<span style="color: #949494;">"</span> Gender_MF         NDAM    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> 10       <span style="color: #949494;">"</span>!(Name %in% c(\"Katrina\", \"Audrey\"))<span style="color: #949494;">"</span> Gender_MF         log(NDA…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">11</span> 11       <span style="color: #949494;">"</span>!(Name %in% c(\"Katrina\", \"Audrey\"))<span style="color: #949494;">"</span> MasFem            NDAM    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">12</span> 12       <span style="color: #949494;">"</span>!(Name %in% c(\"Katrina\", \"Audrey\"))<span style="color: #949494;">"</span> MasFem            log(NDA…</span></span>
-<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable name ¹​damage_branch</span></span></span></code></pre></div>
-<p>Each row of the multiverse <code>hurricane_mv</code> corresponds to each combination of <code>death_outliers</code> (3), <code>femininity</code> (2), and <code>damage</code> (2) for a total of <span class="math inline">\(3 \times 2 \times 2 = 12\)</span> combinations.</p>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 12 × 7</span></span></span>
+<span><span class="co">##    universe death_outliers_branch femininity_branch damage_branch</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 1        none                  binary            original     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 2        none                  binary            log          </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 3        none                  continuous        original     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 4        none                  continuous        log          </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 5        Katrina               binary            original     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 6        Katrina               binary            log          </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 7        Katrina               continuous        original     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 8        Katrina               continuous        log          </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 9        KatrinaAudrey         binary            original     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> 10       KatrinaAudrey         binary            log          </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">11</span> 11       KatrinaAudrey         continuous        original     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">12</span> 12       KatrinaAudrey         continuous        log          </span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 3 more variables: death_outliers_branch_code &lt;fct&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   femininity_branch_code &lt;fct&gt;, damage_branch_code &lt;fct&gt;</span></span></span></code></pre></div>
+<p>Each row of the multiverse <code>hurricane_mv</code> corresponds to
+each combination of <code>death_outliers</code> (3),
+<code>femininity</code> (2), and <code>damage</code> (2) for a total of
+<span class="math inline">\(3 \times 2 \times 2 = 12\)</span>
+combinations.</p>
 </div>
 <div class="section level3">
 <h3 id="glm-branches-for-modelling">GLM Branches for Modelling<a class="anchor" aria-label="anchor" href="#glm-branches-for-modelling"></a>
 </h3>
-<p><code>mverse</code> can define different <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code> models as branches. The formula for a <code>glm</code> model (e.g., <code>y ~ x</code>) can be defined using <code>formula_branch</code>, and <code>family_branch</code> defines the member of the exponential family used via a <code>family</code> object.</p>
-<p>We can create formulas using the branches above or simply use the columns in dataframe. If we use the branches <code>depvars</code>, <code>damage</code>, and <code>depvars</code> in a formula such as</p>
+<p><code>mverse</code> can define different <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code> models as
+branches. The formula for a <code>glm</code> model (e.g.,
+<code>y ~ x</code>) can be defined using <code>formula_branch</code>,
+and <code>family_branch</code> defines the member of the exponential
+family used via a <code>family</code> object.</p>
+<p>We can create formulas using the branches above or simply use the
+columns in dataframe. If we use the branches <code>depvars</code>,
+<code>damage</code>, and <code>depvars</code> in a formula such as</p>
 <p><code>depvars ~ damage + femininity</code></p>
-<p>We can add it to <code>hurricane_mv</code> with <code><a href="../reference/add_formula_branch.html">add_formula_branch()</a></code>.</p>
+<p>We can add it to <code>hurricane_mv</code> with
+<code><a href="../reference/add_formula_branch.html">add_formula_branch()</a></code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/formula_branch.html">formula_branch</a></span><span class="op">(</span><span class="va">alldeaths</span> <span class="op">~</span> <span class="va">damage</span> <span class="op">+</span> <span class="va">femininity</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">hurricane_mv</span> <span class="op">&lt;-</span> <span class="va">hurricane_mv</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/add_formula_branch.html">add_formula_branch</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span></span>
+<span><span class="va">hurricane_mv</span> <span class="op">&lt;-</span> <span class="va">hurricane_mv</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/add_formula_branch.html">add_formula_branch</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/summary.html">summary</a></span><span class="op">(</span><span class="va">hurricane_mv</span><span class="op">)</span></span>
-<span><span class="co">## <span style="color: #949494;"># A tibble: 12 × 5</span></span></span>
-<span><span class="co">##    universe death_outliers_branch                     feminini…¹ damag…² model…³</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                                     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 1        <span style="color: #949494;">"</span>TRUE<span style="color: #949494;">"</span>                                    Gender_MF  NDAM    alldea…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 2        <span style="color: #949494;">"</span>TRUE<span style="color: #949494;">"</span>                                    Gender_MF  log(ND… alldea…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 3        <span style="color: #949494;">"</span>TRUE<span style="color: #949494;">"</span>                                    MasFem     NDAM    alldea…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 4        <span style="color: #949494;">"</span>TRUE<span style="color: #949494;">"</span>                                    MasFem     log(ND… alldea…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 5        <span style="color: #949494;">"</span>Name != \"Katrina\"<span style="color: #949494;">"</span>                     Gender_MF  NDAM    alldea…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 6        <span style="color: #949494;">"</span>Name != \"Katrina\"<span style="color: #949494;">"</span>                     Gender_MF  log(ND… alldea…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 7        <span style="color: #949494;">"</span>Name != \"Katrina\"<span style="color: #949494;">"</span>                     MasFem     NDAM    alldea…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 8        <span style="color: #949494;">"</span>Name != \"Katrina\"<span style="color: #949494;">"</span>                     MasFem     log(ND… alldea…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 9        <span style="color: #949494;">"</span>!(Name %in% c(\"Katrina\", \"Audrey\"))<span style="color: #949494;">"</span> Gender_MF  NDAM    alldea…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> 10       <span style="color: #949494;">"</span>!(Name %in% c(\"Katrina\", \"Audrey\"))<span style="color: #949494;">"</span> Gender_MF  log(ND… alldea…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">11</span> 11       <span style="color: #949494;">"</span>!(Name %in% c(\"Katrina\", \"Audrey\"))<span style="color: #949494;">"</span> MasFem     NDAM    alldea…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">12</span> 12       <span style="color: #949494;">"</span>!(Name %in% c(\"Katrina\", \"Audrey\"))<span style="color: #949494;">"</span> MasFem     log(ND… alldea…</span></span>
-<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable names ¹​femininity_branch, ²​damage_branch,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ³​models_branch</span></span></span></code></pre></div>
-<p>Finally, let’s create a <code><a href="../reference/family_branch.html">family_branch()</a></code> that defines two different members of the Exponential family as branches.</p>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 12 × 9</span></span></span>
+<span><span class="co">##    universe death_outliers_branch femininity_branch damage_branch models_branch</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 1        none                  binary            original      models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 2        none                  binary            log           models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 3        none                  continuous        original      models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 4        none                  continuous        log           models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 5        Katrina               binary            original      models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 6        Katrina               binary            log           models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 7        Katrina               continuous        original      models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 8        Katrina               continuous        log           models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 9        KatrinaAudrey         binary            original      models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> 10       KatrinaAudrey         binary            log           models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">11</span> 11       KatrinaAudrey         continuous        original      models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">12</span> 12       KatrinaAudrey         continuous        log           models_1     </span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 4 more variables: death_outliers_branch_code &lt;fct&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   femininity_branch_code &lt;fct&gt;, damage_branch_code &lt;fct&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   models_branch_code &lt;fct&gt;</span></span></span></code></pre></div>
+<p>Finally, let’s create a <code><a href="../reference/family_branch.html">family_branch()</a></code> that defines two
+different members of the Exponential family as branches.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">distributions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/family_branch.html">family_branch</a></span><span class="op">(</span><span class="va">poisson</span>, <span class="va">gaussian</span><span class="op">)</span></span></code></pre></div>
-<p>Adding this branch to <code>hurricane_mv</code> with <code><a href="../reference/add_family_branch.html">add_family_branch()</a></code>.</p>
+<p>Adding this branch to <code>hurricane_mv</code> with
+<code><a href="../reference/add_family_branch.html">add_family_branch()</a></code>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">hurricane_mv</span> <span class="op">&lt;-</span> <span class="va">hurricane_mv</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/add_family_branch.html">add_family_branch</a></span><span class="op">(</span><span class="va">distributions</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">hurricane_mv</span> <span class="op">&lt;-</span> <span class="va">hurricane_mv</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/add_family_branch.html">add_family_branch</a></span><span class="op">(</span><span class="va">distributions</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/summary.html">summary</a></span><span class="op">(</span><span class="va">hurricane_mv</span><span class="op">)</span></span>
-<span><span class="co">## <span style="color: #949494;"># A tibble: 24 × 6</span></span></span>
-<span><span class="co">##    universe death_outliers_branch femininity_branch damage_bra…¹ model…² distr…³</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 1        <span style="color: #949494;">"</span>TRUE<span style="color: #949494;">"</span>                Gender_MF         NDAM         alldea… poisson</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 2        <span style="color: #949494;">"</span>TRUE<span style="color: #949494;">"</span>                Gender_MF         NDAM         alldea… gaussi…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 3        <span style="color: #949494;">"</span>TRUE<span style="color: #949494;">"</span>                Gender_MF         log(NDAM)    alldea… poisson</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 4        <span style="color: #949494;">"</span>TRUE<span style="color: #949494;">"</span>                Gender_MF         log(NDAM)    alldea… gaussi…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 5        <span style="color: #949494;">"</span>TRUE<span style="color: #949494;">"</span>                MasFem            NDAM         alldea… poisson</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 6        <span style="color: #949494;">"</span>TRUE<span style="color: #949494;">"</span>                MasFem            NDAM         alldea… gaussi…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 7        <span style="color: #949494;">"</span>TRUE<span style="color: #949494;">"</span>                MasFem            log(NDAM)    alldea… poisson</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 8        <span style="color: #949494;">"</span>TRUE<span style="color: #949494;">"</span>                MasFem            log(NDAM)    alldea… gaussi…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 9        <span style="color: #949494;">"</span>Name != \"Katrina\"<span style="color: #949494;">"</span> Gender_MF         NDAM         alldea… poisson</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> 10       <span style="color: #949494;">"</span>Name != \"Katrina\"<span style="color: #949494;">"</span> Gender_MF         NDAM         alldea… gaussi…</span></span>
-<span><span class="co">## <span style="color: #949494;"># … with 14 more rows, and abbreviated variable names ¹​damage_branch,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ²​models_branch, ³​distributions_branch</span></span></span></code></pre></div>
-<p>Now, we have <span class="math inline">\(12 \times 2 = 24\)</span> different combinations.</p>
-<p><code>multiverse_tree</code> can be used to view <code>hurricane_mv</code>. The tree below shows that <code>alldeaths</code> is modelled using both Gaussian and Poisson distributions.</p>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 24 × 11</span></span></span>
+<span><span class="co">##    universe death_outliers_branch femininity_branch damage_branch models_branch</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 1        none                  binary            original      models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 2        none                  binary            original      models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 3        none                  binary            log           models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 4        none                  binary            log           models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 5        none                  continuous        original      models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 6        none                  continuous        original      models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 7        none                  continuous        log           models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 8        none                  continuous        log           models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 9        Katrina               binary            original      models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> 10       Katrina               binary            original      models_1     </span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 14 more rows</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 6 more variables: distributions_branch &lt;fct&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   death_outliers_branch_code &lt;fct&gt;, femininity_branch_code &lt;fct&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   damage_branch_code &lt;fct&gt;, models_branch_code &lt;fct&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   distributions_branch_code &lt;fct&gt;</span></span></span></code></pre></div>
+<p>Now, we have <span class="math inline">\(12 \times 2 = 24\)</span>
+different combinations.</p>
+<p><code>multiverse_tree</code> can be used to view
+<code>hurricane_mv</code>. The tree below shows that
+<code>alldeaths</code> is modelled using both Gaussian and Poisson
+distributions.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/multiverse_tree.html">multiverse_tree</a></span><span class="op">(</span><span class="va">hurricane_mv</span>, label <span class="op">=</span> <span class="cn">TRUE</span>, branches <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"models"</span>, <span class="st">"distributions"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/multiverse_tree.html">multiverse_tree</a></span><span class="op">(</span><span class="va">hurricane_mv</span>, label <span class="op">=</span> <span class="st">"code"</span>, label_size <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>                branches <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"models"</span>, <span class="st">"distributions"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-8-1.png" width="1008"></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/glm_mverse.html">glm_mverse</a></span><span class="op">(</span><span class="va">hurricane_mv</span><span class="op">)</span></span>
@@ -277,39 +330,49 @@
 <span><span class="va">glm_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summary.html">summary</a></span><span class="op">(</span><span class="va">hurricane_mv</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">glm_summary</span></span>
-<span><span class="co">## <span style="color: #949494;"># A tibble: 72 × 13</span></span></span>
-<span><span class="co">##    universe death_outli…¹ femin…² damag…³ model…⁴ distr…⁵ term  estimate std.e…⁶</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 1        TRUE          Gender… NDAM    alldea… poisson (Int…  2.18<span style="color: #949494;">e</span>+0 5.18<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 1        TRUE          Gender… NDAM    alldea… poisson dama…  3.63<span style="color: #949494;">e</span><span style="color: #BB0000;">-5</span> 8.58<span style="color: #949494;">e</span><span style="color: #BB0000;">-7</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 1        TRUE          Gender… NDAM    alldea… poisson femi…  5.37<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 5.50<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 2        TRUE          Gender… NDAM    alldea… gaussi… (Int…  8.37<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 6.56<span style="color: #949494;">e</span>+0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 2        TRUE          Gender… NDAM    alldea… gaussi… dama…  1.76<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span> 2.76<span style="color: #949494;">e</span><span style="color: #BB0000;">-4</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 2        TRUE          Gender… NDAM    alldea… gaussi… femi…  1.04<span style="color: #949494;">e</span>+1 7.58<span style="color: #949494;">e</span>+0</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 3        TRUE          Gender… log(ND… alldea… poisson (Int… -<span style="color: #BB0000;">2.95</span><span style="color: #949494;">e</span>+0 1.69<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 3        TRUE          Gender… log(ND… alldea… poisson dama…  6.58<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 1.70<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 3        TRUE          Gender… log(ND… alldea… poisson femi…  5.40<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 5.50<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> 4        TRUE          Gender… log(ND… alldea… gaussi… (Int… -<span style="color: #BB0000;">4.12</span><span style="color: #949494;">e</span>+1 1.29<span style="color: #949494;">e</span>+1</span></span>
-<span><span class="co">## <span style="color: #949494;"># … with 62 more rows, 4 more variables: statistic &lt;dbl&gt;, p.value &lt;dbl&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   conf.low &lt;dbl&gt;, conf.high &lt;dbl&gt;, and abbreviated variable names</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ¹​death_outliers_branch, ²​femininity_branch, ³​damage_branch, ⁴​models_branch,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ⁵​distributions_branch, ⁶​std.error</span></span></span></code></pre></div>
-<p>Each model has three rows, each corresponding to a summary of a model coefficient.</p>
-<p>The specification curve for the coefficient of <code>femininity</code> is shown below.</p>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 72 × 18</span></span></span>
+<span><span class="co">##    universe death_outliers_branch femininity_branch damage_branch models_branch</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 1        none                  binary            original      models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 1        none                  binary            original      models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 1        none                  binary            original      models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 2        none                  binary            original      models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 2        none                  binary            original      models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 2        none                  binary            original      models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 3        none                  binary            log           models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 3        none                  binary            log           models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 3        none                  binary            log           models_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> 4        none                  binary            log           models_1     </span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 62 more rows</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 13 more variables: distributions_branch &lt;fct&gt;, term &lt;chr&gt;, estimate &lt;dbl&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   std.error &lt;dbl&gt;, statistic &lt;dbl&gt;, p.value &lt;dbl&gt;, conf.low &lt;dbl&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   conf.high &lt;dbl&gt;, death_outliers_branch_code &lt;fct&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   femininity_branch_code &lt;fct&gt;, damage_branch_code &lt;fct&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   models_branch_code &lt;fct&gt;, distributions_branch_code &lt;fct&gt;</span></span></span></code></pre></div>
+<p>Each model has three rows, each corresponding to a summary of a model
+coefficient.</p>
+<p>The specification curve for the coefficient of
+<code>femininity</code> is shown below.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/spec_curve.html">spec_curve</a></span><span class="op">(</span><span class="va">hurricane_mv</span>, var <span class="op">=</span> <span class="st">"femininity"</span>, color_order <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/spec_summary.html">spec_summary</a></span><span class="op">(</span><span class="va">hurricane_mv</span>, var <span class="op">=</span> <span class="st">"femininity"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/spec_curve.html">spec_curve</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"code"</span>, spec_matrix_spacing <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"Significant at 0.05"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-10-1.png" width="1008"></p>
 </div>
 <div class="section level3">
 <h3 id="condition-branches">Condition Branches<a class="anchor" aria-label="anchor" href="#condition-branches"></a>
 </h3>
-<p>The assumption that <code>alldeaths</code> follows a Normal distribution is tenuous, but transforming the <code>alldeaths</code> using <span class="math inline">\(t(x)=\log(x+1)\)</span> could result in a dependent variable that is closer to a Normal distribution.</p>
+<p>The assumption that <code>alldeaths</code> follows a Normal
+distribution is tenuous, but transforming the <code>alldeaths</code>
+using <span class="math inline">\(t(x)=\log(x+1)\)</span> could result
+in a dependent variable that is closer to a Normal distribution.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">hurricane</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="va">alldeaths</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html" class="external-link">stat_qq</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html" class="external-link">stat_qq_line</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">hurricane</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="va">alldeaths</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html" class="external-link">stat_qq</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html" class="external-link">stat_qq_line</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-11-1.png" width="1008"></p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">hurricane</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>logd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">alldeaths</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="va">logd</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html" class="external-link">stat_qq</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html" class="external-link">stat_qq_line</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">hurricane</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>logd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">alldeaths</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="va">logd</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html" class="external-link">stat_qq</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html" class="external-link">stat_qq_line</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-11-2.png" width="1008"></p>
 <p>Let’s set up a similar multiverse analysis to the one above.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
@@ -327,55 +390,73 @@
 <span></span>
 <span><span class="va">distributions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/family_branch.html">family_branch</a></span><span class="op">(</span><span class="va">poisson</span>, <span class="va">gaussian</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">hurricane_mv</span> <span class="op">&lt;-</span> <span class="va">hurricane_mv</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="../reference/add_mutate_branch.html">add_mutate_branch</a></span><span class="op">(</span><span class="va">dep_var</span>, <span class="va">femininity</span>, <span class="va">damage</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_formula_branch.html">add_formula_branch</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="va">hurricane_mv</span> <span class="op">&lt;-</span> <span class="va">hurricane_mv</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/add_mutate_branch.html">add_mutate_branch</a></span><span class="op">(</span><span class="va">dep_var</span>, <span class="va">femininity</span>, <span class="va">damage</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/add_formula_branch.html">add_formula_branch</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/add_family_branch.html">add_family_branch</a></span><span class="op">(</span><span class="va">distributions</span><span class="op">)</span></span></code></pre></div>
-<p>Using <code><a href="../reference/multiverse_tree.html">multiverse_tree()</a></code> to display the multiverse tree of <code>dep_var</code> and <code>distributions</code> shows that <code>log(alldeaths + 1)</code> and <code>alldeaths</code> will be modelled as both Gaussian and Poisson.</p>
+<p>Using <code><a href="../reference/multiverse_tree.html">multiverse_tree()</a></code> to display the multiverse tree
+of <code>dep_var</code> and <code>distributions</code> shows that
+<code>log(alldeaths + 1)</code> and <code>alldeaths</code> will be
+modelled as both Gaussian and Poisson.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/multiverse_tree.html">multiverse_tree</a></span><span class="op">(</span><span class="va">hurricane_mv</span>, label <span class="op">=</span> <span class="cn">TRUE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dep_var"</span>, <span class="st">"distributions"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/multiverse_tree.html">multiverse_tree</a></span><span class="op">(</span><span class="va">hurricane_mv</span>, label <span class="op">=</span> <span class="st">"code"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dep_var"</span>, <span class="st">"distributions"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-13-1.png" width="1008"></p>
-<p>In order to specify that <code>hurricane_mv</code> should only contain analyses where <code>log(alldeaths + 1)</code> is modelled using a Gaussian and <code>alldeaths</code> modelled using Poisson we can use <code><a href="../reference/branch_condition.html">branch_condition()</a></code> and <code><a href="../reference/add_branch_condition.html">add_branch_condition()</a></code> to add it to <code>hurricane_mv</code>.</p>
+<p>In order to specify that <code>hurricane_mv</code> should only
+contain analyses where <code>log(alldeaths + 1)</code> is modelled using
+a Gaussian and <code>alldeaths</code> modelled using Poisson we can use
+<code><a href="../reference/branch_condition.html">branch_condition()</a></code> and <code><a href="../reference/add_branch_condition.html">add_branch_condition()</a></code>
+to add it to <code>hurricane_mv</code>.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">match_poisson</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/branch_condition.html">branch_condition</a></span><span class="op">(</span><span class="va">alldeaths</span>, <span class="va">poisson</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">match_log_lin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/branch_condition.html">branch_condition</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">alldeaths</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span>, <span class="va">gaussian</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">hurricane_mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_branch_condition.html">add_branch_condition</a></span><span class="op">(</span><span class="va">hurricane_mv</span>, <span class="va">match_poisson</span>, <span class="va">match_log_lin</span><span class="op">)</span></span></code></pre></div>
-<p>The multiverse tree shows that <code>log(alldeaths + 1)</code> will <em>only</em> be modelled as Gaussian and <code>alldeaths</code> will <em>only</em> be modelled as Poisson.</p>
+<p>The multiverse tree shows that <code>log(alldeaths + 1)</code> will
+<em>only</em> be modelled as Gaussian and <code>alldeaths</code> will
+<em>only</em> be modelled as Poisson.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/multiverse_tree.html">multiverse_tree</a></span><span class="op">(</span><span class="va">hurricane_mv</span>, label <span class="op">=</span> <span class="cn">TRUE</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dep_var"</span>, <span class="st">"distributions"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/multiverse_tree.html">multiverse_tree</a></span><span class="op">(</span><span class="va">hurricane_mv</span>, label <span class="op">=</span> <span class="st">"code"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dep_var"</span>, <span class="st">"distributions"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-15-1.png" width="1008"></p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/glm_mverse.html">glm_mverse</a></span><span class="op">(</span><span class="va">hurricane_mv</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/summary.html">summary</a></span><span class="op">(</span><span class="va">hurricane_mv</span><span class="op">)</span></span>
-<span><span class="co">## <span style="color: #949494;"># A tibble: 24 × 13</span></span></span>
-<span><span class="co">##    universe femininity_…¹ damag…² model…³ distr…⁴ dep_v…⁵ term  estimate std.e…⁶</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 1        Gender_MF     NDAM    dep_va… poisson alldea… (Int…  2.18<span style="color: #949494;">e</span>+0 5.18<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 1        Gender_MF     NDAM    dep_va… poisson alldea… dama…  3.63<span style="color: #949494;">e</span><span style="color: #BB0000;">-5</span> 8.58<span style="color: #949494;">e</span><span style="color: #BB0000;">-7</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 1        Gender_MF     NDAM    dep_va… poisson alldea… femi…  5.37<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 5.50<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 2        Gender_MF     NDAM    dep_va… gaussi… log(al… (Int…  1.47<span style="color: #949494;">e</span>+0 2.18<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 2        Gender_MF     NDAM    dep_va… gaussi… log(al… dama…  6.32<span style="color: #949494;">e</span><span style="color: #BB0000;">-5</span> 9.18<span style="color: #949494;">e</span><span style="color: #BB0000;">-6</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 2        Gender_MF     NDAM    dep_va… gaussi… log(al… femi…  1.72<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 2.52<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 3        Gender_MF     log(ND… dep_va… poisson alldea… (Int… -<span style="color: #BB0000;">2.95</span><span style="color: #949494;">e</span>+0 1.69<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 3        Gender_MF     log(ND… dep_va… poisson alldea… dama…  6.58<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 1.70<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 3        Gender_MF     log(ND… dep_va… poisson alldea… femi…  5.40<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 5.50<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> 4        Gender_MF     log(ND… dep_va… gaussi… log(al… (Int… -<span style="color: #BB0000;">9.28</span><span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 3.50<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># … with 14 more rows, 4 more variables: statistic &lt;dbl&gt;, p.value &lt;dbl&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   conf.low &lt;dbl&gt;, conf.high &lt;dbl&gt;, and abbreviated variable names</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ¹​femininity_branch, ²​damage_branch, ³​models_branch, ⁴​distributions_branch,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ⁵​dep_var_branch, ⁶​std.error</span></span></span></code></pre></div>
-<p>A summary of the 24 models on the <code>femininity</code> coefficients is shown in the specification curve.</p>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 24 × 18</span></span></span>
+<span><span class="co">##    universe femininity_branch damage_branch models_branch distributions_branch</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>               </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 1        binary_gender     damage_orig   models_1      distributions_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 1        binary_gender     damage_orig   models_1      distributions_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 1        binary_gender     damage_orig   models_1      distributions_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 2        binary_gender     damage_orig   models_1      distributions_2     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 2        binary_gender     damage_orig   models_1      distributions_2     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 2        binary_gender     damage_orig   models_1      distributions_2     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 3        binary_gender     damage_log    models_1      distributions_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 3        binary_gender     damage_log    models_1      distributions_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 3        binary_gender     damage_log    models_1      distributions_1     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> 4        binary_gender     damage_log    models_1      distributions_2     </span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 14 more rows</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 13 more variables: dep_var_branch &lt;fct&gt;, term &lt;chr&gt;, estimate &lt;dbl&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   std.error &lt;dbl&gt;, statistic &lt;dbl&gt;, p.value &lt;dbl&gt;, conf.low &lt;dbl&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   conf.high &lt;dbl&gt;, femininity_branch_code &lt;fct&gt;, damage_branch_code &lt;fct&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   models_branch_code &lt;fct&gt;, distributions_branch_code &lt;fct&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   dep_var_branch_code &lt;fct&gt;</span></span></span></code></pre></div>
+<p>A summary of the 24 models on the <code>femininity</code>
+coefficients is shown in the specification curve.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/spec_curve.html">spec_curve</a></span><span class="op">(</span><span class="va">hurricane_mv</span>, var <span class="op">=</span> <span class="st">"femininity"</span>, color_order <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/spec_summary.html">spec_summary</a></span><span class="op">(</span><span class="va">hurricane_mv</span>, var <span class="op">=</span> <span class="st">"femininity"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/spec_curve.html">spec_curve</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"code"</span>, spec_matrix_spacing <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"Significant at 0.05"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-17-1.png" width="1008"></p>
 </div>
 <div class="section level3">
 <h3 id="negative-binomial-regression">Negative Binomial Regression<a class="anchor" aria-label="anchor" href="#negative-binomial-regression"></a>
 </h3>
-<p><span class="citation">Jung et al. (2014)</span> used negative binomial regression to analyse the severity of female versus male hurricane names on number of deaths. In this section we will <code><a href="../reference/glm.nb_mverse.html">glm.nb_mverse()</a></code> to do a similar analysis.</p>
+<p><span class="citation">Jung et al. (2014)</span> used negative
+binomial regression to analyse the severity of female versus male
+hurricane names on number of deaths. In this section we will
+<code><a href="../reference/glm.nb_mverse.html">glm.nb_mverse()</a></code> to do a similar analysis.</p>
 <p>First, let’s setup the multiverse of analyses.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hurricane_nb_mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mverse.html">create_multiverse</a></span><span class="op">(</span><span class="va">hurricane</span><span class="op">)</span></span>
@@ -388,49 +469,57 @@
 <span></span>
 <span><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/formula_branch.html">formula_branch</a></span><span class="op">(</span><span class="va">alldeaths</span> <span class="op">~</span> <span class="va">damage</span> <span class="op">+</span> <span class="va">femininity</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">hurricane_nb_mv</span> <span class="op">&lt;-</span> <span class="va">hurricane_nb_mv</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="../reference/add_mutate_branch.html">add_mutate_branch</a></span><span class="op">(</span><span class="va">femininity</span>, <span class="va">damage</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="va">hurricane_nb_mv</span> <span class="op">&lt;-</span> <span class="va">hurricane_nb_mv</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/add_mutate_branch.html">add_mutate_branch</a></span><span class="op">(</span><span class="va">femininity</span>, <span class="va">damage</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/add_formula_branch.html">add_formula_branch</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span> </span></code></pre></div>
-<p>A summary of <code>hurricane_nb_mv</code> shows the four models in the multiverse.</p>
+<p>A summary of <code>hurricane_nb_mv</code> shows the four models in
+the multiverse.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summary.html">summary</a></span><span class="op">(</span><span class="va">hurricane_nb_mv</span><span class="op">)</span></span>
-<span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 4</span></span></span>
-<span><span class="co">##   universe femininity_branch damage_branch models_branch                  </span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                          </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> 1        Gender_MF         NDAM          alldeaths ~ damage + femininity</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> 2        Gender_MF         log(NDAM)     alldeaths ~ damage + femininity</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> 3        MasFem            NDAM          alldeaths ~ damage + femininity</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> 4        MasFem            log(NDAM)     alldeaths ~ damage + femininity</span></span></code></pre></div>
-<p>Next, use <code><a href="../reference/glm.nb_mverse.html">glm.nb_mverse()</a></code> to fit the negative binomial regressions.</p>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 4 × 7</span></span></span>
+<span><span class="co">##   universe femininity_branch damage_branch models_branch femininity_branch_code</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> 1        binary_gender     damage_orig   models_1      Gender_MF             </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> 2        binary_gender     damage_log    models_1      Gender_MF             </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> 3        cts_gender        damage_orig   models_1      MasFem                </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> 4        cts_gender        damage_log    models_1      MasFem                </span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 2 more variables: damage_branch_code &lt;fct&gt;, models_branch_code &lt;fct&gt;</span></span></span></code></pre></div>
+<p>Next, use <code><a href="../reference/glm.nb_mverse.html">glm.nb_mverse()</a></code> to fit the negative binomial
+regressions.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/glm.nb_mverse.html">glm.nb_mverse</a></span><span class="op">(</span><span class="va">hurricane_nb_mv</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/summary.html">summary</a></span><span class="op">(</span><span class="va">hurricane_nb_mv</span><span class="op">)</span></span>
-<span><span class="co">## <span style="color: #949494;"># A tibble: 12 × 11</span></span></span>
-<span><span class="co">##    universe femininity…¹ damag…² model…³ term  estimate std.e…⁴ stati…⁵  p.value</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 1        Gender_MF    NDAM    alldea… (Int…  1.71<span style="color: #949494;">e</span>+0 2.43<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span>   7.05  1.80<span style="color: #949494;">e</span><span style="color: #BB0000;">-12</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 1        Gender_MF    NDAM    alldea… dama…  9.81<span style="color: #949494;">e</span><span style="color: #BB0000;">-5</span> 9.89<span style="color: #949494;">e</span><span style="color: #BB0000;">-6</span>   9.92  3.38<span style="color: #949494;">e</span><span style="color: #BB0000;">-23</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 1        Gender_MF    NDAM    alldea… femi…  2.27<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 2.79<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span>   0.813 4.16<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 2        Gender_MF    log(ND… alldea… (Int… -<span style="color: #BB0000;">1.96</span><span style="color: #949494;">e</span>+0 4.60<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span>  -<span style="color: #BB0000;">4.27</span>  1.99<span style="color: #949494;">e</span><span style="color: #BB0000;">- 5</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 2        Gender_MF    log(ND… alldea… dama…  5.77<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 5.44<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span>  10.6   3.01<span style="color: #949494;">e</span><span style="color: #BB0000;">-26</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 2        Gender_MF    log(ND… alldea… femi…  1.08<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 2.39<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span>   0.450 6.52<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 3        MasFem       NDAM    alldea… (Int…  1.66<span style="color: #949494;">e</span>+0 3.18<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span>   5.22  1.74<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 3        MasFem       NDAM    alldea… dama…  9.83<span style="color: #949494;">e</span><span style="color: #BB0000;">-5</span> 9.90<span style="color: #949494;">e</span><span style="color: #BB0000;">-6</span>   9.93  3.01<span style="color: #949494;">e</span><span style="color: #BB0000;">-23</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 3        MasFem       NDAM    alldea… femi…  3.04<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> 4.08<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span>   0.746 4.56<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> 4        MasFem       log(ND… alldea… (Int… -<span style="color: #BB0000;">2.05</span><span style="color: #949494;">e</span>+0 4.97<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span>  -<span style="color: #BB0000;">4.12</span>  3.83<span style="color: #949494;">e</span><span style="color: #BB0000;">- 5</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">11</span> 4        MasFem       log(ND… alldea… dama…  5.76<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> 5.44<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span>  10.6   3.27<span style="color: #949494;">e</span><span style="color: #BB0000;">-26</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">12</span> 4        MasFem       log(ND… alldea… femi…  2.40<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> 3.48<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span>   0.689 4.91<span style="color: #949494;">e</span><span style="color: #BB0000;">- 1</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># … with 2 more variables: conf.low &lt;dbl&gt;, conf.high &lt;dbl&gt;, and abbreviated</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   variable names ¹​femininity_branch, ²​damage_branch, ³​models_branch,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   ⁴​std.error, ⁵​statistic</span></span></span></code></pre></div>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 12 × 14</span></span></span>
+<span><span class="co">##    universe femininity_branch damage_branch models_branch term          estimate</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 1        binary_gender     damage_orig   models_1      (Intercept)  1.71     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 1        binary_gender     damage_orig   models_1      damage       0.000<span style="text-decoration: underline;">098</span>1</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 1        binary_gender     damage_orig   models_1      femininity   0.227    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> 2        binary_gender     damage_log    models_1      (Intercept) -<span style="color: #BB0000;">1.96</span>     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> 2        binary_gender     damage_log    models_1      damage       0.577    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 2        binary_gender     damage_log    models_1      femininity   0.108    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> 3        cts_gender        damage_orig   models_1      (Intercept)  1.66     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> 3        cts_gender        damage_orig   models_1      damage       0.000<span style="text-decoration: underline;">098</span>3</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 3        cts_gender        damage_orig   models_1      femininity   0.030<span style="text-decoration: underline;">4</span>   </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> 4        cts_gender        damage_log    models_1      (Intercept) -<span style="color: #BB0000;">2.05</span>     </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">11</span> 4        cts_gender        damage_log    models_1      damage       0.576    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">12</span> 4        cts_gender        damage_log    models_1      femininity   0.024<span style="text-decoration: underline;">0</span>   </span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 8 more variables: std.error &lt;dbl&gt;, statistic &lt;dbl&gt;, p.value &lt;dbl&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   conf.low &lt;dbl&gt;, conf.high &lt;dbl&gt;, femininity_branch_code &lt;fct&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   damage_branch_code &lt;fct&gt;, models_branch_code &lt;fct&gt;</span></span></span></code></pre></div>
 <p>Finally, we can plot the specification curve.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/spec_curve.html">spec_curve</a></span><span class="op">(</span><span class="va">hurricane_nb_mv</span>, var <span class="op">=</span> <span class="st">"femininity"</span>, color_order <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/spec_summary.html">spec_summary</a></span><span class="op">(</span><span class="va">hurricane_nb_mv</span>, var <span class="op">=</span> <span class="st">"femininity"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/spec_curve.html">spec_curve</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"code"</span>, spec_matrix_spacing <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"Significant at 0.05"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-21-1.png" width="1008"></p>
-<div id="refs" class="references">
-<div id="ref-original">
-<p>Jung, Kiju, Sharon Shavitt, Madhu Viswanathan, and Joseph M. Hilbe. 2014. “Female Hurricanes Are Deadlier Than Male Hurricanes” 111 (24): 8782–7. <a href="https://doi.org/10.1073/pnas.1402786111" class="external-link">https://doi.org/10.1073/pnas.1402786111</a>.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-original" class="csl-entry">
+Jung, Kiju, Sharon Shavitt, Madhu Viswanathan, and Joseph M. Hilbe.
+2014. <span>“Female Hurricanes Are Deadlier Than Male Hurricanes”</span>
+111 (24): 8782–87. <a href="https://doi.org/10.1073/pnas.1402786111" class="external-link">https://doi.org/10.1073/pnas.1402786111</a>.
 </div>
 </div>
 </div>
@@ -454,7 +543,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

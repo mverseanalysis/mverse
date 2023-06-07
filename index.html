@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">mverse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
       </span>
     </div>
 
@@ -98,6 +98,7 @@
 <div class="page-header"><h1 id="mverse">mverse<a class="anchor" aria-label="anchor" href="#mverse"></a>
 </h1></div>
 <!-- badges: start -->
+
 <p><em>mverse</em> is an extension to multiverse package (Sarma et al. 2021) which allows users create explorable multiverse analysis (Steegen et al. 2016) in R. This extension provides user friendly abstraction and a set of examples for researchers, educators, and students in statistics.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -114,13 +115,18 @@
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
 <p>The following demonstration performs a multiverse analysis using <code>hurricane</code> dataset (Jung et al. 2014) included in the library. We first create 6 universes as described in Figure 1. A filter <em>branch</em> with 2 <em>options</em> and a mutate <em>branch</em> with 3 <em>options</em> results in 6 <em>universes</em> in total. We then fit a Poisson regression model across the multiverse and inspect a coefficient estimate. See <code><a href="http://mucollective.github.io/multiverse/articles/hurricane.html" class="external-link">vignette("hurricane")</a></code> for a detailed analysis as well as the terminologies used.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: Using alpha for a discrete variable is not advised.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: Using the `size` aesthetic in this geom was deprecated in ggplot2 3.4.0.</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Please use `linewidth` in the `default_aes` field and elsewhere instead.</span></span></code></pre></div>
 <p><img src="reference/figures/README-tree-1.png" width="100%"></p>
-<caption>Figure 1. Having one branch with 2 options and another with 3 results in 2 x 3 = 6 universes in total.</caption>
+<caption>
+Figure 1. Having one branch with 2 options and another with 3 results in 2 x 3 = 6 universes in total.
+</caption>
 <div class="section level3">
 <h3 id="initiate">Initiate<a class="anchor" aria-label="anchor" href="#initiate"></a>
 </h3>
 <p>First, we start by loading the library and defining a <code>mverse</code> object with the dataset of interest.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mverseanalysis/mverse/" class="external-link">mverse</a></span><span class="op">)</span></span>
 <span><span class="va">mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mverse.html">mverse</a></span><span class="op">(</span><span class="va">hurricane</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -128,17 +134,17 @@
 <h3 id="define-branches">Define Branches<a class="anchor" aria-label="anchor" href="#define-branches"></a>
 </h3>
 <p>We use the <code>*_branch()</code> methods to define branches. <code><a href="reference/filter_branch.html">filter_branch()</a></code> defines filtering operations using <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter()</a></code> with different options for the filter.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">outliers</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/filter_branch.html">filter_branch</a></span><span class="op">(</span></span>
 <span>  <span class="op">!</span> <span class="va">Name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Katrina"</span><span class="op">)</span>,</span>
 <span>  <span class="op">!</span> <span class="va">Name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Katrina"</span>, <span class="st">"Audrey"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="reference/mutate_branch.html">mutate_branch()</a></code> multiplexes <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">dplyr::mutate()</a></code> to add a new column in the dataset.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">strength</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mutate_branch.html">mutate_branch</a></span><span class="op">(</span></span>
 <span>  <span class="va">NDAM</span>, <span class="va">HighestWindSpeed</span>, <span class="va">Minpressure_Updated_2014</span><span class="op">)</span></span></code></pre></div>
 <p>In order to fit a Poisson regression, we need to specify the model using R’s formula syntax and the underlying distribution using <code>family</code>. In <code>mverse</code>, we provide the specifications using <code><a href="reference/formula_branch.html">formula_branch()</a></code> and <code><a href="reference/family_branch.html">family_branch()</a></code>. In this demonstration, we only define a single option for both formula and family but it is possible to provide multiple options for them as well.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/formula_branch.html">formula_branch</a></span><span class="op">(</span><span class="va">alldeaths</span> <span class="op">~</span> <span class="va">strength</span> <span class="op">*</span> <span class="va">MasFem</span><span class="op">)</span></span>
 <span><span class="va">distribution</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/family_branch.html">family_branch</a></span><span class="op">(</span><span class="va">poisson</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -146,7 +152,7 @@
 <h3 id="add-branches">Add Branches<a class="anchor" aria-label="anchor" href="#add-branches"></a>
 </h3>
 <p>After defining the branches, we can add the branch objects to the <code>mverse</code> object using <code>add_*_branch()</code> methods.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mv</span> <span class="op">&lt;-</span> <span class="va">mv</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/add_filter_branch.html">add_filter_branch</a></span><span class="op">(</span><span class="va">outliers</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/add_mutate_branch.html">add_mutate_branch</a></span><span class="op">(</span><span class="va">strength</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -157,57 +163,58 @@
 <h3 id="fit-model">Fit Model<a class="anchor" aria-label="anchor" href="#fit-model"></a>
 </h3>
 <p><code><a href="reference/glm_mverse.html">glm_mverse()</a></code> multiplexes <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">stats::glm()</a></code> function and fits a GLM in each universe according to the specifications provided by <code>add_fomula_branch()</code> and <code><a href="reference/add_family_branch.html">add_family_branch()</a></code>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mv</span> <span class="op">&lt;-</span> <span class="va">mv</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="reference/glm_mverse.html">glm_mverse</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="extract-results">Extract Results<a class="anchor" aria-label="anchor" href="#extract-results"></a>
 </h3>
 <p>After completing the analysis, we can extract the results using <code><a href="reference/summary.html">summary()</a></code>. The method returns a table with branching options, estimates, 95% confidence intervals for all regression terms across the multiverse.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/summary.html">summary</a></span><span class="op">(</span><span class="va">mv</span><span class="op">)</span></span>
 <span><span class="va">res</span></span>
-<span><span class="co">#&gt; # A tibble: 24 × 12</span></span>
+<span><span class="co">#&gt; # A tibble: 24 × 16</span></span>
 <span><span class="co">#&gt;    universe outliers_br…¹ stren…² model…³ distr…⁴ term  estimate std.e…⁵ stati…⁶</span></span>
 <span><span class="co">#&gt;    &lt;fct&gt;    &lt;fct&gt;         &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt;   &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 1        "!Name %in% … NDAM    alldea… poisson (Int…  2.13e+0 8.04e-2  26.5  </span></span>
-<span><span class="co">#&gt;  2 1        "!Name %in% … NDAM    alldea… poisson stre…  3.02e-5 2.63e-6  11.5  </span></span>
-<span><span class="co">#&gt;  3 1        "!Name %in% … NDAM    alldea… poisson MasF…  6.23e-2 1.01e-2   6.19 </span></span>
-<span><span class="co">#&gt;  4 1        "!Name %in% … NDAM    alldea… poisson stre…  7.96e-7 3.20e-7   2.49 </span></span>
-<span><span class="co">#&gt;  5 2        "!Name %in% … Highes… alldea… poisson (Int… -8.59e-2 2.65e-1  -0.324</span></span>
-<span><span class="co">#&gt;  6 2        "!Name %in% … Highes… alldea… poisson stre…  2.35e-2 2.17e-3  10.8  </span></span>
-<span><span class="co">#&gt;  7 2        "!Name %in% … Highes… alldea… poisson MasF…  5.31e-2 3.20e-2   1.66 </span></span>
-<span><span class="co">#&gt;  8 2        "!Name %in% … Highes… alldea… poisson stre…  3.32e-4 2.60e-4   1.28 </span></span>
-<span><span class="co">#&gt;  9 3        "!Name %in% … Minpre… alldea… poisson (Int…  4.74e+1 3.17e+0  15.0  </span></span>
-<span><span class="co">#&gt; 10 3        "!Name %in% … Minpre… alldea… poisson stre… -4.69e-2 3.34e-3 -14.0  </span></span>
-<span><span class="co">#&gt; # … with 14 more rows, 3 more variables: p.value &lt;dbl&gt;, conf.low &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   conf.high &lt;dbl&gt;, and abbreviated variable names ¹​outliers_branch,</span></span>
-<span><span class="co">#&gt; #   ²​strength_branch, ³​model_branch, ⁴​distribution_branch, ⁵​std.error,</span></span>
-<span><span class="co">#&gt; #   ⁶​statistic</span></span>
-<span><span class="co">#&gt; # ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names</span></span></code></pre></div>
+<span><span class="co">#&gt;  1 1        outliers_1    streng… model_1 distri… (Int…  2.13e+0 8.04e-2  26.5  </span></span>
+<span><span class="co">#&gt;  2 1        outliers_1    streng… model_1 distri… stre…  3.02e-5 2.63e-6  11.5  </span></span>
+<span><span class="co">#&gt;  3 1        outliers_1    streng… model_1 distri… MasF…  6.23e-2 1.01e-2   6.19 </span></span>
+<span><span class="co">#&gt;  4 1        outliers_1    streng… model_1 distri… stre…  7.96e-7 3.20e-7   2.49 </span></span>
+<span><span class="co">#&gt;  5 2        outliers_1    streng… model_1 distri… (Int… -8.59e-2 2.65e-1  -0.324</span></span>
+<span><span class="co">#&gt;  6 2        outliers_1    streng… model_1 distri… stre…  2.35e-2 2.17e-3  10.8  </span></span>
+<span><span class="co">#&gt;  7 2        outliers_1    streng… model_1 distri… MasF…  5.31e-2 3.20e-2   1.66 </span></span>
+<span><span class="co">#&gt;  8 2        outliers_1    streng… model_1 distri… stre…  3.32e-4 2.60e-4   1.28 </span></span>
+<span><span class="co">#&gt;  9 3        outliers_1    streng… model_1 distri… (Int…  4.74e+1 3.17e+0  15.0  </span></span>
+<span><span class="co">#&gt; 10 3        outliers_1    streng… model_1 distri… stre… -4.69e-2 3.34e-3 -14.0  </span></span>
+<span><span class="co">#&gt; # … with 14 more rows, 7 more variables: p.value &lt;dbl&gt;, conf.low &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   conf.high &lt;dbl&gt;, outliers_branch_code &lt;fct&gt;, strength_branch_code &lt;fct&gt;,</span></span>
+<span><span class="co">#&gt; #   model_branch_code &lt;fct&gt;, distribution_branch_code &lt;fct&gt;, and abbreviated</span></span>
+<span><span class="co">#&gt; #   variable names ¹​outliers_branch, ²​strength_branch, ³​model_branch,</span></span>
+<span><span class="co">#&gt; #   ⁴​distribution_branch, ⁵​std.error, ⁶​statistic</span></span></code></pre></div>
 <p>The resulting data is a <code>tibble</code> object and we can use regular <code>tidyverse</code> grammar to manipulate the data. In the code below, we specifically focus on the estimated coefficient for <code>MasFem</code> and its confidence intervals.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="va">res</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">term</span> <span class="op">==</span> <span class="st">"MasFem"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">outliers_branch</span>, <span class="va">strength_branch</span>, <span class="va">term</span>, <span class="va">estimate</span>, <span class="va">conf.low</span>, <span class="va">conf.high</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 6 × 6</span></span>
-<span><span class="co">#&gt;   outliers_branch                         stren…¹ term  estim…² conf.low conf.…³</span></span>
-<span><span class="co">#&gt;   &lt;fct&gt;                                   &lt;fct&gt;   &lt;chr&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 "!Name %in% c(\"Katrina\")"             NDAM    MasF…  0.0623  0.0427   0.0822</span></span>
-<span><span class="co">#&gt; 2 "!Name %in% c(\"Katrina\")"             Highes… MasF…  0.0531 -0.00942  0.116 </span></span>
-<span><span class="co">#&gt; 3 "!Name %in% c(\"Katrina\")"             Minpre… MasF… -0.845  -1.59    -0.103 </span></span>
-<span><span class="co">#&gt; 4 "!Name %in% c(\"Katrina\", \"Audrey\")" NDAM    MasF…  0.0623  0.0427   0.0822</span></span>
-<span><span class="co">#&gt; 5 "!Name %in% c(\"Katrina\", \"Audrey\")" Highes… MasF…  0.0956  0.0301   0.161 </span></span>
-<span><span class="co">#&gt; 6 "!Name %in% c(\"Katrina\", \"Audrey\")" Minpre… MasF… -1.02   -1.81    -0.247 </span></span>
-<span><span class="co">#&gt; # … with abbreviated variable names ¹​strength_branch, ²​estimate, ³​conf.high</span></span></code></pre></div>
+<span><span class="co">#&gt;   outliers_branch strength_branch term   estimate conf.low conf.high</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;           &lt;fct&gt;           &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 outliers_1      strength_1      MasFem   0.0623  0.0427     0.0822</span></span>
+<span><span class="co">#&gt; 2 outliers_1      strength_2      MasFem   0.0531 -0.00942    0.116 </span></span>
+<span><span class="co">#&gt; 3 outliers_1      strength_3      MasFem  -0.845  -1.59      -0.103 </span></span>
+<span><span class="co">#&gt; 4 outliers_2      strength_1      MasFem   0.0623  0.0427     0.0822</span></span>
+<span><span class="co">#&gt; 5 outliers_2      strength_2      MasFem   0.0956  0.0301     0.161 </span></span>
+<span><span class="co">#&gt; 6 outliers_2      strength_3      MasFem  -1.02   -1.81      -0.247</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="plot-a-specification-curve">Plot a Specification Curve<a class="anchor" aria-label="anchor" href="#plot-a-specification-curve"></a>
 </h3>
 <p>We can also inspect the result graphically using <code><a href="reference/spec_curve.html">spec_curve()</a></code>. The method builds a specification curve (Simonsohn, Simmons, and Nelson 2020) for a term in the regression model specified by <code>var</code>. The method also allows multiple ways of sorting the estimates. See <code><a href="reference/spec_curve.html">?spec_curve</a></code> for details.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/spec_curve.html">spec_curve</a></span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"MasFem"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/spec_summary.html">spec_summary</a></span><span class="op">(</span><span class="va">mv</span>, var <span class="op">=</span> <span class="st">"MasFem"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="reference/spec_curve.html">spec_curve</a></span><span class="op">(</span>spec_matrix_spacing <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"Significant at 0.05"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-10-1.png" width="100%"></p>
 </div>
 </div>
@@ -215,10 +222,18 @@
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <div id="refs" class="references csl-bib-body hanging-indent">
-<div id="ref-hurricane" class="csl-entry"><p>Jung, Kiju, Sharon Shavitt, Madhu Viswanathan, and Joseph M. Hilbe. 2014. “Female Hurricanes Are Deadlier Than Male Hurricanes” 111 (24): 8782–87. <a href="https://doi.org/10.1073/pnas.1402786111" class="external-link uri">https://doi.org/10.1073/pnas.1402786111</a>.</p></div>
-<div id="ref-multiverseR" class="csl-entry"><p>Sarma, Abhraneel, Alex Kale, Michael Moon, Nathan Taback, Fanny Chevalier, Jessica Hullman, and Matthew Kay. 2021. “Multiverse: Multiplexing Alternative Data Analyses in R Notebooks (Version 0.5.0).” <a href="https://github.com/MUCollective/multiverse" class="external-link uri">https://github.com/MUCollective/multiverse</a>.</p></div>
-<div id="ref-speccurve" class="csl-entry"><p>Simonsohn, Uri, Joseph P. Simmons, and Leif D. Nelson. 2020. “Specification Curve Analysis” 4 (July): 1208–14. <a href="https://doi.org/10.1038/s41562-020-0912-z" class="external-link uri">https://doi.org/10.1038/s41562-020-0912-z</a>.</p></div>
-<div id="ref-multiverse" class="csl-entry"><p>Steegen, Sara, Francis Tuerlinckx, Andrew Gelman, and Wolf Vanpaemel. 2016. “Increasing Transparency Through a Multiverse Analysis” 11 (5): 702–12. <a href="https://doi.org/10.1177/1745691616658637" class="external-link uri">https://doi.org/10.1177/1745691616658637</a>.</p></div>
+<div id="ref-hurricane" class="csl-entry">
+Jung, Kiju, Sharon Shavitt, Madhu Viswanathan, and Joseph M. Hilbe. 2014. “Female Hurricanes Are Deadlier Than Male Hurricanes” 111 (24): 8782–87. <a href="https://doi.org/10.1073/pnas.1402786111" class="external-link uri">https://doi.org/10.1073/pnas.1402786111</a>.
+</div>
+<div id="ref-multiverseR" class="csl-entry">
+Sarma, Abhraneel, Alex Kale, Michael Moon, Nathan Taback, Fanny Chevalier, Jessica Hullman, and Matthew Kay. 2021. “Multiverse: Multiplexing Alternative Data Analyses in R Notebooks (Version 0.5.0).” <a href="https://github.com/MUCollective/multiverse" class="external-link uri">https://github.com/MUCollective/multiverse</a>.
+</div>
+<div id="ref-speccurve" class="csl-entry">
+Simonsohn, Uri, Joseph P. Simmons, and Leif D. Nelson. 2020. “Specification Curve Analysis” 4 (July): 1208–14. <a href="https://doi.org/10.1038/s41562-020-0912-z" class="external-link uri">https://doi.org/10.1038/s41562-020-0912-z</a>.
+</div>
+<div id="ref-multiverse" class="csl-entry">
+Steegen, Sara, Francis Tuerlinckx, Andrew Gelman, and Wolf Vanpaemel. 2016. “Increasing Transparency Through a Multiverse Analysis” 11 (5): 702–12. <a href="https://doi.org/10.1177/1745691616658637" class="external-link uri">https://doi.org/10.1177/1745691616658637</a>.
+</div>
 </div>
 </div>
 </div>
@@ -263,7 +278,8 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/mverseanalysis/mverse/actions" class="external-link"><img src="https://github.com/mverseanalysis/mverse/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://app.codecov.io/gh/mverseanalysis/mverse?branch=master" class="external-link"><img src="https://codecov.io/gh/mverseanalysis/mverse/branch/master/graph/badge.svg" alt="codecove"></a></li>
 </ul>
 </div>
 
@@ -278,7 +294,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
