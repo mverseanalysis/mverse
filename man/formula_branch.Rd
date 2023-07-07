@@ -40,6 +40,7 @@ model_specifications <- formula_branch(
   y ~ femininity * hurricane_strength,
   covariates = c("Year", "Category", "NDAM")
 )
+model_specifications
 }
 \seealso{
 Other formula branch functions: 
