@@ -9,7 +9,7 @@ filter_branch(..., name = NULL)
 \arguments{
 \item{...}{branch definition expressions.}
 
-\item{name}{Name for the new filter.}
+\item{name}{(optional) Name for the new filter.}
 }
 \value{
 a filter_branch object.

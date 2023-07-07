@@ -12,7 +12,7 @@
 #' mv <- create_multiverse(hurricane) %>%
 #'   add_filter_branch(hurricane_outliers)
 #' @param ... branch definition expressions.
-#' @param name Name for the new filter.
+#' @param name (optional) Name for the new filter.
 #' @return a filter_branch object.
 #' @name filter_branch
 #' @family filter branch functions

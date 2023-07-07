@@ -79,7 +79,7 @@ test_that("name() renames a branch.", {
   expect_equal(name(fbranch), "frename")
 })
 
-test_that("parse() creates a branching command for multiverse.", {
+test_that("1() creates a branching command for multiverse.", {
   mbranch <- mutate_branch(x + y, x - y, x * y, name = "m")
   expect_equal(parse(mbranch), rlang::parse_expr(
     'branch(m_branch, "m_1" ~ x + y, "m_2" ~ x - y, "m_3" ~ x * y)'
@@ -191,4 +191,22 @@ test_that("add_*_branch() checks for a new variable name.", {
     ),
     "Please specify a variable name for the branch rule:.*"
   )
+})
+
+test_that("formula_branch() with covariates option creates options
+with all possible combinations of the covarites provided.", {
+  frml <- formula_branch(y ~ x, y ~ log(x),
+                         covariates = c("z", "w"))
+  expect_equal(length(frml$opts), 8)
+  frml <- formula_branch(y ~ x,
+                         covariates = c("z", "w"),
+                         name = "f")
+  expect_equal(length(frml$opts), 4)
+  expect_equal(parse(frml), rlang::parse_expr(
+    paste0('branch(f_branch, ',
+           '"f_1" ~ formula("y ~ x"), ',
+           '"f_2" ~ formula("y ~ x + z"), ',
+           '"f_3" ~ formula("y ~ x + w"), ',
+           '"f_4" ~ formula("y ~ x + z + w"))')
+  ))
 })

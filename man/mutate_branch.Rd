@@ -9,7 +9,7 @@ mutate_branch(..., name = NULL)
 \arguments{
 \item{...}{branch definition expressions.}
 
-\item{name}{Name for the new variable.}
+\item{name}{(optional) Name for the new variable.}
 }
 \value{
 a mutate_branch object.

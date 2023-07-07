@@ -9,7 +9,7 @@
 #' mv <- create_multiverse(hurricane) %>%
 #'   add_family_branch(model_distributions)
 #' @param ... branch definition expressions.
-#' @param name Name for the new family.
+#' @param name (optional) Name for the new family.
 #' @return a \code{family_branch} object.
 #' @name family_branch
 #' @family family branch functions

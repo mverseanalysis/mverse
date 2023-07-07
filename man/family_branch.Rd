@@ -9,7 +9,7 @@ family_branch(..., name = NULL)
 \arguments{
 \item{...}{branch definition expressions.}
 
-\item{name}{Name for the new family.}
+\item{name}{(optional) Name for the new family.}
 }
 \value{
 a \code{family_branch} object.
