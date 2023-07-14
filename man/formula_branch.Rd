@@ -4,12 +4,16 @@
 \alias{formula_branch}
 \title{Create a new formula branch.}
 \usage{
-formula_branch(..., name = NULL)
+formula_branch(..., covariates = NULL, name = NULL)
 }
 \arguments{
 \item{...}{branch definition expressions.}
 
-\item{name}{Name for the new formula.}
+\item{covariates}{(optional) A character vector of optional covariates.
+Each unique combination of the supplied covariates is translated into
+a unique branch option.}
+
+\item{name}{(optional) Name for the new formula.}
 }
 \value{
 a \code{formula_branch} object.
@@ -27,6 +31,16 @@ model_specifications <- formula_branch(
 # Create a mverse, add the branch.
 mv <- create_multiverse(hurricane) \%>\%
   add_formula_branch(model_specifications)
+# You can specify the covariates separately to create branch options with
+# all possible combinations of the covariates in addition to the explanatory
+# variables specified in the formulae.
+model_specifications <- formula_branch(
+  y ~ femininity,
+  y ~ femininity + hurricane_strength,
+  y ~ femininity * hurricane_strength,
+  covariates = c("Year", "Category", "NDAM")
+)
+model_specifications
 }
 \seealso{
 Other formula branch functions: 

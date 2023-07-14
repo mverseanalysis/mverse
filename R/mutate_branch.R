@@ -16,7 +16,7 @@
 #' mv <- create_multiverse(hurricane) %>%
 #'   add_mutate_branch(hurricane_strength)
 #' @param ... branch definition expressions.
-#' @param name Name for the new variable.
+#' @param name (optional) Name for the new variable.
 #' @return a mutate_branch object.
 #'
 #' @name mutate_branch
