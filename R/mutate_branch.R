@@ -70,3 +70,18 @@ add_mutate_branch <- function(.mverse, ...) {
   .mverse <- add_branch(.mverse, brs, nms)
   invisible(.mverse)
 }
+
+#' @importFrom rlang :=
+code_branch_mutate_branch <- function(.mverse, br) {
+  multiverse::inside(
+    .mverse,
+    .data_mverse <- dplyr::mutate(
+      .data_mverse, !!rlang::parse_expr(br$name) := !!parse(br)
+    )
+  )
+  invisible()
+}
+
+setMethod("code_branch", signature = signature(br = "mutate_branch"),
+          code_branch_mutate_branch)
+

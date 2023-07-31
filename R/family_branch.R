@@ -49,3 +49,14 @@ add_family_branch <- function(.mverse, ...) {
   .mverse <- add_branch(.mverse, brs, nms)
   invisible(.mverse)
 }
+
+code_branch_family_branch <- function(.mverse, br) {
+  multiverse::inside(
+    .mverse,
+    .family_mverse <- !!parse(br)
+  )
+  invisible()
+}
+
+setMethod("code_branch", signature = signature(br = "family_branch"),
+          code_branch_family_branch)

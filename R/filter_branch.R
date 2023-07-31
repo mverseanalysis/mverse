@@ -55,3 +55,14 @@ add_filter_branch <- function(.mverse, ...) {
   .mverse <- add_branch(.mverse, brs, nms)
   invisible(.mverse)
 }
+
+code_branch_filter_branch <- function(.mverse, br) {
+  multiverse::inside(
+    .mverse,
+    .data_mverse <- dplyr::filter(.data_mverse, !!parse(br))
+  )
+  invisible()
+}
+
+setMethod("code_branch", signature = signature(br = "filter_branch"),
+          code_branch_filter_branch)

@@ -72,3 +72,13 @@ add_formula_branch <- function(.mverse, ...) {
   .mverse <- add_branch(.mverse, brs, nms)
   invisible(.mverse)
 }
+
+code_branch_formula_branch <- function(.mverse, br) {
+  multiverse::inside(
+    .mverse,
+    .formula_mverse <- stats::formula(!!parse(br))
+  )
+  invisible()
+}
+setMethod("code_branch", signature = signature(br = "formula_branch"),
+          code_branch_formula_branch)

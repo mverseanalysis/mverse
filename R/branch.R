@@ -139,33 +139,8 @@ add_branch <- function(.mverse, brs, nms) {
   .mverse
 }
 
-#' @importFrom rlang :=
 code_branch <- function(.mverse, br) {
-  stopifnot(inherits(br, "branch"))
-  if (inherits(br, "mutate_branch")) {
-    multiverse::inside(
-      .mverse,
-      .data_mverse <- dplyr::mutate(
-        .data_mverse, !!rlang::parse_expr(br$name) := !!parse(br)
-      )
-    )
-  } else if (inherits(br, "filter_branch")) {
-    multiverse::inside(
-      .mverse,
-      .data_mverse <- dplyr::filter(.data_mverse, !!parse(br))
-    )
-  } else if (inherits(br, "formula_branch")) {
-    multiverse::inside(
-      .mverse,
-      .formula_mverse <- stats::formula(!!parse(br))
-    )
-  } else if (inherits(br, "family_branch")) {
-    multiverse::inside(
-      .mverse,
-      .family_mverse <- !!parse(br)
-    )
-  }
-  invisible()
+  UseMethod("code_branch")
 }
 
 reset_parameters <- function(.mverse) {
