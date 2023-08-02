@@ -57,6 +57,6 @@ code_branch_family_branch <- function(.mverse, br) {
   )
   invisible()
 }
-
+setOldClass("family_branch")
 setMethod("code_branch", signature = signature(br = "family_branch"),
           code_branch_family_branch)

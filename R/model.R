@@ -49,7 +49,11 @@ lm_mverse <- function(.mverse) {
   }
   # fit lm
   multiverse::inside(
-    .mverse, .model_mverse <- stats::lm(.formula_mverse, data = .data_mverse)
+    .mverse,
+    .model_mverse <- stats::lm(
+      stats::formula(.formula_mverse),
+      data = .data_mverse
+    )
   )
   attr(.mverse, "class") <- unique(c("lm_mverse", class(.mverse)))
   execute_multiverse(.mverse)
@@ -112,8 +116,10 @@ glm_mverse <- function(.mverse) {
   }
   # fit glm
   multiverse::inside(
-    .mverse, .model_mverse <- stats::glm(
-      .formula_mverse, data = .data_mverse, family = .family_mverse
+    .mverse,
+    .model_mverse <- stats::glm(
+      stats::formula(.formula_mverse),
+      data = .data_mverse, family = .family_mverse
     )
   )
   attr(.mverse, "class") <- unique(c("glm_mverse", class(.mverse)))
@@ -168,7 +174,11 @@ glm.nb_mverse <- function(.mverse) {
   }
   # fit glm
   multiverse::inside(
-    .mverse, .model_mverse <- MASS::glm.nb(.formula_mverse, data = .data_mverse)
+    .mverse,
+    .model_mverse <- MASS::glm.nb(
+      stats::formula(.formula_mverse),
+      data = .data_mverse
+    )
   )
   attr(.mverse, "class") <- unique(c("glm.nb_mverse", class(.mverse)))
   execute_multiverse(.mverse)

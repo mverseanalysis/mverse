@@ -50,30 +50,6 @@ parse.branch <- function(br) {
   rlang::parse_expr(paste0(head_str, body_str, ")"))
 }
 
-parse.formula_branch <- function(br) {
-  # initiate a branch
-  head_str <- paste0(
-    "branch(", br$name, "_branch,"
-  )
-  # construct individual formula
-  has_cond <- "conds" %in% names(br)
-  body_str <- paste0(
-    sapply(
-      names(br$opts),
-      function(opt) {
-        paste0(
-          "'", opt, "'",
-          ifelse(has_cond, br$conds[which(names(br$opts) == opt)], ""),
-          "~ formula(", rlang::quo_text(br$opts[[opt]]), ")"
-        )
-      }
-    ),
-    collapse = ","
-  )
-  # parse as an expression
-  rlang::parse_expr(paste0(head_str, body_str, ")"))
-}
-
 check_branch_name <- function(br) {
   check_str <- paste0("^", class(br)[1], "(.+)$")
   if (grepl(check_str, br$name)) {
@@ -147,7 +123,10 @@ reset_parameters <- function(.mverse) {
   attr(.mverse, "multiverse")[["code"]] <- NULL
   attr(.mverse, "multiverse")[["parameter_set"]] <- NULL
   attr(.mverse, "multiverse")[["parameters"]] <- list()
-  multiverse::inside(.mverse, .data_mverse <- attr(.mverse, "source"))
+  multiverse::inside(.mverse, {
+    .data_mverse <- attr(.mverse, "source")
+    .covariate_mverse <- vector("character")
+  })
   for (br in attr(.mverse, "branches_list")) {
     code_branch(.mverse, br)
   }

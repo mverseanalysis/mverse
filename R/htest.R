@@ -52,7 +52,7 @@ ttest_mverse <-
     if (rlang::quo_is_null(x)) {
       multiverse::inside(.mverse, {
         htest <- stats::t.test(
-          .formula_mverse,
+          stats::formula(.formula_mverse),
           data = .data_mverse,
           alternative = !!rlang::enexpr(alternative),
           mu = !!rlang::enexpr(mu),
@@ -104,6 +104,6 @@ ttest_mverse <-
     })
     execute_multiverse(.mverse)
     mtable <- multiverse::extract_variables(.mverse, out) %>%
-      tidyr::unnest(out) 
+      tidyr::unnest(out)
     display_branch_opts(mtable, .mverse)
   }

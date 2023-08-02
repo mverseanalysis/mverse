@@ -11,7 +11,7 @@ formula_branch(..., covariates = NULL, name = NULL)
 
 \item{covariates}{(optional) A character vector of optional covariates.
 Each unique combination of the supplied covariates is translated into
-a unique branch option.}
+a unique branch option. See Details.}
 
 \item{name}{(optional) Name for the new formula.}
 }
@@ -19,7 +19,31 @@ a unique branch option.}
 a \code{formula_branch} object.
 }
 \description{
-Create a new formula branch.
+The function specifies the model formula for fitting `lm_mverse()` and
+`glm_mverse()`. You can list the model specification formulae individually
+or use \code{covariates} option paired with one or more formulae.
+}
+\details{
+The optional argument \code{covariates} is allows you to specify a set of
+optional covariates in addition to other independent variable such as
+treatment variables and blocking variables which are specified using formula.
+For each covariate provided, a branch is added to the multiverse with the
+option to include or exclude the covariate in the model.
+
+For example, \code{formula_branch(y ~ x, covariates = c("c1", "c2"))} creates
+the following 4 model specifications:
+
+\code{y ~ x}
+
+\code{y ~ x + c1}
+
+\code{y ~ x + c2}
+
+\code{y ~ x + c1 + c2}
+
+Here, \code{y} is the outcome variable and \code{x} may be a treatment
+variable in an experiment setting. \code{c1} and \code{c2} may be additional
+covariates about the experiment units that may or may not be relevant.
 }
 \examples{
 # Define a formula branch.
@@ -31,14 +55,10 @@ model_specifications <- formula_branch(
 # Create a mverse, add the branch.
 mv <- create_multiverse(hurricane) \%>\%
   add_formula_branch(model_specifications)
-# You can specify the covariates separately to create branch options with
-# all possible combinations of the covariates in addition to the explanatory
-# variables specified in the formulae.
+# Specify the covariates separately.
 model_specifications <- formula_branch(
   y ~ femininity,
-  y ~ femininity + hurricane_strength,
-  y ~ femininity * hurricane_strength,
-  covariates = c("Year", "Category", "NDAM")
+  covariates = c("hurricane_strength", "Year", "Category", "NDAM")
 )
 model_specifications
 }

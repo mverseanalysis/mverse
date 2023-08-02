@@ -34,6 +34,6 @@ mv <- create_multiverse(hurricane) \%>\%
 }
 \seealso{
 Other filter branch functions: 
-\code{\link{filter_branch}()}
+\code{\link{filter_branch}}
 }
 \concept{filter branch functions}

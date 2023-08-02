@@ -32,6 +32,6 @@ mv <- create_multiverse(hurricane) \%>\%
 }
 \seealso{
 Other formula branch functions: 
-\code{\link{formula_branch}()}
+\code{\link{formula_branch}}
 }
 \concept{formula branch functions}

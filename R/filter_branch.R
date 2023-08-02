@@ -63,6 +63,6 @@ code_branch_filter_branch <- function(.mverse, br) {
   )
   invisible()
 }
-
+setOldClass("filter_branch")
 setMethod("code_branch", signature = signature(br = "filter_branch"),
           code_branch_filter_branch)
