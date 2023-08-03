@@ -165,7 +165,10 @@ glm_mverse <- function(.mverse) {
 glm.nb_mverse <- function(.mverse) {
   stopifnot(inherits(.mverse, "mverse"))
   # check whether there is a formula branch (should be only 1)
-  brs <- c(attr(.mverse, "branches_conditioned_list"), attr(.mverse, "branches_list"))
+  brs <- c(
+    attr(.mverse, "branches_conditioned_list"),
+    attr(.mverse, "branches_list")
+  )
   if (length(brs) == 0) {
     stop("Exactly one formula branch is required.")
   }

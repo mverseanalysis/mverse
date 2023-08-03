@@ -150,7 +150,12 @@ summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     multiverse::inside(object, {
       if (summary(.model_mverse)$df[1] > 0) {
         out <- as.data.frame(
-          t(c(summary(.model_mverse)$r.squared, summary(.model_mverse)$adj.r.squared))
+          t(
+            c(
+              summary(.model_mverse)$r.squared,
+              summary(.model_mverse)$adj.r.squared
+            )
+          )
         ) %>%
           dplyr::rename(r.squared = "V1", adj.r.squared = "V2")
       } else {
@@ -174,7 +179,7 @@ summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     stop("Invalid output argument.")
   }
   execute_multiverse(object)
-  mtable <- multiverse::extract_variables(object, out) %>% tidyr::unnest(out) 
+  mtable <- multiverse::extract_variables(object, out) %>% tidyr::unnest(out)
   display_branch_opts(mtable, object)
 }
 
@@ -244,7 +249,12 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     multiverse::inside(object, {
       if (summary(.model_mverse)$df[1] > 0) {
         out <- as.data.frame(
-          t(c(summary(.model_mverse)$df.residual, summary(.model_mverse)$df.null))
+          t(
+            c(
+              summary(.model_mverse)$df.residual,
+              summary(.model_mverse)$df.null
+            )
+          )
         ) %>%
           dplyr::rename(df.residual = "V1", df.null = "V2")
       } else {
@@ -255,7 +265,12 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     multiverse::inside(object, {
       if (summary(.model_mverse)$df[1] > 0) {
         out <- as.data.frame(
-          t(c(summary(.model_mverse)$deviance, summary(.model_mverse)$null.deviance))
+          t(
+            c(
+              summary(.model_mverse)$deviance,
+              summary(.model_mverse)$null.deviance
+            )
+          )
         ) %>%
           dplyr::rename(deviance = "V1", null.deviance = "V2")
       } else {
@@ -265,7 +280,14 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
   } else if (tolower(output) %in% c("aic", "bic")) {
     multiverse::inside(object, {
       if (summary(.model_mverse)$df[1] > 0) {
-        out <- as.data.frame(t(c(stats::AIC(.model_mverse), stats::BIC(.model_mverse)))) %>%
+        out <- as.data.frame(
+          t(
+            c(
+              stats::AIC(.model_mverse),
+              stats::BIC(.model_mverse)
+            )
+          )
+        ) %>%
           dplyr::rename(AIC = "V1", BIC = "V2")
       } else {
         out <- data.frame(AIC = NA, BIC = NA)
@@ -275,7 +297,7 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     stop("Invalid output argument.")
   }
   execute_multiverse(object)
-  mtable <- multiverse::extract_variables(object, out) %>% tidyr::unnest(out) 
+  mtable <- multiverse::extract_variables(object, out) %>% tidyr::unnest(out)
   display_branch_opts(mtable, object)
 }
 
@@ -345,9 +367,14 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     multiverse::inside(object, {
       if (summary(.model_mverse)$df[1] > 0) {
         out <-
-          as.data.frame(t(c(
-            summary(.model_mverse)$df.residual, summary(.model_mverse)$df.null
-          ))) %>%
+          as.data.frame(
+            t(
+              c(
+                summary(.model_mverse)$df.residual,
+                summary(.model_mverse)$df.null
+              )
+            )
+          ) %>%
           dplyr::rename(
             df.residual = "V1",
             df.null = "V2"
@@ -363,9 +390,14 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     multiverse::inside(object, {
       if (summary(.model_mverse)$df[1] > 0) {
         out <-
-          as.data.frame(t(c(
-            summary(.model_mverse)$deviance, summary(.model_mverse)$null.deviance
-          ))) %>%
+          as.data.frame(
+            t(
+              c(
+                summary(.model_mverse)$deviance,
+                summary(.model_mverse)$null.deviance
+              )
+            )
+          ) %>%
           dplyr::rename(
             deviance = "V1",
             null.deviance = "V2"
@@ -381,7 +413,14 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     multiverse::inside(object, {
       if (summary(.model_mverse)$df[1] > 0) {
         out <-
-          as.data.frame(t(c(stats::AIC(.model_mverse), stats::BIC(.model_mverse)))) %>%
+          as.data.frame(
+            t(
+              c(
+                stats::AIC(.model_mverse),
+                stats::BIC(.model_mverse)
+              )
+            )
+          ) %>%
           dplyr::rename(
             AIC = "V1",
             BIC = "V2"
@@ -397,7 +436,7 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
     stop("Invalid output argument.")
   }
   execute_multiverse(object)
-  mtable <- multiverse::extract_variables(object, out) %>% tidyr::unnest(out) 
+  mtable <- multiverse::extract_variables(object, out) %>% tidyr::unnest(out)
   display_branch_opts(mtable, object)
 }
 
@@ -522,7 +561,12 @@ multiverse_tree <- function(.mverse, label = "none",
   }
   brs_name <- paste0(brs, ifelse(label == "code", "_branch_code", "_branch"))
   combs <- summary.mverse(.mverse, conf.int = FALSE)[brs_name] %>%
-    dplyr::mutate(dplyr::across(.cols = tidyselect::everything(), .fns = as.character))
+    dplyr::mutate(
+      dplyr::across(
+        .cols = tidyselect::everything(),
+        .fns = as.character
+      )
+    )
   edges_list <-
     list(data.frame(
       from = "Data",

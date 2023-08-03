@@ -81,7 +81,7 @@ code_branch_mutate_branch <- function(.mverse, br) {
   )
   invisible()
 }
-setOldClass("mutate_branch")
-setMethod("code_branch", signature = signature(br = "mutate_branch"),
-          code_branch_mutate_branch)
-
+methods::setOldClass("mutate_branch")
+methods::setMethod("code_branch",
+                   signature = signature(br = "mutate_branch"),
+                   code_branch_mutate_branch)

@@ -149,8 +149,7 @@ references:
 ---
 
 ```{r setup, include = FALSE, message=FALSE, warning=FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE, fig.width=7, fig.height=4)
+knitr::opts_chunk$set(collapse = TRUE, fig.width = 7, fig.height = 4)
 ```
 
 ## Simple Example: Transform and Summarise One Numeric Column
@@ -162,9 +161,7 @@ library(mverse)
 library(tibble)
 library(dplyr)
 library(ggplot2)
-
 set.seed(6)
-
 df <- tibble(col1 = rnorm(5, 0, 1), col2 = col1 + runif(5))
 ```
 
@@ -219,15 +216,15 @@ df_transformed |> head()
 ### Step 5: use `tidyverse` to compute the summary and plot the distribution of each transformation (universe)
 
 ```{r}
-df_transformed |> 
-  group_by(transformation_branch_branch) |> 
-  summarise(n = n(), 
-            mean = mean(transformation_branch), 
+df_transformed |>
+  group_by(transformation_branch_branch) |>
+  summarise(n = n(),
+            mean = mean(transformation_branch),
             sd = sd(transformation_branch),
             median = median(transformation_branch),
             IQR = IQR(transformation_branch))
 
-df_transformed |> 
+df_transformed |>
   ggplot(aes(x = transformation_branch)) + geom_histogram(bins = 3) +
   facet_wrap(vars(transformation_branch_branch))
 ```
@@ -245,8 +242,8 @@ mv1 <- create_multiverse(df)
 ### Step 2: Create `formula_branch` of the linear regression models
 
 ```{r}
-formulas <- formula_branch(col2 ~ col1, 
-                           col2 ~ log(abs(col1 + 1)), 
+formulas <- formula_branch(col2 ~ col1,
+                           col2 ~ log(abs(col1 + 1)),
                            col2 ~ abs(col1))
 ```
 
@@ -283,9 +280,9 @@ mod3 <- formula(col2 ~ abs(col1))
 
 models <- list(mod1, mod2, mod3)
 
-models |> 
-  purrr::map(lm, data = df) |> 
-  purrr::map(broom::tidy) |> 
+models |>
+  purrr::map(lm, data = df) |>
+  purrr::map(broom::tidy) |>
   bind_rows()
 ```
 
@@ -305,8 +302,8 @@ The data comes from @datasrc and contains `r format(nrow(soccer), big.mark = ","
 
 ```{r load, message=FALSE}
 library(mverse)
-soccer_bias <- soccer[!is.na(soccer$rater1) & !is.na(soccer$rater2), 
-             c('playerShort', 'rater1', 'rater2')]
+soccer_bias <- soccer[!is.na(soccer$rater1) & !is.na(soccer$rater2),
+                      c("playerShort", "rater1", "rater2")]
 soccer_bias <- unique(soccer_bias)
 head(soccer_bias)
 ```
@@ -324,22 +321,26 @@ We would like to study the distribution of the player skin tones but the two ind
 Let's first consider how you might study the five options using R without `mverse`. First, we define the five options as separate variables in R.
 
 ```{r base_r}
-skin_option_1 <- (soccer_bias$rater1 + soccer_bias$rater2) / 2 
-skin_option_2 <- ifelse(soccer_bias$rater1 > soccer_bias$rater2, soccer_bias$rater1, soccer_bias$rater2)
-skin_option_3 <- ifelse(soccer_bias$rater1 < soccer_bias$rater2, soccer_bias$rater1, soccer_bias$rater2)
-skin_option_4 <- soccer_bias$rater1    
-skin_option_5 <- soccer_bias$rater2    
+skin_option_1 <- (soccer_bias$rater1 + soccer_bias$rater2) / 2
+skin_option_2 <- ifelse(soccer_bias$rater1 > soccer_bias$rater2,
+                        soccer_bias$rater1,
+                        soccer_bias$rater2)
+skin_option_3 <- ifelse(soccer_bias$rater1 < soccer_bias$rater2,
+                        soccer_bias$rater1,
+                        soccer_bias$rater2)
+skin_option_4 <- soccer_bias$rater1
+skin_option_5 <- soccer_bias$rater2
 ```
 
 We can plot a histogram to study the distribution of the resulting skin tone value for each option. Below is the histogram for the first option (`skin_option_1`).
 
 ```{r hist_base}
 library(ggplot2)
-ggplot(mapping=aes(x = skin_option_1)) +
-  geom_histogram(breaks = seq(0,1,0.2),
-                 colour = 'white') +
-  labs(title = 'Histogram of player skin tones (Option 1: Mean).',
-       x = 'Skin Tone', y = 'Count')
+ggplot(mapping = aes(x = skin_option_1)) +
+  geom_histogram(breaks = seq(0, 1, 0.2),
+                 colour = "white") +
+  labs(title = "Histogram of player skin tones (Option 1: Mean).",
+       x = "Skin Tone", y = "Count")
 ```
 
 
@@ -347,16 +348,24 @@ For the remaining four options, we can repeat the step above to examine the dist
 
 ```{r hist_base_overlaid}
 skin_option_all <- data.frame(
-  x = c(skin_option_1, skin_option_2, skin_option_3, skin_option_4, skin_option_5),
-  Option = rep(c(
-    'Option 1: Mean', 'Option 2: Max', 'Option 3: Min', 
-    'Option 4: Rater 1', 'Option 5: Rater 2'), each = nrow(df)
-    )
+  x = c(skin_option_1,
+        skin_option_2,
+        skin_option_3,
+        skin_option_4,
+        skin_option_5),
+  Option = rep(
+    c("Option 1: Mean",
+      "Option 2: Max",
+      "Option 3: Min",
+      "Option 4: Rater 1",
+      "Option 5: Rater 2"),
+    each = nrow(df)
   )
+)
 ggplot(data = skin_option_all) +
   geom_histogram(aes(x = x), binwidth = 0.1) +
-  labs(title = 'Histogram of player skin tones for each option.',
-       x = 'Skin Tone', y = 'Count') +
+  labs(title = "Histogram of player skin tones for each option.",
+       x = "Skin Tone", y = "Count") +
   facet_wrap(. ~ Option)
 ```
 
@@ -376,7 +385,7 @@ You can create a mutate branch with `mutate_branch()`. The syntax for defining t
 
 ```{r mutate_branch}
 skin_tone <- mutate_branch(
-  (rater1 + rater2)/2,
+  (rater1 + rater2) / 2,
   ifelse(rater1 > rater2, rater1, rater2),
   ifelse(rater1 < rater2, rater1, rater2),
   rater1,
@@ -412,21 +421,24 @@ In this section, we now examine and compare the distributions of `skin_tone` val
 branched <- mverse::extract(soccer_bias_mv)
 ```
 
-`branched` is a dataset with `skin_tone` values. If we want to extract the `skin_tone` values that were computed using the average of the two raters then we can filter `branched` by `skin_tone_branch` values equal to `(rater1 + rater2)/2`.  Alternatively, we could filter by `universe == 1`.
+`branched` is a dataset with `skin_tone` values. If we want to extract the `skin_tone` values that were computed using the average of the two raters then we can filter `branched` by `skin_tone_branch` values equal to `(rater1 + rater2) / 2`.  Alternatively, we could filter by `universe == 1`.
 
 ```{r head_skin_tone}
-branched |> 
-  filter(skin_tone_branch == "(rater1 + rater2)/2" ) |> 
+branched |>
+  filter(skin_tone_branch == "(rater1 + rater2) / 2") |>
   head()
 ```
 
 The distribution of each method for calculating skin tone can be computed by grouping the levels of `skin_tone_branch`.
 
 ```{r}
-branched |> 
-  group_by(skin_tone_branch) |> 
-  summarise(n = n(), mean = mean(skin_tone), 
-            sd = sd(skin_tone), median = median(skin_tone), IQR = IQR(skin_tone))
+branched |>
+  group_by(skin_tone_branch) |>
+  summarise(n = n(),
+            mean = mean(skin_tone),
+            sd = sd(skin_tone),
+            median = median(skin_tone),
+            IQR = IQR(skin_tone))
 ```
 
 
@@ -452,11 +464,14 @@ Finally, we can construct plots to compare the distributions of `skin_tone` in d
 branched |>
   ggplot(mapping = aes(x = skin_tone, color = universe)) +
   geom_density(alpha = 0.2) +
-  labs(title = 'Density of player skin tones for each option.',
-       x = 'Skin Tone', y = 'Density') +
-  scale_color_discrete(labels = c(
-    'Option 1: Mean', 'Option 2: Max', 'Option 3: Min', 
-    'Option 4: Rater 1', 'Option 5: Rater 2'),
+  labs(title = "Density of player skin tones for each option.",
+       x = "Skin Tone", y = "Density") +
+  scale_color_discrete(
+    labels = c("Option 1: Mean",
+               "Option 2: Max",
+               "Option 3: Min",
+               "Option 4: Rater 1",
+               "Option 5: Rater 2"),
     name = NULL
   )
 ```
@@ -466,17 +481,19 @@ Another option is the use `ggplot`'s `facet_grid` function to generate multiple 
 ```{r compare_universe_hist, warning=FALSE}
 branched |>
   ggplot(mapping = aes(x = skin_tone)) +
-  geom_histogram(position = 'dodge', bins = 21) +
-  labs(title = 'Histogram of player skin tones for each option.',
-       y = 'Count', x='Skin Tone') + 
+  geom_histogram(position = "dodge", bins = 21) +
+  labs(title = "Histogram of player skin tones for each option.",
+       y = "Count", x = "Skin Tone") +
   facet_wrap(
-    . ~ universe, 
-    labeller = labeller(univrse = c(
-    'Option 1: Mean', 'Option 2: Max', 'Option 3: Min', 
-    'Option 4: Rater 1', 'Option 5: Rater 2'))
-  ) 
+    . ~ universe,
+    labeller = labeller(
+      universe = c(`1` = "Option 1: Mean",
+                   `2` = "Option 2: Max",
+                   `3` = "Option 3: Min",
+                   `4` = "Option 4: Rater 1",
+                   `5` = "Option 5: Rater 2")
+    )
+  )
 ```
-
-
 
 ## References

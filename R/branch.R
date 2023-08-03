@@ -67,7 +67,7 @@ branch <- function(opts, opts_names, name, class) {
   if (!length(opts) > 0) {
     stop("Error: Provide at least one rule.")
   }
-  if (!(is.character(name) | is.null(name))) {
+  if (!(is.character(name) || is.null(name))) {
     stop('Error: "name" must be a character object.')
   }
   opts <- stats::setNames(

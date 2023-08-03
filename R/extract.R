@@ -127,8 +127,9 @@ extract.mverse <- function(.mverse, columns = NULL,
   if (include_branch_options) {
     extracted %>%
       dplyr::left_join(mtable, by = "universe") %>%
-      dplyr::select(dplyr::all_of(
-        c(columns, paste0(branched_columns, "_branch"))))
+      dplyr::select(
+        dplyr::all_of(c(columns, paste0(branched_columns, "_branch")))
+      )
   } else {
     dplyr::select(dplyr::all_of(c(extracted, columns)))
   }

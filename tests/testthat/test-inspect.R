@@ -22,24 +22,31 @@ test_that("summary() prints the multiverse table for a mverse object.", {
     f2_branch = factor(rep(c("f2_1", "f2_2", "f2_3"), 3^3)),
     m1_branch_code = factor(
       rep(c("x + y", "x - y", "x * y"), each = 3^3),
-      levels = c("x + y", "x - y", "x * y")),
+      levels = c("x + y", "x - y", "x * y")
+    ),
     m2_branch_code = factor(
       rep(rep(c("x + y", "x - y", "x * y"), each = 3^2), 3),
-      levels = c("x + y", "x - y", "x * y")),
+      levels = c("x + y", "x - y", "x * y")
+    ),
     f1_branch_code = factor(
       rep(rep(c("x < 0", "x > 0", "x == 0"), each = 3), 3^2),
-      levels = c("x < 0", "x > 0", "x == 0")),
+      levels = c("x < 0", "x > 0", "x == 0")
+    ),
     f2_branch_code = factor(
       rep(c("x > 0", "x < 0", "x == 0"), 3^3),
-      levels = c("x > 0", "x < 0", "x == 0"))
+      levels = c("x > 0", "x < 0", "x == 0")
+    )
   )
   expect_equal(nrow(mtable), 3^4)
   expect_equal(ncol(mtable), 9)
   expect_equal(
     names(mtable),
-    c("universe", c(
-      "m1_branch", "m2_branch", "f1_branch", "f2_branch",
-      "m1_branch_code", "m2_branch_code", "f1_branch_code", "f2_branch_code"))
+    c("universe",
+      c("m1_branch", "m2_branch",
+        "f1_branch", "f2_branch",
+        "m1_branch_code", "m2_branch_code",
+        "f1_branch_code", "f2_branch_code")
+    )
   )
   expect_identical(mtable, mtable_expected)
 })
@@ -89,49 +96,55 @@ test_that("Universe is a categorical variable in the mutiverse table.", {
   expect_true(is.factor(mtable$universe))
 })
 
-test_that("summary.lm_mverse() outputs coefficient estimates with 95% confidence intervals by default.", {
-  n <- 10
-  mydf <- data.frame(x1 = 1:n, x2 = sample(1:n)) %>%
-    dplyr::mutate(y = rnorm(n, x1 + x2))
-  model_spec <- formula_branch(y ~ 0, y ~ 1, y ~ ., y ~ x1 * x2)
-  mv <- mverse(mydf) %>%
-    add_formula_branch(model_spec) %>%
-    lm_mverse()
-  smanu <- do.call(rbind, list(
-    tibble::tibble(
-      term = "(None)", estimate = NA, std.error = NA,
-      statistic = NA, p.value = NA, conf.low = NA, conf.high = NA
-    ),
-    lm(y ~ 1, data = mydf) %>% broom::tidy(conf.int = TRUE),
-    lm(y ~ ., data = mydf) %>% broom::tidy(conf.int = TRUE),
-    lm(y ~ x1 * x2, data = mydf) %>% broom::tidy(conf.int = TRUE)
-  ))
-  smverse <- summary(mv) %>%
-    dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
-  expect_identical(smverse, smanu)
-})
+test_that(
+  "summary.lm_mverse() outputs coefficient estimates with 95% confidence
+  intervals by default.", {
+    n <- 10
+    mydf <- data.frame(x1 = 1:n, x2 = sample(1:n)) %>%
+      dplyr::mutate(y = rnorm(n, x1 + x2))
+    model_spec <- formula_branch(y ~ 0, y ~ 1, y ~ ., y ~ x1 * x2)
+    mv <- mverse(mydf) %>%
+      add_formula_branch(model_spec) %>%
+      lm_mverse()
+    smanu <- do.call(rbind, list(
+      tibble::tibble(
+        term = "(None)", estimate = NA, std.error = NA,
+        statistic = NA, p.value = NA, conf.low = NA, conf.high = NA
+      ),
+      lm(y ~ 1, data = mydf) %>% broom::tidy(conf.int = TRUE),
+      lm(y ~ ., data = mydf) %>% broom::tidy(conf.int = TRUE),
+      lm(y ~ x1 * x2, data = mydf) %>% broom::tidy(conf.int = TRUE)
+    ))
+    smverse <- summary(mv) %>%
+      dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
+    expect_identical(smverse, smanu)
+  }
+)
 
-test_that("summary.lm_mverse(., conf.int = FALSE) outputs coefficient estimates without any confidence intervals.", {
-  n <- 10
-  mydf <- data.frame(x1 = 1:n, x2 = sample(1:n)) %>%
-    dplyr::mutate(y = rnorm(n, x1 + x2))
-  model_spec <- formula_branch(y ~ 0, y ~ 1, y ~ ., y ~ x1 * x2)
-  mv <- mverse(mydf) %>%
-    add_formula_branch(model_spec) %>%
-    lm_mverse()
-  smanu <- do.call(rbind, list(
-    tibble::tibble(
-      term = "(None)", estimate = NA, std.error = NA,
-      statistic = NA, p.value = NA
-    ),
-    lm(y ~ 1, data = mydf) %>% broom::tidy(),
-    lm(y ~ ., data = mydf) %>% broom::tidy(),
-    lm(y ~ x1 * x2, data = mydf) %>% broom::tidy()
-  ))
-  smverse <- summary(mv, conf.int = FALSE) %>%
-    dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
-  expect_identical(smverse, smanu)
-})
+test_that(
+  "summary.lm_mverse(., conf.int = FALSE) outputs coefficient estimates without
+  any confidence intervals.", {
+    n <- 10
+    mydf <- data.frame(x1 = 1:n, x2 = sample(1:n)) %>%
+      dplyr::mutate(y = rnorm(n, x1 + x2))
+    model_spec <- formula_branch(y ~ 0, y ~ 1, y ~ ., y ~ x1 * x2)
+    mv <- mverse(mydf) %>%
+      add_formula_branch(model_spec) %>%
+      lm_mverse()
+    smanu <- do.call(rbind, list(
+      tibble::tibble(
+        term = "(None)", estimate = NA, std.error = NA,
+        statistic = NA, p.value = NA
+      ),
+      lm(y ~ 1, data = mydf) %>% broom::tidy(),
+      lm(y ~ ., data = mydf) %>% broom::tidy(),
+      lm(y ~ x1 * x2, data = mydf) %>% broom::tidy()
+    ))
+    smverse <- summary(mv, conf.int = FALSE) %>%
+      dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
+    expect_identical(smverse, smanu)
+  }
+)
 
 test_that("summary.lm_mverse(output = 'df') outputs degrees of freedom.", {
   n <- 10
@@ -213,19 +226,21 @@ test_that("summary.lm_mverse(output = 'f') outputs F statistics.", {
   expect_identical(smverse2, smanu)
 })
 
-test_that("summary.lm_mverse(output = 'x') throws an invalid output argument error.", {
-  n <- 10
-  mydf <- data.frame(x1 = 1:n, x2 = sample(1:n)) %>%
-    dplyr::mutate(y = rnorm(n, x1 + x2))
-  model_spec <- formula_branch(y ~ 0, y ~ 1, y ~ ., y ~ x1 * x2)
-  mv <- mverse(mydf) %>%
-    add_formula_branch(model_spec) %>%
-    lm_mverse()
-  expect_error(
-    summary(mv, output = "x"),
-    "Invalid output argument."
-  )
-})
+test_that(
+  "summary.lm_mverse(output = 'x') throws an invalid output argument error.", {
+    n <- 10
+    mydf <- data.frame(x1 = 1:n, x2 = sample(1:n)) %>%
+      dplyr::mutate(y = rnorm(n, x1 + x2))
+    model_spec <- formula_branch(y ~ 0, y ~ 1, y ~ ., y ~ x1 * x2)
+    mv <- mverse(mydf) %>%
+      add_formula_branch(model_spec) %>%
+      lm_mverse()
+    expect_error(
+      summary(mv, output = "x"),
+      "Invalid output argument."
+    )
+  }
+)
 
 test_that("multiverse_tree() expects at least one branch.", {
   mydf <- data.frame(x = c(1, 2, 3), y = c(4, 5, 6))
@@ -280,7 +295,7 @@ test_that("multiverse_tree() draws a graph with correct data.", {
   )
 })
 
-test_that("multiverse_tree() runs after fitting a lm model." , {
+test_that("multiverse_tree() runs after fitting a lm model.", {
   mydf <- data.frame(x = sample.int(25), y = sample.int(25), u = sample.int(25))
   w <- mutate_branch(x + y + u, x - y + u)
   z <- mutate_branch(x + y < mean(w), x + y > mean(w))
@@ -297,7 +312,7 @@ test_that("multiverse_tree() runs after fitting a lm model." , {
   expect_equal(mtree$data$.ggraph.orig_index, mtree_lm$data$.ggraph.orig_index)
 })
 
-test_that("multiverse_tree() runs after fitting a glm model." , {
+test_that("multiverse_tree() runs after fitting a glm model.", {
   mydf <- data.frame(x = rnorm(100), y = sample.int(100) - 50)
   p1 <- mutate_branch(1 / (1 + exp(-(x + y / 100))))
   p2 <- mutate_branch(1 / (1 + exp(-(x - y / 100))))

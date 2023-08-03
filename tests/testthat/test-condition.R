@@ -1,10 +1,13 @@
 mydf <- data.frame(x = c(1, 2, 3), y = c(4, 5, 6))
 
-test_that("branch_condition() stores x and y options without evaluating the expressions.", {
-  cond <- branch_condition(log(x + 1), y)
-  expect_equal(cond$x, "log(x + 1)")
-  expect_equal(cond$y, "y")
-})
+test_that(
+  "branch_condition() stores x and y options
+  without evaluating the expressions.", {
+    cond <- branch_condition(log(x + 1), y)
+    expect_equal(cond$x, "log(x + 1)")
+    expect_equal(cond$y, "y")
+  }
+)
 
 test_that("branch_condition() expects expressions not strings.", {
   expect_error(
@@ -70,5 +73,6 @@ test_that("add_branch_condition() works with named branch options.", {
     add_mutate_branch(z, w) %>%
     add_branch_condition(cond)
   expect_match(
-    attr(mv, "branches_conditioned_list")[[1]]$conds['x'], "subtract")
+    attr(mv, "branches_conditioned_list")[[1]]$conds["x"], "subtract"
+  )
 })

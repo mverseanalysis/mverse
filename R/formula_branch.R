@@ -158,9 +158,10 @@ code_branch_formula_branch <- function(.mverse, br) {
   )
   invisible()
 }
-setOldClass("formula_branch")
-setMethod("code_branch", signature = signature(br = "formula_branch"),
-          code_branch_formula_branch)
+methods::setOldClass("formula_branch")
+methods::setMethod("code_branch",
+                   signature = signature(br = "formula_branch"),
+                   code_branch_formula_branch)
 
 #' @export
 print.formula_branch <- function(x, ...) {

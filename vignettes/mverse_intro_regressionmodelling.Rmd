@@ -38,9 +38,9 @@ references:
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE, fig.width=7
+  collapse = TRUE, fig.width = 7
 )
-Sys.setenv(LANG="en")
+Sys.setenv(LANG = "en")
 ```
 
 This vignette describes the workflow of linear regression modeling in the multiverse with the following functions:
@@ -129,4 +129,3 @@ spec_summary(mv, var = "log(lstat)") |>
   spec_curve(label = "code") +
   ggplot2::labs("Significant at 0.05")
 ```
-
