@@ -96,7 +96,8 @@ in the summary table.</p>
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>.spec_summary</dt>
-<dd><p>A specification table created using <code><a href="spec_summary.html">spec_summary()</a></code>.</p></dd>
+<dd><p>A specification table created using
+<code><a href="spec_summary.html">spec_summary()</a></code>.</p></dd>
 
 
 <dt>label</dt>
@@ -114,13 +115,13 @@ the codes used to define the branch options.</p></dd>
 
 <dt>palette_common</dt>
 <dd><p>A character vector of colours to match the values of
-the varible <code>colour_by</code> in the specification curve and the specification 
-matrix. The palette must contain more colours than the number of unique values
-of <code>colour_by</code> variable.</p></dd>
+the variable <code>colour_by</code> in the specification curve and the
+specification matrix. The palette must contain more colours than the number
+of unique values of <code>colour_by</code> variable.</p></dd>
 
 
 <dt>pointsize</dt>
-<dd><p>Size of the points in the specification curve and 
+<dd><p>Size of the points in the specification curve and
 the specification matrix.</p></dd>
 
 
@@ -130,19 +131,19 @@ the specification matrix.</p></dd>
 
 <dt>spec_matrix_spacing</dt>
 <dd><p>A numeric for adjusting the specification matrix
-spacing passed to <code>combmatrix.label.extra_spacing</code> 
+spacing passed to <code>combmatrix.label.extra_spacing</code>
 in <code><a href="https://rdrr.io/pkg/ggupset/man/theme_combmatrix.html" class="external-link">ggupset::theme_combmatrix()</a></code>.</p></dd>
 
 
 <dt>theme_common</dt>
-<dd><p>A <code>ggplot</code> theme to be used for both the specification
-curve and the specification matrix.</p></dd>
+<dd><p>A <code>ggplot</code> theme to be used for both the
+specification curve and the specification matrix.</p></dd>
 
 
 <dt>sep</dt>
-<dd><p>A string used internally to create the spcification matrix. The string
-must be distinct from all branch names, option names, and option codes. Use a
-different value if any of them contains the default value.</p></dd>
+<dd><p>A string used internally to create the specification matrix. The
+string must be distinct from all branch names, option names, and option
+codes. Use a different value if any of them contains the default value.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -203,7 +204,7 @@ different value if any of them contains the default value.</p></dd>
 <span class="r-in"><span>  <span class="fu">spec_curve</span><span class="op">(</span>order_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"colour_by"</span><span class="op">)</span>, colour_by <span class="op">=</span> <span class="st">"colour_by"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="spec_curve-2.png" alt="" width="1050" height="649"></span>
 <span class="r-in"><span><span class="co"># Because the output is a \code{ggplot} object, you can</span></span></span>
-<span class="r-in"><span><span class="co"># further modify the asethetics of the specification curve </span></span></span>
+<span class="r-in"><span><span class="co"># further modify the asethetics of the specification curve</span></span></span>
 <span class="r-in"><span><span class="co"># using \code{ggplot2::theme()} and the specication matrix</span></span></span>
 <span class="r-in"><span><span class="co"># using \code{ggupset::theme_combmatrix()}</span></span></span>
 <span class="r-in"><span><span class="fu">spec_curve</span><span class="op">(</span><span class="va">stable</span><span class="op">)</span> <span class="op">+</span></span></span>
