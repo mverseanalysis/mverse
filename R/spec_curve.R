@@ -7,7 +7,8 @@
 #' @param .mverse A \code{mverse} object.
 #' @param var A character specifying the variable of interest.
 #' @param conf.int Whether the table should include confidence intervals.
-#' @param conf.level The confidence level for the confidence level and \code{is_significant}.
+#' @param conf.level The confidence level for the confidence level and
+#'   \code{is_significant}.
 #' @examples
 #' femininity <- mutate_branch(
 #'   1 * (MasFem > 6), 1 * (MasFem > mean(MasFem))
@@ -28,10 +29,11 @@
 #'   add_formula_branch(model) %>%
 #'   lm_mverse()
 #' spec_summary(mv, "femininity")
-#' @return A \code{spec_summary} object that includes estimates and specification
-#'   acorss the multiverse for the selected term(s). A boolean column \code{is_significant}
-#'   indicates whether \code{p.value} for the universe is less than the specified
-#'   significance level (\code{1 - conf.level}).
+#' @return A \code{spec_summary} object that includes estimates and
+#'   specification across the multiverse for the selected term(s). A boolean
+#'   column \code{is_significant} indicates whether \code{p.value} for the
+#'   universe is less than the specified significance level
+#'   (\code{1 - conf.level}).
 #' @name spec_summary
 #' @importFrom rlang .data
 #' @family specification curve analysis
@@ -41,10 +43,13 @@ spec_summary <- function(.mverse, var, conf.int = TRUE, conf.level = .95) {
 }
 
 #' @export
-spec_summary.mverse <- function(.mverse, var, conf.int = TRUE, conf.level = .95){
-  .spec_summary <- summary(.mverse,
-          conf.int = !!rlang::enexpr(conf.int),
-          conf.level = !!rlang::enexpr(conf.level)) %>%
+spec_summary.mverse <- function(
+    .mverse, var, conf.int = TRUE, conf.level = .95) {
+  .spec_summary <- summary(
+    .mverse,
+    conf.int = !!rlang::enexpr(conf.int),
+    conf.level = !!rlang::enexpr(conf.level)
+  ) %>%
     dplyr::filter(.data$term == var) %>%
     dplyr::select(
       tidyselect::any_of(c(
@@ -52,7 +57,7 @@ spec_summary.mverse <- function(.mverse, var, conf.int = TRUE, conf.level = .95)
       )),
       tidyselect::contains("_branch")
     ) %>%
-    dplyr::mutate(is_significant = .data$p.value < (1 - conf.level)) 
+    dplyr::mutate(is_significant = .data$p.value < (1 - conf.level))
   attr(.spec_summary, "var") <- var
   attr(.spec_summary, "conf.int") <- conf.int
   attr(.spec_summary, "conf.level") <- conf.level
@@ -78,26 +83,27 @@ print.spec_summary <- function(x, ...) {
 #' Note that the order of universes may not correspond to the order
 #' in the summary table.
 #'
-#' @param .spec_summary A specification table created using \code{spec_summary()}.
+#' @param .spec_summary A specification table created using
+#'   \code{spec_summary()}.
 #' @param label If "name", uses the branch option names. If "code", display
 #'   the codes used to define the branch options.
 #' @param order_by A character vector by which the curve is sorted.
-#' @param colour_by The name of the variable to colour the curve. 
+#' @param colour_by The name of the variable to colour the curve.
 #' @param palette_common A character vector of colours to match the values of
-#'   the varible \code{colour_by} in the specification curve and the specification 
-#'   matrix. The palette must contain more colours than the number of unique values
-#'   of \code{colour_by} variable.
-#' @param pointsize Size of the points in the specification curve and 
+#'   the variable \code{colour_by} in the specification curve and the
+#'   specification matrix. The palette must contain more colours than the number
+#'   of unique values of \code{colour_by} variable.
+#' @param pointsize Size of the points in the specification curve and
 #'   the specification matrix.
 #' @param linewidth Width of confidence interval lines.
 #' @param spec_matrix_spacing A numeric for adjusting the specification matrix
-#'   spacing passed to \code{combmatrix.label.extra_spacing} 
+#'   spacing passed to \code{combmatrix.label.extra_spacing}
 #'   in \code{ggupset::theme_combmatrix()}.
-#' @param theme_common A \code{ggplot} theme to be used for both the specification
-#'   curve and the specification matrix.
-#' @param sep A string used internally to create the spcification matrix. The string
-#'   must be distinct from all branch names, option names, and option codes. Use a
-#'   different value if any of them contains the default value.
+#' @param theme_common A \code{ggplot} theme to be used for both the
+#'   specification curve and the specification matrix.
+#' @param sep A string used internally to create the specification matrix. The
+#'   string must be distinct from all branch names, option names, and option
+#'   codes. Use a different value if any of them contains the default value.
 #' @importFrom Rdpack reprompt
 #' @return a \code{ggplot} object with the specification curve plot for
 #'   the estimates passed in the \code{spec_summary()}.
@@ -135,7 +141,7 @@ print.spec_summary <- function(x, ...) {
 #'   dplyr::mutate(colour_by = y_branch) %>%
 #'   spec_curve(order_by = c("estimate", "colour_by"), colour_by = "colour_by")
 #' # Because the output is a \code{ggplot} object, you can
-#' # further modify the asethetics of the specification curve 
+#' # further modify the asethetics of the specification curve
 #' # using \code{ggplot2::theme()} and the specication matrix
 #' # using \code{ggupset::theme_combmatrix()}
 #' spec_curve(stable) +
@@ -150,27 +156,31 @@ print.spec_summary <- function(x, ...) {
 #' @name spec_curve
 #' @family specification curve analysis
 #' @export
-spec_curve <- function(
-    .spec_summary, label = "name",
-    order_by = c("estimate", "is_significant"),
-    colour_by = "is_significant", palette_common = NULL,
-    pointsize = 2, linewidth = .5, spec_matrix_spacing = 10,
-    theme_common = ggplot2::theme_minimal(),
-    sep = "---"
-) {
+spec_curve <- function(.spec_summary,
+                       label = "name",
+                       order_by = c("estimate", "is_significant"),
+                       colour_by = "is_significant",
+                       palette_common = NULL,
+                       pointsize = 2,
+                       linewidth = .5,
+                       spec_matrix_spacing = 10,
+                       theme_common = ggplot2::theme_minimal(),
+                       sep = "---") {
   UseMethod("spec_curve")
 }
 
 #' @import ggplot2
 #' @export
-spec_curve.spec_summary <- function(
-    .spec_summary, label = "name",
-    order_by = c("estimate", "is_significant"),
-    colour_by = "is_significant", palette_common = NULL,
-    pointsize = 2, linewidth = .5, spec_matrix_spacing = 10,
-    theme_common = ggplot2::theme_minimal(),
-    sep = "---"
-) {
+spec_curve.spec_summary <- function(.spec_summary,
+                                    label = "name",
+                                    order_by = c("estimate", "is_significant"),
+                                    colour_by = "is_significant",
+                                    palette_common = NULL,
+                                    pointsize = 2,
+                                    linewidth = .5,
+                                    spec_matrix_spacing = 10,
+                                    theme_common = ggplot2::theme_minimal(),
+                                    sep = "---") {
   stopifnot(label %in% c("name", "code"))
   branch_end <- ifelse(label == "name", "_branch", "_branch_code")
   n_colours <- length(unique(.spec_summary[[colour_by]]))
@@ -190,7 +200,9 @@ spec_curve.spec_summary <- function(
     )
   if (is.factor(tmp[[colour_by]])) {
     tmp[[colour_by]] <- factor(
-      tmp[[colour_by]], sort(levels(tmp[[colour_by]])))
+      tmp[[colour_by]],
+      sort(levels(tmp[[colour_by]]))
+    )
   }
   for (ord in order_by) {
     tmp <- tmp %>% dplyr::arrange(.data[[ord]])
@@ -225,7 +237,7 @@ ggspec_curve <- function(specs, theme_common,
   ggplot(
     specs,
     aes(x = .data$spec, y = .data$estimate, colour = .data[[colour_by]])
-    ) +
+  ) +
     theme_common + xlab(NULL) +
     geom_point(size = pointsize) +
     axis_combmatrix(
@@ -240,12 +252,15 @@ ggspec_curve <- function(specs, theme_common,
           opts,
           levels = rev(unlist(
             sapply(
-              unique(brs), function(x) c(paste(x, 1:2), x, rev(unique(opts[brs == x])))
+              unique(brs),
+              function(x) c(paste(x, 1:2), x, rev(unique(opts[brs == x])))
             )
           )),
           ordered = FALSE
         )
-        tbl <- ggplot(df, aes(x = .data$at, y = .data$single_label, colour = cols)) +
+        tbl <- ggplot(
+          df, aes(x = .data$at, y = .data$single_label, colour = cols)
+        ) +
           labs(x = NULL, y = NULL) +
           scale_x_continuous(
             limits = c(0, 1), expand = c(0, 0),

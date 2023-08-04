@@ -13,13 +13,15 @@ spec_summary(.mverse, var, conf.int = TRUE, conf.level = 0.95)
 
 \item{conf.int}{Whether the table should include confidence intervals.}
 
-\item{conf.level}{The confidence level for the confidence level and \code{is_significant}.}
+\item{conf.level}{The confidence level for the confidence level and
+\code{is_significant}.}
 }
 \value{
-A \code{spec_summary} object that includes estimates and specification
-  acorss the multiverse for the selected term(s). A boolean column \code{is_significant}
-  indicates whether \code{p.value} for the universe is less than the specified
-  significance level (\code{1 - conf.level}).
+A \code{spec_summary} object that includes estimates and
+  specification across the multiverse for the selected term(s). A boolean
+  column \code{is_significant} indicates whether \code{p.value} for the
+  universe is less than the specified significance level
+  (\code{1 - conf.level}).
 }
 \description{
 Returns estimates for a selected variable across the multiverse along with

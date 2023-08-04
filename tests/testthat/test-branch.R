@@ -81,47 +81,67 @@ test_that("name() renames a branch.", {
 
 test_that("1() creates a branching command for multiverse.", {
   mbranch <- mutate_branch(x + y, x - y, x * y, name = "m")
-  expect_equal(parse(mbranch), rlang::parse_expr(
-    'branch(m_branch, "m_1" ~ x + y, "m_2" ~ x - y, "m_3" ~ x * y)'
-  ))
+  expect_equal(
+    parse(mbranch),
+    rlang::parse_expr(
+      'branch(m_branch, "m_1" ~ x + y, "m_2" ~ x - y, "m_3" ~ x * y)'
+    )
+  )
   fbranch <- filter_branch(x > 0, x < 0, x == 0, name = "f")
-  expect_equal(parse(fbranch), rlang::parse_expr(
-    'branch(f_branch, "f_1" ~ x > 0, "f_2" ~ x < 0, "f_3" ~ x == 0)'
-  ))
+  expect_equal(
+    parse(fbranch),
+    rlang::parse_expr(
+      'branch(f_branch, "f_1" ~ x > 0, "f_2" ~ x < 0, "f_3" ~ x == 0)'
+    )
+  )
 })
 
 test_that("parse() handles named branched options", {
   mbranch <- mutate_branch(
-    add = x + y, subtract = x - y, multiply = x * y, name = "m")
-  expect_equal(parse(mbranch), rlang::parse_expr(
-    'branch(m_branch, "add" ~ x + y, "subtract" ~ x - y, "multiply" ~ x * y)'
-  ))
+    add = x + y, subtract = x - y, multiply = x * y, name = "m"
+  )
+  expect_equal(
+    parse(mbranch),
+    rlang::parse_expr(
+      'branch(m_branch, "add" ~ x + y, "subtract" ~ x - y, "multiply" ~ x * y)'
+    )
+  )
   fbranch <- filter_branch(x > 0, x < 0, equals = x == 0, name = "filter")
-  expect_equal(parse(fbranch), rlang::parse_expr(
-    'branch(filter_branch, "filter_1" ~ x > 0, "filter_2" ~ x < 0, "equals" ~ x == 0)'
-  ))
+  expect_equal(
+    parse(fbranch),
+    rlang::parse_expr(
+      paste0('branch(filter_branch, "filter_1" ~ x > 0, ',
+             '"filter_2" ~ x < 0, "equals" ~ x == 0)')
+    )
+  )
   frml <- formula_branch(linear = x ~ y, x ~ z, name = "model")
-  expect_equal(parse(frml), rlang::parse_expr(
-    'branch(model_branch, "linear" ~ formula(x ~ y), "model_2" ~ formula(x ~ z))'
-  ))
+  expect_equal(
+    parse(frml),
+    rlang::parse_expr(
+      'branch(model_branch, "linear" ~ "x ~ y", "model_2" ~ "x ~ z")'
+    )
+  )
   frml <- family_branch(linear = gaussian, name = "fam")
-  expect_equal(parse(frml), rlang::parse_expr(
-    'branch(fam_branch, "linear" ~ gaussian)'
-  ))
+  expect_equal(
+    parse(frml),
+    rlang::parse_expr(
+      'branch(fam_branch, "linear" ~ gaussian)'
+    )
+  )
 })
 
 test_that("parse() handles long branch options.", {
   mydf <- data.frame(col1 = c(1, 2, 3))
   mbranch <- mutate_branch(
-    dplyr::if_else(col1 > 1, "a", dplyr::if_else(col1 == 1, "b", "c"))
+    ifelse(col1 > 1, "a", ifelse(col1 == 1, "b", "c"))
   )
   mv <- mverse(mydf) %>%
     add_mutate_branch(mbranch) %>%
     execute_multiverse()
   expect_true(any(
     stringr::str_detect(
-      sapply(multiverse::code(mv), as.character),
-      "dplyr::if_else\\(col1 > 1,"
+      unlist(sapply(multiverse::code(mv), as.character)),
+      "ifelse\\(col1 > 1,"
     )
   ))
   fbranch <- formula_branch(
@@ -133,7 +153,7 @@ test_that("parse() handles long branch options.", {
   add_formula_branch(mv, fbranch)
   expect_true(any(
     stringr::str_detect(
-      sapply(multiverse::code(mv), as.character),
+      unlist(sapply(multiverse::code(mv), as.character)),
       "cbind\\(col1, col2 - col1\\)"
     )
   ))
@@ -193,20 +213,31 @@ test_that("add_*_branch() checks for a new variable name.", {
   )
 })
 
-test_that("formula_branch() with covariates option creates options
-with all possible combinations of the covarites provided.", {
-  frml <- formula_branch(y ~ x, y ~ log(x),
-                         covariates = c("z", "w"))
-  expect_equal(length(frml$opts), 8)
-  frml <- formula_branch(y ~ x,
-                         covariates = c("z", "w"),
-                         name = "f")
-  expect_equal(length(frml$opts), 4)
-  expect_equal(parse(frml), rlang::parse_expr(
-    paste0('branch(f_branch, ',
-           '"f_1" ~ formula("y ~ x"), ',
-           '"f_2" ~ formula("y ~ x + z"), ',
-           '"f_3" ~ formula("y ~ x + w"), ',
-           '"f_4" ~ formula("y ~ x + z + w"))')
-  ))
-})
+test_that(
+  "formula_branch() with covariates option creates covariate branches linked
+  with the formula branch.", {
+    mydf <- data.frame(
+      x = c(1, 2, 3),
+      y = c(4, 5, 6),
+      w = c(7, 8, 9),
+      z = c(10, 11, 12)
+    )
+    mv <- create_multiverse(mydf)
+    frml <- formula_branch(y ~ x, y ~ log(x),
+                           covariates = c("z", "w"))
+    expect_equal(frml$covariates, c("z", "w"))
+    frml <- formula_branch(y ~ x,
+                           covariates = c("z", "w"),
+                           name = "f")
+    expect_equal(frml$covariates, c("z", "w"))
+    add_formula_branch(mv, frml)
+    branch_names <- names(multiverse::parameters(mv))
+    expect_true(any(grepl("covariate_z_branch", branch_names)))
+    expect_true(any(grepl("covariate_w_branch", branch_names)))
+    expect_equal(nrow(summary(mv)), 4)
+    expect_contains(summary(mv)[["covariate_z_branch"]],
+                    c("include_z", "exclude_z"))
+    expect_contains(summary(mv)[["covariate_w_branch"]],
+                    c("include_w", "exclude_w"))
+  }
+)

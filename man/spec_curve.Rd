@@ -18,7 +18,8 @@ spec_curve(
 )
 }
 \arguments{
-\item{.spec_summary}{A specification table created using \code{spec_summary()}.}
+\item{.spec_summary}{A specification table created using
+\code{spec_summary()}.}
 
 \item{label}{If "name", uses the branch option names. If "code", display
 the codes used to define the branch options.}
@@ -28,25 +29,25 @@ the codes used to define the branch options.}
 \item{colour_by}{The name of the variable to colour the curve.}
 
 \item{palette_common}{A character vector of colours to match the values of
-the varible \code{colour_by} in the specification curve and the specification 
-matrix. The palette must contain more colours than the number of unique values
-of \code{colour_by} variable.}
+the variable \code{colour_by} in the specification curve and the
+specification matrix. The palette must contain more colours than the number
+of unique values of \code{colour_by} variable.}
 
-\item{pointsize}{Size of the points in the specification curve and 
+\item{pointsize}{Size of the points in the specification curve and
 the specification matrix.}
 
 \item{linewidth}{Width of confidence interval lines.}
 
 \item{spec_matrix_spacing}{A numeric for adjusting the specification matrix
-spacing passed to \code{combmatrix.label.extra_spacing} 
+spacing passed to \code{combmatrix.label.extra_spacing}
 in \code{ggupset::theme_combmatrix()}.}
 
-\item{theme_common}{A \code{ggplot} theme to be used for both the specification
-curve and the specification matrix.}
+\item{theme_common}{A \code{ggplot} theme to be used for both the
+specification curve and the specification matrix.}
 
-\item{sep}{A string used internally to create the spcification matrix. The string
-must be distinct from all branch names, option names, and option codes. Use a
-different value if any of them contains the default value.}
+\item{sep}{A string used internally to create the specification matrix. The
+string must be distinct from all branch names, option names, and option
+codes. Use a different value if any of them contains the default value.}
 }
 \value{
 a \code{ggplot} object with the specification curve plot for
@@ -92,7 +93,7 @@ stable \%>\%
   dplyr::mutate(colour_by = y_branch) \%>\%
   spec_curve(order_by = c("estimate", "colour_by"), colour_by = "colour_by")
 # Because the output is a \code{ggplot} object, you can
-# further modify the asethetics of the specification curve 
+# further modify the asethetics of the specification curve
 # using \code{ggplot2::theme()} and the specication matrix
 # using \code{ggupset::theme_combmatrix()}
 spec_curve(stable) +

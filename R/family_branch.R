@@ -16,7 +16,7 @@
 #' @export
 family_branch <- function(..., name = NULL) {
   opts <- rlang::enquos(...)
-  branch(opts, names(opts), name, "family_branch")
+  branch(opts, name, "family_branch")
 }
 
 
@@ -49,3 +49,15 @@ add_family_branch <- function(.mverse, ...) {
   .mverse <- add_branch(.mverse, brs, nms)
   invisible(.mverse)
 }
+
+code_branch_family_branch <- function(.mverse, br) {
+  multiverse::inside(
+    .mverse,
+    .family_mverse <- !!parse(br)
+  )
+  invisible()
+}
+methods::setOldClass("family_branch")
+methods::setMethod("code_branch",
+                   signature = signature(br = "family_branch"),
+                   code_branch_family_branch)

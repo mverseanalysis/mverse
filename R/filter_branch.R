@@ -19,7 +19,7 @@
 #' @export
 filter_branch <- function(..., name = NULL) {
   opts <- rlang::enquos(...)
-  branch(opts, names(opts), name, "filter_branch")
+  branch(opts, name, "filter_branch")
 }
 
 
@@ -55,3 +55,15 @@ add_filter_branch <- function(.mverse, ...) {
   .mverse <- add_branch(.mverse, brs, nms)
   invisible(.mverse)
 }
+
+code_branch_filter_branch <- function(.mverse, br) {
+  multiverse::inside(
+    .mverse,
+    .data_mverse <- dplyr::filter(.data_mverse, !!parse(br))
+  )
+  invisible()
+}
+methods::setOldClass("filter_branch")
+methods::setMethod("code_branch",
+                   signature = signature(br = "filter_branch"),
+                   code_branch_filter_branch)

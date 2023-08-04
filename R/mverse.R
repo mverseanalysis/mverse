@@ -18,16 +18,13 @@ magrittr::`%>%`
 #' @import multiverse
 #' @export
 mverse <- function(data) {
-  # utils::globalVariables(
-  #   c(".data_mverse", ".formula_mverse", ".family_mverse", ".model_mverse"),
-  #   package = "mverse",
-  # )
   stopifnot(is.data.frame(data))
   .mverse <- multiverse()
   attr(.mverse, "source") <- data
   attr(.mverse, "branches_list") <- list()
   attr(.mverse, "branches_conditioned_list") <- list()
   attr(.mverse, "conditions_list") <- list()
+  attr(.mverse, "covariate_branches_list") <- list()
   attr(.mverse, "class") <- c("mverse", class(.mverse))
   .mverse
 }

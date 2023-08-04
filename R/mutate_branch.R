@@ -24,7 +24,7 @@
 #' @export
 mutate_branch <- function(..., name = NULL) {
   opts <- rlang::enquos(...)
-  branch(opts, names(opts), name, "mutate_branch")
+  branch(opts, name, "mutate_branch")
 }
 
 #' Add mutate branches to a \code{mverse} object.
@@ -70,3 +70,18 @@ add_mutate_branch <- function(.mverse, ...) {
   .mverse <- add_branch(.mverse, brs, nms)
   invisible(.mverse)
 }
+
+#' @importFrom rlang :=
+code_branch_mutate_branch <- function(.mverse, br) {
+  multiverse::inside(
+    .mverse,
+    .data_mverse <- dplyr::mutate(
+      .data_mverse, !!rlang::parse_expr(br$name) := !!parse(br)
+    )
+  )
+  invisible()
+}
+methods::setOldClass("mutate_branch")
+methods::setMethod("code_branch",
+                   signature = signature(br = "mutate_branch"),
+                   code_branch_mutate_branch)

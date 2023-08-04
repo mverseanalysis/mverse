@@ -45,6 +45,6 @@ mv <- create_multiverse(hurricane) \%>\%
 }
 \seealso{
 Other mutate branch functions: 
-\code{\link{mutate_branch}()}
+\code{\link{mutate_branch}}
 }
 \concept{mutate branch functions}
