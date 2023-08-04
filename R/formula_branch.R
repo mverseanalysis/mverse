@@ -53,7 +53,7 @@
 #' @export
 formula_branch <- function(..., covariates = NULL, name = NULL) {
   opts <- rlang::enquos(...)
-  br <- branch(opts, names(opts), name, "formula_branch")
+  br <- branch(opts, name, "formula_branch")
   structure(
     list(
       opts = br$opts,
@@ -96,14 +96,44 @@ add_formula_branch <- function(.mverse, ...) {
 }
 
 covariate_branch <- function(covariate) {
+  opts <- stats::setNames(
+    c(paste0(" + ", covariate), ""),
+    paste0(c("include_", "exclude_"), covariate)
+  )
+  branch(opts, paste0("covariate_", covariate), "covariate_branch")
+}
+
+add_covariate_branch <- function(.mverse, br) {
+  attr(.mverse, "covariate_branches_list") <- attr(
+    .mverse, "covariate_branches_list"
+  )[
+    sapply(
+      attr(.mverse, "covariate_branches_list"), function(x) x$name
+    ) != br$name
+  ]
+  attr(.mverse, "covariate_branches_list") <- append(
+    attr(.mverse, "covariate_branches_list"),
+    list(br)
+  )
+  invisible()
+}
+
+parse.covariate_branch <- function(br) {
   head_str <- paste0(
-    "branch(covariate_", covariate, "_branch,"
+    "branch(", br$name, "_branch,"
   )
   body_str <- paste0(
-    "'include_", covariate, "'~' + ", covariate, "',",
-    "'exclude_", covariate, "'~'')"
+    sapply(
+      names(br$opts),
+      function(opt) {
+        paste0(
+          "'", opt, "' ~ ", rlang::quo_text(br$opts[[opt]])
+        )
+      }
+    ),
+    collapse = ","
   )
-  rlang::parse_expr(paste0(head_str, body_str))
+  rlang::parse_expr(paste0(head_str, body_str, ")"))
 }
 
 formula_with_covariates <- function(formula, covariates,
@@ -143,11 +173,13 @@ parse.formula_branch <- function(br) {
 code_branch_formula_branch <- function(.mverse, br) {
   if (!is.null(br$covariates)) {
     for (covariate in br$covariates) {
+      c_branch <- covariate_branch(covariate)
+      add_covariate_branch(.mverse, c_branch)
       multiverse::inside(
         .mverse,
         if (! (!!covariate %in% names(.covariate_mverse))) {
           .covariate_mverse[!!covariate] <-
-            !!covariate_branch(covariate)
+            !!parse(c_branch)
         }
       )
     }

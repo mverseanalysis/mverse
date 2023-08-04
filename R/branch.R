@@ -60,9 +60,9 @@ check_branch_name <- function(br) {
   }
 }
 
-branch <- function(opts, opts_names, name, class) {
+branch <- function(opts, name, class) {
   stopifnot(
-    length(unique(opts_names)) >= length(opts_names[nchar(opts_names) > 0])
+    length(unique(names(opts))) >= length(names(opts)[nchar(names(opts)) > 0])
   )
   if (!length(opts) > 0) {
     stop("Error: Provide at least one rule.")
@@ -101,7 +101,7 @@ add_branch <- function(.mverse, brs, nms) {
   )
   # check branch name
   sapply(brs, function(s) invisible(check_branch_name(s)))
-  # replce old and add new
+  # replace old and add new
   attr(.mverse, "branches_list") <- attr(.mverse, "branches_list")[
     !sapply(
       attr(.mverse, "branches_list"), function(x) x$name

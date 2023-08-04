@@ -272,7 +272,11 @@ test_that("multiverse_tree() draws a graph with nodes and edges.", {
 test_that("multiverse_tree() draws a graph with correct data.", {
   z <- mutate_branch(x, y, name = "z")
   w <- mutate_branch(x + y, x - y, name = "w")
-  mydf <- data.frame(x = c(1, 2, 3), y = c(4, 5, 6))
+  mydf <- data.frame(
+    u = c(0, 1, 0),
+    x = c(1, 2, 3),
+    y = c(4, 5, 6)
+  )
   mv <- mverse(mydf) %>%
     add_mutate_branch(z, w)
   mtree <- multiverse_tree(mv)
@@ -281,17 +285,30 @@ test_that("multiverse_tree() draws a graph with correct data.", {
   expect_equal(nrow(mtree$data), 7)
   expect_equal(nrow(mtree_name$data), 7)
   expect_equal(nrow(mtree_code$data), 7)
-  expect_equal(
+  expect_setequal(
     mtree$data$name,
     c("Data", "z_1", "z_2", "z_1_w_1", "z_1_w_2", "z_2_w_1", "z_2_w_2")
   )
-  expect_equal(
+  expect_setequal(
     mtree_name$data$name,
     c("Data", "z_1", "z_2", "z_1_w_1", "z_1_w_2", "z_2_w_1", "z_2_w_2")
   )
-  expect_equal(
+  expect_setequal(
     mtree_code$data$name,
     c("Data", "x", "y", "x_x + y", "x_x - y", "y_x + y", "y_x - y")
+  )
+  f <- formula_branch(y ~ u, covariates = c("z", "w"))
+  mv <- mverse(mydf) %>%
+    add_mutate_branch(z, w) %>%
+    add_formula_branch(f)
+  mtree <- multiverse_tree(mv, label = "code")
+  mtree_partial <- multiverse_tree(mv, label = "name",
+                                   branches = c("f", "covariate_z"))
+  expect_equal(nrow(mtree$data), 35)
+  expect_equal(nrow(mtree_partial$data), 4)
+  expect_setequal(
+    mtree_partial$data$name,
+    c("Data", "f_1", "f_1_include_z", "f_1_exclude_z")
   )
 })
 

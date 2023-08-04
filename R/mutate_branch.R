@@ -24,7 +24,7 @@
 #' @export
 mutate_branch <- function(..., name = NULL) {
   opts <- rlang::enquos(...)
-  branch(opts, names(opts), name, "mutate_branch")
+  branch(opts, name, "mutate_branch")
 }
 
 #' Add mutate branches to a \code{mverse} object.

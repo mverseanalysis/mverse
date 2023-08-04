@@ -19,7 +19,7 @@
 #' @export
 filter_branch <- function(..., name = NULL) {
   opts <- rlang::enquos(...)
-  branch(opts, names(opts), name, "filter_branch")
+  branch(opts, name, "filter_branch")
 }
 
 

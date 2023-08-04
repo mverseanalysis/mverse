@@ -16,7 +16,7 @@
 #' @export
 family_branch <- function(..., name = NULL) {
   opts <- rlang::enquos(...)
-  branch(opts, names(opts), name, "family_branch")
+  branch(opts, name, "family_branch")
 }
 
 
