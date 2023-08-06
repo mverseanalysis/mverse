@@ -249,14 +249,15 @@ ggspec_curve <- function(specs, theme_common,
         opts <- sapply(labs_cols, "[[", 2)
         cols <- factor(sapply(labs_cols, "[[", 3))
         df$single_label <- factor(
-          opts,
+          paste(brs, opts, sep = sep_internal),
           levels = rev(unlist(
             sapply(
               unique(brs),
-              function(x) c(paste(x, 1:2), x, rev(unique(opts[brs == x])))
+              function(x) {
+                c(paste(x, 1:2), x, rev(unique(df$single_label[brs == x])))
+              }
             )
-          )),
-          ordered = FALSE
+          ))
         )
         tbl <- ggplot(
           df, aes(x = .data$at, y = .data$single_label, colour = cols)
@@ -266,7 +267,11 @@ ggspec_curve <- function(specs, theme_common,
             limits = c(0, 1), expand = c(0, 0),
             breaks = unique(df$at)
           ) +
-          scale_y_discrete(breaks = opts, drop = FALSE) +
+          scale_y_discrete(
+            breaks = df$single_label,
+            labels = opts,
+            drop = FALSE
+          ) +
           geom_point(size = pointsize, show.legend = FALSE) +
           annotate(
             "text", x = 0, hjust = 1, vjust = 0, y = unique(brs),

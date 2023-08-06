@@ -316,7 +316,7 @@ test_that("multiverse_tree() runs after fitting a lm model.", {
   mydf <- data.frame(x = sample.int(25), y = sample.int(25), u = sample.int(25))
   w <- mutate_branch(x + y + u, x - y + u)
   z <- mutate_branch(x + y < mean(w), x + y > mean(w))
-  frml <- formula_branch(w ~ 0 + x + y)
+  frml <- formula_branch(w ~ x, covariates = c("y"))
   mv <- mverse(mydf) %>%
     add_mutate_branch(w) %>%
     add_formula_branch(frml)
@@ -334,7 +334,7 @@ test_that("multiverse_tree() runs after fitting a glm model.", {
   p1 <- mutate_branch(1 / (1 + exp(-(x + y / 100))))
   p2 <- mutate_branch(1 / (1 + exp(-(x - y / 100))))
   z <- mutate_branch(rbinom(100, 1, p1), rbinom(100, 1, p2))
-  frml <- formula_branch(z ~ x + y)
+  frml <- formula_branch(z ~ x, covariates = "y")
   fml <- family_branch(binomial)
   mv <- mverse(mydf) %>%
     add_mutate_branch(p1, p2, z) %>%

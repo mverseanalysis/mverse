@@ -564,7 +564,9 @@ multiverse_tree <- function(.mverse, label = "none",
       x %in% branches
     })]
   }
-  col_names <- paste0(br_names, ifelse(label == "code", "_branch_code", "_branch"))
+  col_names <- paste0(
+    br_names, ifelse(label == "code", "_branch_code", "_branch")
+  )
   combs <- summary.mverse(.mverse, conf.int = FALSE)[col_names] %>%
     dplyr::mutate(
       dplyr::across(
