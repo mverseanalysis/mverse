@@ -248,8 +248,9 @@ ggspec_curve <- function(specs, theme_common,
         brs <- sapply(labs_cols, "[[", 1)
         opts <- sapply(labs_cols, "[[", 2)
         cols <- factor(sapply(labs_cols, "[[", 3))
+        df$single_label <- paste(brs, opts, sep = sep_internal)
         df$single_label <- factor(
-          paste(brs, opts, sep = sep_internal),
+          df$single_label,
           levels = rev(unlist(
             sapply(
               unique(brs),
