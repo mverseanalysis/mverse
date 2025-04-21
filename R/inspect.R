@@ -306,24 +306,14 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
 
 #' @examples
 #' \donttest{
-#'
 #' # Displaying the multiverse table with \code{glm.nb} models fitted.
-#' hurricane_strength <- mutate_branch(
-#'   NDAM,
-#'   HighestWindSpeed,
-#'   Minpressure_Updated_2014
-#' )
 #' hurricane_outliers <- filter_branch(
 #'   !Name %in% c("Katrina", "Audrey", "Andrew"),
 #'   TRUE # include all
 #' )
-#' model_specifications <- formula_branch(
-#'   alldeaths ~ MasFem,
-#'   alldeaths ~ MasFem + hurricane_strength
-#' )
+#' model_specifications <- formula_branch(alldeaths ~ MasFem)
 #' mv <- create_multiverse(hurricane) %>%
 #'   add_filter_branch(hurricane_outliers) %>%
-#'   add_mutate_branch(hurricane_strength) %>%
 #'   add_formula_branch(model_specifications) %>%
 #'   glm.nb_mverse()
 #' summary(mv)

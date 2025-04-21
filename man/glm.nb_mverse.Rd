@@ -19,26 +19,17 @@ At least one \code{formula_branch} must have been added.
 }
 \examples{
 \donttest{
-
-# Fitting \code{glm.nb} models across a multiverse.
-hurricane_strength <- mutate_branch(
-  NDAM,
-  HighestWindSpeed,
-  Minpressure_Updated_2014
-)
+# Displaying the multiverse table with \code{glm.nb} models fitted.
 hurricane_outliers <- filter_branch(
   !Name \%in\% c("Katrina", "Audrey", "Andrew"),
   TRUE # include all
 )
-model_specifications <- formula_branch(
-  alldeaths ~ MasFem,
-  alldeaths ~ MasFem + hurricane_strength
-)
+model_specifications <- formula_branch(alldeaths ~ MasFem)
 mv <- create_multiverse(hurricane) \%>\%
   add_filter_branch(hurricane_outliers) \%>\%
-  add_mutate_branch(hurricane_strength) \%>\%
   add_formula_branch(model_specifications) \%>\%
   glm.nb_mverse()
+summary(mv)
 }
 }
 \seealso{
