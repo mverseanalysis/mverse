@@ -105,6 +105,7 @@ knitr::opts_chunk$set(
 # mverse
 
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/mverse)](https://CRAN.R-project.org/package=mverse)
 [![R-CMD-check](https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/mverseanalysis/mverse/branch/master/graph/badge.svg?token=WP7ZLOlHzY)](https://codecov.io/gh/mverseanalysis/mverse)
 <!-- badges: end -->
