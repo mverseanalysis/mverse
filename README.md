@@ -6,7 +6,6 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml)
-[![codecove](https://codecov.io/gh/mverseanalysis/mverse/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mverseanalysis/mverse?branch=master)
 [![Codecov test
 coverage](https://codecov.io/gh/mverseanalysis/mverse/graph/badge.svg)](https://app.codecov.io/gh/mverseanalysis/mverse)
 <!-- badges: end -->
