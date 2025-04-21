@@ -52,8 +52,8 @@
 #' scaled to 0 to 1 - i.e., 0, 0.25, 0.5, 0.75, 1.
 #'
 #' @source
-#' Silberzahn, R., Uhlmann, E. L., Martin, D. P., Anselmi, P., Aust, F.,
-#' Awtrey, E. C., … Nosek, B. A. (2018, August 24).
-#' {Many analysts, one dataset: Making transparent how variations in analytical
-#' choices affect results.} Retrieved from \url{https://osf.io/gvm2z/}
+#' Silberzahn R, Uhlmann EL, Martin DP, et al.
+#' {Many Analysts, One Data Set: Making Transparent How Variations in Analytic 
+#' Choices Affect Results}. Advances in Methods and Practices in Psychological 
+#' Science. 2018;1(3):337-356. \doi{10.1177/2515245917747646}
 "soccer"

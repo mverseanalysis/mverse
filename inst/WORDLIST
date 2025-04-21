@@ -1,9 +1,7 @@
 Abhraneel
-Anselmi
-Aust
-Awtrey
 Behaviour
 CMD
+EL
 Gelman
 Hilbe
 Hullman
@@ -12,7 +10,6 @@ Kiju
 MTUrk
 Madhu
 Modelling
-Nosek
 Sarma
 Shavitt
 Silberzahn
@@ -30,7 +27,7 @@ analyse
 anonymizing
 behaviour
 bic
-codecove
+codecov
 colour
 colours
 de
