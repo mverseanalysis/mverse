@@ -65,7 +65,7 @@ display_branch_opts <- function(mtable, .mverse) {
 #' @importFrom rlang .data
 #' @export
 summary.mverse <- function(object, ...) {
-  mtable <- multiverse::extract_variables(object)
+  mtable <- multiverse::expand(object)
   display_branch_opts(mtable, object)
 }
 

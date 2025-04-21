@@ -1,17 +1,19 @@
 #' Performs one or two sample t-tests on data columns.
 #'
-#' \code{ttest_mverse} performs t-tests across the multiverse.
+#' \code{t_test_mverse} performs t-tests across the multiverse.
 #' If x or y is specified, then performs one and two sample t-tests
 #' on specified columns of the data. If both x and y are NULL, then
 #' performs t.test based on the formula branches.
 #'
 #' @examples
 #' # Performing a unpaired two sample t-test.
-#' mv <- mverse(soccer)
+#' library(dplyr)
+#' mv <- soccer |>
+#'   filter(!is.na(rater1), !is.na(rater2)) |>
+#'   mverse()
 #' x <- mutate_branch(
 #'   ((rater1 + rater2) / 2) > mean((rater1 + rater2) / 2),
-#'   ifelse(rater1 > rater2, rater1, rater2) >
-#'     mean(ifelse(rater1 > rater2, rater1, rater2))
+#'   ifelse(rater1 > rater2, rater1 > 0.5, rater2 > 0.5)
 #' )
 #' y <- mutate_branch(
 #'   redCards, yellowCards, yellowReds
@@ -20,7 +22,7 @@
 #' mv <- mv %>%
 #'   add_mutate_branch(x, y) %>%
 #'   add_formula_branch(two_sample_form)
-#' ttest_mverse(mv)
+#' t_test_mverse(mv)
 #' @param .mverse a \code{mverse} object.
 #' @param x (optional) column name of data within mverse object
 #' @param y (optional) column name of data within mverse object
@@ -33,11 +35,11 @@
 #' @param var.equal a logical variable indicating whether to treat the two
 #'        variances as being equal.
 #' @param conf.level confidence level of the interval.
-#' @return A \code{ttest_mverse} object.
-#' @name ttest
+#' @return a multiverse table displaying the t-test results as a tibble.
+#' @name t_test_mverse
 #' @importFrom rlang .data
 #' @export
-ttest_mverse <-
+t_test_mverse <-
   function(.mverse,
            x = NULL,
            y = NULL,
@@ -51,7 +53,7 @@ ttest_mverse <-
     y <- rlang::enquo(y)
     if (rlang::quo_is_null(x)) {
       multiverse::inside(.mverse, {
-        htest <- stats::t.test(
+        .ttest_mverse <- stats::t.test(
           stats::formula(.formula_mverse),
           data = .data_mverse,
           alternative = !!rlang::enexpr(alternative),
@@ -63,7 +65,7 @@ ttest_mverse <-
       })
     } else if (rlang::quo_is_null(y)) {
       multiverse::inside(.mverse, {
-        htest <- stats::t.test(
+        .ttest_mverse <- stats::t.test(
           x = .data_mverse %>% dplyr::pull(!!rlang::get_expr(x)),
           alternative = !!rlang::enexpr(alternative),
           mu = !!rlang::enexpr(mu),
@@ -74,7 +76,7 @@ ttest_mverse <-
       })
     } else {
       multiverse::inside(.mverse, {
-        htest <- stats::t.test(
+        .ttest_mverse <- stats::t.test(
           x = .data_mverse %>% dplyr::pull(!!rlang::get_expr(x)),
           y = .data_mverse %>% dplyr::pull(!!rlang::get_expr(y)),
           alternative = !!rlang::enexpr(alternative),
@@ -89,10 +91,10 @@ ttest_mverse <-
       out <-
         as.data.frame(t(
           c(
-            htest$statistic,
-            htest$p.value,
-            htest$conf.int,
-            htest$estimate
+            .ttest_mverse$statistic,
+            .ttest_mverse$p.value,
+            .ttest_mverse$conf.int,
+            .ttest_mverse$estimate
           )
         )) %>%
         dplyr::rename(

@@ -42,25 +42,28 @@ Imports:
   tidyselect,
   stringr,
   stats,
+  utils,
   broom,
   igraph,
   ggraph,
   ggplot2,
   ggupset
 Suggests:
-  methods,
-  tibble,
-  purrr,
-  scales,
-  MASS,
-  testthat (>= 3.0.0),
-  pkgdown (>= 1.5.1),
-  covr,
-  knitr,
-  rmarkdown,
-  kableExtra
-RoxygenNote: 7.2.3
+    methods,
+    tibble,
+    purrr,
+    scales,
+    MASS,
+    testthat (>= 3.0.0),
+    pkgdown (>= 1.5.1),
+    covr,
+    knitr,
+    rmarkdown,
+    kableExtra,
+    spelling
+RoxygenNote: 7.3.2
 RdMacros: Rdpack
 VignetteBuilder: knitr
 URL: https://github.com/mverseanalysis/mverse/, https://mverseanalysis.github.io/mverse/
 Config/testthat/edition: 3
+Language: en-US

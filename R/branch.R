@@ -82,7 +82,8 @@ branch <- function(opts, name, class) {
   structure(
     list(
       opts = opts,
-      name = name
+      name = name,
+      id = ""
     ),
     class = c(class, "branch")
   )
@@ -119,10 +120,10 @@ code_branch <- function(.mverse, br) {
   UseMethod("code_branch")
 }
 
+#' @importFrom utils getFromNamespace
 reset_parameters <- function(.mverse) {
-  attr(.mverse, "multiverse")[["code"]] <- NULL
-  attr(.mverse, "multiverse")[["parameter_set"]] <- NULL
-  attr(.mverse, "multiverse")[["parameters"]] <- list()
+  Multiverse <- getFromNamespace("Multiverse", "multiverse")
+  attr(.mverse, "multiverse") <- Multiverse$new()
   multiverse::inside(.mverse, {
     .data_mverse <- attr(.mverse, "source")
     .covariate_mverse <- vector("character")

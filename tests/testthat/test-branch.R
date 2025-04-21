@@ -61,35 +61,35 @@ test_that("*_brach() defines branches with multiple options.", {
 
 test_that("name() extracts the name of a branch.", {
   mbranch <- mutate_branch(x + y, x - y, x * y, name = "mutate")
-  expect_equal(name(mbranch), "mutate")
+  expect_equal(mverse:::name.branch(mbranch), "mutate")
   fbranch <- filter_branch(x > 0, x < 0, x == 0, name = "filter")
-  expect_equal(name(fbranch), "filter")
+  expect_equal(mverse:::name.branch(fbranch), "filter")
   frmbranch <- formula_branch(y ~ x, y ~ log(x), name = "formula")
-  expect_equal(name(frmbranch), "formula")
+  expect_equal(mverse:::name.branch(frmbranch), "formula")
   fambranch <- family_branch(poisson, gaussian(link = "log"), name = "family")
-  expect_equal(name(fambranch), "family")
+  expect_equal(mverse:::name.branch(fambranch), "family")
 })
 
 test_that("name() renames a branch.", {
   mbranch <- mutate_branch(x + y, x - y, x * y, name = "mutate")
-  mbranch <- name(mbranch, "mrename")
-  expect_equal(name(mbranch), "mrename")
+  mbranch <- mverse:::name.branch(mbranch, "mrename")
+  expect_equal(mverse:::name.branch(mbranch), "mrename")
   fbranch <- filter_branch(x > 0, x < 0, x == 0, name = "filter")
-  fbranch <- name(fbranch, "frename")
-  expect_equal(name(fbranch), "frename")
+  fbranch <- mverse:::name.branch(fbranch, "frename")
+  expect_equal(mverse:::name.branch(fbranch), "frename")
 })
 
-test_that("1() creates a branching command for multiverse.", {
+test_that("*_branch() creates a branching command for multiverse.", {
   mbranch <- mutate_branch(x + y, x - y, x * y, name = "m")
   expect_equal(
-    parse(mbranch),
+    mverse:::parse.branch(mbranch),
     rlang::parse_expr(
       'branch(m_branch, "m_1" ~ x + y, "m_2" ~ x - y, "m_3" ~ x * y)'
     )
   )
   fbranch <- filter_branch(x > 0, x < 0, x == 0, name = "f")
   expect_equal(
-    parse(fbranch),
+    mverse:::parse.branch(fbranch),
     rlang::parse_expr(
       'branch(f_branch, "f_1" ~ x > 0, "f_2" ~ x < 0, "f_3" ~ x == 0)'
     )
@@ -101,14 +101,14 @@ test_that("parse() handles named branched options", {
     add = x + y, subtract = x - y, multiply = x * y, name = "m"
   )
   expect_equal(
-    parse(mbranch),
+    mverse:::parse.branch(mbranch),
     rlang::parse_expr(
       'branch(m_branch, "add" ~ x + y, "subtract" ~ x - y, "multiply" ~ x * y)'
     )
   )
   fbranch <- filter_branch(x > 0, x < 0, equals = x == 0, name = "filter")
   expect_equal(
-    parse(fbranch),
+    mverse:::parse.branch(fbranch),
     rlang::parse_expr(
       paste0('branch(filter_branch, "filter_1" ~ x > 0, ',
              '"filter_2" ~ x < 0, "equals" ~ x == 0)')
@@ -116,14 +116,14 @@ test_that("parse() handles named branched options", {
   )
   frml <- formula_branch(linear = x ~ y, x ~ z, name = "model")
   expect_equal(
-    parse(frml),
+    mverse:::parse.branch(frml),
     rlang::parse_expr(
-      'branch(model_branch, "linear" ~ "x ~ y", "model_2" ~ "x ~ z")'
+      'branch(model_branch, "linear" ~ x ~ y, "model_2" ~ x ~ z)'
     )
   )
-  frml <- family_branch(linear = gaussian, name = "fam")
+  fmly <- family_branch(linear = gaussian, name = "fam")
   expect_equal(
-    parse(frml),
+    mverse:::parse.branch(fmly),
     rlang::parse_expr(
       'branch(fam_branch, "linear" ~ gaussian)'
     )
