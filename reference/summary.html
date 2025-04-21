@@ -266,46 +266,26 @@ across the multiverse.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   hurricane_strength_branch_code &lt;fct&gt;, …</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Displaying the multiverse table with \code{glm.nb} models fitted.</span></span></span>
-<span class="r-in"><span><span class="va">hurricane_strength</span> <span class="op">&lt;-</span> <span class="fu"><a href="mutate_branch.html">mutate_branch</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">NDAM</span>,</span></span>
-<span class="r-in"><span>  <span class="va">HighestWindSpeed</span>,</span></span>
-<span class="r-in"><span>  <span class="va">Minpressure_Updated_2014</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">hurricane_outliers</span> <span class="op">&lt;-</span> <span class="fu"><a href="filter_branch.html">filter_branch</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="op">!</span><span class="va">Name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Katrina"</span>, <span class="st">"Audrey"</span>, <span class="st">"Andrew"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="cn">TRUE</span> <span class="co"># include all</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">model_specifications</span> <span class="op">&lt;-</span> <span class="fu"><a href="formula_branch.html">formula_branch</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">alldeaths</span> <span class="op">~</span> <span class="va">MasFem</span>,</span></span>
-<span class="r-in"><span>  <span class="va">alldeaths</span> <span class="op">~</span> <span class="va">MasFem</span> <span class="op">+</span> <span class="va">hurricane_strength</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model_specifications</span> <span class="op">&lt;-</span> <span class="fu"><a href="formula_branch.html">formula_branch</a></span><span class="op">(</span><span class="va">alldeaths</span> <span class="op">~</span> <span class="va">MasFem</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="mverse.html">create_multiverse</a></span><span class="op">(</span><span class="va">hurricane</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="add_filter_branch.html">add_filter_branch</a></span><span class="op">(</span><span class="va">hurricane_outliers</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="add_mutate_branch.html">add_mutate_branch</a></span><span class="op">(</span><span class="va">hurricane_strength</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="add_formula_branch.html">add_formula_branch</a></span><span class="op">(</span><span class="va">model_specifications</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="glm.nb_mverse.html">glm.nb_mverse</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">summary</span><span class="op">(</span><span class="va">mv</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 30 × 14</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    universe hurricane_outliers_b…¹ hurricane_strength_b…² model_specifications…³</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 1        hurricane_outliers_1   hurricane_strength_1   model_specifications_1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 1        hurricane_outliers_1   hurricane_strength_1   model_specifications_1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2        hurricane_outliers_1   hurricane_strength_1   model_specifications_2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2        hurricane_outliers_1   hurricane_strength_1   model_specifications_2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2        hurricane_outliers_1   hurricane_strength_1   model_specifications_2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 3        hurricane_outliers_1   hurricane_strength_2   model_specifications_1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 3        hurricane_outliers_1   hurricane_strength_2   model_specifications_1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 4        hurricane_outliers_1   hurricane_strength_2   model_specifications_2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 4        hurricane_outliers_1   hurricane_strength_2   model_specifications_2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 4        hurricane_outliers_1   hurricane_strength_2   model_specifications_2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 20 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ abbreviated names: ¹​hurricane_outliers_branch, ²​hurricane_strength_branch,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ³​model_specifications_branch</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 10 more variables: term &lt;chr&gt;, estimate &lt;dbl&gt;, std.error &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   statistic &lt;dbl&gt;, p.value &lt;dbl&gt;, conf.low &lt;dbl&gt;, conf.high &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   hurricane_outliers_branch_code &lt;fct&gt;, hurricane_strength_branch_code &lt;fct&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 12</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   universe hurricane_outliers_branch model_specifications_branch term   estimate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1        hurricane_outliers_1      model_specifications_1      (Inte…   2.38  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 1        hurricane_outliers_1      model_specifications_1      MasFem   0.085<span style="text-decoration: underline;">5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 2        hurricane_outliers_2      model_specifications_1      (Inte…   2.23  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 2        hurricane_outliers_2      model_specifications_1      MasFem   0.201 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 7 more variables: std.error &lt;dbl&gt;, statistic &lt;dbl&gt;, p.value &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   conf.low &lt;dbl&gt;, conf.high &lt;dbl&gt;, hurricane_outliers_branch_code &lt;fct&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   model_specifications_branch_code &lt;fct&gt;</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
