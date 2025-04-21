@@ -138,11 +138,12 @@ test_that("parse() handles long branch options.", {
   mv <- mverse(mydf) %>%
     add_mutate_branch(mbranch) %>%
     execute_multiverse()
+  parsed_branches <- sapply(attr(mv, "branches_list"), mverse:::parse.branch)
   expect_true(any(
-    stringr::str_detect(
-      unlist(sapply(multiverse::code(mv), as.character)),
-      "ifelse\\(col1 > 1,"
-    )
+    grepl("mbranch_1", parsed_branches)
+  ))
+  expect_true(any(
+    grepl("ifelse\\(col1 > 1", parsed_branches)
   ))
   fbranch <- formula_branch(
     cbind(col1, col2 - col1) ~ col3 + col3^2 + col3^3 +
@@ -150,12 +151,14 @@ test_that("parse() handles long branch options.", {
     cbind(col1, col2 - col1) ~ col3 + col3^2 + col3^3 +
       col3^4 + exp(col3) + exp(col3^2)
   )
-  add_formula_branch(mv, fbranch)
+  add_formula_branch(mv, fbranch) |>
+    execute_multiverse()
+  parsed_branches <- sapply(attr(mv, "branches_list"), mverse:::parse.branch)
   expect_true(any(
-    stringr::str_detect(
-      unlist(sapply(multiverse::code(mv), as.character)),
-      "cbind\\(col1, col2 - col1\\)"
-    )
+    grepl("fbranch_2", parsed_branches)
+  ))
+  expect_true(any(
+    grepl("cbind\\(col1, col2 - col1", parsed_branches)
   ))
 })
 

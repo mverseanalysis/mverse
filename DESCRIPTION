@@ -45,7 +45,7 @@ Imports:
   broom,
   igraph,
   ggraph,
-  ggplot2,
+  ggplot2 (>= 3.5.2),
   ggupset (>= 0.4.1)
 Suggests:
   methods,

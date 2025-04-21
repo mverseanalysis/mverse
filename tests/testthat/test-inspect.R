@@ -324,7 +324,7 @@ test_that("multiverse_tree() runs after fitting a lm model.", {
   mv <- mv %>%
     lm_mverse()
   mtree_lm <- multiverse_tree(mv)
-  expect_true(ggplot2::is.ggplot(mtree))
+  expect_true(ggplot2::is_ggplot(mtree))
   expect_equal(mtree$data$.ggraph.index, mtree_lm$data$.ggraph.index)
   expect_equal(mtree$data$.ggraph.orig_index, mtree_lm$data$.ggraph.orig_index)
 })
@@ -344,7 +344,7 @@ test_that("multiverse_tree() runs after fitting a glm model.", {
   mv <- mv %>%
     glm_mverse()
   mtree_glm <- multiverse_tree(mv)
-  expect_true(ggplot2::is.ggplot(mtree))
+  expect_true(ggplot2::is_ggplot(mtree))
   expect_equal(mtree$data$.ggraph.index, mtree_glm$data$.ggraph.index)
   expect_equal(mtree$data$.ggraph.orig_index, mtree_glm$data$.ggraph.orig_index)
 })
