@@ -29,7 +29,6 @@ Description: Extends 'multiverse' package
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-Remotes: const-ae/ggupset
 Depends:
   R (>= 3.6),
   multiverse (>= 0.6.2)
