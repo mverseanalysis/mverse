@@ -3,16 +3,16 @@
 #' @examples
 #' # Define a formula branch.
 #' model_specifications <- formula_branch(
-#'   y ~ femininity,
-#'   y ~ femininity + hurricane_strength,
-#'   y ~ femininity * hurricane_strength
+#'   y ~ MasFem,
+#'   y ~ MasFem + hurricane_strength,
+#'   y ~ MasFem * hurricane_strength
 #' )
 #' # Create a mverse, add the branch.
 #' mv <- create_multiverse(hurricane) %>%
 #'   add_formula_branch(model_specifications)
 #' # Specify the covariates separately.
 #' model_specifications <- formula_branch(
-#'   y ~ femininity,
+#'   y ~ MasFem,
 #'   covariates = c("hurricane_strength", "Year", "Category", "NDAM")
 #' )
 #' model_specifications
@@ -75,9 +75,9 @@ formula_branch <- function(..., covariates = NULL, name = NULL) {
 #' @examples
 #' # Define a formula branch.
 #' model_specifications <- formula_branch(
-#'   y ~ femininity,
-#'   y ~ femininity + hurricane_strength,
-#'   y ~ femininity * hurricane_strength
+#'   y ~ MasFem,
+#'   y ~ MasFem + hurricane_strength,
+#'   y ~ MasFem * hurricane_strength
 #' )
 #' # Create a mverse, add the branch.
 #' mv <- create_multiverse(hurricane) %>%

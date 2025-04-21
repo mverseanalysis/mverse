@@ -22,9 +22,9 @@ are used to specify model structure options for the analysis.
 \examples{
 # Define a formula branch.
 model_specifications <- formula_branch(
-  y ~ femininity,
-  y ~ femininity + hurricane_strength,
-  y ~ femininity * hurricane_strength
+  y ~ MasFem,
+  y ~ MasFem + hurricane_strength,
+  y ~ MasFem * hurricane_strength
 )
 # Create a mverse, add the branch.
 mv <- create_multiverse(hurricane) \%>\%

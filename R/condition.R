@@ -9,7 +9,7 @@
 #' @examples
 #' # Example branches.
 #' y <- mutate_branch(alldeaths, log(alldeaths + 1))
-#' model <- formula_branch(y ~ femininity * strength, y ~ femininity + strength)
+#' model <- formula_branch(y ~ MasFem * strength, y ~ MasFem + strength)
 #' # Define a new branch condition.
 #' match_poisson <- branch_condition(alldeaths, poisson)
 #' # Define a branch condition that reject an option dependent on another.
