@@ -1,4 +1,4 @@
-# mverse 0.1.1
+# mverse 0.2.0
 
 ## Major changes
 

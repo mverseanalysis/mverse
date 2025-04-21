@@ -1,10 +1,11 @@
 citHeader("To cite mverse in publications use:")
 
-citEntry(
-  entry    = "Manual",
+bibentry(
+  key = "mverse",
+  bibtype    = "Manual",
   title    = "{mverse: Tidy Multiverse Analysis Made Simple}",
   author   = "Michael Jongho Moon and Haoda Li and Mingwei Xu and Nathan Taback and Fanny Chevalier",
-  year     = "2023",
+  year     = "2025",
   note     = "R package version 0.1.1 \\url{https://mverseanalysis.github.io/mverse/}",
-  textVersion = "Moon, M.J., Li, H., Xu, M., Taback, N., and Chevalier, F. (2023). mverse: Tidy Multiverse Analysis Made Simple. R package version 0.1.1 https://mverseanalysis.github.io/mverse/"
+  textVersion = "Moon, M.J., Li, H., Xu, M., Taback, N., and Chevalier, F. (2025). mverse: Tidy Multiverse Analysis Made Simple. R package version 0.1.1 https://mverseanalysis.github.io/mverse/"
 )

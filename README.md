@@ -8,7 +8,7 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/mverse)](https://CRAN.R-project.org/package=mverse)
 [![R-CMD-check](https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/mverseanalysis/mverse/branch/master/graph/badge.svg?token=WP7ZLOlHzY)](https://codecov.io/gh/mverseanalysis/mverse)
+[![codecov](https://codecov.io/gh/mverseanalysis/mverse/branch/master/graph/badge.svg?token=WP7ZLOlHzY)](https://app.codecov.io/gh/mverseanalysis/mverse)
 <!-- badges: end -->
 
 *mverse* is an extension to multiverse package (Sarma et al. 2021) which
@@ -195,7 +195,7 @@ entry-spacing="0">
 
 Jung, Kiju, Sharon Shavitt, Madhu Viswanathan, and Joseph M. Hilbe.
 2014. “Female Hurricanes Are Deadlier Than Male Hurricanes” 111 (24):
-8782–87. <https://doi.org/10.1073/pnas.1402786111>.
+8782–87.
 
 </div>
 
@@ -212,7 +212,6 @@ Multiplexing Alternative Data Analyses in R Notebooks (Version 0.5.0).”
 
 Simonsohn, Uri, Joseph P. Simmons, and Leif D. Nelson. 2020.
 “Specification Curve Analysis” 4 (July): 1208–14.
-<https://doi.org/10.1038/s41562-020-0912-z>.
 
 </div>
 
@@ -220,7 +219,7 @@ Simonsohn, Uri, Joseph P. Simmons, and Leif D. Nelson. 2020.
 
 Steegen, Sara, Francis Tuerlinckx, Andrew Gelman, and Wolf Vanpaemel.
 2016. “Increasing Transparency Through a Multiverse Analysis” 11 (5):
-702–12. <https://doi.org/10.1177/1745691616658637>.
+702–12.
 
 </div>
 

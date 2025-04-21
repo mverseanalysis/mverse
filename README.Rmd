@@ -10,8 +10,7 @@ references:
       year: 2014
       month: 6
       day: 17
-    URL: https://doi.org/10.1073/pnas.1402786111
-    DOI: 10.1073/pnas.1402786111
+    doi: \doi{10.1073/pnas.1402786111}
     journal: Proceeedings fo the National Academiy of Sciences of the United States of America
     volume: 111
     issue: 24
@@ -54,8 +53,7 @@ references:
       year: 2016
       month: 9
       day: 29
-    URL: https://doi.org/10.1177/1745691616658637
-    DOI: 10.1177/1745691616658637
+    doi: \doi{10.1177/1745691616658637}
     journal: Perspectives on Psychological Science
     volume: 11
     issue: 5
@@ -76,8 +74,7 @@ references:
       year: 2020
       month: 7
       day: 27
-    URL: https://doi.org/10.1038/s41562-020-0912-z 
-    DOI: 10.1038/s41562-020-0912-z 
+    doi: \doi{10.1038/s41562-020-0912-z}
     journal: Nature Human Behaviour
     volume: 4
     page: 1208-1214
@@ -107,7 +104,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/mverse)](https://CRAN.R-project.org/package=mverse)
 [![R-CMD-check](https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/mverseanalysis/mverse/branch/master/graph/badge.svg?token=WP7ZLOlHzY)](https://codecov.io/gh/mverseanalysis/mverse)
+[![codecov](https://codecov.io/gh/mverseanalysis/mverse/branch/master/graph/badge.svg?token=WP7ZLOlHzY)](https://app.codecov.io/gh/mverseanalysis/mverse)
 <!-- badges: end -->
 
 _mverse_ is an extension to multiverse package [@multiverseR]
