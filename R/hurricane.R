@@ -1,8 +1,7 @@
 #' Data on Atlantic hurricanes in the U.S. between 1950 and 2012.
 #'
 #' A dataset for the study conducted by Jung et al. (2014) in
-#' \doi{10.1073/pnas.1402786111}{Female hurricanes are
-#' deadlier than male hurricanes}.
+#' Female hurricanes are deadlier than male hurricanes.
 #'
 #' @format A data frame with 94 rows and 12 variables:
 #' \describe{
@@ -32,9 +31,9 @@
 #' \emph{Female hurricanes are deadlier than male hurricanes}.
 #' Their study didn't include hurricanes Katrina and Audrey which were
 #' deemed as outliers. Simonsohn et al. collected the extra data for
-#' \doi{10.1038/s41562-020-0912-z}{Specification curve analysis}
-#' including an additional femininity index based on an MTUrk survey
-#' and updated normalized damage amount in 2015 U.S. dollars.
+#' \emph{Specification curve analysis} including an additional femininity 
+#' index based on an MTUrk survey and updated normalized damage amount in 2015 
+#' U.S. dollars.
 #'
 #' This dataset includes data prepared by Jung et al. (2014) as well as those
 #' prepared by Simonsohn et al. (2020). Specifically, all data on Katrina and

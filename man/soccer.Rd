@@ -64,7 +64,7 @@ Each line represents a player-referee pair.
 }
 \details{
 The skin colour of each player was rated by two independent raters,
-{rater1} and {rater2}, and the 5-point scale values were
+\code{rater1} and \code{rater2}, and the 5-point scale values were
 scaled to 0 to 1 - i.e., 0, 0.25, 0.5, 0.75, 1.
 }
 \keyword{datasets}
