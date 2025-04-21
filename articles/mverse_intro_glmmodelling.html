@@ -169,7 +169,7 @@ observations where the condition is <code>TRUE</code>.</p>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html" class="external-link">after_stat</a></span><span class="op">(</span><span class="va">count</span><span class="op">)</span><span class="op">)</span>, bins <span class="op">=</span> <span class="fl">25</span>,</span>
 <span>    geom <span class="op">=</span> <span class="st">"text"</span>, vjust <span class="op">=</span> <span class="op">-</span><span class="fl">.7</span>, size <span class="op">=</span> <span class="fl">2</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-1-1.png" width="1008"></p>
+<p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-1-1.png" width="2100"></p>
 <p>It looks like there are a few outliers. Let’s find out the names of
 these hurricanes.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -325,7 +325,7 @@ distributions.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/multiverse_tree.html">multiverse_tree</a></span><span class="op">(</span><span class="va">hurricane_mv</span>, label <span class="op">=</span> <span class="st">"code"</span>, label_size <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>                branches <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"models"</span>, <span class="st">"distributions"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-8-1.png" width="1008"></p>
+<p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-8-1.png" width="2100"></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/glm_mverse.html">glm_mverse</a></span><span class="op">(</span><span class="va">hurricane_mv</span><span class="op">)</span></span>
 <span></span>
@@ -360,7 +360,7 @@ coefficient.</p>
 <span>  <span class="fu"><a href="../reference/spec_curve.html">spec_curve</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"code"</span>, spec_matrix_spacing <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"Significant at 0.05"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-10-1.png" width="1008"></p>
+<p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-10-1.png" width="2100"></p>
 </div>
 <div class="section level3">
 <h3 id="condition-branches">Condition Branches<a class="anchor" aria-label="anchor" href="#condition-branches"></a>
@@ -376,7 +376,7 @@ distribution.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="va">alldeaths</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html" class="external-link">stat_qq</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html" class="external-link">stat_qq_line</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-11-1.png" width="1008"></p>
+<p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-11-1.png" width="2100"></p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">hurricane</span> <span class="op">|&gt;</span></span>
@@ -384,7 +384,7 @@ distribution.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="va">logd</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html" class="external-link">stat_qq</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html" class="external-link">stat_qq_line</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-11-2.png" width="1008"></p>
+<p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-11-2.png" width="2100"></p>
 <p>Let’s set up a similar multiverse analysis to the one above.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hurricane_mv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mverse.html">create_multiverse</a></span><span class="op">(</span><span class="va">hurricane</span><span class="op">)</span></span>
@@ -411,7 +411,7 @@ of <code>dep_var</code> and <code>distributions</code> shows that
 modelled as both Gaussian and Poisson.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/multiverse_tree.html">multiverse_tree</a></span><span class="op">(</span><span class="va">hurricane_mv</span>, label <span class="op">=</span> <span class="st">"code"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dep_var"</span>, <span class="st">"distributions"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-13-1.png" width="1008"></p>
+<p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-13-1.png" width="2100"></p>
 <p>In order to specify that <code>hurricane_mv</code> should only
 contain analyses where <code>log(alldeaths + 1)</code> is modelled using
 a Gaussian and <code>alldeaths</code> modelled using Poisson we can use
@@ -428,7 +428,7 @@ to add it to <code>hurricane_mv</code>.</p>
 <em>only</em> be modelled as Poisson.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/multiverse_tree.html">multiverse_tree</a></span><span class="op">(</span><span class="va">hurricane_mv</span>, label <span class="op">=</span> <span class="st">"code"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dep_var"</span>, <span class="st">"distributions"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-15-1.png" width="1008"></p>
+<p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-15-1.png" width="2100"></p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/glm_mverse.html">glm_mverse</a></span><span class="op">(</span><span class="va">hurricane_mv</span><span class="op">)</span></span>
 <span></span>
@@ -459,7 +459,7 @@ coefficients is shown in the specification curve.</p>
 <span>  <span class="fu"><a href="../reference/spec_curve.html">spec_curve</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"code"</span>, spec_matrix_spacing <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"Significant at 0.05"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-17-1.png" width="1008"></p>
+<p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-17-1.png" width="2100"></p>
 </div>
 <div class="section level3">
 <h3 id="negative-binomial-regression">Negative Binomial Regression<a class="anchor" aria-label="anchor" href="#negative-binomial-regression"></a>
@@ -525,7 +525,7 @@ regressions.</p>
 <span>  <span class="fu"><a href="../reference/spec_curve.html">spec_curve</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"code"</span>, spec_matrix_spacing <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"Significant at 0.05"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-21-1.png" width="1008"></p>
+<p><img src="mverse_intro_glmmodelling_files/figure-html/unnamed-chunk-21-1.png" width="2100"></p>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-original" class="csl-entry">
 Jung, Kiju, Sharon Shavitt, Madhu Viswanathan, and Joseph M. Hilbe.
