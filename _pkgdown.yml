@@ -1,7 +1,7 @@
 destination: docs
 url: https://mverseanalysis.github.io/mverse
 figures:
-  dpi: 144
+  dpi: 300
 articles:
 - title: Examples
   navbar: Examples
