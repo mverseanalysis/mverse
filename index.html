@@ -107,9 +107,7 @@
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
 <p>The following demonstration performs a multiverse analysis using <code>hurricane</code> dataset (Jung et al. 2014) included in the library. We first create 6 universes as described in Figure 1. A filter <em>branch</em> with 2 <em>options</em> and a mutate <em>branch</em> with 3 <em>options</em> results in 6 <em>universes</em> in total. We then fit a Poisson regression model across the multiverse and inspect a coefficient estimate. See <code>vignette("hurricane")</code> for a detailed analysis as well as the terminologies used.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co">#&gt; Warning: Using alpha for a discrete variable is not advised.</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; Warning: Using the `size` aesthetic in this geom was deprecated in ggplot2 3.4.0.</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; ℹ Please use `linewidth` in the `default_aes` field and elsewhere instead.</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co">#&gt; Warning: Using alpha for a discrete variable is not advised.</span></span></code></pre></div>
 <p><img src="reference/figures/README-tree-1.png" width="100%"></p>
 <caption>
 Figure 1. Having one branch with 2 options and another with 3 results in 2 x 3 = 6 universes in total.
@@ -166,23 +164,23 @@ Figure 1. Having one branch with 2 options and another with 3 results in 2 x 3 =
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/summary.html">summary</a></span><span class="op">(</span><span class="va">mv</span><span class="op">)</span></span>
 <span><span class="va">res</span></span>
 <span><span class="co">#&gt; # A tibble: 24 × 16</span></span>
-<span><span class="co">#&gt;    universe outliers_br…¹ stren…² model…³ distr…⁴ term  estimate std.e…⁵ stati…⁶</span></span>
-<span><span class="co">#&gt;    &lt;fct&gt;    &lt;fct&gt;         &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt;   &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 1        outliers_1    streng… model_1 distri… (Int…  2.13e+0 8.04e-2  26.5  </span></span>
-<span><span class="co">#&gt;  2 1        outliers_1    streng… model_1 distri… stre…  3.02e-5 2.63e-6  11.5  </span></span>
-<span><span class="co">#&gt;  3 1        outliers_1    streng… model_1 distri… MasF…  6.23e-2 1.01e-2   6.19 </span></span>
-<span><span class="co">#&gt;  4 1        outliers_1    streng… model_1 distri… stre…  7.96e-7 3.20e-7   2.49 </span></span>
-<span><span class="co">#&gt;  5 2        outliers_1    streng… model_1 distri… (Int… -8.59e-2 2.65e-1  -0.324</span></span>
-<span><span class="co">#&gt;  6 2        outliers_1    streng… model_1 distri… stre…  2.35e-2 2.17e-3  10.8  </span></span>
-<span><span class="co">#&gt;  7 2        outliers_1    streng… model_1 distri… MasF…  5.31e-2 3.20e-2   1.66 </span></span>
-<span><span class="co">#&gt;  8 2        outliers_1    streng… model_1 distri… stre…  3.32e-4 2.60e-4   1.28 </span></span>
-<span><span class="co">#&gt;  9 3        outliers_1    streng… model_1 distri… (Int…  4.74e+1 3.17e+0  15.0  </span></span>
-<span><span class="co">#&gt; 10 3        outliers_1    streng… model_1 distri… stre… -4.69e-2 3.34e-3 -14.0  </span></span>
-<span><span class="co">#&gt; # … with 14 more rows, 7 more variables: p.value &lt;dbl&gt;, conf.low &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   conf.high &lt;dbl&gt;, outliers_branch_code &lt;fct&gt;, strength_branch_code &lt;fct&gt;,</span></span>
-<span><span class="co">#&gt; #   model_branch_code &lt;fct&gt;, distribution_branch_code &lt;fct&gt;, and abbreviated</span></span>
-<span><span class="co">#&gt; #   variable names ¹​outliers_branch, ²​strength_branch, ³​model_branch,</span></span>
-<span><span class="co">#&gt; #   ⁴​distribution_branch, ⁵​std.error, ⁶​statistic</span></span></code></pre></div>
+<span><span class="co">#&gt;    universe outliers_branch strength_branch model_branch distribution_branch</span></span>
+<span><span class="co">#&gt;    &lt;fct&gt;    &lt;fct&gt;           &lt;fct&gt;           &lt;fct&gt;        &lt;fct&gt;              </span></span>
+<span><span class="co">#&gt;  1 1        outliers_1      strength_1      model_1      distribution_1     </span></span>
+<span><span class="co">#&gt;  2 1        outliers_1      strength_1      model_1      distribution_1     </span></span>
+<span><span class="co">#&gt;  3 1        outliers_1      strength_1      model_1      distribution_1     </span></span>
+<span><span class="co">#&gt;  4 1        outliers_1      strength_1      model_1      distribution_1     </span></span>
+<span><span class="co">#&gt;  5 2        outliers_1      strength_2      model_1      distribution_1     </span></span>
+<span><span class="co">#&gt;  6 2        outliers_1      strength_2      model_1      distribution_1     </span></span>
+<span><span class="co">#&gt;  7 2        outliers_1      strength_2      model_1      distribution_1     </span></span>
+<span><span class="co">#&gt;  8 2        outliers_1      strength_2      model_1      distribution_1     </span></span>
+<span><span class="co">#&gt;  9 3        outliers_1      strength_3      model_1      distribution_1     </span></span>
+<span><span class="co">#&gt; 10 3        outliers_1      strength_3      model_1      distribution_1     </span></span>
+<span><span class="co">#&gt; # ℹ 14 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 11 more variables: term &lt;chr&gt;, estimate &lt;dbl&gt;, std.error &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   statistic &lt;dbl&gt;, p.value &lt;dbl&gt;, conf.low &lt;dbl&gt;, conf.high &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   outliers_branch_code &lt;fct&gt;, strength_branch_code &lt;fct&gt;,</span></span>
+<span><span class="co">#&gt; #   model_branch_code &lt;fct&gt;, distribution_branch_code &lt;fct&gt;</span></span></code></pre></div>
 <p>The resulting data is a <code>tibble</code> object and we can use regular <code>tidyverse</code> grammar to manipulate the data. In the code below, we specifically focus on the estimated coefficient for <code>MasFem</code> and its confidence intervals.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -213,7 +211,7 @@ Figure 1. Having one branch with 2 options and another with 3 results in 2 x 3 =
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-hurricane" class="csl-entry">
 Jung, Kiju, Sharon Shavitt, Madhu Viswanathan, and Joseph M. Hilbe. 2014. “Female Hurricanes Are Deadlier Than Male Hurricanes” 111 (24): 8782–87. <a href="https://doi.org/10.1073/pnas.1402786111" class="external-link uri">https://doi.org/10.1073/pnas.1402786111</a>.
 </div>
@@ -272,6 +270,7 @@ Steegen, Sara, Francis Tuerlinckx, Andrew Gelman, and Wolf Vanpaemel. 2016. “I
 <ul class="list-unstyled">
 <li><a href="https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/mverseanalysis/mverse?branch=master" class="external-link"><img src="https://codecov.io/gh/mverseanalysis/mverse/branch/master/graph/badge.svg" alt="codecove"></a></li>
+<li><a href="https://app.codecov.io/gh/mverseanalysis/mverse" class="external-link"><img src="https://codecov.io/gh/mverseanalysis/mverse/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
 
