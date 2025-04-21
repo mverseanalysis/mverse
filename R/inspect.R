@@ -1,3 +1,5 @@
+#' @noRd
+#' @keywords internal
 display_branch_opts <- function(mtable, .mverse) {
   branches <- c(
     attr(.mverse, "branches_list"),

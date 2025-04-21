@@ -89,6 +89,8 @@ add_branch_condition.mverse <- function(.mverse, ...) {
   invisible(.mverse)
 }
 
+#' @noRd
+#' @keywords internal
 add_condition_to_mverse <- function(br_x, br_y, br_x_i, cond, .mverse) {
   # switch x and y to avoid circular conditioning
   x <- cond$x
@@ -138,6 +140,8 @@ add_condition_to_mverse <- function(br_x, br_y, br_x_i, cond, .mverse) {
   invisible()
 }
 
+#' @noRd
+#' @keywords internal
 add_branch_condition_single <- function(cond, .mverse) {
   stopifnot(inherits(cond, "branch_condition"))
   brs <- attr(.mverse, "branches_list")

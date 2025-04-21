@@ -118,6 +118,8 @@ add_covariate_branch <- function(.mverse, br) {
   invisible()
 }
 
+#' @noRd
+#' @keywords internal
 parse.covariate_branch <- function(br) {
   head_str <- paste0(
     "branch(", br$name, "_branch,"
@@ -136,11 +138,15 @@ parse.covariate_branch <- function(br) {
   rlang::parse_expr(paste0(head_str, body_str, ")"))
 }
 
+#' @noRd
+#' @keywords internal
 formula_with_covariates <- function(formula, covariates,
                                     .covariate_mverse) {
   paste0(formula, paste0(.covariate_mverse[covariates], collapse = ""))
 }
 
+#' @noRd
+#' @keywords internal
 parse.formula_branch <- function(br) {
   # initiate a branch
   head_str <- paste0(
@@ -170,6 +176,8 @@ parse.formula_branch <- function(br) {
   rlang::parse_expr(paste0(head_str, body_str, ")"))
 }
 
+#' @noRd
+#' @keywords internal
 code_branch_formula_branch <- function(.mverse, br) {
   if (!is.null(br$covariates)) {
     for (covariate in br$covariates) {

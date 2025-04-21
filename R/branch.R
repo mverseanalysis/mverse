@@ -1,7 +1,11 @@
+#' @noRd
+#' @keywords internal
 name <- function(br, name = NULL) {
   UseMethod("name")
 }
 
+#' @noRd
+#' @keywords internal
 name.branch <- function(br, name = NULL) {
   stopifnot(inherits(br, "branch"))
   if (is.null(name)) {
@@ -22,10 +26,14 @@ name.branch <- function(br, name = NULL) {
   br
 }
 
+#' @noRd
+#' @keywords internal
 parse <- function(br) {
   UseMethod("parse")
 }
 
+#' @noRd
+#' @keywords internal
 parse.branch <- function(br) {
   # initiate a branch
   head_str <- paste0(
@@ -50,6 +58,8 @@ parse.branch <- function(br) {
   rlang::parse_expr(paste0(head_str, body_str, ")"))
 }
 
+#' @noRd
+#' @keywords internal
 check_branch_name <- function(br) {
   check_str <- paste0("^", class(br)[1], "(.+)$")
   if (grepl(check_str, br$name)) {
@@ -60,6 +70,8 @@ check_branch_name <- function(br) {
   }
 }
 
+#' @noRd
+#' @keywords internal
 branch <- function(opts, name, class) {
   stopifnot(
     length(unique(names(opts))) >= length(names(opts)[nchar(names(opts)) > 0])
@@ -89,6 +101,8 @@ branch <- function(opts, name, class) {
   )
 }
 
+#' @noRd
+#' @keywords internal
 add_branch <- function(.mverse, brs, nms) {
   # name branch
   brs <- mapply(
@@ -116,10 +130,14 @@ add_branch <- function(.mverse, brs, nms) {
   .mverse
 }
 
+#' @noRd
+#' @keywords internal
 code_branch <- function(.mverse, br) {
   UseMethod("code_branch")
 }
 
+#' @noRd
+#' @keywords internal
 #' @importFrom utils getFromNamespace
 reset_parameters <- function(.mverse) {
   Multiverse <- getFromNamespace("Multiverse", "multiverse")
@@ -137,6 +155,8 @@ reset_parameters <- function(.mverse) {
   .mverse
 }
 
+#' @noRd
+#' @keywords internal
 as_option_list <- function(x) {
   opts <- sapply(
     x$opts, function(s) stringr::str_replace(rlang::expr_text(s), "^~", "")

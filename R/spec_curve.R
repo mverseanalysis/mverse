@@ -230,6 +230,8 @@ spec_curve.spec_summary <- function(.spec_summary,
 
 #' @import ggplot2
 #' @import ggupset
+#' @noRd
+#' @keywords internal
 ggspec_curve <- function(specs, theme_common,
                          colour_by, palette_common, n_colours,
                          pointsize, linewidth, spec_matrix_spacing,

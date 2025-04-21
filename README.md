@@ -7,6 +7,8 @@
 
 [![R-CMD-check](https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mverseanalysis/mverse/actions/workflows/R-CMD-check.yaml)
 [![codecove](https://codecov.io/gh/mverseanalysis/mverse/branch/master/graph/badge.svg)](https://app.codecov.io/gh/mverseanalysis/mverse?branch=master)
+[![Codecov test
+coverage](https://codecov.io/gh/mverseanalysis/mverse/graph/badge.svg)](https://app.codecov.io/gh/mverseanalysis/mverse)
 <!-- badges: end -->
 
 *mverse* is an extension to multiverse package (Sarma et al. 2021) which
@@ -43,8 +45,6 @@ multiverse and inspect a coefficient estimate. See
 terminologies used.
 
     #> Warning: Using alpha for a discrete variable is not advised.
-    #> Warning: Using the `size` aesthetic in this geom was deprecated in ggplot2 3.4.0.
-    #> ℹ Please use `linewidth` in the `default_aes` field and elsewhere instead.
 
 <img src="man/figures/README-tree-1.png" width="100%" />
 
@@ -130,23 +130,23 @@ multiverse.
 res <- summary(mv)
 res
 #> # A tibble: 24 × 16
-#>    universe outliers_br…¹ stren…² model…³ distr…⁴ term  estimate std.e…⁵ stati…⁶
-#>    <fct>    <fct>         <fct>   <fct>   <fct>   <chr>    <dbl>   <dbl>   <dbl>
-#>  1 1        outliers_1    streng… model_1 distri… (Int…  2.13e+0 8.04e-2  26.5  
-#>  2 1        outliers_1    streng… model_1 distri… stre…  3.02e-5 2.63e-6  11.5  
-#>  3 1        outliers_1    streng… model_1 distri… MasF…  6.23e-2 1.01e-2   6.19 
-#>  4 1        outliers_1    streng… model_1 distri… stre…  7.96e-7 3.20e-7   2.49 
-#>  5 2        outliers_1    streng… model_1 distri… (Int… -8.59e-2 2.65e-1  -0.324
-#>  6 2        outliers_1    streng… model_1 distri… stre…  2.35e-2 2.17e-3  10.8  
-#>  7 2        outliers_1    streng… model_1 distri… MasF…  5.31e-2 3.20e-2   1.66 
-#>  8 2        outliers_1    streng… model_1 distri… stre…  3.32e-4 2.60e-4   1.28 
-#>  9 3        outliers_1    streng… model_1 distri… (Int…  4.74e+1 3.17e+0  15.0  
-#> 10 3        outliers_1    streng… model_1 distri… stre… -4.69e-2 3.34e-3 -14.0  
-#> # … with 14 more rows, 7 more variables: p.value <dbl>, conf.low <dbl>,
-#> #   conf.high <dbl>, outliers_branch_code <fct>, strength_branch_code <fct>,
-#> #   model_branch_code <fct>, distribution_branch_code <fct>, and abbreviated
-#> #   variable names ¹​outliers_branch, ²​strength_branch, ³​model_branch,
-#> #   ⁴​distribution_branch, ⁵​std.error, ⁶​statistic
+#>    universe outliers_branch strength_branch model_branch distribution_branch
+#>    <fct>    <fct>           <fct>           <fct>        <fct>              
+#>  1 1        outliers_1      strength_1      model_1      distribution_1     
+#>  2 1        outliers_1      strength_1      model_1      distribution_1     
+#>  3 1        outliers_1      strength_1      model_1      distribution_1     
+#>  4 1        outliers_1      strength_1      model_1      distribution_1     
+#>  5 2        outliers_1      strength_2      model_1      distribution_1     
+#>  6 2        outliers_1      strength_2      model_1      distribution_1     
+#>  7 2        outliers_1      strength_2      model_1      distribution_1     
+#>  8 2        outliers_1      strength_2      model_1      distribution_1     
+#>  9 3        outliers_1      strength_3      model_1      distribution_1     
+#> 10 3        outliers_1      strength_3      model_1      distribution_1     
+#> # ℹ 14 more rows
+#> # ℹ 11 more variables: term <chr>, estimate <dbl>, std.error <dbl>,
+#> #   statistic <dbl>, p.value <dbl>, conf.low <dbl>, conf.high <dbl>,
+#> #   outliers_branch_code <fct>, strength_branch_code <fct>,
+#> #   model_branch_code <fct>, distribution_branch_code <fct>
 ```
 
 The resulting data is a `tibble` object and we can use regular
@@ -188,7 +188,8 @@ spec_summary(mv, var = "MasFem") %>%
 
 ## References
 
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0">
 
 <div id="ref-hurricane" class="csl-entry">
 
