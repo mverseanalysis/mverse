@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mverse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -66,15 +66,15 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.1.1" id="mverse-011">mverse 0.1.1<a class="anchor" aria-label="anchor" href="#mverse-011"></a></h2>
+<h2 class="page-header" data-toc-text="0.2.0" id="mverse-020">mverse 0.2.0<a class="anchor" aria-label="anchor" href="#mverse-020"></a></h2>
 <div class="section level3">
-<h3 id="major-changes-0-1-1">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-1-1"></a></h3>
+<h3 id="major-changes-0-2-0">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-2-0"></a></h3>
 <ul><li>
 <code>spe_curve()</code> is simplified with the introduction of <code>spec_table()</code>. It also returns a <code>ggplot</code> object now for further modification of the aesthetics.</li>
 <li>Renamed <code>ttest_mverse()</code> to <code><a href="../reference/t_test_mverse.html">t_test_mverse()</a></code> to be consistent.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="internal-changes-0-1-1">Internal changes<a class="anchor" aria-label="anchor" href="#internal-changes-0-1-1"></a></h3>
+<h3 id="internal-changes-0-2-0">Internal changes<a class="anchor" aria-label="anchor" href="#internal-changes-0-2-0"></a></h3>
 <ul><li>Branch options are named and stored when <code>*_branch</code> objects are defined.</li>
 <li>Global variables are declared to avoid variable missing in scope message: “.data_mverse”, “.formula_mverse”, “.family_mverse”, “.model_mverse”.</li>
 <li>Fixed compatibility issue with <code>multiverse</code> 0.6.2 update by using <code>multiverse:::Multiverse$new()</code> to reset multiverse environment inside <code>reset_parameters()</code> to be compatible (<a href="https://github.com/mverseanalysis/mverse/issues/54" class="external-link">#54</a>).</li>
