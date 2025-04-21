@@ -34,8 +34,8 @@ hurricane_outliers <- filter_branch(
   TRUE # include all
 )
 model_specifications <- formula_branch(
-  y ~ femininity,
-  y ~ femininity + hurricane_strength
+  y ~ MasFem,
+  y ~ MasFem + hurricane_strength
 )
 mv <- create_multiverse(hurricane) \%>\%
   add_filter_branch(hurricane_outliers) \%>\%

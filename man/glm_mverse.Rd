@@ -36,8 +36,8 @@ hurricane_outliers <- filter_branch(
   TRUE # include all
 )
 model_specifications <- formula_branch(
-  alldeaths ~ femininity,
-  alldeaths ~ femininity + hurricane_strength
+  alldeaths ~ MasFem,
+  alldeaths ~ MasFem + hurricane_strength
 )
 model_distributions <- family_branch(poisson)
 mv <- create_multiverse(hurricane) \%>\%

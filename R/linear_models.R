@@ -21,8 +21,8 @@
 #'   TRUE # include all
 #' )
 #' model_specifications <- formula_branch(
-#'   y ~ femininity,
-#'   y ~ femininity + hurricane_strength
+#'   y ~ MasFem,
+#'   y ~ MasFem + hurricane_strength
 #' )
 #' mv <- create_multiverse(hurricane) %>%
 #'   add_filter_branch(hurricane_outliers) %>%
@@ -86,8 +86,8 @@ lm_mverse <- function(.mverse) {
 #'   TRUE # include all
 #' )
 #' model_specifications <- formula_branch(
-#'   alldeaths ~ femininity,
-#'   alldeaths ~ femininity + hurricane_strength
+#'   alldeaths ~ MasFem,
+#'   alldeaths ~ MasFem + hurricane_strength
 #' )
 #' model_distributions <- family_branch(poisson)
 #' mv <- create_multiverse(hurricane) %>%
@@ -148,8 +148,8 @@ glm_mverse <- function(.mverse) {
 #'   TRUE # include all
 #' )
 #' model_specifications <- formula_branch(
-#'   alldeaths ~ femininity,
-#'   alldeaths ~ femininity + hurricane_strength
+#'   alldeaths ~ MasFem,
+#'   alldeaths ~ MasFem + hurricane_strength
 #' )
 #' mv <- create_multiverse(hurricane) %>%
 #'   add_filter_branch(hurricane_outliers) %>%
