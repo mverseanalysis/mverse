@@ -48,8 +48,8 @@ performs t.test based on the formula branches.
 \examples{
 # Performing a unpaired two sample t-test.
 library(dplyr)
-mv <- soccer |>
-  filter(!is.na(rater1), !is.na(rater2)) |>
+mv <- soccer \%>\%
+  filter(!is.na(rater1), !is.na(rater2)) \%>\%
   mverse()
 x <- mutate_branch(
   ((rater1 + rater2) / 2) > mean((rater1 + rater2) / 2),

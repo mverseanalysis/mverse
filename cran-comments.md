@@ -1,14 +1,14 @@
-## Submission v0.2.0
+## v0.2.0
 
 +  The package was archived due to an error caused by a dependency update.
 +  This update fixes the error plus implements an updated method for plotting.
 
 ### Local `devtools::check(remote = TRUE, manual = TRUE)` results
 
-── R CMD check results ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── mverse 0.2.0 ────
-Duration: 1m 11.3s
+── R CMD check results ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────── mverse 0.2.0 ────
+Duration: 1m 9.5s
 
-❯ checking CRAN incoming feasibility ... [3s/10s] NOTE
+❯ checking CRAN incoming feasibility ... [2s/12s] NOTE
   Maintainer: ‘Michael Jongho Moon <michael.moon@utoronto.ca>’
   
   New submission
@@ -25,13 +25,18 @@ Duration: 1m 11.3s
     X-CRAN-Comment: Archived on 2024-11-02 as issues were not corrected
       in time.
 
-❯ checking for future file timestamps ... NOTE
-  unable to verify current time
+❯ checking for future file timestam
 
-0 errors ✔ | 0 warnings ✔ | 2 notes ✖
+### `rhub::rhub_check()` results
+
+- Status: OK on all runs
+- Available at https://github.com/mverseanalysis/mverse/actions/runs/14577533635/job/40886871898
+
+### `devtools::check_win_devel()` results
 
 
-## Old submission 
+
+## v.0.1.0
 
 ------------------------------------------------------
 
