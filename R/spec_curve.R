@@ -184,6 +184,9 @@ spec_curve.spec_summary <- function(.spec_summary,
   stopifnot(label %in% c("name", "code"))
   branch_end <- ifelse(label == "name", "_branch", "_branch_code")
   n_colours <- length(unique(.spec_summary[[colour_by]]))
+  for (ord in order_by) {
+    .spec_summary <- .spec_summary %>% dplyr::arrange(.data[[ord]])
+  }
   sep_internal <- "::::"
   tmp <- .spec_summary %>%
     tidyr::pivot_longer(tidyselect::ends_with(branch_end)) %>%
@@ -204,9 +207,9 @@ spec_curve.spec_summary <- function(.spec_summary,
       sort(levels(tmp[[colour_by]]))
     )
   }
-  for (ord in order_by) {
-    tmp <- tmp %>% dplyr::arrange(.data[[ord]])
-  }
+  # for (ord in order_by) {
+  #   tmp <- tmp %>% dplyr::arrange(.data[[ord]])
+  # }
   plt <- tmp %>%
     dplyr::mutate(spec = stats::reorder(.data$spec, dplyr::row_number())) %>%
     ggspec_curve(

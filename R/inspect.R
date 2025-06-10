@@ -525,13 +525,21 @@ BIC <- function(object, ...) {
 #'   when specified. Display all when NULL.
 #' @param label_size A numeric. Set size of option labels.
 #' @param label_angle A numeric. Rotate option labels.
+#' @param label_hjust A numeric. Set the horizontal justification of the node
+#'   labels.
+#' @param label_vjust A numeric. Set the vertical justification of the node
+#'   labels.
 #' @import igraph ggraph ggplot2
 #' @return A \code{ggplot} object displaying the multiverse tree.
 #' @name multiverse_tree
 #' @export
-multiverse_tree <- function(.mverse, label = "none",
-                            branches = NULL, label_size = NULL,
-                            label_angle = 0) {
+multiverse_tree <- function(.mverse,
+                            label = "none",
+                            branches = NULL,
+                            label_size = NULL,
+                            label_angle = 0,
+                            label_hjust = 0,
+                            label_vjust = 0) {
   stopifnot(label %in% c("none", "code", "name"))
   brs <- c(
     attr(.mverse, "branches_conditioned_list"),
@@ -589,7 +597,7 @@ multiverse_tree <- function(.mverse, label = "none",
   edges <- do.call(rbind, edges_list)
   g <- graph_from_data_frame(edges)
   plt <- ggraph(g, layout = "dendrogram", circular = FALSE) +
-    geom_edge_link(aes(color = "branch")) +
+    geom_edge_link(aes(color = branch)) +
     theme_void() +
     coord_flip() +
     scale_y_reverse(expand = c(0.1, 0.1)) +
@@ -600,8 +608,8 @@ multiverse_tree <- function(.mverse, label = "none",
     plt <- plt +
       geom_node_text(
         aes(label = v_labels),
-        hjust = 1,
-        vjust = 1.2,
+        hjust = label_hjust,
+        vjust = label_vjust,
         size = ifelse(is.null(label_size), 7, label_size),
         angle = label_angle
       )

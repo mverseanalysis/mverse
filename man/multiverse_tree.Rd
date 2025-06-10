@@ -9,7 +9,9 @@ multiverse_tree(
   label = "none",
   branches = NULL,
   label_size = NULL,
-  label_angle = 0
+  label_angle = 0,
+  label_hjust = 0,
+  label_vjust = 0
 )
 }
 \arguments{
@@ -24,6 +26,12 @@ when specified. Display all when NULL.}
 \item{label_size}{A numeric. Set size of option labels.}
 
 \item{label_angle}{A numeric. Rotate option labels.}
+
+\item{label_hjust}{A numeric. Set the horizontal justification of the node
+labels.}
+
+\item{label_vjust}{A numeric. Set the vertical justification of the node
+labels.}
 }
 \value{
 A \code{ggplot} object displaying the multiverse tree.
