@@ -255,7 +255,7 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
         return(out)
       }
     )
-    mtable <- results |> tidyr::unnest("out")
+    mtable <- results %>% tidyr::unnest("out")
   } else if (output == "df") {
     mtable <- cbind(
       results, 

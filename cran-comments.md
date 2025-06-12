@@ -1,3 +1,37 @@
+## v0.2.1
+
++  Fixed `multiverse_tree()` colouring by branch.
++  Added `label_hjust` and `label_vjust` optional arguments to 
+`multiverse_tree()`.
++  Updated `add_family_branch()` and `add_formula_branch()` so that they take 
+only one branch at a time. `mverse` can only save one each of the two branch 
+types.
++  Added optional arguments `parallel` and `progress` to `execute_multiverse()`.
+The arguments are passed to `multiverse::execute_multiverse()` for parallel 
+processing and progress bar dispaly.
++  Avoid redundant `execute_multiverse()` in `summary()` functions by extracting
+model objects from multiverse environments instead of executing the multiverses 
+each time.
+
+### Local `devtools::check(remote = TRUE, manual = TRUE)` results
+
+── R CMD check results ─────────────────────────── mverse 0.2.1 ────
+Duration: 44.5s
+
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+
+R CMD check succeeded
+
+### `rhub::rhub_check()` results
+
+- Status: OK
+- Results available at https://github.com/mverseanalysis/mverse/actions/runs/15617829021
+
+### `devtools::check_win_devel()` results
+
+* DONE
+Status: OK
+
 ## v0.2.0
 
 +  The package was archived due to an error caused by a dependency update.
