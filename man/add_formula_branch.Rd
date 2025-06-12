@@ -4,20 +4,20 @@
 \alias{add_formula_branch}
 \title{Add formula branches to a \code{mverse} object.}
 \usage{
-add_formula_branch(.mverse, ...)
+add_formula_branch(.mverse, br)
 }
 \arguments{
 \item{.mverse}{a \code{mverse} object.}
 
-\item{...}{\code{formula_branch} objects.}
+\item{br}{a \code{formula_branch} object.}
 }
 \value{
 The resulting \code{mverse} object.
 }
 \description{
-This method adds one or more formula branches to
-an existing \code{mverse} object. Formula branches
-are used to specify model structure options for the analysis.
+This method adds a formula branch to an existing \code{mverse} object.
+A formula branch is used to specify model structure options for the
+analysis.
 }
 \examples{
 # Define a formula branch.

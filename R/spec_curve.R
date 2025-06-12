@@ -47,8 +47,8 @@ spec_summary.mverse <- function(
     .mverse, var, conf.int = TRUE, conf.level = .95) {
   .spec_summary <- summary(
     .mverse,
-    conf.int = !!rlang::enexpr(conf.int),
-    conf.level = !!rlang::enexpr(conf.level)
+    conf.int = conf.int,
+    conf.level = conf.level
   ) %>%
     dplyr::filter(.data$term == var) %>%
     dplyr::select(

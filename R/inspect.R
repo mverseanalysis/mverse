@@ -105,21 +105,23 @@ summary.mverse <- function(object, ...) {
 #' @param conf.level The confidence level of the confidence interval
 #'   returned using \code{conf.int = TRUE}. Default value is 0.95.
 #' @param output The output of interest. The possible values are
-#'   "estimates" ("e"), "df", "fstatistic" ("f"), and "r.squared" ("r").
-#'   Default value is "estimates".
+#'   "estimates" ("e"), "df", "fstatistic" ("f"), "r.squared" ("r"), 
+#'   and "aic" ("bic"). Default value is "estimates".
 #' @param ... Ignored.
 #' @rdname summary
 #' @importFrom rlang .data
 #' @export
 summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
                               output = "estimates", ...) {
+  results <- multiverse::extract_variables(object, .model_mverse)
   if (output %in% c("estimates", "e")) {
-    multiverse::inside(object, {
-      if (summary(.model_mverse)$df[1] > 0) {
-        out <- broom::tidy(
-          .model_mverse, !!rlang::enexpr(conf.int), !!rlang::enexpr(conf.level)
-        )
-      } else {
+    results[["out"]] <- lapply(
+      results[[".model_mverse"]],
+      function(x)  {
+        out <- broom::tidy(x, conf.int = conf.int, cnf.level = conf.level)
+        if (nrow(out) > 0) {
+          return(out)
+        }
         out <- data.frame(
           term = "(None)",
           estimate = NA,
@@ -127,62 +129,69 @@ summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
           statistic = NA,
           p.value = NA
         )
-        if (!!rlang::enexpr(conf.int)) {
-          out <- out %>% dplyr::mutate(conf.low = NA, conf.high = NA)
-        }
+        return(out)
       }
-    })
+    )
+    mtable <- results %>% tidyr::unnest("out")
   } else if (output == "df") {
-    multiverse::inside(object, {
-      if (summary(.model_mverse)$df[1] > 0) {
-        out <- as.data.frame(t(summary(.model_mverse)$df)) %>%
-          dplyr::rename(
-            p = "V1",
-            n.minus.p = "V2",
-            p.star = "V3"
-          )
-      } else {
-        out <- data.frame(
-          p = NA,
-          n.minus.p = NA,
-          p.star = NA
+    mtable <- cbind(
+      results, 
+      lapply(
+        results[[".model_mverse"]],
+        function(x) as.data.frame(t(summary(x)$df))
+      ) %>% 
+        dplyr::bind_rows() %>%
+        dplyr::rename(
+          p = "V1",
+          n.minus.p = "V2",
+          p.star = "V3"
         )
-      }
-    })
+    )
   } else if (output %in% c("r.squared", "r")) {
-    multiverse::inside(object, {
-      if (summary(.model_mverse)$df[1] > 0) {
-        out <- as.data.frame(
-          t(
-            c(
-              summary(.model_mverse)$r.squared,
-              summary(.model_mverse)$adj.r.squared
-            )
-          )
-        ) %>%
-          dplyr::rename(r.squared = "V1", adj.r.squared = "V2")
-      } else {
-        out <- data.frame(r.squared = NA, adj.r.squared = NA)
-      }
-    })
+    mtable <- cbind(
+      results, 
+      lapply(
+        results[[".model_mverse"]],
+        function(x) data.frame(
+          r.squared = summary(x)$r.squared,
+          adj.r.squared = summary(x)$adj.r.squared
+        )
+      ) %>%
+        dplyr::bind_rows()
+    )
   } else if (output %in% c("fstatistic", "f")) {
-    multiverse::inside(object, {
-      if (summary(.model_mverse)$df[1] > 1) {
-        out <- as.data.frame(t(summary(.model_mverse)$fstatistic)) %>%
-          dplyr::rename(
-            fstatistic = "value",
-            numdf.f = "numdf",
-            dendf.f = "dendf"
+    mtable <- cbind(
+      results, 
+      lapply(
+        results[[".model_mverse"]],
+        function(x) {
+          out <- summary(x)$fstatistic 
+          if (length(out) > 0) {
+            return(as.data.frame(t(out)))
+          }
+          out <- data.frame(
+            value = NA,
+            numdf = NA,
+            dendf = NA
           )
-      } else {
-        out <- data.frame(fstatistic = NA, numdf.f = NA, dendf.f = NA)
-      }
-    })
+          return(out)
+        }
+      ) %>%
+        dplyr::bind_rows()
+    )
+  } else if (output %in% c("aic", "bic")) {
+    mtable <- results
+    mtable["AIC"] <- sapply(
+      results[[".model_mverse"]],
+      stats::AIC
+    )
+    mtable["BIC"] <- sapply(
+      results[[".model_mverse"]],
+      stats::BIC
+    )
   } else {
     stop("Invalid output argument.")
   }
-  execute_multiverse(object)
-  mtable <- multiverse::extract_variables(object, out) %>% tidyr::unnest(out)
   display_branch_opts(mtable, object)
 }
 
@@ -220,21 +229,22 @@ summary.lm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
 #'   returned using \code{conf.int = TRUE}. Default value is 0.95.
 #' @param output The output of interest. The possible values are
 #'   "estimates" ("e"), "df", "deviance" ("de"), and "aic" ("bic").
-#'   Alternatively, the first letters may be used. Default value
-#'   is "estimates".
+#'   Default value is "estimates".
 #' @param ... Ignored.
 #' @rdname summary
 #' @importFrom rlang .data
 #' @export
 summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
                                output = "estimates", ...) {
+  results <- multiverse::extract_variables(object, .model_mverse)
   if (output %in% c("estimates", "e")) {
-    multiverse::inside(object, {
-      if (summary(.model_mverse)$df[1] > 0) {
-        out <- broom::tidy(
-          .model_mverse, !!rlang::enexpr(conf.int), !!rlang::enexpr(conf.level)
-        )
-      } else {
+    results[["out"]] <- lapply(
+      results[[".model_mverse"]],
+      function(x)  {
+        if (length(x$coefficients) > 0) {
+          out <- broom::tidy(x, conf.int = conf.int, conf.level = conf.level)
+          return(out)
+        }
         out <- data.frame(
           term = "(None)",
           estimate = NA,
@@ -242,65 +252,47 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
           statistic = NA,
           p.value = NA
         )
-        if (!!rlang::enexpr(conf.int)) {
-          out$conf.low <- NA
-          out$conf.hight <- NA
-        }
+        return(out)
       }
-    })
+    )
+    mtable <- results |> tidyr::unnest("out")
   } else if (output == "df") {
-    multiverse::inside(object, {
-      if (summary(.model_mverse)$df[1] > 0) {
-        out <- as.data.frame(
-          t(
-            c(
-              summary(.model_mverse)$df.residual,
-              summary(.model_mverse)$df.null
-            )
-          )
-        ) %>%
-          dplyr::rename(df.residual = "V1", df.null = "V2")
-      } else {
-        out <- data.frame(df.residual = NA, df.null = NA)
-      }
-    })
+    mtable <- cbind(
+      results, 
+      lapply(
+        results[[".model_mverse"]],
+        function(x) as.data.frame(t(summary(x)$df))
+      ) %>% 
+        dplyr::bind_rows() %>%
+        dplyr::rename(
+          rank = "V1",
+          df.residual = "V2",
+          n.coef = "V3"
+        )
+    )
   } else if (output %in% c("de", "deviance")) {
-    multiverse::inside(object, {
-      if (summary(.model_mverse)$df[1] > 0) {
-        out <- as.data.frame(
-          t(
-            c(
-              summary(.model_mverse)$deviance,
-              summary(.model_mverse)$null.deviance
-            )
-          )
-        ) %>%
-          dplyr::rename(deviance = "V1", null.deviance = "V2")
-      } else {
-        out <- data.frame(deviance = NA, null.deviance = NA)
-      }
-    })
-  } else if (tolower(output) %in% c("aic", "bic")) {
-    multiverse::inside(object, {
-      if (summary(.model_mverse)$df[1] > 0) {
-        out <- as.data.frame(
-          t(
-            c(
-              stats::AIC(.model_mverse),
-              stats::BIC(.model_mverse)
-            )
-          )
-        ) %>%
-          dplyr::rename(AIC = "V1", BIC = "V2")
-      } else {
-        out <- data.frame(AIC = NA, BIC = NA)
-      }
-    })
+    mtable <- results
+    mtable["deviance"] <- sapply(
+      results[[".model_mverse"]],
+      function(x) summary(x)$deviance
+    )
+    mtable["null.deviance"] <- sapply(
+      results[[".model_mverse"]],
+      function(x) summary(x)$null.deviance
+    )
+  } else if (output %in% c("aic", "bic")) {
+    mtable <- results
+    mtable["AIC"] <- sapply(
+      results[[".model_mverse"]],
+      stats::AIC
+    )
+    mtable["BIC"] <- sapply(
+      results[[".model_mverse"]],
+      stats::BIC
+    )
   } else {
     stop("Invalid output argument.")
   }
-  execute_multiverse(object)
-  mtable <- multiverse::extract_variables(object, out) %>% tidyr::unnest(out)
   display_branch_opts(mtable, object)
 }
 
@@ -333,104 +325,12 @@ summary.glm_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
 #' @export
 summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
                                   output = "estimates", ...) {
-  if (output %in% c("estimates", "e")) {
-    multiverse::inside(object, {
-      if (summary(.model_mverse)$df[1] > 0) {
-        out <-
-          broom::tidy(
-            .model_mverse,
-            !!rlang::enexpr(conf.int),
-            !!rlang::enexpr(conf.level)
-          )
-      } else {
-        out <- data.frame(
-          term = "(None)",
-          estimate = NA,
-          std.error = NA,
-          statistic = NA,
-          p.value = NA
-        )
-        if (!!rlang::enexpr(conf.int)) {
-          out <-
-            out %>% dplyr::mutate(conf.low = NA, conf.high = NA)
-        }
-      }
-    })
-  } else if (output == "df") {
-    multiverse::inside(object, {
-      if (summary(.model_mverse)$df[1] > 0) {
-        out <-
-          as.data.frame(
-            t(
-              c(
-                summary(.model_mverse)$df.residual,
-                summary(.model_mverse)$df.null
-              )
-            )
-          ) %>%
-          dplyr::rename(
-            df.residual = "V1",
-            df.null = "V2"
-          )
-      } else {
-        out <- data.frame(
-          df.residual = NA,
-          df.null = NA
-        )
-      }
-    })
-  } else if (output %in% c("de", "deviance")) {
-    multiverse::inside(object, {
-      if (summary(.model_mverse)$df[1] > 0) {
-        out <-
-          as.data.frame(
-            t(
-              c(
-                summary(.model_mverse)$deviance,
-                summary(.model_mverse)$null.deviance
-              )
-            )
-          ) %>%
-          dplyr::rename(
-            deviance = "V1",
-            null.deviance = "V2"
-          )
-      } else {
-        out <- data.frame(
-          deviance = NA,
-          null.deviance = NA
-        )
-      }
-    })
-  } else if (tolower(output) %in% c("aic", "bic")) {
-    multiverse::inside(object, {
-      if (summary(.model_mverse)$df[1] > 0) {
-        out <-
-          as.data.frame(
-            t(
-              c(
-                stats::AIC(.model_mverse),
-                stats::BIC(.model_mverse)
-              )
-            )
-          ) %>%
-          dplyr::rename(
-            AIC = "V1",
-            BIC = "V2"
-          )
-      } else {
-        out <- data.frame(
-          AIC = NA,
-          BIC = NA
-        )
-      }
-    })
-  } else {
-    stop("Invalid output argument.")
-  }
-  execute_multiverse(object)
-  mtable <- multiverse::extract_variables(object, out) %>% tidyr::unnest(out)
-  display_branch_opts(mtable, object)
+  summary.glm_mverse(
+    object, 
+    conf.int = conf.int, 
+    conf.level = conf.level, 
+    output = output
+  )
 }
 
 #' Display the AIC and BIC score of the fitted models across the multiverse
@@ -444,20 +344,19 @@ summary.glm.nb_mverse <- function(object, conf.int = TRUE, conf.level = 0.95,
 #' @return a multiverse table as a tibble
 #' @name AIC
 #' @export
-AIC.glm_mverse <- function(object, ..., k = 2) {
-  df <- summary.glm_mverse(object, output = "aic")
+AIC.mverse <- function(object, ..., k = 2) {
+  df <- summary(object, output = "aic")
   df$BIC <- NULL
   df
 }
 
 #' @rdname AIC
 #' @export
-BIC.glm_mverse <- function(object, ...) {
-  df <- summary.glm_mverse(object, output = "aic")
+BIC.mverse <- function(object, ...) {
+  df <- summary(object, output = "bic")
   df$AIC <- NULL
   df
 }
-
 #' @rdname AIC
 #' @export
 AIC <- function(object, ..., k = 2) {

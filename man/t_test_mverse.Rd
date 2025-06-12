@@ -12,7 +12,9 @@ t_test_mverse(
   mu = 0,
   paired = FALSE,
   var.equal = FALSE,
-  conf.level = 0.95
+  conf.level = 0.95,
+  parallel = FALSE,
+  progress = FALSE
 )
 }
 \arguments{
@@ -35,6 +37,13 @@ in means if you are performing a two sample test).}
 variances as being equal.}
 
 \item{conf.level}{confidence level of the interval.}
+
+\item{parallel}{passed to \code{multiverse::execute_multiverse()} to indicate
+whether to execute the multiverse analysis in parallel. Defaults to FALSE.}
+
+\item{progress}{passed to \code{multiverse::execute_multiverse()} to indicate
+whether to include a progress bar for each step of the execution. Defaults
+to FALSE.}
 }
 \value{
 a multiverse table displaying the t-test results as a tibble.

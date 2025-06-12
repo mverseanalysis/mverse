@@ -66,12 +66,12 @@ formula_branch <- function(..., covariates = NULL, name = NULL) {
 
 #' Add formula branches to a \code{mverse} object.
 #'
-#' This method adds one or more formula branches to
-#' an existing \code{mverse} object. Formula branches
-#' are used to specify model structure options for the analysis.
+#' This method adds a formula branch to an existing \code{mverse} object.
+#' A formula branch is used to specify model structure options for the
+#' analysis.
 #'
 #' @param .mverse a \code{mverse} object.
-#' @param ... \code{formula_branch} objects.
+#' @param br a \code{formula_branch} object.
 #' @examples
 #' # Define a formula branch.
 #' model_specifications <- formula_branch(
@@ -87,10 +87,10 @@ formula_branch <- function(..., covariates = NULL, name = NULL) {
 #' @rdname add_formula_branch
 #' @family formula branch functions
 #' @export
-add_formula_branch <- function(.mverse, ...) {
-  nms <- sapply(rlang::enquos(...), rlang::quo_name)
-  brs <- list(...)
-  stopifnot(all(sapply(brs, inherits, "formula_branch")))
+add_formula_branch <- function(.mverse, br) {
+  nms <- rlang::quo_name(rlang::enquo(br))
+  stopifnot(inherits(br, "formula_branch"))
+  brs <- list(br)
   .mverse <- add_branch(.mverse, brs, nms)
   invisible(.mverse)
 }

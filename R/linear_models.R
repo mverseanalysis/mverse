@@ -31,11 +31,17 @@
 #'   lm_mverse()
 #' }
 #' @param .mverse a \code{mverse} object.
+#' @param parallel passed to \code{multiverse::execute_multiverse()} to indicate
+#'   whether to execute the multiverse analysis in parallel. Defaults to FALSE.
+#' @param progress passed to \code{multiverse::execute_multiverse()} to indicate
+#'   whether to include a progress bar for each step of the execution. Defaults
+#'   to FALSE.
 #' @return A \code{mverse} object with \code{lm} fitted.
 #' @name lm_mverse
 #' @family model fitting functions
 #' @export
-lm_mverse <- function(.mverse) {
+lm_mverse <- function(
+    .mverse, parallel = FALSE, progress = FALSE) {
   stopifnot(inherits(.mverse, "mverse"))
   # check whether there is a formula branch (should be only 1)
   brs <- c(
@@ -98,11 +104,17 @@ lm_mverse <- function(.mverse) {
 #'   glm_mverse()
 #' }
 #' @param .mverse a \code{mverse} object.
+#' @param parallel passed to \code{multiverse::execute_multiverse()} to indicate
+#'   whether to execute the multiverse analysis in parallel. Defaults to FALSE.
+#' @param progress passed to \code{multiverse::execute_multiverse()} to indicate
+#'   whether to include a progress bar for each step of the execution. Defaults
+#'   to FALSE.
 #' @return A \code{mverse} object with \code{glm} fitted.
 #' @name glm_mverse
 #' @family model fitting functions
 #' @export
-glm_mverse <- function(.mverse) {
+glm_mverse <- function(
+    .mverse, parallel = FALSE, progress = FALSE) {
   stopifnot(inherits(.mverse, "mverse"))
   # check whether there is a formula branch (should be only 1)
   brs <- c(
@@ -149,11 +161,17 @@ glm_mverse <- function(.mverse) {
 #' summary(mv)
 #' }
 #' @param .mverse a \code{mverse} object.
+#' @param parallel passed to \code{multiverse::execute_multiverse()} to indicate
+#'   whether to execute the multiverse analysis in parallel. Defaults to FALSE.
+#' @param progress passed to \code{multiverse::execute_multiverse()} to indicate
+#'   whether to include a progress bar for each step of the execution. Defaults
+#'   to FALSE.
 #' @return A \code{mverse} object with \code{glm.nb} fitted.
 #' @name glm.nb_mverse
 #' @family model fitting functions
 #' @export
-glm.nb_mverse <- function(.mverse) {
+glm.nb_mverse <- function(
+    .mverse, parallel = FALSE, progress = FALSE) {
   stopifnot(inherits(.mverse, "mverse"))
   # check whether there is a formula branch (should be only 1)
   brs <- c(

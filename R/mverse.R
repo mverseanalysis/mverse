@@ -38,7 +38,8 @@ create_multiverse <- function(data) {
 
 #' @rdname execute_multiverse
 #' @export
-execute_multiverse <- function(.mverse) {
+execute_multiverse <- function(
+    .mverse, parallel = FALSE, progress = FALSE) {
   UseMethod("execute_multiverse")
 }
 #' Execute the entire multiverse.
@@ -48,6 +49,11 @@ execute_multiverse <- function(.mverse) {
 #' across the entire multiverse.
 #'
 #' @param .mverse a \code{mverse} object.
+#' @param parallel passed to \code{multiverse::execute_multiverse()} to indicate
+#'   whether to execute the multiverse analysis in parallel. Defaults to FALSE.
+#' @param progress passed to \code{multiverse::execute_multiverse()} to indicate
+#'   whether to include a progress bar for each step of the execution. Defaults
+#'   to FALSE.
 #' @examples
 #' # Define a mutate branch.
 #' hurricane_strength <- mutate_branch(
@@ -69,8 +75,11 @@ execute_multiverse <- function(.mverse) {
 #' @return The resulting \code{mverse} object.
 #' @name execute_multiverse
 #' @export
-execute_multiverse.mverse <- function(.mverse) {
+execute_multiverse.mverse <- function(
+    .mverse, parallel = FALSE, progress = FALSE) {
   stopifnot(inherits(.mverse, "mverse"))
-  multiverse::execute_multiverse(.mverse)
+  multiverse::execute_multiverse(
+    .mverse, parallel = parallel, progress = progress
+  )
   invisible(.mverse)
 }

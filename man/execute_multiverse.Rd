@@ -5,12 +5,19 @@
 \alias{execute_multiverse.mverse}
 \title{Execute the entire multiverse.}
 \usage{
-execute_multiverse(.mverse)
+execute_multiverse(.mverse, parallel = FALSE, progress = FALSE)
 
-\method{execute_multiverse}{mverse}(.mverse)
+\method{execute_multiverse}{mverse}(.mverse, parallel = FALSE, progress = FALSE)
 }
 \arguments{
 \item{.mverse}{a \code{mverse} object.}
+
+\item{parallel}{passed to \code{multiverse::execute_multiverse()} to indicate
+whether to execute the multiverse analysis in parallel. Defaults to FALSE.}
+
+\item{progress}{passed to \code{multiverse::execute_multiverse()} to indicate
+whether to include a progress bar for each step of the execution. Defaults
+to FALSE.}
 }
 \value{
 The resulting \code{mverse} object.

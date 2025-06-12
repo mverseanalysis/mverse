@@ -4,20 +4,19 @@
 \alias{add_family_branch}
 \title{Add family branches to a \code{mverse} object.}
 \usage{
-add_family_branch(.mverse, ...)
+add_family_branch(.mverse, br)
 }
 \arguments{
 \item{.mverse}{a \code{mverse} object.}
 
-\item{...}{\code{family_branch} objects.}
+\item{br}{a \code{family_branch} object.}
 }
 \value{
 The resulting \code{mverse} object.
 }
 \description{
-This method adds one or more family branches to
-an existing \code{mverse} object. Family branches
-are used to define options for the analysis distributions
+This method adds a family branch to an existing \code{mverse} object.
+A family branch is used to define options for the analysis distributions
 when using \code{glm_mverse()}.
 }
 \examples{

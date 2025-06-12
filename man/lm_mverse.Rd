@@ -4,10 +4,17 @@
 \alias{lm_mverse}
 \title{Fit linear regression models across the multiverse.}
 \usage{
-lm_mverse(.mverse)
+lm_mverse(.mverse, parallel = FALSE, progress = FALSE)
 }
 \arguments{
 \item{.mverse}{a \code{mverse} object.}
+
+\item{parallel}{passed to \code{multiverse::execute_multiverse()} to indicate
+whether to execute the multiverse analysis in parallel. Defaults to FALSE.}
+
+\item{progress}{passed to \code{multiverse::execute_multiverse()} to indicate
+whether to include a progress bar for each step of the execution. Defaults
+to FALSE.}
 }
 \value{
 A \code{mverse} object with \code{lm} fitted.

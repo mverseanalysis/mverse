@@ -106,7 +106,7 @@ test_that(
     mv <- mverse(mydf) %>%
       add_formula_branch(model_spec) %>%
       lm_mverse()
-    smanu <- do.call(rbind, list(
+    smanu <- do.call(dplyr::bind_rows, list(
       tibble::tibble(
         term = "(None)", estimate = NA, std.error = NA,
         statistic = NA, p.value = NA, conf.low = NA, conf.high = NA
@@ -122,7 +122,69 @@ test_that(
 )
 
 test_that(
-  "summary.lm_mverse(., conf.int = FALSE) outputs coefficient estimates without
+  "summary.glm_mverse() outputs coefficient estimates with 95% confidence
+  intervals by default.", {
+    x <- rnorm(100)
+    y <- rbinom(100, 1, 1 / (1 + exp(-x)))
+    mydf <- data.frame(x = x, y = y)
+    frml <- formula_branch(y ~ 0, y ~ 1, y ~ x)
+    fml <- family_branch(binomial)
+    mv <- mverse(mydf) %>%
+      add_formula_branch(frml) %>%
+      add_family_branch(fml) %>%
+      glm_mverse()
+    smanu <- do.call(dplyr::bind_rows, list(
+      tibble::tibble(
+        term = "(None)", estimate = NA, std.error = NA,
+        statistic = NA, p.value = NA, conf.low = NA, conf.high = NA
+      ),
+      glm(y ~ 1, data = mydf, family = binomial) %>% 
+        broom::tidy(conf.int = TRUE),
+      glm(y ~ x, data = mydf, family = binomial) %>% 
+        broom::tidy(conf.int = TRUE)
+    ))
+    smverse <- summary(mv) %>%
+      dplyr::select(-c(
+        universe, 
+        frml_branch, 
+        frml_branch_code, 
+        fml_branch, 
+        fml_branch_code
+      ))
+    expect_identical(smverse, smanu)
+  }
+)
+
+test_that(
+  "summary.glm.nb_mverse() outputs coefficient estimates with 95% confidence
+  intervals by default.", {
+    x <- rep(1:2, 50)
+    y <- rnbinom(100, 1, .5)
+    mydf <- data.frame(x = x, y = y)
+    frml <- formula_branch(y ~ 0, y ~ 1, y ~ x)
+    mv <- mverse(mydf) %>%
+      add_formula_branch(frml) %>%
+      glm.nb_mverse()
+    smanu <- do.call(dplyr::bind_rows, list(
+      tibble::tibble(
+        term = "(None)", estimate = NA, std.error = NA,
+        statistic = NA, p.value = NA, conf.low = NA, conf.high = NA
+      ),
+      MASS::glm.nb(y ~ 1, data = mydf) %>% broom::tidy(conf.int = TRUE),
+      MASS::glm.nb(y ~ x, data = mydf) %>% broom::tidy(conf.int = TRUE)
+    ))
+    smverse <- summary(mv) %>%
+      dplyr::select(-c(
+        universe, 
+        frml_branch, 
+        frml_branch_code
+      ))
+    expect_equal(smverse, smanu)
+  }
+)
+
+test_that(
+  "summary.lm_mverse(conf.int = FALSE) outputs coefficient estimates without
   any confidence intervals.", {
     n <- 10
     mydf <- data.frame(x1 = 1:n, x2 = sample(1:n)) %>%
@@ -131,7 +193,7 @@ test_that(
     mv <- mverse(mydf) %>%
       add_formula_branch(model_spec) %>%
       lm_mverse()
-    smanu <- do.call(rbind, list(
+    smanu <- do.call(dplyr::bind_rows, list(
       tibble::tibble(
         term = "(None)", estimate = NA, std.error = NA,
         statistic = NA, p.value = NA
@@ -146,6 +208,68 @@ test_that(
   }
 )
 
+test_that(
+  "summary.glm_mverse(conf.int = FALSE) outputs coefficient estimates 
+  without any confidence intervals.", {
+    x <- rnorm(100)
+    y <- rbinom(100, 1, 1 / (1 + exp(-x)))
+    mydf <- data.frame(x = x, y = y)
+    frml <- formula_branch(y ~ 0, y ~ 1, y ~ x)
+    fml <- family_branch(binomial)
+    mv <- mverse(mydf) %>%
+      add_formula_branch(frml) %>%
+      add_family_branch(fml) %>%
+      glm_mverse()
+    smanu <- do.call(dplyr::bind_rows, list(
+      tibble::tibble(
+        term = "(None)", estimate = NA, std.error = NA,
+        statistic = NA, p.value = NA
+      ),
+      glm(y ~ 1, data = mydf, family = binomial) %>% 
+        broom::tidy(conf.int = FALSE),
+      glm(y ~ x, data = mydf, family = binomial) %>% 
+        broom::tidy(conf.int = FALSE)
+    ))
+    smverse <- summary(mv, conf.int = FALSE) %>%
+      dplyr::select(-c(
+        universe, 
+        frml_branch, 
+        frml_branch_code, 
+        fml_branch, 
+        fml_branch_code
+      ))
+    expect_identical(smverse, smanu)
+  }
+)
+
+test_that(
+  "summary.glm.nb_mverse(conf.int = FALSE) outputs coefficient estimates 
+  without any confidence intervals.", {
+    x <- rep(1:2, 50)
+    y <- rnbinom(100, 1, .5)
+    mydf <- data.frame(x = x, y = y)
+    frml <- formula_branch(y ~ 0, y ~ 1, y ~ x)
+    mv <- mverse(mydf) %>%
+      add_formula_branch(frml) %>%
+      glm.nb_mverse()
+    smanu <- do.call(dplyr::bind_rows, list(
+      tibble::tibble(
+        term = "(None)", estimate = NA, std.error = NA,
+        statistic = NA, p.value = NA
+      ),
+      MASS::glm.nb(y ~ 1, data = mydf) %>% broom::tidy(conf.int = FALSE),
+      MASS::glm.nb(y ~ x, data = mydf) %>% broom::tidy(conf.int = FALSE)
+    ))
+    smverse <- summary(mv, conf.int = FALSE) %>%
+      dplyr::select(-c(
+        universe, 
+        frml_branch, 
+        frml_branch_code
+      ))
+    expect_equal(smverse, smanu)
+  }
+)
+
 test_that("summary.lm_mverse(output = 'df') outputs degrees of freedom.", {
   n <- 10
   mydf <- data.frame(x1 = 1:n, x2 = sample(1:n)) %>%
@@ -154,8 +278,9 @@ test_that("summary.lm_mverse(output = 'df') outputs degrees of freedom.", {
   mv <- mverse(mydf) %>%
     add_formula_branch(model_spec) %>%
     lm_mverse()
-  smanu <- do.call(rbind, list(
-    tibble::tibble(p = NA, n.minus.p = NA, p.star = NA),
+  smanu <- do.call(dplyr::bind_rows, list(
+    as.data.frame(t(summary(lm(y ~ 0, data = mydf))$df)) %>%
+      dplyr::rename(p = V1, n.minus.p = V2, p.star = V3),
     as.data.frame(t(summary(lm(y ~ 1, data = mydf))$df)) %>%
       dplyr::rename(p = V1, n.minus.p = V2, p.star = V3),
     as.data.frame(t(summary(lm(y ~ ., data = mydf))$df)) %>%
@@ -168,6 +293,58 @@ test_that("summary.lm_mverse(output = 'df') outputs degrees of freedom.", {
   expect_identical(smverse2, smanu)
 })
 
+test_that("summary.glm_mverse(output = 'df') outputs degrees of freedom.", {
+    x <- rnorm(100)
+    y <- rbinom(100, 1, 1 / (1 + exp(-x)))
+    mydf <- data.frame(x = x, y = y)
+    frml <- formula_branch(y ~ 0, y ~ 1, y ~ x)
+    fml <- family_branch(binomial)
+    mv <- mverse(mydf) %>%
+      add_formula_branch(frml) %>%
+      add_family_branch(fml) %>%
+      glm_mverse()
+    smanu <- data.frame(rbind(
+      summary(glm(y ~ 0, data = mydf, family = binomial))$df,
+      summary(glm(y ~ 1, data = mydf, family = binomial))$df,
+      summary(glm(y ~ x, data = mydf, family = binomial))$df
+    ))
+    names(smanu) <- c("rank", "df.residual", "n.coef")
+    smverse <- summary(mv, output = "df") %>%
+      dplyr::select(-c(
+        universe, 
+        frml_branch, 
+        frml_branch_code, 
+        fml_branch, 
+        fml_branch_code
+      ))
+    expect_identical(smverse, smanu)
+  }
+)
+
+test_that("summary.glm.nb_mverse(output = 'df') outputs degrees of freedom.", {
+    x <- rep(1:2, 50)
+    y <- rnbinom(100, 1, .5)
+    mydf <- data.frame(x = x, y = y)
+    frml <- formula_branch(y ~ 0, y ~ 1, y ~ x)
+    mv <- mverse(mydf) %>%
+      add_formula_branch(frml) %>%
+      glm.nb_mverse()
+    smanu <- data.frame(rbind(
+      summary(MASS::glm.nb(y ~ 0, data = mydf))$df,
+      summary(MASS::glm.nb(y ~ 1, data = mydf))$df,
+      summary(MASS::glm.nb(y ~ x, data = mydf))$df
+    ))
+    names(smanu) <- c("rank", "df.residual", "n.coef")
+    smverse <- summary(mv, output = "df") %>%
+      dplyr::select(-c(
+        universe, 
+        frml_branch, 
+        frml_branch_code
+      ))
+    expect_equal(smverse, smanu)
+  }
+)
+
 test_that("summary.lm_mverse(output = 'r') outputs R squared values.", {
   n <- 10
   mydf <- data.frame(x1 = 1:n, x2 = sample(1:n)) %>%
@@ -176,8 +353,12 @@ test_that("summary.lm_mverse(output = 'r') outputs R squared values.", {
   mv <- mverse(mydf) %>%
     add_formula_branch(model_spec) %>%
     lm_mverse()
-  smanu <- do.call(rbind, list(
-    tibble::tibble(r.squared = NA, adj.r.squared = NA),
+  smanu <- do.call(dplyr::bind_rows, list(
+    as.data.frame(t(c(
+      summary(lm(y ~ 0, data = mydf))$r.squared,
+      summary(lm(y ~ 0, data = mydf))$adj.r.squared
+    ))) %>%
+      dplyr::rename(r.squared = V1, adj.r.squared = V2),
     as.data.frame(t(c(
       summary(lm(y ~ 1, data = mydf))$r.squared,
       summary(lm(y ~ 1, data = mydf))$adj.r.squared
@@ -210,13 +391,11 @@ test_that("summary.lm_mverse(output = 'f') outputs F statistics.", {
   mv <- mverse(mydf) %>%
     add_formula_branch(model_spec) %>%
     lm_mverse()
-  smanu <- do.call(rbind, list(
-    tibble::tibble(fstatistic = NA, numdf.f = NA, dendf.f = NA),
-    tibble::tibble(fstatistic = NA, numdf.f = NA, dendf.f = NA),
-    as.data.frame(t(summary(lm(y ~ ., data = mydf))$fstatistic)) %>%
-      dplyr::rename(fstatistic = value, numdf.f = numdf, dendf.f = dendf),
-    as.data.frame(t(summary(lm(y ~ x1 * x2, data = mydf))$fstatistic)) %>%
-      dplyr::rename(fstatistic = value, numdf.f = numdf, dendf.f = dendf)
+  smanu <- do.call(dplyr::bind_rows, list(
+    data.frame(value = NA, numdf = NA, dendf = NA),
+    data.frame(value = NA, numdf = NA, dendf = NA),
+    as.data.frame(t(summary(lm(y ~ ., data = mydf))$fstatistic)),
+    as.data.frame(t(summary(lm(y ~ x1 * x2, data = mydf))$fstatistic))
   ))
   smverse <- summary(mv, output = "f") %>%
     dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
@@ -225,6 +404,199 @@ test_that("summary.lm_mverse(output = 'f') outputs F statistics.", {
   expect_identical(smverse, smanu)
   expect_identical(smverse2, smanu)
 })
+
+test_that("summary.glm_mverse(output = 'de') outputs deviance.", {
+    x <- rnorm(100)
+    y <- rbinom(100, 1, 1 / (1 + exp(-x)))
+    mydf <- data.frame(x = x, y = y)
+    frml <- formula_branch(y ~ 0, y ~ 1, y ~ x)
+    fml <- family_branch(binomial)
+    mv <- mverse(mydf) %>%
+      add_formula_branch(frml) %>%
+      add_family_branch(fml) %>%
+      glm_mverse()
+    smanu <- rbind(
+      c(
+        deviance = summary(
+          glm(y ~ 0, data = mydf, family = binomial)
+        )$deviance,
+        null.deviance = summary(
+          glm(y ~ 0, data = mydf, family = binomial)
+        )$null.deviance
+      ),
+      c(
+        deviance = summary(
+          glm(y ~ 1, data = mydf, family = binomial)
+        )$deviance,
+        null.deviance = summary(
+          glm(y ~ 1, data = mydf, family = binomial)
+        )$null.deviance
+      ),
+      c(
+        deviance = summary(
+          glm(y ~ x, data = mydf, family = binomial)
+        )$deviance,
+        null.deviance = summary(
+          glm(y ~ x, data = mydf, family = binomial)
+        )$null.deviance
+      )
+    )
+    smverse <- summary(mv, output = "de") %>%
+      dplyr::select(-c(
+        universe, 
+        frml_branch, 
+        frml_branch_code, 
+        fml_branch, 
+        fml_branch_code
+      ))
+    expect_equal(as.matrix(smverse), smanu)
+  }
+)
+
+test_that("summary.glm.nb_mverse(output = 'de') outputs deviance.", {
+    x <- rep(1:2, 50)
+    y <- rnbinom(100, 1, .5)
+    mydf <- data.frame(x = x, y = y)
+    frml <- formula_branch(y ~ 0, y ~ 1, y ~ x)
+    mv <- mverse(mydf) %>%
+      add_formula_branch(frml) %>%
+      glm.nb_mverse()
+    smanu <- rbind(
+      c(
+        deviance = summary(MASS::glm.nb(y ~ 0, data = mydf))$deviance,
+        null.deviance = summary(MASS::glm.nb(y ~ 0, data = mydf))$null.deviance
+      ),
+      c(
+        deviance = summary(MASS::glm.nb(y ~ 1, data = mydf))$deviance,
+        null.deviance = summary(MASS::glm.nb(y ~ 1, data = mydf))$null.deviance
+      ),
+      c(
+        deviance = summary(MASS::glm.nb(y ~ x, data = mydf))$deviance,
+        null.deviance = summary(MASS::glm.nb(y ~ x, data = mydf))$null.deviance
+      )
+    )
+    smverse <- summary(mv, output = "de") %>%
+      dplyr::select(-c(
+        universe, 
+        frml_branch, 
+        frml_branch_code
+      ))
+    expect_equal(as.matrix(smverse), smanu)
+  }
+)
+
+test_that("summary.lm_mverse(output = 'aic') outputs AIC and BIC statistics.", {
+  n <- 10
+  mydf <- data.frame(x1 = 1:n, x2 = sample(1:n)) %>%
+    dplyr::mutate(y = rnorm(n, x1 + x2))
+  model_spec <- formula_branch(y ~ 0, y ~ 1, y ~ ., y ~ x1 * x2)
+  mv <- mverse(mydf) %>%
+    add_formula_branch(model_spec) %>%
+    lm_mverse()
+  smanu <- do.call(rbind, lapply(
+    list(
+      lm(y ~ 0, data = mydf),
+      lm(y ~ 1, data = mydf),
+      lm(y ~ ., data = mydf),
+      lm(y ~ x1 * x2, data = mydf)
+    ),
+    function(x) {
+      c(
+        AIC = stats::AIC(x),
+        BIC = stats::BIC(x)
+      )
+    }
+  ))
+  smverse <- summary(mv, output = "aic") %>%
+    dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
+  smverse2 <- summary(mv, output = "bic") %>%
+    dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
+  expect_identical(as.matrix(smverse), smanu)
+  expect_identical(as.matrix(smverse2), smanu)
+})
+
+
+test_that("summary.glm_mverse(output = 'aic') outputs AIC and BIC statistics.", {
+    x <- rnorm(100)
+    y <- rbinom(100, 1, 1 / (1 + exp(-x)))
+    mydf <- data.frame(x = x, y = y)
+    frml <- formula_branch(y ~ 0, y ~ 1, y ~ x)
+    fml <- family_branch(binomial)
+    mv <- mverse(mydf) %>%
+      add_formula_branch(frml) %>%
+      add_family_branch(fml) %>%
+      glm_mverse()
+    smanu <- do.call(rbind, lapply(
+      list(
+        glm(y ~ 0, data = mydf, family = binomial),
+        glm(y ~ 1, data = mydf, family = binomial),
+        glm(y ~ x, data = mydf, family = binomial)
+      ),
+      function(x) {
+        c(
+          AIC = stats::AIC(x),
+          BIC = stats::BIC(x)
+        )
+      }
+    ))
+    smverse <- summary(mv, output = "aic") %>%
+      dplyr::select(-c(
+        universe, 
+        frml_branch,
+        frml_branch_code, 
+        fml_branch, 
+        fml_branch_code
+      ))
+    smverse2 <- summary(mv, output = "bic") %>%
+      dplyr::select(-c(
+        universe, 
+        frml_branch,
+        frml_branch_code, 
+        fml_branch, 
+        fml_branch_code
+      ))
+    expect_identical(as.matrix(smverse), smanu)
+    expect_identical(as.matrix(smverse2), smanu)
+  }
+)
+
+test_that("summary.glm.nb_mverse(output = 'aic') outputs AIC and BIC statistics.", {
+    x <- rep(1:2, 50)
+    y <- rnbinom(100, 1, .5)
+    mydf <- data.frame(x = x, y = y)
+    frml <- formula_branch(y ~ 0, y ~ 1, y ~ x)
+    mv <- mverse(mydf) %>%
+      add_formula_branch(frml) %>%
+      glm.nb_mverse()
+    smanu <-do.call(rbind, lapply(
+      list(
+        MASS::glm.nb(y ~ 0, data = mydf),
+        MASS::glm.nb(y ~ 1, data = mydf),
+        MASS::glm.nb(y ~ x, data = mydf)
+      ),
+      function(x) {
+        c(
+          AIC = stats::AIC(x),
+          BIC = stats::BIC(x)
+        )
+      }
+    ))
+    smverse <- summary(mv, output = "aic") %>%
+      dplyr::select(-c(
+        universe, 
+        frml_branch,
+        frml_branch_code
+      ))
+    smverse2 <- summary(mv, output = "bic") %>%
+      dplyr::select(-c(
+        universe, 
+        frml_branch,
+        frml_branch_code
+      ))
+    expect_identical(as.matrix(smverse), smanu)
+    expect_identical(as.matrix(smverse2), smanu)
+  }
+)
 
 test_that(
   "summary.lm_mverse(output = 'x') throws an invalid output argument error.", {
@@ -235,6 +607,40 @@ test_that(
     mv <- mverse(mydf) %>%
       add_formula_branch(model_spec) %>%
       lm_mverse()
+    expect_error(
+      summary(mv, output = "x"),
+      "Invalid output argument."
+    )
+  }
+)
+
+test_that(
+  "summary.glm_mverse(output = 'x') throws an invalid output argument error.", {
+    x <- rnorm(100)
+    y <- rbinom(100, 1, 1 / (1 + exp(-x)))
+    mydf <- data.frame(x = x, y = y)
+    frml <- formula_branch(y ~ 0, y ~ 1, y ~ x)
+    fml <- family_branch(binomial)
+    mv <- mverse(mydf) %>%
+      add_formula_branch(frml) %>%
+      add_family_branch(fml) %>%
+      glm_mverse()
+    expect_error(
+      summary(mv, output = "x"),
+      "Invalid output argument."
+    )
+  }
+)
+
+test_that(
+  "summary.glm.nb_mverse(output = 'x') throws an invalid output argument error.", {
+    x <- rep(1:2, 50)
+    y <- rnbinom(100, 1, .5)
+    mydf <- data.frame(x = x, y = y)
+    frml <- formula_branch(y ~ 0, y ~ 1, y ~ x)
+    mv <- mverse(mydf) %>%
+      add_formula_branch(frml) %>%
+      glm.nb_mverse()
     expect_error(
       summary(mv, output = "x"),
       "Invalid output argument."

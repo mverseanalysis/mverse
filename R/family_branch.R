@@ -22,13 +22,12 @@ family_branch <- function(..., name = NULL) {
 
 #' Add family branches to a \code{mverse} object.
 #'
-#' This method adds one or more family branches to
-#' an existing \code{mverse} object. Family branches
-#' are used to define options for the analysis distributions
+#' This method adds a family branch to an existing \code{mverse} object.
+#' A family branch is used to define options for the analysis distributions
 #' when using \code{glm_mverse()}.
 #'
 #' @param .mverse a \code{mverse} object.
-#' @param ... \code{family_branch} objects.
+#' @param br a \code{family_branch} object.
 #' @examples
 #' # Define a family branch.
 #' model_distributions <- family_branch(
@@ -42,10 +41,10 @@ family_branch <- function(..., name = NULL) {
 #' @rdname add_family_branch
 #' @family family branch functions
 #' @export
-add_family_branch <- function(.mverse, ...) {
-  nms <- sapply(rlang::enquos(...), rlang::quo_name)
-  brs <- list(...)
-  stopifnot(all(sapply(brs, inherits, "family_branch")))
+add_family_branch <- function(.mverse, br) {
+  nms <- rlang::quo_name(rlang::enquo(br))
+  stopifnot(inherits(br, "family_branch"))
+  brs <- list(br)
   .mverse <- add_branch(.mverse, brs, nms)
   invisible(.mverse)
 }

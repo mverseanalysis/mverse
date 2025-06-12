@@ -2,14 +2,14 @@
 % Please edit documentation in R/inspect.R
 \name{AIC}
 \alias{AIC}
-\alias{AIC.glm_mverse}
-\alias{BIC.glm_mverse}
+\alias{AIC.mverse}
+\alias{BIC.mverse}
 \alias{BIC}
 \title{Display the AIC and BIC score of the fitted models across the multiverse}
 \usage{
-\method{AIC}{glm_mverse}(object, ..., k = 2)
+\method{AIC}{mverse}(object, ..., k = 2)
 
-\method{BIC}{glm_mverse}(object, ...)
+\method{BIC}{mverse}(object, ...)
 
 AIC(object, ..., k = 2)
 
