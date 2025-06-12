@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mverse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
@@ -195,33 +195,27 @@ changing the <code>output</code> parameter.</p>
 freedom table.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summary.html">summary</a></span><span class="op">(</span><span class="va">mv</span>, output <span class="op">=</span> <span class="st">"df"</span><span class="op">)</span></span>
-<span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 6</span></span></span>
-<span><span class="co">##   universe formulas_branch     p n.minus.p p.star formulas_branch_code        </span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                       </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> 1        formulas_1          4       502      4 medv ~ log(lstat) * rm      </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> 2        formulas_2          4       502      4 medv ~ log(lstat) * tax     </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> 3        formulas_3          8       498      8 medv ~ log(lstat) * tax * rm</span></span></code></pre></div>
+<span><span class="co">##   universe formulas_branch p n.minus.p p.star         formulas_branch_code</span></span>
+<span><span class="co">## 1        1      formulas_1 4       502      4       medv ~ log(lstat) * rm</span></span>
+<span><span class="co">## 2        2      formulas_2 4       502      4      medv ~ log(lstat) * tax</span></span>
+<span><span class="co">## 3        3      formulas_3 8       498      8 medv ~ log(lstat) * tax * rm</span></span></code></pre></div>
 <p>Other options include F (<code>output = "f"</code>) statistics</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summary.html">summary</a></span><span class="op">(</span><span class="va">mv</span>, output <span class="op">=</span> <span class="st">"f"</span><span class="op">)</span></span>
-<span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 6</span></span></span>
-<span><span class="co">##   universe formulas_branch fstatistic numdf.f dendf.f formulas_branch_code      </span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                     </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> 1        formulas_1            482.       3     502 medv ~ log(lstat) * rm    </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> 2        formulas_2            341.       3     502 medv ~ log(lstat) * tax   </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> 3        formulas_3            368.       7     498 medv ~ log(lstat) * tax *…</span></span></code></pre></div>
+<span><span class="co">##   universe formulas_branch    value numdf dendf         formulas_branch_code</span></span>
+<span><span class="co">## 1        1      formulas_1 482.2512     3   502       medv ~ log(lstat) * rm</span></span>
+<span><span class="co">## 2        2      formulas_2 341.0488     3   502      medv ~ log(lstat) * tax</span></span>
+<span><span class="co">## 3        3      formulas_3 367.7342     7   498 medv ~ log(lstat) * tax * rm</span></span></code></pre></div>
 <p>and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
 (<code>output = "r"</code>).</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># output R-squared by `r.squared` or "r"</span></span>
 <span><span class="fu"><a href="../reference/summary.html">summary</a></span><span class="op">(</span><span class="va">mv</span>, output <span class="op">=</span> <span class="st">"r"</span><span class="op">)</span></span>
-<span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">##   universe formulas_branch r.squared adj.r.squared formulas_branch_code        </span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                       </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> 1        formulas_1          0.742         0.741 medv ~ log(lstat) * rm      </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> 2        formulas_2          0.671         0.669 medv ~ log(lstat) * tax     </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> 3        formulas_3          0.838         0.836 medv ~ log(lstat) * tax * rm</span></span></code></pre></div>
+<span><span class="co">##   universe formulas_branch r.squared adj.r.squared         formulas_branch_code</span></span>
+<span><span class="co">## 1        1      formulas_1 0.7423994     0.7408600       medv ~ log(lstat) * rm</span></span>
+<span><span class="co">## 2        2      formulas_2 0.6708513     0.6688842      medv ~ log(lstat) * tax</span></span>
+<span><span class="co">## 3        3      formulas_3 0.8378980     0.8356194 medv ~ log(lstat) * tax * rm</span></span></code></pre></div>
 <p>Finally, we can display how the effect of number of rooms in a
 dwelling <code>log(lstat)</code> using <code>spec_curve</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">

@@ -19,7 +19,7 @@ At least one formula_branch must have been added."><!-- mathjax --><script src="
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mverse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
@@ -75,7 +75,7 @@ At least one <code>formula_branch</code> must have been added.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lm_mverse</span><span class="op">(</span><span class="va">.mverse</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lm_mverse</span><span class="op">(</span><span class="va">.mverse</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>, progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -84,6 +84,17 @@ At least one <code>formula_branch</code> must have been added.</p>
 
 <dl><dt id="arg--mverse">.mverse<a class="anchor" aria-label="anchor" href="#arg--mverse"></a></dt>
 <dd><p>a <code>mverse</code> object.</p></dd>
+
+
+<dt id="arg-parallel">parallel<a class="anchor" aria-label="anchor" href="#arg-parallel"></a></dt>
+<dd><p>passed to <code><a href="http://mucollective.github.io/multiverse/reference/execute.html" class="external-link">multiverse::execute_multiverse()</a></code> to indicate
+whether to execute the multiverse analysis in parallel. Defaults to FALSE.</p></dd>
+
+
+<dt id="arg-progress">progress<a class="anchor" aria-label="anchor" href="#arg-progress"></a></dt>
+<dd><p>passed to <code><a href="http://mucollective.github.io/multiverse/reference/execute.html" class="external-link">multiverse::execute_multiverse()</a></code> to indicate
+whether to include a progress bar for each step of the execution. Defaults
+to FALSE.</p></dd>
 
 </dl></div>
     <div id="value">

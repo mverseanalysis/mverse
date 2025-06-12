@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mverse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
@@ -65,6 +65,17 @@
       <small>Source: <a href="https://github.com/mverseanalysis/mverse/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.2.1" id="mverse-021">mverse 0.2.1<a class="anchor" aria-label="anchor" href="#mverse-021"></a></h2>
+<div class="section level3">
+<h3 id="minor-patches-0-2-1">Minor patches<a class="anchor" aria-label="anchor" href="#minor-patches-0-2-1"></a></h3>
+<ul><li>Fixed <code><a href="../reference/multiverse_tree.html">multiverse_tree()</a></code> colouring by branch.</li>
+<li>Added <code>label_hjust</code> and <code>label_vjust</code> optional arguments to <code><a href="../reference/multiverse_tree.html">multiverse_tree()</a></code>.</li>
+<li>Updated <code><a href="../reference/add_family_branch.html">add_family_branch()</a></code> and <code><a href="../reference/add_formula_branch.html">add_formula_branch()</a></code> so that they take only one branch at a time. <code>mverse</code> can only save one each of the two branch types.</li>
+<li>Added optional arguments <code>parallel</code> and <code>progress</code> to <code><a href="../reference/execute_multiverse.html">execute_multiverse()</a></code>. The arguments are passed to <code><a href="http://mucollective.github.io/multiverse/reference/execute.html" class="external-link">multiverse::execute_multiverse()</a></code> for parallel processing and progress bar display.</li>
+<li>Avoid redundant <code><a href="../reference/execute_multiverse.html">execute_multiverse()</a></code> in <code><a href="../reference/summary.html">summary()</a></code> functions by extracting model objects from multiverse environments instead of executing the multiverses each time.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.0" id="mverse-020">mverse 0.2.0<small>2025-04-24</small><a class="anchor" aria-label="anchor" href="#mverse-020"></a></h2>
 <div class="section level3">

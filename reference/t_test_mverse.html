@@ -20,7 +20,7 @@ performs t.test based on the formula branches."><!-- mathjax --><script src="htt
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mverse</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
@@ -85,7 +85,9 @@ performs t.test based on the formula branches.</p>
 <span>  mu <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  paired <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  var.equal <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  conf.level <span class="op">=</span> <span class="fl">0.95</span></span>
+<span>  conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  progress <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -127,6 +129,17 @@ variances as being equal.</p></dd>
 
 <dt id="arg-conf-level">conf.level<a class="anchor" aria-label="anchor" href="#arg-conf-level"></a></dt>
 <dd><p>confidence level of the interval.</p></dd>
+
+
+<dt id="arg-parallel">parallel<a class="anchor" aria-label="anchor" href="#arg-parallel"></a></dt>
+<dd><p>passed to <code><a href="http://mucollective.github.io/multiverse/reference/execute.html" class="external-link">multiverse::execute_multiverse()</a></code> to indicate
+whether to execute the multiverse analysis in parallel. Defaults to FALSE.</p></dd>
+
+
+<dt id="arg-progress">progress<a class="anchor" aria-label="anchor" href="#arg-progress"></a></dt>
+<dd><p>passed to <code><a href="http://mucollective.github.io/multiverse/reference/execute.html" class="external-link">multiverse::execute_multiverse()</a></code> to indicate
+whether to include a progress bar for each step of the execution. Defaults
+to FALSE.</p></dd>
 
 </dl></div>
     <div id="value">
