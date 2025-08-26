@@ -1,3 +1,17 @@
+# mverse 0.2.3
+
+## Minor patch
+
++  Updated vignette to explicitly specify `ggplot` labels in preparation for the
+upcoming `ggplot2` update.
+
+# mverse 0.2.2
+
+## Minor patch
+
++  Updated unit tests to prevent failing due to differences <10-8 in numerical 
+estimates.
+
 # mverse 0.2.1
 
 ## Minor patches

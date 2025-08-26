@@ -48,7 +48,7 @@ test_that("summary() prints the multiverse table for a mverse object.", {
         "f1_branch_code", "f2_branch_code")
     )
   )
-  expect_identical(mtable, mtable_expected)
+  expect_equal(mtable, mtable_expected)
 })
 
 test_that("summary() doesn't truncate long branch options.", {
@@ -117,7 +117,7 @@ test_that(
     ))
     smverse <- summary(mv) %>%
       dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
-    expect_identical(smverse, smanu)
+    expect_equal(smverse, smanu)
   }
 )
 
@@ -138,20 +138,20 @@ test_that(
         term = "(None)", estimate = NA, std.error = NA,
         statistic = NA, p.value = NA, conf.low = NA, conf.high = NA
       ),
-      glm(y ~ 1, data = mydf, family = binomial) %>% 
+      glm(y ~ 1, data = mydf, family = binomial) %>%
         broom::tidy(conf.int = TRUE),
-      glm(y ~ x, data = mydf, family = binomial) %>% 
+      glm(y ~ x, data = mydf, family = binomial) %>%
         broom::tidy(conf.int = TRUE)
     ))
     smverse <- summary(mv) %>%
       dplyr::select(-c(
-        universe, 
-        frml_branch, 
-        frml_branch_code, 
-        fml_branch, 
+        universe,
+        frml_branch,
+        frml_branch_code,
+        fml_branch,
         fml_branch_code
       ))
-    expect_identical(smverse, smanu)
+    expect_equal(smverse, smanu)
   }
 )
 
@@ -175,8 +175,8 @@ test_that(
     ))
     smverse <- summary(mv) %>%
       dplyr::select(-c(
-        universe, 
-        frml_branch, 
+        universe,
+        frml_branch,
         frml_branch_code
       ))
     expect_equal(smverse, smanu)
@@ -204,12 +204,12 @@ test_that(
     ))
     smverse <- summary(mv, conf.int = FALSE) %>%
       dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
-    expect_identical(smverse, smanu)
+    expect_equal(smverse, smanu)
   }
 )
 
 test_that(
-  "summary.glm_mverse(conf.int = FALSE) outputs coefficient estimates 
+  "summary.glm_mverse(conf.int = FALSE) outputs coefficient estimates
   without any confidence intervals.", {
     x <- rnorm(100)
     y <- rbinom(100, 1, 1 / (1 + exp(-x)))
@@ -225,25 +225,25 @@ test_that(
         term = "(None)", estimate = NA, std.error = NA,
         statistic = NA, p.value = NA
       ),
-      glm(y ~ 1, data = mydf, family = binomial) %>% 
+      glm(y ~ 1, data = mydf, family = binomial) %>%
         broom::tidy(conf.int = FALSE),
-      glm(y ~ x, data = mydf, family = binomial) %>% 
+      glm(y ~ x, data = mydf, family = binomial) %>%
         broom::tidy(conf.int = FALSE)
     ))
     smverse <- summary(mv, conf.int = FALSE) %>%
       dplyr::select(-c(
-        universe, 
-        frml_branch, 
-        frml_branch_code, 
-        fml_branch, 
+        universe,
+        frml_branch,
+        frml_branch_code,
+        fml_branch,
         fml_branch_code
       ))
-    expect_identical(smverse, smanu)
+    expect_equal(smverse, smanu)
   }
 )
 
 test_that(
-  "summary.glm.nb_mverse(conf.int = FALSE) outputs coefficient estimates 
+  "summary.glm.nb_mverse(conf.int = FALSE) outputs coefficient estimates
   without any confidence intervals.", {
     x <- rep(1:2, 50)
     y <- rnbinom(100, 1, .5)
@@ -262,8 +262,8 @@ test_that(
     ))
     smverse <- summary(mv, conf.int = FALSE) %>%
       dplyr::select(-c(
-        universe, 
-        frml_branch, 
+        universe,
+        frml_branch,
         frml_branch_code
       ))
     expect_equal(smverse, smanu)
@@ -290,7 +290,7 @@ test_that("summary.lm_mverse(output = 'df') outputs degrees of freedom.", {
   ))
   smverse2 <- summary(mv, output = "df") %>%
     dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
-  expect_identical(smverse2, smanu)
+  expect_equal(smverse2, smanu)
 })
 
 test_that("summary.glm_mverse(output = 'df') outputs degrees of freedom.", {
@@ -311,13 +311,13 @@ test_that("summary.glm_mverse(output = 'df') outputs degrees of freedom.", {
     names(smanu) <- c("rank", "df.residual", "n.coef")
     smverse <- summary(mv, output = "df") %>%
       dplyr::select(-c(
-        universe, 
-        frml_branch, 
-        frml_branch_code, 
-        fml_branch, 
+        universe,
+        frml_branch,
+        frml_branch_code,
+        fml_branch,
         fml_branch_code
       ))
-    expect_identical(smverse, smanu)
+    expect_equal(smverse, smanu)
   }
 )
 
@@ -337,8 +337,8 @@ test_that("summary.glm.nb_mverse(output = 'df') outputs degrees of freedom.", {
     names(smanu) <- c("rank", "df.residual", "n.coef")
     smverse <- summary(mv, output = "df") %>%
       dplyr::select(-c(
-        universe, 
-        frml_branch, 
+        universe,
+        frml_branch,
         frml_branch_code
       ))
     expect_equal(smverse, smanu)
@@ -379,8 +379,8 @@ test_that("summary.lm_mverse(output = 'r') outputs R squared values.", {
     dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
   smverse2 <- summary(mv, output = "r.squared") %>%
     dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
-  expect_identical(smverse, smanu)
-  expect_identical(smverse2, smanu)
+  expect_equal(smverse, smanu)
+  expect_equal(smverse2, smanu)
 })
 
 test_that("summary.lm_mverse(output = 'f') outputs F statistics.", {
@@ -401,8 +401,8 @@ test_that("summary.lm_mverse(output = 'f') outputs F statistics.", {
     dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
   smverse2 <- summary(mv, output = "fstatistic") %>%
     dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
-  expect_identical(smverse, smanu)
-  expect_identical(smverse2, smanu)
+  expect_equal(smverse, smanu)
+  expect_equal(smverse2, smanu)
 })
 
 test_that("summary.glm_mverse(output = 'de') outputs deviance.", {
@@ -443,10 +443,10 @@ test_that("summary.glm_mverse(output = 'de') outputs deviance.", {
     )
     smverse <- summary(mv, output = "de") %>%
       dplyr::select(-c(
-        universe, 
-        frml_branch, 
-        frml_branch_code, 
-        fml_branch, 
+        universe,
+        frml_branch,
+        frml_branch_code,
+        fml_branch,
         fml_branch_code
       ))
     expect_equal(as.matrix(smverse), smanu)
@@ -477,8 +477,8 @@ test_that("summary.glm.nb_mverse(output = 'de') outputs deviance.", {
     )
     smverse <- summary(mv, output = "de") %>%
       dplyr::select(-c(
-        universe, 
-        frml_branch, 
+        universe,
+        frml_branch,
         frml_branch_code
       ))
     expect_equal(as.matrix(smverse), smanu)
@@ -511,8 +511,8 @@ test_that("summary.lm_mverse(output = 'aic') outputs AIC and BIC statistics.", {
     dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
   smverse2 <- summary(mv, output = "bic") %>%
     dplyr::select(-c(universe, model_spec_branch, model_spec_branch_code))
-  expect_identical(as.matrix(smverse), smanu)
-  expect_identical(as.matrix(smverse2), smanu)
+  expect_equal(as.matrix(smverse), smanu)
+  expect_equal(as.matrix(smverse2), smanu)
 })
 
 
@@ -541,22 +541,22 @@ test_that("summary.glm_mverse(output = 'aic') outputs AIC and BIC statistics.", 
     ))
     smverse <- summary(mv, output = "aic") %>%
       dplyr::select(-c(
-        universe, 
+        universe,
         frml_branch,
-        frml_branch_code, 
-        fml_branch, 
+        frml_branch_code,
+        fml_branch,
         fml_branch_code
       ))
     smverse2 <- summary(mv, output = "bic") %>%
       dplyr::select(-c(
-        universe, 
+        universe,
         frml_branch,
-        frml_branch_code, 
-        fml_branch, 
+        frml_branch_code,
+        fml_branch,
         fml_branch_code
       ))
-    expect_identical(as.matrix(smverse), smanu)
-    expect_identical(as.matrix(smverse2), smanu)
+    expect_equal(as.matrix(smverse), smanu)
+    expect_equal(as.matrix(smverse2), smanu)
   }
 )
 
@@ -583,18 +583,18 @@ test_that("summary.glm.nb_mverse(output = 'aic') outputs AIC and BIC statistics.
     ))
     smverse <- summary(mv, output = "aic") %>%
       dplyr::select(-c(
-        universe, 
+        universe,
         frml_branch,
         frml_branch_code
       ))
     smverse2 <- summary(mv, output = "bic") %>%
       dplyr::select(-c(
-        universe, 
+        universe,
         frml_branch,
         frml_branch_code
       ))
-    expect_identical(as.matrix(smverse), smanu)
-    expect_identical(as.matrix(smverse2), smanu)
+    expect_equal(as.matrix(smverse), smanu)
+    expect_equal(as.matrix(smverse2), smanu)
   }
 )
 

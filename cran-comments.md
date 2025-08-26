@@ -1,3 +1,49 @@
+## v0.2.3
+
++  `ggplot2` label name specified in vignette to address issues with the upcoming 
+ggplot2 release.
+
+### Local `devtools::check(remote = TRUE, manual = TRUE)` results
+
+── R CMD check results ─────────────────────────────────────── mverse 0.2.3 ────
+Duration: 1m 18s
+
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+
+### `rhub::rhub_check()` results
+
+- Included ATLAS
+- Status: OK
+- Results available at https://github.com/mverseanalysis/mverse/actions/runs/17244377765
+
+### `devtools::check_win_devel()` results
+
+* DONE
+Status: OK
+
+## v0.2.2
+
++  Updated unit tests to prevent failing due to differences <10-8 in numerical 
+estimates addressing issues in the ATLAS check
+
+### Local `devtools::check(remote = TRUE, manual = TRUE)` results
+
+── R CMD check results ─────────────────────────────────────── mverse 0.2.2 ────
+Duration: 1m 11.6s
+
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+
+### `rhub::rhub_check()` results
+
+- Included ATLAS
+- Status: OK
+- Results available at https://github.com/mverseanalysis/mverse/actions/runs/15781962183
+
+### `devtools::check_win_devel()` results
+
+* DONE
+Status: OK
+
 ## v0.2.1
 
 +  Fixed `multiverse_tree()` colouring by branch.

@@ -127,5 +127,5 @@ Finally, we can display how the effect of number of rooms in a dwelling `log(lst
 ```{r fig.height=5}
 spec_summary(mv, var = "log(lstat)") |>
   spec_curve(label = "code") +
-  ggplot2::labs("Significant at 0.05")
+  ggplot2::labs(colour = "Significant at 0.05")
 ```
